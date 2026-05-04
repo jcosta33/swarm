@@ -1,0 +1,10 @@
+# Swarm framework — append these lines to your project's .gitignore
+
+# Worktree-local task files. Task files are execution scaffolding — never committed.
+# Durable findings migrate to .agents/audits/, .agents/specs/, .agents/research/, or .agents/bugs/
+# before the worktree is closed.
+.agents/tasks/
+
+# The .worktrees/ convention used by the Lead Engineer pattern. Each worker runs
+# in its own worktree under .worktrees/<slug>.
+.worktrees/

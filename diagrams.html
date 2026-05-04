@@ -1,0 +1,1365 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Swarm framework — visual reference</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        color-scheme: light dark;
+        --bg: #fcfbf7;
+        --text-1: #181816;
+        --text-2: #5f5e5a;
+        --border: #d3d1c7;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1e1e1b;
+          --text-1: #f0eee6;
+          --text-2: #b4b2a9;
+          --border: #444441;
+        }
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+          Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--text-1);
+        background: var(--bg);
+        padding: 2.5rem 1rem;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 22px;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      h2 {
+        font-size: 18px;
+        font-weight: 500;
+        margin: 2.5rem 0 0.5rem;
+      }
+      .intro {
+        color: var(--text-2);
+        margin-bottom: 1rem;
+      }
+      p {
+        color: var(--text-2);
+        margin-bottom: 0.75rem;
+      }
+      section {
+        padding: 0.5rem 0;
+        border-top: 0.5px solid var(--border);
+        margin-top: 1.5rem;
+      }
+      section:first-of-type {
+        border-top: none;
+        margin-top: 0;
+      }
+      svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 1rem 0;
+      }
+
+      /* SVG text classes mirroring the visualize tool */
+      text.t {
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 400;
+        fill: var(--text-1);
+      }
+      text.ts {
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 400;
+        fill: var(--text-2);
+      }
+      text.th {
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        fill: var(--text-1);
+      }
+      .arr {
+        stroke: var(--text-2);
+        stroke-width: 1.5;
+        fill: none;
+      }
+
+      /* Color ramps */
+      .c-gray rect,
+      .c-gray circle {
+        fill: #f1efe8;
+        stroke: #5f5e5a;
+        stroke-width: 0.5;
+      }
+      .c-gray text.t,
+      .c-gray text.th {
+        fill: #444441;
+      }
+      .c-gray text.ts {
+        fill: #5f5e5a;
+      }
+      .c-teal rect,
+      .c-teal circle {
+        fill: #e1f5ee;
+        stroke: #0f6e56;
+        stroke-width: 0.5;
+      }
+      .c-teal text.t,
+      .c-teal text.th {
+        fill: #085041;
+      }
+      .c-teal text.ts {
+        fill: #0f6e56;
+      }
+      .c-purple rect,
+      .c-purple circle {
+        fill: #eeedfe;
+        stroke: #534ab7;
+        stroke-width: 0.5;
+      }
+      .c-purple text.t,
+      .c-purple text.th {
+        fill: #3c3489;
+      }
+      .c-purple text.ts {
+        fill: #534ab7;
+      }
+      .c-coral rect,
+      .c-coral circle {
+        fill: #faece7;
+        stroke: #993c1d;
+        stroke-width: 0.5;
+      }
+      .c-coral text.t,
+      .c-coral text.th {
+        fill: #712b13;
+      }
+      .c-coral text.ts {
+        fill: #993c1d;
+      }
+      .c-red rect,
+      .c-red circle {
+        fill: #fcebeb;
+        stroke: #a32d2d;
+        stroke-width: 0.5;
+      }
+      .c-red text.t,
+      .c-red text.th {
+        fill: #791f1f;
+      }
+      .c-red text.ts {
+        fill: #a32d2d;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .c-gray rect,
+        .c-gray circle {
+          fill: #444441;
+          stroke: #b4b2a9;
+        }
+        .c-gray text.t,
+        .c-gray text.th {
+          fill: #d3d1c7;
+        }
+        .c-gray text.ts {
+          fill: #b4b2a9;
+        }
+        .c-teal rect,
+        .c-teal circle {
+          fill: #085041;
+          stroke: #5dcaa5;
+        }
+        .c-teal text.t,
+        .c-teal text.th {
+          fill: #9fe1cb;
+        }
+        .c-teal text.ts {
+          fill: #5dcaa5;
+        }
+        .c-purple rect,
+        .c-purple circle {
+          fill: #3c3489;
+          stroke: #afa9ec;
+        }
+        .c-purple text.t,
+        .c-purple text.th {
+          fill: #cecbf6;
+        }
+        .c-purple text.ts {
+          fill: #afa9ec;
+        }
+        .c-coral rect,
+        .c-coral circle {
+          fill: #712b13;
+          stroke: #f0997b;
+        }
+        .c-coral text.t,
+        .c-coral text.th {
+          fill: #f5c4b3;
+        }
+        .c-coral text.ts {
+          fill: #f0997b;
+        }
+        .c-red rect,
+        .c-red circle {
+          fill: #791f1f;
+          stroke: #f09595;
+        }
+        .c-red text.t,
+        .c-red text.th {
+          fill: #f7c1c1;
+        }
+        .c-red text.ts {
+          fill: #f09595;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Swarm — visual reference</h1>
+      <p class="intro">
+        Five views of the framework. Read alongside swarm-framework.md.
+      </p>
+
+      <!-- shared arrow marker, defined once and referenced by every SVG below -->
+      <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+        <defs>
+          <marker
+            id="arrow"
+            viewBox="0 0 10 10"
+            refX="8"
+            refY="5"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M2 1L8 5L2 9"
+              fill="none"
+              stroke="context-stroke"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </marker>
+        </defs>
+      </svg>
+
+      <section>
+        <h2>1. The task at the centre</h2>
+        <p>
+          The task file is the framework's source of truth. A source doc grounds
+          it, the lead persona conditions it, skills are loaded as references,
+          validation gates verify the work, and the output is what the task
+          produced.
+        </p>
+        <svg viewBox="0 0 680 388" role="img">
+          <title>Task file at the centre of the framework</title>
+          <desc>
+            Source doc grounds the task file, lead persona conditions it, skills
+            support it. The task drives validation gates, which produce the
+            output.
+          </desc>
+          <g class="c-gray">
+            <rect x="180" y="52" width="140" height="56" rx="8" />
+            <text
+              class="th"
+              x="250"
+              y="76"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Lead persona
+            </text>
+            <text
+              class="ts"
+              x="250"
+              y="94"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Mindset and rules
+            </text>
+          </g>
+          <g class="c-gray">
+            <rect x="20" y="172" width="140" height="56" rx="8" />
+            <text
+              class="th"
+              x="90"
+              y="196"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Source doc
+            </text>
+            <text
+              class="ts"
+              x="90"
+              y="214"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Grounds the task
+            </text>
+          </g>
+          <g class="c-purple">
+            <rect x="180" y="160" width="140" height="80" rx="8" />
+            <text
+              class="th"
+              x="250"
+              y="190"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Task file
+            </text>
+            <text
+              class="ts"
+              x="250"
+              y="212"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Source of truth
+            </text>
+          </g>
+          <g class="c-gray">
+            <rect x="360" y="172" width="140" height="56" rx="8" />
+            <text
+              class="th"
+              x="430"
+              y="196"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Validation gates
+            </text>
+            <text
+              class="ts"
+              x="430"
+              y="214"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Named slots
+            </text>
+          </g>
+          <g class="c-gray">
+            <rect x="540" y="172" width="120" height="56" rx="8" />
+            <text
+              class="th"
+              x="600"
+              y="196"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Output
+            </text>
+            <text
+              class="ts"
+              x="600"
+              y="214"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Code or doc
+            </text>
+          </g>
+          <g class="c-gray">
+            <rect x="180" y="292" width="140" height="56" rx="8" />
+            <text
+              class="th"
+              x="250"
+              y="316"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Skills
+            </text>
+            <text
+              class="ts"
+              x="250"
+              y="334"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Loaded references
+            </text>
+          </g>
+          <line
+            x1="250"
+            y1="108"
+            x2="250"
+            y2="158"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="160"
+            y1="200"
+            x2="178"
+            y2="200"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="320"
+            y1="200"
+            x2="358"
+            y2="200"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="500"
+            y1="200"
+            x2="538"
+            y2="200"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="250"
+            y1="292"
+            x2="250"
+            y2="242"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+        </svg>
+      </section>
+
+      <section>
+        <h2>2. The thirteen task types, by output</h2>
+        <p>
+          Implementation tasks produce code. Investigation tasks produce a
+          document. The single Communication task produces docs. Each task type
+          has exactly one lead persona — the mapping is rigid.
+        </p>
+        <svg viewBox="0 0 680 564" role="img">
+          <title>The 13 task types organised by output category</title>
+          <desc>
+            Implementation tasks produce code. Investigation tasks produce
+            documents. Communication tasks produce documentation.
+          </desc>
+          <text class="th" x="130" y="52" text-anchor="middle">
+            Implementation
+          </text>
+          <text class="ts" x="130" y="70" text-anchor="middle">
+            output: code
+          </text>
+          <text class="th" x="340" y="52" text-anchor="middle">
+            Investigation
+          </text>
+          <text class="ts" x="340" y="70" text-anchor="middle">
+            output: a document
+          </text>
+          <text class="th" x="550" y="52" text-anchor="middle">
+            Communication
+          </text>
+          <text class="ts" x="550" y="70" text-anchor="middle">
+            output: docs
+          </text>
+          <g class="c-teal">
+            <rect x="40" y="92" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="130"
+              y="114"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Feature development
+            </text>
+            <text
+              class="ts"
+              x="130"
+              y="132"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Builder
+            </text>
+            <rect x="40" y="156" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="130"
+              y="178"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Bug fix
+            </text>
+            <text
+              class="ts"
+              x="130"
+              y="196"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Debugger
+            </text>
+            <rect x="40" y="220" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="130"
+              y="242"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Refactor
+            </text>
+            <text
+              class="ts"
+              x="130"
+              y="260"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Refactorer
+            </text>
+            <rect x="40" y="284" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="130"
+              y="306"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Migration
+            </text>
+            <text
+              class="ts"
+              x="130"
+              y="324"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Migrator
+            </text>
+            <rect x="40" y="348" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="130"
+              y="370"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Optimisation
+            </text>
+            <text
+              class="ts"
+              x="130"
+              y="388"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Optimiser
+            </text>
+            <rect x="40" y="412" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="130"
+              y="434"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Cleanup
+            </text>
+            <text
+              class="ts"
+              x="130"
+              y="452"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Janitor
+            </text>
+            <rect x="40" y="476" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="130"
+              y="498"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Test authoring
+            </text>
+            <text
+              class="ts"
+              x="130"
+              y="516"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Test Engineer
+            </text>
+          </g>
+          <g class="c-purple">
+            <rect x="250" y="92" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="340"
+              y="114"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Research
+            </text>
+            <text
+              class="ts"
+              x="340"
+              y="132"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Researcher
+            </text>
+            <rect x="250" y="156" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="340"
+              y="178"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Audit
+            </text>
+            <text
+              class="ts"
+              x="340"
+              y="196"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Cartographer
+            </text>
+            <rect x="250" y="220" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="340"
+              y="242"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Spec authoring
+            </text>
+            <text
+              class="ts"
+              x="340"
+              y="260"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Specifier
+            </text>
+            <rect x="250" y="284" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="340"
+              y="306"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Review
+            </text>
+            <text
+              class="ts"
+              x="340"
+              y="324"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Skeptic
+            </text>
+            <rect x="250" y="348" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="340"
+              y="370"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Spike
+            </text>
+            <text
+              class="ts"
+              x="340"
+              y="388"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Spike Investigator
+            </text>
+          </g>
+          <g class="c-coral">
+            <rect x="460" y="92" width="180" height="56" rx="8" />
+            <text
+              class="th"
+              x="550"
+              y="114"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Documentation
+            </text>
+            <text
+              class="ts"
+              x="550"
+              y="132"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Documenter
+            </text>
+          </g>
+        </svg>
+      </section>
+
+      <section>
+        <h2>3. Distillation flows downhill</h2>
+        <p>
+          Allowed flows go from broad upstream artifacts to narrow downstream
+          ones. Reverse flow, skipping the spec, and ungrounded tasks are the
+          three ways agents most commonly drift — the framework forbids them by
+          name.
+        </p>
+        <svg viewBox="0 0 680 440" role="img">
+          <title>
+            Distillation flows downhill — allowed paths and forbidden paths
+          </title>
+          <desc>
+            Information flows from upstream artifacts toward implementation.
+            Reverse flow, skipping the spec, and ungrounded tasks are forbidden.
+          </desc>
+          <text class="th" x="40" y="55">
+            Allowed — distillation flows downhill
+          </text>
+          <g class="c-teal">
+            <rect x="40" y="80" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="130"
+              y="96"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Research question
+            </text>
+            <rect x="40" y="130" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="130"
+              y="146"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Research file
+            </text>
+            <rect x="40" y="180" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="130"
+              y="196"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Spec
+            </text>
+            <rect x="40" y="230" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="130"
+              y="246"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Code + tests
+            </text>
+            <rect x="250" y="80" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="340"
+              y="96"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Audit brief
+            </text>
+            <rect x="250" y="130" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="340"
+              y="146"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Audit
+            </text>
+            <rect x="250" y="180" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="340"
+              y="196"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Refactored code
+            </text>
+            <rect x="460" y="80" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="550"
+              y="96"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Bug report
+            </text>
+            <rect x="460" y="130" width="180" height="32" rx="6" />
+            <text
+              class="t"
+              x="550"
+              y="146"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Fix + test
+            </text>
+          </g>
+          <line
+            x1="130"
+            y1="112"
+            x2="130"
+            y2="128"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="130"
+            y1="162"
+            x2="130"
+            y2="178"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="130"
+            y1="212"
+            x2="130"
+            y2="228"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="340"
+            y1="112"
+            x2="340"
+            y2="128"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="340"
+            y1="162"
+            x2="340"
+            y2="178"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="550"
+            y1="112"
+            x2="550"
+            y2="128"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <text class="th" x="40" y="320">
+            Forbidden — never reverse or skip
+          </text>
+          <g class="c-red">
+            <rect x="40" y="340" width="180" height="60" rx="6" />
+            <text class="th" x="56" y="358" dominant-baseline="central">
+              Research → code
+            </text>
+            <text class="ts" x="56" y="382" dominant-baseline="central">
+              skips the required spec
+            </text>
+            <rect x="250" y="340" width="180" height="60" rx="6" />
+            <text class="th" x="266" y="358" dominant-baseline="central">
+              Code → spec
+            </text>
+            <text class="ts" x="266" y="382" dominant-baseline="central">
+              back-fill is dishonest
+            </text>
+            <rect x="460" y="340" width="180" height="60" rx="6" />
+            <text class="th" x="476" y="358" dominant-baseline="central">
+              Task with no source
+            </text>
+            <text class="ts" x="476" y="382" dominant-baseline="central">
+              grounding missing
+            </text>
+          </g>
+        </svg>
+      </section>
+
+      <section>
+        <h2>4. The task file's seventeen sections</h2>
+        <p>
+          Sections one, three, four, and five are pre-filled deterministically
+          from the task type. Most others are filled by the agent during the
+          session. Three sections (constraints, validation gates, self-review)
+          carry deterministic skeletons that the agent then completes.
+        </p>
+        <svg viewBox="0 0 680 410" role="img">
+          <title>Task file anatomy — 17 sections in order</title>
+          <desc>
+            Sections one, three, four, and five are pre-filled deterministically
+            from the task type. Most others are filled by the agent. A few are
+            mixed.
+          </desc>
+          <text class="th" x="40" y="50">Task file — 17 sections in order</text>
+          <g class="c-teal">
+            <rect x="430" y="38" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="455"
+              y="48"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              auto
+            </text>
+          </g>
+          <g class="c-gray">
+            <rect x="490" y="38" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="515"
+              y="48"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <g class="c-purple">
+            <rect x="550" y="38" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="575"
+              y="48"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              mixed
+            </text>
+          </g>
+          <text class="t" x="40" y="95" dominant-baseline="central">
+            1. Metadata
+          </text>
+          <g class="c-teal">
+            <rect x="240" y="85" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="95"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              auto
+            </text>
+          </g>
+          <text class="t" x="40" y="127" dominant-baseline="central">
+            2. Objective
+          </text>
+          <g class="c-gray">
+            <rect x="240" y="117" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="127"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="40" y="159" dominant-baseline="central">
+            3. Source doc
+          </text>
+          <g class="c-teal">
+            <rect x="240" y="149" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="159"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              auto
+            </text>
+          </g>
+          <text class="t" x="40" y="191" dominant-baseline="central">
+            4. Lead persona
+          </text>
+          <g class="c-teal">
+            <rect x="240" y="181" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="191"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              auto
+            </text>
+          </g>
+          <text class="t" x="40" y="223" dominant-baseline="central">
+            5. Required skills
+          </text>
+          <g class="c-teal">
+            <rect x="240" y="213" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="223"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              auto
+            </text>
+          </g>
+          <text class="t" x="40" y="255" dominant-baseline="central">
+            6. Domain skills
+          </text>
+          <g class="c-gray">
+            <rect x="240" y="245" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="255"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="40" y="287" dominant-baseline="central">
+            7. Optional research
+          </text>
+          <g class="c-gray">
+            <rect x="240" y="277" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="287"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="40" y="319" dominant-baseline="central">
+            8. Constraints
+          </text>
+          <g class="c-purple">
+            <rect x="240" y="309" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="319"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              mixed
+            </text>
+          </g>
+          <text class="t" x="40" y="351" dominant-baseline="central">
+            9. Plan
+          </text>
+          <g class="c-gray">
+            <rect x="240" y="341" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="265"
+              y="351"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="380" y="95" dominant-baseline="central">
+            10. Progress checklist
+          </text>
+          <g class="c-gray">
+            <rect x="580" y="85" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="95"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="380" y="127" dominant-baseline="central">
+            11. Decisions
+          </text>
+          <g class="c-gray">
+            <rect x="580" y="117" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="127"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="380" y="159" dominant-baseline="central">
+            12. Findings
+          </text>
+          <g class="c-gray">
+            <rect x="580" y="149" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="159"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="380" y="191" dominant-baseline="central">
+            13. Assumptions
+          </text>
+          <g class="c-gray">
+            <rect x="580" y="181" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="191"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="380" y="223" dominant-baseline="central">
+            14. Blockers
+          </text>
+          <g class="c-gray">
+            <rect x="580" y="213" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="223"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+          <text class="t" x="380" y="255" dominant-baseline="central">
+            15. Validation gates
+          </text>
+          <g class="c-purple">
+            <rect x="580" y="245" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="255"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              mixed
+            </text>
+          </g>
+          <text class="t" x="380" y="287" dominant-baseline="central">
+            16. Self-review
+          </text>
+          <g class="c-purple">
+            <rect x="580" y="277" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="287"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              mixed
+            </text>
+          </g>
+          <text class="t" x="380" y="319" dominant-baseline="central">
+            17. Next steps
+          </text>
+          <g class="c-gray">
+            <rect x="580" y="309" width="50" height="20" rx="4" />
+            <text
+              class="ts"
+              x="605"
+              y="319"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              agent
+            </text>
+          </g>
+        </svg>
+      </section>
+
+      <section>
+        <h2>5. Worked example — research question to shipped code</h2>
+        <p>
+          The longest realistic chain. A research question becomes a research
+          file via the Researcher; the research file becomes a spec via the
+          Specifier; the spec becomes code via the Builder. Each arrow is one
+          task; the persona shown on each box is who owns producing that
+          artifact.
+        </p>
+        <svg viewBox="0 0 680 240" role="img">
+          <title>Worked example — from question to shipped code</title>
+          <desc>
+            A research question becomes a research file by the Researcher, then
+            a spec by the Specifier, then code and tests by the Builder.
+          </desc>
+          <text class="th" x="40" y="55">
+            Worked example — research question to shipped code
+          </text>
+          <g class="c-gray">
+            <rect x="20" y="110" width="140" height="64" rx="8" />
+            <text
+              class="th"
+              x="90"
+              y="126"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Research question
+            </text>
+            <text
+              class="ts"
+              x="90"
+              y="158"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              user-written
+            </text>
+          </g>
+          <g class="c-purple">
+            <rect x="184" y="110" width="140" height="64" rx="8" />
+            <text
+              class="th"
+              x="254"
+              y="126"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Research file
+            </text>
+            <text
+              class="ts"
+              x="254"
+              y="158"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Researcher
+            </text>
+            <rect x="348" y="110" width="140" height="64" rx="8" />
+            <text
+              class="th"
+              x="418"
+              y="126"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Spec
+            </text>
+            <text
+              class="ts"
+              x="418"
+              y="158"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Specifier
+            </text>
+          </g>
+          <g class="c-teal">
+            <rect x="512" y="110" width="140" height="64" rx="8" />
+            <text
+              class="th"
+              x="582"
+              y="126"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Code + tests
+            </text>
+            <text
+              class="ts"
+              x="582"
+              y="158"
+              text-anchor="middle"
+              dominant-baseline="central"
+            >
+              Builder
+            </text>
+          </g>
+          <line
+            x1="160"
+            y1="142"
+            x2="182"
+            y2="142"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="324"
+            y1="142"
+            x2="346"
+            y2="142"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <line
+            x1="488"
+            y1="142"
+            x2="510"
+            y2="142"
+            class="arr"
+            marker-end="url(#arrow)"
+          />
+          <text class="ts" x="40" y="210">
+            Each arrow is one task; the persona shown is who owns producing it
+          </text>
+        </svg>
+      </section>
+    </main>
+  </body>
+</html>
