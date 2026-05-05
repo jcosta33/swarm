@@ -2,6 +2,8 @@
 
 > The 18 task types in Swarm. Each task type has a default lead persona, an attached skill set, named verification gate slots, and a template. Each one earns its place by being something agents do *constantly* across projects, languages, and stacks.
 
+> 📦 **`/docs/tasks/` captures routing rationale, verification philosophy, delta notes (integration/upgrade/etc.) — not full templates.** Executable skeletons (`task-base.md`, `task-feature.md`, …) ship only inside [`/scaffold/.agents/templates/`](../../scaffold/.agents/templates/).
+
 For the conceptual frame, see [`concepts/06-task-types.md`](../concepts/06-task-types.md).
 
 ---

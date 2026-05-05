@@ -2,6 +2,8 @@
 
 > **TL;DR.** A specialised migration for dependency / framework / language version bumps. Same persona (The Migrator), same wave discipline, same per-wave validation. The distinction is purely in the source of the change — an external library version, not an internal API replacement.
 
+> 📦 **This page is documentation.** The `upgrade` task type uses the same template as `migration`: [`/scaffold/.agents/templates/task-migration.md`](../../scaffold/.agents/templates/task-migration.md), with `Type: upgrade` and the additions noted below.
+
 ---
 
 ## 🎯 When to use vs `migration`
@@ -34,36 +36,22 @@ Mechanically, `upgrade` and `migration` use the same template, persona, and disc
 
 ---
 
-## 📐 Template
+## Canonical template (agent artefact)
 
-Use the [`migration` template](migration.md#-template), with these adaptations:
+Uses **`/scaffold/.agents/templates/task-migration.md`** with **`Type: upgrade`**. Persona (`Migrator`), wave discipline, and empirical cadence mirror [`migration`](migration.md); divergence is semantic input (upstream release artefacts vs internally authored API retirement).
 
-- `Type: upgrade`
-- `## Migration source and target` becomes `## Upgrade source and target`:
-  - **From:** the package version being replaced (e.g., `react@18.3.1`)
-  - **To:** the package version replacing it (e.g., `react@19.0.0`)
-  - **Reason:** what the upgrade unlocks (security fix, framework feature, end-of-life)
-  - Cite the upstream's official migration guide as a `## Linked docs` entry
-- The `<wave_plan>` table's "Validation gate" column should add `cmdBuild` to most waves (upgrades often expose build-time issues)
-- Self-review's "Callsite coverage" question becomes "**Pattern coverage** — Did you grep for every deprecated/removed API in the upgraded dependency? Are zero callsites of removed APIs remaining?"
+### Semantic split recap
 
----
+See table in **When to use** — framework keeps templates unified to minimise mechanical drift while letting routing signal different risk stories to reviewers.
 
-## 🛠️ Worked example: React 18 → 19
+### Expected structural adaptations
 
-A migration plan at `.agents/migrations/react-19-upgrade.md` cites:
-- React 19's official migration guide
-- The codebase audit at `.agents/audits/react-18-removed-apis.md` listing the deprecated patterns we use
+- Rename wave narrative headers to **`## Upgrade source and target`** emphasising semver endpoints + business/security motivation.
+- **Linked docs** must cite authoritative upstream migration / release-note URLs (not merely internal shorthand).
+- **Wave validation column** biases toward adding `cmdBuild` each wave — version bumps surface statically before tests.
+- Self-review substitutes **pattern-coverage / removed API extinguishment** language for purely internal callsite hunts.
 
-The Migrator:
-
-1. **Wave 0 (preparation):** Update `package.json` (`react: 19.0.0`); run `{{cmdInstall}}`. Run `{{cmdBuild}}` and `{{cmdTest}}` to baseline what breaks.
-2. **Wave 1 (legacy `ReactDOM.render` → `createRoot`):** ~15 callsites; manual review per file; per-wave `{{cmdBuild}}` and `{{cmdTest}}`.
-3. **Wave 2 (`useEffect` cleanup semantic changes):** Identify hooks affected by React 19's stricter cleanup ordering; per-file review.
-4. **Wave 3 (deprecated `unstable_*` APIs):** Audit-listed call sites.
-5. **Final wave (cleanup):** Remove the `react-18-shim.ts` shim; run full integration suite.
-
-Each wave ends with `{{cmdBuild}}`, `{{cmdValidate}}`, `{{cmdTest}}` outputs pasted, plus a `git grep -c <removed-API>` showing the count drop.
+Operational Markdown belongs in spawned task artefacts under `.agents/tasks/`, not mirrored here.
 
 ---
 

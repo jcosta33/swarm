@@ -138,7 +138,7 @@ This workspace overrides the root `AGENTS.md` for the following:
 
 ## Workspace-specific overlay personas
 
-This workspace uses **The Integrator** overlay for SDK-wiring tasks. See `.agents/skills/personas/the-integrator.md`.
+This workspace uses **The Integrator** overlay for SDK-wiring tasks. Keep the operative profile beside your forked personas catalogue (`personas/SKILL.md` appendices or `.agents/skills/personas/overlays/`) and cite the binding in this workspace's `AGENTS.md`.
 ```
 
 The Rust workspace has different bindings:

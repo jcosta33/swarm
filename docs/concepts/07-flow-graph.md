@@ -223,6 +223,16 @@ The agent has done the research, the answer seems clear, and the temptation is t
 
 **Framework response: forbidden.** If you find yourself implementing directly from research, *stop and write the spec first*. Research is input; spec is contract. The failure mode (drift between research findings and implementation) is severe and silent — the framework treats this as a hard rule.
 
+### ⚖️ Optimisation overlapping structural edits (resolved tension)
+
+Older exploratory drafts debated precedence when **performance improvements require internal reorganisation**. Default stance:
+
+1. **Prefer sequential specialised tasks** — `performance` carries measurement obligations; follow-on `refactor` (Janitor persona) absorbs behaviour-neutral extraction—wire dependencies through orchestration metadata so reviewers grasp ordering.
+2. **Merged single-task exception** permitted only when `## Linked docs` explicitly ranks the benchmark/report above cosmetic debt *and* the conditioned Self-review inherits **both** measurement + behavioural invariance checks.
+3. **Never** disguise semantic deltas as refactors (`documentation-gatekeeper` blocks) or cite perf wins without artefacts (`empirical-proof` blocks).
+
+ADR / constitution notes for storage layout (research vs specs): prefer `.agents/adrs/` chronology distinct from drafts in `.agents/specs/` when teams need divergence tracking—launcher paths remain project conventions as long as routing tables stay deterministic.
+
 ---
 
 ## 🧭 Decision flow when starting a task

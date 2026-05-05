@@ -2,6 +2,8 @@
 
 > **TL;DR.** Re-walk an existing audit with fresh adversarial eyes. Lead persona is The Skeptic. Read the code with the prior audit *closed*. Look for what the prior audit missed; flag any of its claims that don't hold up. Output: an updated audit (or a new audit citing the prior one) with new findings and corrections.
 
+> 📦 **This page is documentation.** The `deepen-audit` task type uses the same template as `audit-writing`: [`/scaffold/.agents/templates/task-audit.md`](../../scaffold/.agents/templates/task-audit.md), with `Type: deepen-audit` and the additions noted below.
+
 ---
 
 ## 🎯 When to use
@@ -28,49 +30,25 @@ If you're auditing a *new* area for the first time, that's `audit-writing`. Deep
 
 ---
 
-## 📐 Template
+## Canonical template (agent artefact)
 
-Use the [`audit-writing` template](audit-writing.md#-template), with these adaptations:
+Uses **`/scaffold/.agents/templates/task-audit.md`** with `type: deepen-audit`. Conceptually inherits the authoring skeleton from [`audit-writing`](audit-writing.md) but swaps persona and proof emphasis to Skeptic-coded adversarial re-verification rather than Auditor net-new discovery.
 
-- `Type: deepen-audit`
-- The marker becomes:
+### Why deepen-audit merits its own routed task
 
-  > 🔒 **DEEPEN-AUDIT SESSION** — Re-walk the cited audit with the prior audit *closed*. Read the code first; only then compare to the prior audit. Hunt for what the prior audit missed and any of its claims that don't hold up. Output: an updated audit at the same path, or a new audit citing the prior one.
-  >
-  > **PERSONA:** Load `.agents/skills/personas/SKILL.md` and adopt **The Skeptic** persona.
+| Concern | Rationale |
+|--------|-----------|
+| **Framing contagion** | Reading the predecessor audit before code imports blind spots labelled as completeness. Launcher encodes mandatory sequencing in constraints + persona. |
+| **Epistemic duty** | Not only additive findings — must falsify stale claims referencing moved codepaths. Different Self-review interrogatives than first-pass audit-writing. |
 
-- Add to `## Linked docs`:
-  - **Prior audit:** `<path>` (the audit being deepened)
+### Deltas the conditioned file must encode (summaries — verbatim text in scaffold / generated task only)
 
-- Add to `## Constraints`:
-  - **Read the code with the prior audit closed first.** Only after independently exploring should you compare to the prior audit's claims.
-  - Verify cited file:line references in the prior audit; flag any that don't hold up.
-  - For new findings: state file:line + Needed.
-  - For corrections to the prior audit: cite the original claim and the evidence that contradicts it.
+- Session banner + persona block quoting Skeptic deepening protocol.
+- `## Linked docs` includes **prior audit** path as primary foil.
+- Constraint bullets: independent read-first discipline, corroborate or negate prior citations, explicit correction choreography for contradicted assertions.
+- Self-review appendix: adversarial completeness questions distinct from Auditor checklist.
 
-- Add to `## Self-review`:
-
-  ### Adversarial completeness (deepen-audit specific)
-
-  - Did you read the code with the prior audit closed? Did you find issues the prior audit missed?
-  - Did you verify the prior audit's structural claims (especially "no callers" or "behavior X holds")?
-  - Are corrections to the prior audit explicit (with the original claim cited and the evidence)?
-
----
-
-## 🛠️ Worked example
-
-The prior audit at `.agents/audits/billing-q1-2026.md` was a clean review by The Auditor, but two months later a near-miss bug surfaced involving a race condition in `src/billing/charge.ts` that the audit didn't flag.
-
-The Skeptic's deepen-audit:
-
-1. Reads `src/billing/` from scratch, *without* the prior audit open.
-2. Inspects `src/billing/charge.ts` adversarially, finds the same race condition the near-miss exposed.
-3. *Then* opens the prior audit; finds it claimed "thread safety verified" without grep-evidence.
-4. Documents:
-   - **New finding:** the race condition (file:line + Needed).
-   - **Correction to prior audit:** the "thread safety verified" claim was unsupported; the prior audit's `## Findings` section should be amended.
-5. Updates the audit (or creates a new one citing the prior).
+Structured starter lives with other task templates under `/scaffold/.agents/templates/` (see scaffold README); do **not** mirror full Markdown bodies here — that reintroduces copy drift.
 
 ---
 

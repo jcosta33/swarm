@@ -141,24 +141,7 @@ Anti-patterns:
 - ❌ "Doesn't quite hit the spec"
 - ❌ Vague file references ("the validation logic")
 
-Worked example of a _good_ kickback:
-
-```markdown
-**Kickback for branch `feature/oauth2-pkce`**
-
-1. `src/auth/pkce.ts:42` — `generateCodeVerifier()` uses `Math.random()`; the spec
-   (`.agents/specs/oauth2-pkce.md` §3.2) requires cryptographically secure randomness.
-   Use `crypto.randomBytes(32).toString('base64url')`.
-
-2. `src/auth/pkce.ts:78` — Missing handling of `S256` vs `plain` code challenge methods.
-   Spec §3.4 requires both. Add a switch on `code_challenge_method`.
-
-3. `tests/auth/pkce.test.ts` — No test for the rejected-state-mismatch flow. Spec §5.1
-   acceptance criterion 4 requires it. Add a test that asserts a 400 response when
-   the state parameter doesn't match.
-
-These are blockers. Re-submit when addressed.
-```
+A concise kickback lists **blocking** bullets with `path:line`, the spec/audit citation, and the exact behavioural delta expected—workers must be able to act without clarifying pings.
 
 The kickback notes ride alongside the original spec in the worker's _kickback task_ — see [`tasks/kickback.md`](../tasks/kickback.md).
 
@@ -252,5 +235,4 @@ The persona's hard constraints encode this management discipline.
 - [`tasks/orchestration.md`](../tasks/orchestration.md) — the orchestration task template
 - [`tasks/kickback.md`](../tasks/kickback.md) — the kickback task template
 - [`10-subagent-strategy.md`](10-subagent-strategy.md) — read-side vs write-side parallelism
-- [`examples/orchestration-walkthrough.md`](../examples/orchestration-walkthrough.md) — a worked example
 - [ADR 0014](../adrs/0014-recursion-renamed-delegation.md) — the naming decision

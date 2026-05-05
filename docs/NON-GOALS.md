@@ -18,7 +18,7 @@ There is no runtime in this repo. No process manager, no scheduler, no daemon. T
 
 ## ❌ Swarm does not enforce a specific test runner, package manager, or language
 
-`pnpm`, `cargo`, `pip`, `bundle`, `go test`, `mvn` — none of these appear in any framework-level template. They appear only in [`examples/`](examples/) where they are clearly marked as language-specific.
+`pnpm`, `cargo`, `pip`, `bundle`, `go test`, `mvn` — none of these appear in any **`/scaffold`** template shipped by this framework repo. Concrete commands exist only inside a **consumer project's** bindings (typically `AGENTS.md`) or language-specific notes you add locally.
 
 The framework names verification *gate slots* (`{{cmdValidate}}`, `{{cmdTest}}`, `{{cmdBenchmark}}`); the project binds slots to commands. See [Principle 2](PRINCIPLES.md#2--language--and-runtime-agnostic-at-the-framework-level).
 

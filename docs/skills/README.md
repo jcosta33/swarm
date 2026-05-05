@@ -2,6 +2,10 @@
 
 > The framework's shipped skills. Two categories: **cross-cutting** (always or near-always loaded) and **authoring** (per doc type / per task type). Project-specific skills live in `.agents/skills/domain/` in the consumer repo.
 
+> 📦 **The pages in this directory are *documentation about* the skills — what they do, why they exist, what failure modes they prevent.**
+>
+> The actual skill files (the ones the agent loads at runtime) live in [`/scaffold/.agents/skills/`](../../scaffold/.agents/skills/). Copy from there into your project; everything in the scaffold is self-contained (its cross-references stay valid after copying).
+
 ---
 
 ## ⚡ TL;DR

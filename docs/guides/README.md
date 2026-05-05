@@ -23,4 +23,4 @@
 
 - [`concepts/`](../concepts/) — the why behind each guide
 - [`reference/`](../reference/) — the lookup tables
-- [`examples/`](../examples/) — worked walkthroughs
+- [`tasks/`](../tasks/) — routed task archetypes (operational specifics live under `/scaffold/.agents/templates/`)

@@ -36,21 +36,49 @@ The framework itself is just disciplined Markdown — no runtime, no DSL, no exe
 ## 🗺️ Repo map
 
 ```
-docs/
-├── README.md                  ← you are here
-├── PRINCIPLES.md              ← load-bearing design constraints
-├── NON-GOALS.md               ← what Swarm explicitly is not
+swarm/
+├── docs/                          ← the framework documentation (this directory)
+│   ├── README.md                  ← you are here
+│   ├── PRINCIPLES.md              ← load-bearing design constraints
+│   ├── NON-GOALS.md               ← what Swarm explicitly is not
+│   │
+│   ├── concepts/                  ← the WHY — the framework's ideas
+│   ├── personas/                  ← discussion of the 13 mindsets
+│   ├── tasks/                     ← discussion of the 18 task types
+│   ├── documents/                 ← discussion of the 4 core doc types + extended
+│   ├── skills/                    ← discussion of the shipped skills
+│   ├── reference/                 ← lookup tables (compat matrix, flow graph, placeholders, glossary)
+│   └── adrs/                      ← Architecture Decision Records
 │
-├── concepts/                  ← the WHY — the framework's ideas
-├── personas/                  ← the 13 mindsets, one file each
-├── tasks/                     ← the 18 task types, one file each
-├── documents/                 ← the 4 core doc types + extended variants
-├── skills/                    ← the framework's shipped skills
-├── reference/                 ← the lookup tables (compatibility matrix, flow graph, placeholders, glossary)
-├── guides/                    ← the HOW — task-shaped instruction
-├── examples/                  ← worked walkthroughs in prose
-└── adrs/                      ← Architecture Decision Records
+└── scaffold/                      ← the literal artefacts you copy into your repo
+    ├── README.md                  ← what's in here, install procedure
+    ├── AGENTS.md                  ← root agent brief (with TODO markers)
+    ├── CLAUDE.md, GEMINI.md       ← cross-tool aliases
+    ├── .gitignore.additions       ← lines to append to your .gitignore
+    │
+    ├── docs/agents/               ← human-facing process docs (ship with every project)
+    │   ├── 01-process.md ··· 05-flow-graph.md
+    │
+    └── .agents/
+        ├── skills/                ← the actual skill files
+        │   ├── personas/SKILL.md  ← all 13 persona profiles
+        │   ├── manage-task/SKILL.md
+        │   ├── documentation-gatekeeper/SKILL.md
+        │   ├── distillation-discipline/SKILL.md
+        │   ├── empirical-proof/SKILL.md
+        │   ├── adversarial-review/SKILL.md
+        │   └── write-{spec,audit,research,bug-report,feature,fix,refactor,rewrite}/SKILL.md
+        └── templates/             ← task and doc templates with {{placeholders}}
+            ├── task-{feature,fix,...}.md          (task templates bundled for copy)
+            ├── {spec,audit,bug-report,research}.md  (4 doc templates)
+            └── skill.md
 ```
+
+> **`/docs/` is for understanding; `/scaffold/` is for adopting.**
+>
+> The `/docs/` directory explains the framework — concepts, design rationale, comparisons, examples, and references. Every page links freely across `/docs/`.
+>
+> The `/scaffold/` directory is **self-contained**: every reference inside it points to other files inside it (using `.agents/...` paths the consumer would have). Copy `/scaffold/` into your repo's root, bind the placeholders, and you're conformant. No `/docs/` references break when you copy.
 
 Every directory has its own `README.md` that catalogues what's inside.
 
@@ -63,10 +91,11 @@ Reading order depends on who you are and why you're here:
 | You are…                                     | Read this first                                                                           |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 👀 Casually evaluating Swarm                 | [`concepts/01-what-is-swarm.md`](concepts/01-what-is-swarm.md) — 5 minutes                |
-| 🛠️ Adopting Swarm in a real project          | [`guides/quickstart.md`](guides/quickstart.md) → [`guides/adopting-swarm.md`](guides/adopting-swarm.md) |
+| 🛠️ Adopting Swarm in a real project          | [`guides/quickstart.md`](guides/quickstart.md) → [`guides/adopting-swarm.md`](guides/adopting-swarm.md) → [`/scaffold/README.md`](../scaffold/README.md) |
 | 🧠 Trying to understand the mechanism        | [`concepts/02-conditioning-pipeline.md`](concepts/02-conditioning-pipeline.md)            |
 | 🎭 Looking for the right persona             | [`personas/README.md`](personas/README.md) → the matrix                                    |
 | 📋 Looking for the right task type           | [`tasks/README.md`](tasks/README.md) → the matrix                                          |
+| 📦 Looking for the actual files to copy      | [`/scaffold/README.md`](../scaffold/README.md)                                             |
 | 🧰 Building a tool that consumes Swarm       | [`reference/template-placeholders.md`](reference/template-placeholders.md)                |
 | 🤝 Contributing or extending the framework   | [`guides/extending-the-framework.md`](guides/extending-the-framework.md) → [`adrs/`](adrs/) |
 | 🔬 Comparing to Spec Kit / BMAD / Superpowers | [`concepts/12-prior-art.md`](concepts/12-prior-art.md)                                    |

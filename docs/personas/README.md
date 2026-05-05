@@ -2,6 +2,8 @@
 
 > The 13 mindsets that condition agents in Swarm. Each persona has its own page; this README is the catalogue and the index.
 
+> 📦 **`/docs/personas/` is conceptual — routing wedges, contrasts, hazards.** Executable profiles (constraints, forbiddances, proofs, red flags) live strictly in [`/scaffold/.agents/skills/personas/SKILL.md`](../../scaffold/.agents/skills/personas/SKILL.md).
+
 ---
 
 ## ⚡ TL;DR
@@ -122,67 +124,15 @@ A project can add overlay personas that the framework doesn't ship — for stack
 | **The Security Reviewer**    | (project-defined)                              | Regulated codebase requiring per-PR security audit            |
 | **The Accessibility Auditor** | (project-defined)                              | UI codebase with WCAG conformance requirements                |
 
-Overlays live in the project's `.agents/skills/personas/<name>.md`. They follow the same format as the framework's 13. They do *not* require an ADR or framework approval. The framework graduates an overlay to canonical only when many projects independently demand it. See [`guides/customizing-personas.md`](../guides/customizing-personas.md).
+Overlays ship in consumer repos beside the forked **`personas/SKILL.md`** or under `.agents/skills/personas/overlays/` — see [`guides/customizing-personas.md`](../guides/customizing-personas.md). They inherit the iron-law pattern but remain project-owned artefacts.
 
 ---
 
-## 📐 The persona profile format
+## 📐 Profile shape (conceptual — full headings live in `/scaffold`)
 
-Every persona file uses the same structure (the "iron law + red flags" pattern):
+Canonical personas embed **constraints, forbiddances, routing tables, proofs, adversarial Self-review deltas, iron-law red-flag tables**. That literal outline is maintained once inside [`personas/SKILL.md`](../../scaffold/.agents/skills/personas/SKILL.md) so loaders ingest a uniform catalogue.
 
-```markdown
-# Persona: <Display name>
-
-## TL;DR
-One paragraph that answers: when do I become this persona, and what does that change?
-
-## Role
-What this persona is responsible for.
-
-## Mindset
-The frame the agent must adopt. Stated as imperatives.
-
-## Hard constraints
-Numbered. No hedging.
-
-## Forbidden actions
-Numbered. The negative space.
-
-## Decision heuristics
-Tiebreakers when rules don't directly apply.
-
-## Triggering documents
-Which source docs lead to this persona.
-
-## Triggering task types
-Which task types route to this persona by default.
-
-## Skills auto-attached
-The skills loaded when this persona becomes active.
-
-## Empirical proofs required
-What must be pasted into Self-review.
-
-## Self-review focus
-Persona-specific questions in Self-review.
-
-## Anti-patterns
-Concrete failure modes the persona resists.
-
-## Red flags 🚩
-Rationalisations the persona refuses to accept (the "iron law" pattern).
-
-## Example: how this persona resolves a representative issue
-A short worked example showing the persona's thinking on a real-shaped problem.
-
-## Handoff partners
-Who hands off to whom.
-
-## Checklist
-The persona's pre-close checklist.
-```
-
-See [ADR 0013](../adrs/0013-iron-law-red-flags-pattern.md) for the format's rationale.
+Consult [ADR 0013](../adrs/0013-iron-law-red-flags-pattern.md) for why the iron-law + rationalisation refusal table anchors reliability more than motivational blurbs ever could.
 
 ---
 

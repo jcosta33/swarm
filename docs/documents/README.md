@@ -2,6 +2,8 @@
 
 > The four core source documents in Swarm — plus the extended catalogue of specialised variants. Each doc has a distinct *epistemic stance*; they cannot collapse into one another.
 
+> 📦 **`/docs/documents/` explains epistemic jobs and lifecycle — not authoring scaffolds.** Copy literal templates [`/scaffold/.agents/templates/`](../../scaffold/.agents/templates/) (`spec.md`, `audit.md`, `bug-report.md`, `research.md`).
+
 For the conceptual frame, see [`concepts/05-document-types.md`](../concepts/05-document-types.md).
 
 ---
@@ -37,35 +39,9 @@ These four are the **canonical source documents**. Every project running Swarm s
 
 ---
 
-## 🧬 The shared base skeleton
+## 🧬 Shared skeleton conventions
 
-All doc types share a base. Per-type templates extend it.
-
-```markdown
-# <Title>
-
-## Context
-Why this doc exists. The triggering ask. The audience.
-
-## Linked docs
-- Upstream sources
-- Related documents
-
-## <Type-specific main content>
-(Different per doc type)
-
-## Decisions
-Significant choices made while writing this doc, with rationale.
-
-## Open questions
-- [ ] **[CRITICAL]** Questions that block downstream work
-- [ ] **[MINOR]** Questions worth recording but not blocking
-
-## Distillation Loss Statement
-(For docs distilled from upstream — see concepts/03-distillation.md)
-```
-
-The base is documented at [`reference/document-base.md`](../reference/document-base.md).
+Structural commonalities (`Context`, linked upstreams, Loss Statement slots) live in **[`reference/document-base.md`](../reference/document-base.md)** and in the verbatim scaffold templates — reproduced here only as narration would reintroduce copy drift.
 
 ---
 

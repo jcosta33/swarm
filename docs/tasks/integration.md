@@ -2,6 +2,8 @@
 
 > **TL;DR.** Wire a third-party SDK, API, or MCP server into the codebase per a spec. Same persona as `feature` (The Builder), specialised constraints around credential handling, error semantics, and protocol fidelity. Output: working integration + tests + handoff to The Skeptic.
 
+> 📦 **This page is documentation.** The `integration` task type uses the same template as `feature`: [`/scaffold/.agents/templates/task-feature.md`](../../scaffold/.agents/templates/task-feature.md), with `Type: integration` and the additions noted below.
+
 ---
 
 ## 🎯 When to use
@@ -39,58 +41,26 @@ If you're *consuming* an already-integrated SDK to add a feature, that's `featur
 
 ---
 
-## 📐 Template
+## Canonical template (agent artefact)
 
-Use the [`feature` template](feature.md#-template), with:
+Uses **`/scaffold/.agents/templates/task-feature.md`** with **`Type: integration`**. Routing still selects The Builder (`write-feature` skill bundle) — the task type specialises *proof obligations*, not persona.
 
-- `Type: integration`
-- Add a section after `## Linked docs`:
+### Why a distinct `integration` type exists
 
-  ```markdown
-  ## Integration target
+| Driver | Explanation |
+|--------|----------------|
+| **Secret & boundary hazard class** | External IO raises incident severity curve; embedding extra Self-review probes + grep-style negative proofs lowers silent leakage regressions. |
+| **Architect coupling** | Specs seldom encode handshake edge matrices fully; secondary reviewer listing anticipates escalation path reducing reinterpretation churn. |
 
-  <integration_target>
+### Conceptual deltas on top of feature template
 
-  **External system:** (e.g., Stripe Payment Intents API)
-  **Version:** (e.g., `stripe-node@14.21.0`, API version `2024-06-20`)
-  **Authentication:** (e.g., bearer token via `STRIPE_SECRET_KEY` env var)
-  **Documentation:** (link to SDK docs / API reference / RFC)
+Consumers extend the scaffolded feature task instance with:
 
-  </integration_target>
-  ```
+- **`## Integration target`** capturing system identity (name, pinned artifact/API version, auth surface references, authoritative external docs URLs).
+- **Constraint amplification** repeating non-negotiables: secrets only via environment indirection; map foreign failures into domestic error taxonomy before domain layers.
+- **`### Integration boundary` Self-review stanza** — forces evidence-talk about secret grep negatives + version pinning artefacts.
 
-- Add to `## Constraints`:
-  - Credentials via env vars, never hardcoded
-  - Errors bridged at the integration boundary
-  - SDK / API version pinned and recorded
-
-- Add to `## Self-review`:
-
-  ```markdown
-  ### Integration boundary
-
-  - Are external errors mapped into the project's error taxonomy at the integration point? Does business logic stay free of external error shapes?
-  - Are credentials sourced from env vars only? Pasted `git grep -n '<api-key-prefix>'` showing zero hardcoded keys?
-  - Is the integration's version pinned in `package.json` (or equivalent) and documented?
-  ```
-
----
-
-## 🛠️ Worked example
-
-A spec at `.agents/specs/stripe-payment-intents.md` calls for integrating the Stripe Payment Intents API.
-
-The Builder (in integration mode):
-
-1. Reads the spec and the Stripe SDK docs.
-2. Sets up the SDK client with the secret key from `process.env.STRIPE_SECRET_KEY`.
-3. Wires the integration in `src/payments/stripe.ts`:
-   - `createPaymentIntent({ amount, currency, customerId })` — returns the project's `PaymentIntent` type
-   - Internal Stripe errors mapped to `PaymentError` with structured codes
-4. Writes integration tests using Stripe's sandbox env (or recorded fixtures via VCR-like tools).
-5. Writes a unit test verifying error mapping (e.g., Stripe's `card_declined` → our `PaymentError(code: 'card_declined')`).
-6. Pastes the `git grep -n 'sk_'` result showing zero hardcoded keys.
-7. Hands off to the Skeptic for review.
+Markdown for these deltas is authored in generated task files, not duplicated from `/docs`.
 
 ---
 
