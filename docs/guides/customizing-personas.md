@@ -65,7 +65,7 @@ If the work folds cleanly into an existing persona with a different mindset swit
 | ---------------------- | ----------------------------------- | ------------------------------------------------------------- |
 | **The Type Surgeon**   | spec-gemini's TypeScript-soundness persona | TypeScript codebase with strict generics / variance constraints |
 | **The Integrator**     | spec-gemini's SDK/MCP wiring persona | Heavy third-party integration work                           |
-| **The Spike Investigator** | framework.md's time-boxed exploration persona | Throwaway spike code answering one question         |
+| **The Spike Investigator** | Bounded throwaway prototyping session | Spike code answering one explicit question                          |
 | **The Security Reviewer** | (project-defined)                | Regulated codebase requiring per-PR security audit            |
 | **The Accessibility Auditor** | (project-defined)            | UI codebase with WCAG conformance requirements                |
 | **The Data Engineer**  | (project-defined)                   | Data pipeline / ETL work with its own constraints             |

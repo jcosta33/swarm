@@ -120,7 +120,7 @@ A project can add overlay personas that the framework doesn't ship — for stack
 | ---------------------------- | ---------------------------------------------- | ------------------------------------------------------------- |
 | **The Type Surgeon**         | spec-gemini's TypeScript-soundness persona     | TypeScript codebase with strict generics / variance constraints |
 | **The Integrator**           | spec-gemini's SDK/MCP wiring persona           | Heavy third-party integration work                            |
-| **The Spike Investigator**   | framework.md's time-boxed exploration persona  | Throwaway spike code answering one question                   |
+| **The Spike Investigator**   | Early exploratory prototyping persona                           | Throwaway spike code answering one bounded question                   |
 | **The Security Reviewer**    | (project-defined)                              | Regulated codebase requiring per-PR security audit            |
 | **The Accessibility Auditor** | (project-defined)                              | UI codebase with WCAG conformance requirements                |
 
