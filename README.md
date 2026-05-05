@@ -1,83 +1,74 @@
 # Swarm
 
-**Swarm is documentation-shaped conditioning for coding agents.** It does not run models or ship a runtime in this repo. It gives you Markdown you can copy, adapt, or ignore—the same philosophical lane as **[shadcn/ui](https://ui.shadcn.com/)**: *you bring the codebase; we bring patterns you paste in and own.* Think of Swarm as a **buffet**, not a monolithic framework you “install” and obey end-to-end.
+**Swarm is documentation-shaped conditioning for coding agents.** Nothing in this repository runs inference or ships a runtime. You get Markdown—concepts in [`docs/`](docs/README.md), copy-paste artefacts in [`scaffold/`](scaffold/README.md)—that you vendor into your own tree, edit, delete, or replace. Adoption can be incremental or complete; mixing both is fine. This is deliberately **not** a product you install and obey wholesale, and not a completeness test for whether you’re “doing agents correctly.” Use it as raw material until it stops earning its keep.
 
 ---
 
 ## What problem this tries to solve
 
-Agents fail in repeatable ways:
+Agents tend to fail in predictable ways:
 
 - **Drift** — work wanders away from the real ask.
 - **Ungrounded changes** — the model never saw your architecture rules or the contract for the task.
 - **Hallucinated “done”** — confident summaries without evidence from your toolchain.
 - **No durable trail** — the next session re-discovers the same facts because nothing was captured where it belongs.
 
-Swarm attacks that root cause by making **upstream documents** route to **task types**, **personas**, **skills**, and **verification gates** deterministically—then encoding all of that in a **single task file** the agent reads before it touches code. The goal is predictable conditioning, not magic autonomy.
+Swarm addresses that by tying **upstream documents** to **task types**, **personas**, **skills**, and **verification gates** in a deterministic way, then folding that into **one task file** the agent is meant to read before it edits code. The aim is repeatable conditioning—not autonomous magic.
 
 ---
 
-## What this is / is not
+## What this repo is—and isn’t
 
-| This repo **is** | This repo **is not** |
-| ---------------- | --------------------- |
-| Prose (`/docs`), copy-paste artefacts (`/scaffold`), and ADRs | The Swarm CLI, a daemon, or a package you `npm install` as “Swarm” |
-| A starting point you fork mentally and literally | A certification that “you’re doing agents right” if you copy everything |
-| A buffet: take the flow graph only, take skills only, or take the whole tray | The one true agent stack; teams differ—**pick what earns its keep** |
-
-If something here does not fit your stack, leave it on the buffet. Mixed adoption is intentional.
+| Here | Elsewhere |
+| ---- | --------- |
+| Prose, reference tables, ADRs (`docs/`) | The Swarm CLI, schedulers, or an installable “Swarm SDK” |
+| Artefacts you paste and own (`scaffold/`) | A mandate to adopt every persona, template, or convention |
+| A starting constraint language for teams | A single sanctioned stack everyone must mirror |
 
 ---
 
 ## How to consume it
 
-### Buffet (recommended default)
+### Incrementally (usual path)
 
-Browse [`docs/`](docs/README.md), then pull **only** what reduces your failure modes:
+Skim [`docs/`](docs/README.md), then take only what lowers your risk:
 
-- **Just the vocabulary** → [`docs/concepts/`](docs/concepts/README.md) and [`docs/reference/glossary.md`](docs/reference/glossary.md)
-- **Just routing discipline** → [`docs/reference/flow-graph.md`](docs/reference/flow-graph.md)
-- **Just skills format + one behaviour** → a single folder under [`scaffold/.agents/skills/`](scaffold/.agents/skills/), plus [`docs/guides/writing-skills.md`](docs/guides/writing-skills.md)
-- **Just templates** → [`scaffold/.agents/templates/`](scaffold/.agents/templates/)
+| Need | Entry |
+| --- | --- |
+| Shared vocabulary | [`docs/concepts/`](docs/concepts/README.md), [`docs/reference/glossary.md`](docs/reference/glossary.md) |
+| Routing & attachment rules | [`docs/reference/flow-graph.md`](docs/reference/flow-graph.md) |
+| One skill’s behaviour | A folder under [`scaffold/.agents/skills/`](scaffold/.agents/skills/), with [`docs/guides/writing-skills.md`](docs/guides/writing-skills.md) |
+| Task / doc blanks | [`scaffold/.agents/templates/`](scaffold/.agents/templates/) |
 
-You are not obligated to adopt personas, worktrees, or every task type. **Partial adoption beats zero adoption framed as “we’ll migrate later”.**
+You are not obliged to adopt worktrees, every task type, or the full persona set. Ship the smallest slice that fixes a real gap.
 
-### Wholesale (single drop)
+### Full bundle
 
-Copy the [`scaffold/`](scaffold/README.md) tree into your project, fill `TODO`s in [`scaffold/AGENTS.md`](scaffold/AGENTS.md), merge [`.gitignore` hints](scaffold/.gitignore.additions). Then skim [`docs/guides/adopting-swarm.md`](docs/guides/adopting-swarm.md) for intent. **Reasoning stays in `/docs`; literal files you paste live in `/scaffold`.**
+Copy [`scaffold/`](scaffold/README.md) into your project, resolve `TODO`s in [`scaffold/AGENTS.md`](scaffold/AGENTS.md), apply [`.gitignore` hints](scaffold/.gitignore.additions). Read [`docs/guides/adopting-swarm.md`](docs/guides/adopting-swarm.md) for intent. **`/docs` is for humans; `/scaffold` is what agents and launchers reuse.**
 
-### Understand before you cargo-cult
+### Rationale before paste
 
-- **Why these ideas exist:** [`docs/README.md`](docs/README.md) → concepts → guides  
-- **Decisions recorded as ADRs:** [`docs/adrs/README.md`](docs/adrs/README.md)
-
----
-
-## Repository map
-
-| Path | Role |
-| ---- | ---- |
-| [`docs/`](docs/README.md) | *Why & what* — progressive disclosure for humans |
-| [`scaffold/`](scaffold/README.md) | *What you paste* — self-contained artefacts for agents (skills, templates, process snippets) |
-| [`.agents/audits/`](.agents/audits/) | Optional dogfood — this repo occasionally audits itself here |
+Concepts → guides → reference: [`docs/README.md`](docs/README.md). Design decisions live in [`docs/adrs/README.md`](docs/adrs/README.md).
 
 ---
 
-## The shadcn analogy (one sentence)
+## Repository layout
 
-Like shadcn, Swarm favors **explicit, editable artefacts in your repo** over an opaque upstream runtime: copy, customize, delete what you dislike—**your tree, your rules**, with conventions that stayed portable enough to steal.
-
----
-
-## Next clicks
-
-| I want to… | Go to |
-| ---------- | ----- |
-| Read the full pitch & mechanism | [`docs/concepts/01-what-is-swarm.md`](docs/concepts/01-what-is-swarm.md) |
-| Install in a project fast | [`docs/guides/quickstart.md`](docs/guides/quickstart.md) |
-| Copy files into a repo | [`scaffold/README.md`](scaffold/README.md) |
-| See what Swarm refuses to be | [`docs/NON-GOALS.md`](docs/NON-GOALS.md) |
+| Path | Purpose |
+| ---- | ------- |
+| [`docs/`](docs/README.md) | Why things exist, progressive depth |
+| [`scaffold/`](scaffold/README.md) | Self-contained files meant to land in consumer repos |
+| [`.agents/audits/`](.agents/audits/) | Optional internal audits—same convention as adopting projects |
 
 ---
 
-**Swarm is a starting point.** If it saves you one class of agent failure or gives you language to discuss conditioning with your team, it did its job. Everything else is optional.
+## Where to go next
+
+| Goal | Doc |
+| ---- | --- |
+| Full framing & pipeline diagram | [`docs/concepts/01-what-is-swarm.md`](docs/concepts/01-what-is-swarm.md) |
+| Fast concrete install steps | [`docs/guides/quickstart.md`](docs/guides/quickstart.md) |
+| What ships in the scaffold | [`scaffold/README.md`](scaffold/README.md) |
+| Explicit boundaries | [`docs/NON-GOALS.md`](docs/NON-GOALS.md) |
+
+If Swarm eliminates one recurrent failure mode or gives your team clearer words for how you condition agents, it has done enough. The rest is optional.
