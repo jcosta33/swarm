@@ -19,11 +19,11 @@ Swarm addresses that by tying **upstream documents** to **task types**, **person
 
 ## What this repo is—and isn’t
 
-| Here | Elsewhere |
-| ---- | --------- |
-| Prose, reference tables, ADRs (`docs/`) | The Swarm CLI, schedulers, or an installable “Swarm SDK” |
+| Here                                      | Elsewhere                                                 |
+| ----------------------------------------- | --------------------------------------------------------- |
+| Prose, reference tables, ADRs (`docs/`)   | The Swarm CLI, schedulers, or an installable “Swarm SDK”  |
 | Artefacts you paste and own (`scaffold/`) | A mandate to adopt every persona, template, or convention |
-| A starting constraint language for teams | A single sanctioned stack everyone must mirror |
+| A starting constraint language for teams  | A single sanctioned stack everyone must mirror            |
 
 ---
 
@@ -33,12 +33,12 @@ Swarm addresses that by tying **upstream documents** to **task types**, **person
 
 Skim [`docs/`](docs/README.md), then take only what lowers your risk:
 
-| Need | Entry |
-| --- | --- |
-| Shared vocabulary | [`docs/concepts/`](docs/concepts/README.md), [`docs/reference/glossary.md`](docs/reference/glossary.md) |
-| Routing & attachment rules | [`docs/reference/flow-graph.md`](docs/reference/flow-graph.md) |
-| One skill’s behaviour | A folder under [`scaffold/.agents/skills/`](scaffold/.agents/skills/), with [`docs/guides/writing-skills.md`](docs/guides/writing-skills.md) |
-| Task / doc blanks | [`scaffold/.agents/templates/`](scaffold/.agents/templates/) |
+| Need                       | Entry                                                                                                                                        |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shared vocabulary          | [`docs/concepts/`](docs/concepts/README.md), [`docs/reference/glossary.md`](docs/reference/glossary.md)                                      |
+| Routing & attachment rules | [`docs/reference/flow-graph.md`](docs/reference/flow-graph.md)                                                                               |
+| One skill’s behaviour      | A folder under [`scaffold/.agents/skills/`](scaffold/.agents/skills/), with [`docs/guides/writing-skills.md`](docs/guides/writing-skills.md) |
+| Task / doc blanks          | [`scaffold/.agents/templates/`](scaffold/.agents/templates/)                                                                                 |
 
 You are not obliged to adopt worktrees, every task type, or the full persona set. Ship the smallest slice that fixes a real gap.
 
@@ -54,21 +54,21 @@ Concepts → guides → reference: [`docs/README.md`](docs/README.md). Design de
 
 ## Repository layout
 
-| Path | Purpose |
-| ---- | ------- |
-| [`docs/`](docs/README.md) | Why things exist, progressive depth |
-| [`scaffold/`](scaffold/README.md) | Self-contained files meant to land in consumer repos |
+| Path                                 | Purpose                                                       |
+| ------------------------------------ | ------------------------------------------------------------- |
+| [`docs/`](docs/README.md)            | Why things exist, progressive depth                           |
+| [`scaffold/`](scaffold/README.md)    | Self-contained files meant to land in consumer repos          |
 | [`.agents/audits/`](.agents/audits/) | Optional internal audits—same convention as adopting projects |
 
 ---
 
 ## Where to go next
 
-| Goal | Doc |
-| ---- | --- |
+| Goal                            | Doc                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------ |
 | Full framing & pipeline diagram | [`docs/concepts/01-what-is-swarm.md`](docs/concepts/01-what-is-swarm.md) |
-| Fast concrete install steps | [`docs/guides/quickstart.md`](docs/guides/quickstart.md) |
-| What ships in the scaffold | [`scaffold/README.md`](scaffold/README.md) |
-| Explicit boundaries | [`docs/NON-GOALS.md`](docs/NON-GOALS.md) |
+| Fast concrete install steps     | [`docs/guides/quickstart.md`](docs/guides/quickstart.md)                 |
+| What ships in the scaffold      | [`scaffold/README.md`](scaffold/README.md)                               |
+| Explicit boundaries             | [`docs/NON-GOALS.md`](docs/NON-GOALS.md)                                 |
 
 If Swarm eliminates one recurrent failure mode or gives your team clearer words for how you condition agents, it has done enough. The rest is optional.
