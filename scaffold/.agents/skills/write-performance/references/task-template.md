@@ -164,8 +164,8 @@ Concrete starting points for the next session if this one ends incomplete.
 ### Verification outputs (paste actual command output — do not paraphrase)
 
 - `git status` →
-- Baseline `{{cmdBenchmark}}` output:
-- Final `{{cmdBenchmark}}` output:
+- Baseline `{{cmdBenchmark}}` output (before any change):
+- Final `{{cmdBenchmark}}` output (after the change, **same protocol as baseline** — same warmup, sample count, aggregate, hardware):
 - Final `{{cmdTest}}` (last 2 lines):
 - Final `{{cmdValidate}}` (last 2 lines):
 

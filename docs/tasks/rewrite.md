@@ -18,6 +18,15 @@ If behaviour is preserved, it's `refactor`. If it's a new module from scratch wi
 
 ---
 
+## 🎯 Two-surface verification
+
+A rewrite has a recorded behaviour delta, and the two surfaces it creates are verified by two distinct self-review gates ([ADR 0021](../adrs/0021-verification-contract.md), [ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md); defined in [`reference/verification-gates.md`](../reference/verification-gates.md)):
+
+- **`acceptance-criteria-coverage` on the delta** — each changed behaviour is a spec acceptance criterion carrying a check binding (`test` / `command` / `manual`); the self-review maps every changed behaviour to its check and pastes the result. `test`-bound criteria must be shown to be valid oracles (fail-when-violated / pass-when-satisfied, proven by assertion-flip).
+- **`behaviour-preservation` on the non-delta** — everything outside the delta must be behaviour-preserved, proven by an equivalence check that fails if behaviour changed (property-based / differential / golden where available, else an explicit record of why the existing suite is a sufficient oracle). A green suite alone is necessary but not sufficient.
+
+---
+
 ## 🧬 Metadata
 
 | Field                | Value                                              |
@@ -27,7 +36,7 @@ If behaviour is preserved, it's `refactor`. If it's a new module from scratch wi
 | **Secondary**        | [The Skeptic](../personas/the-skeptic.md) (review) |
 | **Output**           | New implementation, behaviour delta enforced       |
 | **Recommended skills** | `write-rewrite`, `empirical-proof` (the Builder mindset is carried by `write-rewrite`) |
-| **Verification gate slots** | `cmdInstall` (pre), `cmdValidate` (after each module), `cmdValidate` (post), `cmdTest` (post) |
+| **Verification gate slots** | `cmdInstall` (pre), `cmdValidate` (after each module), `cmdValidate` (post), `cmdTest` (post), plus two spec-intent gates at self-review: `acceptance-criteria-coverage` on the delta and `behaviour-preservation` on the non-delta surface |
 
 ---
 
@@ -48,6 +57,8 @@ Every task template shares the same structural clusters; see [Why these structur
 - Not updating callers for behaviour changes
 - Calling it a refactor when behaviour changes (mislabelling)
 - Calling it a rewrite when behaviour is preserved (over-marking)
+- Treating a green suite as proof the non-delta surface was preserved (no equivalence check that fails if behaviour changed)
+- Declaring done with a changed behaviour that isn't mapped to its check and a pasted result
 
 ---
 

@@ -40,7 +40,7 @@ Commands are referenced in two different shapes depending on *where* the referen
 | **Skill body** (`SKILL.md` prose)          | Named entry — `AGENTS.md > Commands > Validation`           | Read by the agent at run time (degrades to "ask the user" if the entry is missing) |
 | **Task template** (`{{cmd*}}` placeholder) | `{{cmdValidate}}`, `{{cmdTest}}`, …                          | The launcher, from the same `AGENTS.md > Commands` entries |
 
-This keeps skill bodies **self-contained**: a `SKILL.md` body never hardcodes a command and never carries a `{{cmd*}}` placeholder (placeholders would be meaningless without a launcher to resolve them). It points at the project's `AGENTS.md > Commands` section by name. The templates, which a launcher *does* resolve, carry the `{{cmd*}}` placeholders. Both ends bind to the same `AGENTS.md > Commands` table — required entries `Validation` / `Test` / `Format`, plus extended `Install` / `Typecheck` / `Build` / `ValidateDeps` / `Benchmark`.
+This keeps skill bodies **self-contained**: a `SKILL.md` body never hardcodes a command and never carries a `{{cmd*}}` placeholder (placeholders would be meaningless without a launcher to resolve them). It points at the project's `AGENTS.md > Commands` section by name. The templates, which a launcher *does* resolve, carry the `{{cmd*}}` placeholders. Both ends bind to the same `AGENTS.md > Commands` table — required entries `Validation` / `Test` / `Format`; extended `Install` / `Typecheck` / `Lint` / `Build` / `ValidateDeps` / `Benchmark`; and out-of-contract doc-lint commands (`MarkdownLint` / `LinkCheck` / `CitationCheck`) that only doc/research-heavy projects bind.
 
 ### Where the templates live
 
@@ -60,22 +60,24 @@ There are **no** flat per-skill task templates in `.agents/templates/` — each 
 
 These are bound by the project in its `AGENTS.md > Commands` section (a launcher may also read a CLI config). The framework cares only about the slot names; the project binds them. The skill-body equivalent is the named `Commands > …` entry the placeholder maps to (see the dual contract above).
 
-| Placeholder              | Semantics                                                                  | Example bindings                                  |
-| ------------------------ | -------------------------------------------------------------------------- | ------------------------------------------------- |
-| `{{cmdInstall}}`         | Install dependencies / set up the worktree                                | `pnpm install` · `cargo build` · `pip install -r requirements.txt` |
-| `{{cmdValidate}}`        | The project's catch-all check (lint + format + typecheck)                 | `pnpm run validate` · `cargo check && cargo clippy` |
-| `{{cmdLint}}`            | Lint only                                                                  | `pnpm run lint` · `cargo clippy` · `ruff check`   |
-| `{{cmdFormat}}`          | Format check                                                               | `pnpm run format:check` · `cargo fmt --check`     |
-| `{{cmdTypecheck}}`       | Static analysis / type check                                               | `pnpm run typecheck` · `mypy .` · `cargo check`   |
-| `{{cmdTest}}`            | Test suite                                                                 | `pnpm test` · `cargo test` · `pytest`             |
-| `{{cmdBuild}}`           | Build the project artefact                                                 | `pnpm run build` · `cargo build --release`        |
-| `{{cmdValidateDeps}}`    | Architectural / dependency-graph boundary check                            | `pnpm run validate:deps` · `dependency-cruiser` · `import-linter` |
-| `{{cmdBenchmark}}`       | Run benchmarks (used by `performance` tasks)                              | `pnpm run bench` · `cargo bench`                  |
-| `{{cmdMarkdownLint}}`    | Lint Markdown docs (used by `documentation` tasks where applicable)        | `pnpm run lint:md` · `markdownlint`               |
-| `{{cmdLinkCheck}}`       | Check that doc links resolve                                               | `pnpm run check:links` · `lychee`                 |
-| `{{cmdCitationCheck}}`   | Check that research file citations are valid (used by `research-writing`)  | (project-defined; few projects implement this)    |
+Every slot carries a **contract status** so the catalogue and `AGENTS.md > Commands` agree (no placeholder is unbindable by construction): **required** = skills rely on it; **extended** = bind when the work occurs, else `n/a` with a one-line reason; **out-of-contract** = no standard `AGENTS.md` row, bound only by doc/research-heavy projects (otherwise the skill asks at run time).
 
-A repo that lacks a particular slot (e.g., no architectural validation tooling) marks the slot `n/a` with a one-line justification rather than silently skipping it.
+| Placeholder              | Status            | Semantics                                                       | Example bindings                                  |
+| ------------------------ | ----------------- | --------------------------------------------------------------- | ------------------------------------------------- |
+| `{{cmdValidate}}`        | **required**      | The project's catch-all check (lint + format + typecheck)       | `pnpm run validate` · `cargo check && cargo clippy` |
+| `{{cmdTest}}`            | **required**      | Test suite                                                      | `pnpm test` · `cargo test` · `pytest`             |
+| `{{cmdFormat}}`          | **required**      | Format check                                                    | `pnpm run format:check` · `cargo fmt --check`     |
+| `{{cmdInstall}}`         | extended          | Install dependencies / set up the worktree                      | `pnpm install` · `cargo build` · `pip install -r requirements.txt` |
+| `{{cmdTypecheck}}`       | extended          | Static analysis / type check                                    | `pnpm run typecheck` · `mypy .` · `cargo check`   |
+| `{{cmdLint}}`            | extended          | Lint only (when not folded into `Validate`)                     | `pnpm run lint` · `cargo clippy` · `ruff check`   |
+| `{{cmdBuild}}`           | extended          | Build the project artefact                                      | `pnpm run build` · `cargo build --release`        |
+| `{{cmdValidateDeps}}`    | extended          | Dependency-flow / architecture-boundary check                   | `pnpm run validate:deps` · `dependency-cruiser` · `import-linter` |
+| `{{cmdBenchmark}}`       | extended          | Run benchmarks (used by `performance` tasks)                    | `pnpm run bench` · `cargo bench`                  |
+| `{{cmdMarkdownLint}}`    | out-of-contract   | Lint Markdown docs (`documentation` tasks, doc-heavy projects)  | `pnpm run lint:md` · `markdownlint`               |
+| `{{cmdLinkCheck}}`       | out-of-contract   | Check that doc links resolve (`documentation` tasks)            | `pnpm run check:links` · `lychee`                 |
+| `{{cmdCitationCheck}}`   | out-of-contract   | Check research-file citations (`research-writing`, rare)        | (project-defined; few projects implement this)    |
+
+A repo that lacks an *extended* slot (e.g., no dependency-flow tooling) marks it `n/a` with a one-line justification rather than silently skipping it. *Out-of-contract* slots need no row unless a `documentation`/`research-writing` task uses one.
 
 ---
 

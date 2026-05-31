@@ -17,9 +17,17 @@ Resolves project commands via the consuming repo's `AGENTS.md` — `Commands > V
 
 ## Core rules
 
-### 1. Surface-level behaviour is preserved
+### 1. Surface-level behaviour is preserved — proven by an equivalence check that fails if behaviour changed
 
 The test suite passes before, during (at every wave checkpoint), and after. Behaviour at the surface — what callers observe — does not change. The *implementation* moves; the *contract* doesn't. If a test fails after a wave, investigate before "fixing" the test.
+
+But a green suite is **necessary, not sufficient**: "the existing tests still pass" only proves the migration didn't break what was already covered, not that behaviour is unchanged where coverage is thin. The gate is an *equivalence check* — one that would **fail if behaviour changed**, generalising a bug-fix's fail-before / pass-after oracle to the whole migrated surface. Pick the strongest available:
+
+- **Property-based** — assert invariants over generated inputs across the old-API and new-API code paths.
+- **Differential** — run the old API and the new API on the same inputs and assert byte-equal outputs (keep the old path reachable behind the shim until the diff is clean — a migration's shims make this the natural fit).
+- **Golden-output** — capture the pre-migration output for a representative input set, then assert the post-migration output matches it.
+
+If no stronger check than the existing suite is available for a given change, **record explicitly in `## Self-review` why the existing suite is a sufficient oracle for this change** — e.g. the migrated callsites are exhaustively covered by named tests, with the coverage shown. "The suite is green" stated without that justification does not satisfy this gate.
 
 ### 2. Plan in waves
 
@@ -79,6 +87,6 @@ Anything you discover that's not on the migration plan's list gets *promoted* to
 
 ## Bundled resources
 
-- `references/task-template.md` — a fillable migration-task template with source/target, wave plan, compatibility shims, callsite tracker, per-wave validation slots, and a self-review hard gate covering wave integrity, callsite coverage, shim hygiene, and final state.
+- `references/task-template.md` — a fillable migration-task template with source/target, wave plan, compatibility shims, callsite tracker, per-wave validation slots, and a self-review hard gate covering wave integrity, callsite coverage, shim hygiene, behaviour preservation (the equivalence check), and final state.
 
 Substitute the `{{...}}` placeholders and fill in as you work.

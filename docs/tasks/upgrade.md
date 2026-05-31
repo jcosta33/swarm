@@ -32,7 +32,7 @@ Mechanically, `upgrade` and `migration` use the same template, persona, and disc
 | **Secondary**        | [The Skeptic](../personas/the-skeptic.md) (review per wave) |
 | **Output**           | Codebase compatible with the upgraded dependency / version |
 | **Recommended skills** | `write-migration`, `empirical-proof`, `persona-migrator` |
-| **Verification gate slots** | Same as `migration` + `cmdInstall` (must succeed first), `cmdBuild` (post) where applicable |
+| **Verification gate slots** | Same as `migration` (incl. the [`behaviour-preservation`](../reference/verification-gates.md) equivalence check at self-review) + `cmdInstall` (must succeed first), `cmdBuild` (post) where applicable |
 
 ---
 
@@ -59,7 +59,7 @@ Operational Markdown belongs in spawned task artefacts under `.agents/tasks/`, n
 
 - Skipping the build step (`AGENTS.md > Commands > Build`) in per-wave validation (upgrades often surface at build time, not test time)
 - Bumping multiple major dependencies in one task (each is its own upgrade)
-- Treating "tests pass" as sufficient when the upgrade may have changed behaviour the suite doesn't cover
+- Treating "tests pass" as sufficient when the upgrade may have changed behaviour the suite doesn't cover — a green suite is necessary but not sufficient; the [`behaviour-preservation`](../reference/verification-gates.md) gate wants an equivalence check (property-based / differential / golden-output) that would *fail if behaviour changed*, or an explicit record of why the existing suite is a sufficient oracle here
 - Trusting the upstream migration guide without verifying the cited deprecated patterns exist in *our* codebase
 
 ---

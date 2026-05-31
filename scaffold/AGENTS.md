@@ -36,12 +36,17 @@ This is the **command contract**. Skills reference these entries by name in pros
 | Command          | Template placeholder   | Bind to / `n/a`                  | Used by                                 |
 | ---------------- | ---------------------- | -------------------------------- | --------------------------------------- |
 | `Install`        | `{{cmdInstall}}`       | TODO                             | most code tasks (worktree setup)        |
-| `Typecheck`      | `{{cmdTypecheck}}`     | TODO _or_ `n/a`                  | refactor, standalone type checks        |
-| `Build`          | `{{cmdBuild}}`         | TODO _or_ `n/a`                  | upgrade                                 |
-| `ValidateDeps`   | `{{cmdValidateDeps}}`  | TODO _or_ `n/a`                  | refactor / migration / review (arch boundary check) |
+| `Typecheck`      | `{{cmdTypecheck}}`     | TODO _or_ `n/a`                  | refactor, feature, standalone type checks |
+| `Lint`           | `{{cmdLint}}`          | TODO _or_ `n/a`                  | standalone lint when not folded into `Validation` |
+| `Build`          | `{{cmdBuild}}`         | TODO _or_ `n/a`                  | upgrade, feature (where applicable)     |
+| `ValidateDeps`   | `{{cmdValidateDeps}}`  | TODO _or_ `n/a`                  | refactor / migration / review (dependency-flow / architecture-boundary check) |
 | `Benchmark`      | `{{cmdBenchmark}}`     | TODO _or_ `n/a`                  | performance                             |
 
 > Skills never invent commands. If a value isn't here, they ask you and proceed once told. If you find yourself answering the same question every session, add the binding above rather than letting skills guess.
+>
+> **Out-of-contract commands.** Doc-lint commands (`{{cmdMarkdownLint}}`, `{{cmdLinkCheck}}`, `{{cmdCitationCheck}}`) are *out of the standard contract* — only documentation- or research-heavy projects bind them. Add a row above if a `documentation` / `research-writing` task in your project needs one; otherwise the skill asks at run time.
+>
+> **Version.** The scaffold version this repo holds is recorded in `.agents/.swarm-version` (one line). Upgrade notes, when a framework milestone ships, live in `MIGRATIONS.md` / `DEPRECATIONS.md` at the repo root.
 
 ---
 

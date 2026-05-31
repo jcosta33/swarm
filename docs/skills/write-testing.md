@@ -21,6 +21,7 @@ Three kinds of net-negative test — they cost maintenance and catch nothing:
 - **Test behaviour, not implementation.** Exercise the public surface. A test that breaks on a behaviour-preserving refactor is a bad test.
 - **One test, one reason to fail.** Each test asserts one specific behaviour. If it can fail for two reasons, split it.
 - **Flip the assertion to prove the test means something.** After writing each test, flip its assertion (or comment out the path it exercises) → it must fail; restore → it must pass. Paste a representative sample of that failing-then-passing transition into the self-review. A test that passes when flipped tests nothing.
+- **A criterion-bound test must encode the criterion's intended behaviour.** When a test is the oracle for a spec acceptance criterion (binding `test`, per [ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)), two *separate* proofs are required: the assertion-flip proves it fires (not a tautology), and the criterion mapping proves it fires for the right reason — it must assert the behaviour the criterion describes, not an adjacent passing condition, and fail when the *criterion* is violated. If no fail-when-violated test can be built, that's a finding for the spec author (rebind to `command` / `manual`), not licence to ship a green-but-irrelevant test.
 - **Place tests per the project's conventions.** Don't guess layout. Follow the existing file-naming / directory / runner convention; if several exist, pick the one closest to the code under test and document the choice.
 - **Coverage is a smell, not a target.** A poorly-tested covered line is worse than an uncovered one — it manufactures false confidence. Test the behaviour that deserves a test, not the percentage.
 - **Failure messages must be useful.** "AssertionError: expected true" tells the developer nothing. Descriptive test names; descriptive assertion messages where the runner supports them.
@@ -43,7 +44,7 @@ The skill resolves commands through `AGENTS.md > Commands` — `Test` and `Valid
 
 ## What it ships
 
-`references/task-template.md` — a fillable testing-task template: a coverage-gap block, a test-cases table (behaviour / inputs / expected outcome / reason this test exists), a test-placement table, a progress checklist that includes the assertion-flip step, and a self-review hard gate covering behaviour-over-implementation, failure-mode clarity, placement, and robustness. Copy it into your project's task-file location, substitute the `{{...}}` placeholders, and fill it in as you work.
+`references/task-template.md` — a fillable testing-task template: a coverage-gap block, a test-cases table (behaviour / inputs / expected outcome / reason this test exists), a test-placement table, a progress checklist that includes the assertion-flip and criterion-encoding steps, and a self-review hard gate. The hard gate enumerates the required verification suite for a `testing` task — the project's test command, its coverage report, and validation — plus the assertion-flip proof, the criterion-encoding mapping (for any acceptance-criterion-bound test), behaviour-over-implementation, failure-mode clarity, placement, and robustness. Copy it into your project's task-file location, substitute the `{{...}}` placeholders, and fill it in as you work.
 
 ## Related
 

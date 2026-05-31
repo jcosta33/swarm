@@ -1,6 +1,6 @@
 # 01 · What is Swarm?
 
-> **TL;DR.** Swarm is a documentation framework for coding agents. It exists because agents fail predictably without grounded context — they drift, they make irreversible decisions on unverified assumptions, and they leave no trail for the next session. Swarm's response is a deterministic conditioning pipeline: a source document determines a task type, which suggests a persona, which determines the skills and verification gates that get attached to a worktree-local task file. The agent reads one file, adopts the suggested mindset (or the one its workflow skill carries), executes the task, and pastes empirical proof.
+> **TL;DR.** Swarm is a documentation framework for coding agents. It exists because agents fail predictably without grounded context — they drift, they make irreversible decisions on unverified assumptions, and they leave no trail for the next session. Swarm's response is a conditioning pipeline: a source document routes to a task type, which suggests a persona, which suggests the skills and verification gates attached to a worktree-local task file. That routing is *recommended* — a launcher may apply it deterministically and the directive skill descriptions reproduce it in-session, but the agent self-assesses and may re-route ([ADR 0020](../adrs/0020-activation-by-self-assessment.md)). Determinism here means *which conditioning loads*, not *which output is produced*. The agent reads one file, adopts the suggested mindset (or the one its workflow skill carries), executes the task, and pastes empirical proof.
 
 ---
 
@@ -148,7 +148,7 @@ Swarm fits when:
 
 - ✅ You have multiple agents (or one agent across many sessions) doing real engineering work.
 - ✅ You've been bitten by drift, hallucinated completion, or context pollution.
-- ✅ You want determinism: same input → same persona, every time.
+- ✅ You want repeatable conditioning: the same source doc + task type routes to the same *starting conditioning* — deterministically when a launcher applies the graph, and the agent may still re-assess in-session. (Repeatable conditioning, not reproducible output — sampling is the CLI's concern.)
 - ✅ Your stack is heterogeneous; you don't want a framework that bakes in `pnpm` or `cargo`.
 - ✅ You like Diátaxis / Spec Kit / Superpowers but want something more rigorous on the documentation side.
 

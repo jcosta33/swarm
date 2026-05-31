@@ -11,12 +11,18 @@ A spec is the contract between the spec author (who specifies) and the implement
 
 ## Core rules
 
-### 1. Every requirement is testable
+### 1. Every acceptance criterion is testable — and names its check
 
-A requirement that can't be tested is a wish. A test author must be able to derive a test from each acceptance criterion. If you can't write the test in your head, the requirement is too vague.
+A requirement that can't be tested is a wish. Beyond being testable, each acceptance criterion **declares how it is verified** — its *check binding* — so intent is checkable, not re-interpreted by every implementer:
 
-- ✅ "GET /api/login redirects to the IdP with a valid S256 code_challenge derived from a cryptographically-secure verifier (≥ 32 bytes entropy)."
-- ❌ "The login endpoint should be secure."
+- **`test`** (preferred) — a test exercises it; that test must be a valid *oracle*: it fails when the criterion is violated and passes when satisfied (downstream `feature`/`testing` work proves this by flipping the assertion).
+- **`command`** — the output of a project command (named via `AGENTS.md > Commands`) demonstrates it.
+- **`manual`** — verification is unavoidably human; carry a one-line reason why it cannot be a runnable check.
+
+- ✅ "GET /api/login redirects to the IdP with a valid S256 `code_challenge` (≥ 32 bytes entropy). — **check:** `test` · auth/login-redirect"
+- ❌ "The login endpoint should be secure." (untestable, no check)
+
+A criterion with no check binding is not finalisable. The bindings are what make the spec a contract the downstream `feature` task verifies *against*, rather than prose it re-interprets — the difference between a spec that is read and one that is checked.
 
 ### 2. State requirements, not implementations
 
@@ -76,6 +82,18 @@ Before delivering the spec, output the `[CRITICAL]` open-question list verbatim 
 ```
 
 If any `[CRITICAL]` remains, the spec is not finalisable. Halt, route to the resolution path (research, ADR, audit, or downgrade with a recorded design decision), then re-output the list. The agent does not deliver the spec to the user until the list is in the task file and shows `(none — spec is finalisable)`.
+
+Also output the **acceptance-criteria bindings** and confirm every criterion carries one:
+
+```markdown
+## Acceptance-criteria bindings
+
+- AC1 → `test`: <path or name of the test that is its oracle>
+- AC2 → `command`: `AGENTS.md > Commands > <name>`
+- AC3 → `manual`: <one-line reason it cannot be a runnable check>
+```
+
+A criterion with no binding is not finalisable — bind it (`test`/`command`) or record it as `manual` with a reason. This is the spec's half of the spec-as-code contract: the downstream `feature` task maps each criterion to its check and pastes the result.
 
 ## What does not belong
 

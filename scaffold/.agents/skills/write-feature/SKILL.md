@@ -39,7 +39,17 @@ The project's validation command runs after every batch of changes, not only at 
 
 Every acceptance criterion has a corresponding test (or notes the test in a `testing` follow-up task).
 
-### 7. Paste verification output
+### 7. Map every acceptance criterion to its check and paste the result
+
+The spec binds each acceptance criterion to a check — `test`, `command`, or `manual`. Honour that binding: in `## Self-review`, list every criterion, the check the spec named for it, and the pasted result of running that check. A criterion is only covered when its result is in the task file.
+
+- A `test`-bound criterion is covered only when its oracle is shown to be valid — it fails when the criterion is violated and passes when satisfied (prove it by flipping the assertion). A test that passes no matter what proves nothing.
+- A `command`-bound criterion is covered by the pasted output of the named project command (resolved via `AGENTS.md > Commands`).
+- A `manual` criterion is covered by recording the one-line reason it can't be a runnable check and the human judgement made.
+
+A green toolchain suite is not coverage. The suite proves the code is well-formed; this mapping proves the code does what the spec asked. Do not declare done with an unmapped criterion.
+
+### 8. Paste verification output
 
 `## Self-review` requires verbatim verification output. Paraphrase is not proof: paste the last two lines of every command run, in a fenced code block, unmodified.
 
@@ -53,6 +63,8 @@ Every acceptance criterion has a corresponding test (or notes the test in a `tes
 - Implementing past the spec ("while I'm here…")
 - Silently resolving spec ambiguities
 - Declaring done without verification output
+- Declaring done with an acceptance criterion that isn't mapped to its check and a pasted result
+- Treating a green toolchain suite as proof the spec's intent was met
 - Reinventing helpers that already exist
 - Suppressing architectural-violation warnings
 - "I'll add tests later"

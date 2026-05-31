@@ -1,5 +1,7 @@
 # Empirical Evidence on Agent Tooling and Codebase Augmentation for Coding Agents
 
+> ⚠️ **Originating design exploration — superseded on the skill layer.** This file predates the skills-repo merge and [ADR 0017](../../docs/adrs/0017-no-always-load-skills.md) (no always-loaded skills). It specifies skills (`manage-task`, `documentation-gatekeeper`, `write-orchestration`) and a persona/task taxonomy the shipped framework no longer matches. It is kept for provenance and the empirical evidence it cites; **canonical truth lives in [`docs/`](../../docs/) + [`docs/adrs/`](../../docs/adrs/).**
+
 ## Executive summary
 
 - **Curated, focused skills are the clearest win in the current literature.** The strongest direct benchmark, _SkillsBench_, evaluates 84 tasks across 11 domains and 7 model–agent configurations, and finds that curated skills raise pass rate by **16.2 percentage points on average** over a no-skills baseline. The same study reports that **2–3 focused skills/modules** work better than broader documentation-style bundles, while **4+ skills show much smaller benefit**, suggesting that skill count and scope must be actively controlled rather than maximized. _GraSP_ reinforces this pattern: when the active skill set grows, the bottleneck becomes orchestration, not raw skill availability. Confidence: **high** for skill-dependent tasks; **moderate** for direct transfer to repository-level coding because much of the skill evidence is broader than software engineering alone. citeturn24view0turn24view3turn31view5turn17view0

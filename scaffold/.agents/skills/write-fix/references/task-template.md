@@ -126,6 +126,8 @@ Re-run the bug report's reproduction. Paste the output to confirm the bug fires 
 - `git status` →
 - Pre-patch reproduction (the bug actually fires in this worktree):
 - Post-patch reproduction (the bug no longer fires):
+- Regression test FAILS before the patch (patch out the fix, run the regression test, paste the failing output):
+- Regression test PASSES after the patch (`{{cmdTest}}` on the regression test, paste the passing output):
 - `{{cmdValidate}}` (last 2 lines):
 - `{{cmdTest}}` (last 2 lines):
 - `git diff --stat`:

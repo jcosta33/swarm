@@ -27,7 +27,7 @@ If behaviour changes, it's `rewrite`. If it's a single file with a small change,
 | **Secondary**        | [The Skeptic](../personas/the-skeptic.md) (review of each wave) |
 | **Output**           | Codebase using the target API; old API removed (or scheduled) |
 | **Recommended skills** | `write-migration`, `empirical-proof`, `persona-migrator` |
-| **Verification gate slots** | `cmdInstall` (pre), `cmdValidate` (per wave), `cmdValidate` (post), `cmdTest` (post), migration-coverage check (post) |
+| **Verification gate slots** | `cmdInstall` (pre), `cmdValidate` (per wave), `cmdValidate` (post), `cmdTest` (post), migration-coverage check (post), [`behaviour-preservation`](../reference/verification-gates.md) (self-review) — an equivalence check that fails if behaviour changed, not just a green suite |
 
 ---
 

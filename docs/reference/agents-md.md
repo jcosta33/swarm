@@ -58,18 +58,21 @@ Extended (bound when the relevant work occurs; mark `n/a` with a one-line reason
 | Command        | Template placeholder  | Bind to / `n/a`         | Used by                          |
 | -------------- | --------------------- | ----------------------- | -------------------------------- |
 | `Install`      | `{{cmdInstall}}`      | `pnpm install`          | most code tasks (worktree setup) |
-| `Typecheck`    | `{{cmdTypecheck}}`    | `pnpm typecheck` / `n/a` | refactor, standalone type checks |
-| `Build`        | `{{cmdBuild}}`        | `pnpm build` / `n/a`    | upgrade                          |
-| `ValidateDeps` | `{{cmdValidateDeps}}` | `pnpm validate:deps` / `n/a` | refactor / migration / review |
+| `Typecheck`    | `{{cmdTypecheck}}`    | `pnpm typecheck` / `n/a` | refactor, feature, type checks  |
+| `Lint`         | `{{cmdLint}}`         | `pnpm lint` / `n/a`     | standalone lint (not folded into Validation) |
+| `Build`        | `{{cmdBuild}}`        | `pnpm build` / `n/a`    | upgrade, feature                 |
+| `ValidateDeps` | `{{cmdValidateDeps}}` | `pnpm validate:deps` / `n/a` | refactor / migration / review (dependency-flow) |
 | `Benchmark`    | `{{cmdBenchmark}}`    | `pnpm bench` / `n/a`    | performance                      |
+
+Out-of-contract (doc/research-heavy projects only; otherwise the skill asks at run time): `MarkdownLint`, `LinkCheck`, `CitationCheck`. Version held: `.agents/.swarm-version`.
 
 ## Skills
 
 Skills live in `.agents/skills/<name>/SKILL.md` and **self-activate**: each carries a
 directive `description` and loads when its triggers match the task. There is **no
 always-loaded skill** — keep only the skills your work needs and let each fire on its
-own description. (See `docs/skills/building/scope.md` for why a load-on-every-task
-"skill" is the wrong primitive — its content belongs here in AGENTS.md.)
+own description. (A skill authored to load on every task is the wrong primitive —
+its content is persistent context and belongs here in AGENTS.md.)
 
 ## Repo structure
 

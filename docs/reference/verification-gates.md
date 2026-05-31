@@ -2,6 +2,8 @@
 
 > The named gate slots and when each fires. The gates are *what the framework names*; the *commands* are project-bound (see [`template-placeholders.md`](template-placeholders.md)).
 
+> **The required suite per task type is canonical in [`flow-graph.md`](flow-graph.md)** ("Task type → verification commands"); this page defines what each gate *is*. Both bind through `AGENTS.md > Commands` ([ADR 0021](../adrs/0021-verification-contract.md)). Toolchain gates (lint, typecheck, dependency-flow, test, build) prove the code is *well-formed and the existing suite passes*; the **spec-intent and equivalence gates** below ([ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)) verify the code does *what the spec intended* — the difference between toolchain health and correctness.
+
 ---
 
 ## 🚦 Gate phases
@@ -111,6 +113,20 @@ For research-writing, audit-writing, spec-writing, bug-report-writing, deepen-au
 | Per-worker `{{cmdTest}}` (run by Lead Engineer)     | per-worker review pass | Same                                                           |
 | Final merged-branch `{{cmdValidate}}` and `{{cmdTest}}` | post                  | Integrated validation; per-worker validation isn't enough       |
 | Merge log                           | self-review                  | Order, conflicts, resolutions                                   |
+
+---
+
+## 🎯 Spec-intent & equivalence gates ([ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md))
+
+Toolchain gates prove form, not intent. These gates verify the output against what the source doc actually asked for. They are the framework's answer to "the suite is green, but is it *correct*?"
+
+| Slot                         | Phase             | Tasks                          | Purpose                                                                                          |
+| ---------------------------- | ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `acceptance-criteria-coverage` | self-review     | feature, integration           | Each acceptance criterion maps to its check binding (`test` / `command` / `manual`-with-reason) and a pasted result; `test`-bound criteria are shown to be valid oracles (fail-then-pass / assertion-flip), not tautologies |
+| `behaviour-preservation`     | post + self-review | refactor, migration, rewrite   | Equivalence shown by a check that would *fail if behaviour changed*. The existing suite passing is necessary but not sufficient — name a property-based / differential / golden-output check where available, or record explicitly why the existing suite is a sufficient oracle for this change |
+| `integration-boundary`       | self-review       | integration                    | Secrets resolve via scoped env vars (a `grep` proves none hardcoded); the SDK/API version is pinned and documented; a contract/integration test exercises the boundary |
+
+These are the criteria-level oracle ([0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)) layered on top of the toolchain suite ([0021](../adrs/0021-verification-contract.md)). Where no executable check is possible, the `manual`-with-reason form is the honest fallback — the gate records *that* a human must judge it, rather than pretending a test covers it.
 
 ---
 

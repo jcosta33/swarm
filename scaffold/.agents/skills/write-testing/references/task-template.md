@@ -92,9 +92,12 @@ Where each test goes per the project's testing conventions. Load any project-spe
 - [ ] Write each test
 - [ ] Verify each test fails when its assertion is flipped (proves the test actually tests something)
 - [ ] Restore the assertions; verify each test passes
+- [ ] For any test that is the oracle for a spec acceptance criterion: confirm it asserts the criterion's behavior (fails when the *criterion* is violated), not an adjacent condition
 - [ ] `{{cmdTest}}` passes overall
+- [ ] `{{cmdTest}}` coverage report shows the new behavior covered
 - [ ] `{{cmdValidate}}` passes
-- [ ] Self-review: Verification outputs pasted
+- [ ] Self-review: Verification outputs pasted (`{{cmdTest}}`, coverage report, `{{cmdValidate}}`, assertion-flip proof)
+- [ ] Self-review: Criterion encoding answered (or `n/a`)
 - [ ] Self-review: Behavior over implementation answered
 - [ ] Self-review: Failure mode clarity answered
 - [ ] Self-review: Placement answered
@@ -138,8 +141,14 @@ Stop. Tests that pass when commented out, tests that test internals, and tests t
 
 - `git status` →
 - `{{cmdTest}}` (last 2 lines):
+- `{{cmdTest}}` coverage report (the new behavior is covered — paste the relevant lines, or `n/a` with reason if the project has no coverage tooling):
 - `{{cmdValidate}}` (last 2 lines):
-- For each new test: output proving it fails when the assertion is flipped (paste a representative sample):
+- Assertion-flip proof — for each new test, output proving it fails when the assertion is flipped, then passes when restored (paste a representative sample):
+
+### Criterion encoding (for any test that is the oracle for a spec acceptance criterion)
+
+- Does each acceptance-criterion-bound test assert the behavior the *criterion* describes, in the criterion's own terms — not merely an adjacent passing condition? Map criterion → test → asserted behavior, and confirm the test fails when the *criterion* is violated. If no such criterion applies, write `n/a`. If a criterion could not be turned into a fail-when-violated test, record it as a finding for the spec author (the binding should be `command` or `manual`).
+  Answer:
 
 ### Behavior over implementation
 

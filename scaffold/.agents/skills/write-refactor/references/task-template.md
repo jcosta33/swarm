@@ -39,7 +39,7 @@ Refactor modules to address the audit's prioritised findings without altering ex
 - Do not merge, rebase, or push unless explicitly instructed
 - Run `{{cmdInstall}}` to install dependencies
 - Run `{{cmdValidateDeps}}` after every 10 files modified (or at the audit's chosen checkpoint frequency)
-- Behaviour preservation is non-negotiable
+- Behaviour preservation is non-negotiable — prove it with an equivalence check that would fail if behaviour changed (property-based / differential / golden-output); a green existing suite is necessary but not sufficient
 - Document every shim contract before touching consumers
 - Prove deletion safety via exhaustive search (grep for callers + check for dynamic dispatch)
 - No new features; promote findings to upstream audit
@@ -100,6 +100,7 @@ Every compatibility shim added during the refactor. Document the contract before
 - [ ] Final `{{cmdValidateDeps}}` clean
 - [ ] `{{cmdTypecheck}}` clean
 - [ ] `{{cmdTest}}` clean (no behavioural drift)
+- [ ] `behaviour-preservation` equivalence check run and pasted (property-based / differential / golden-output, or recorded why the suite is a sufficient oracle)
 - [ ] Findings promoted to audit
 - [ ] Self-review: Verification outputs pasted
 - [ ] Self-review: Behavior preservation answered
@@ -145,10 +146,15 @@ Stop. A refactor that changes behaviour silently is a rewrite in disguise. Act a
 - Final `{{cmdValidateDeps}}` (last 2 lines):
 - `{{cmdTypecheck}}` (last 2 lines):
 - `{{cmdTest}}` (last 2 lines):
+- **`behaviour-preservation`** — the equivalence check that would *fail if behaviour changed* (property-based / differential / golden-output). Name the check and paste its result:
+
+  > _If no stronger check than the existing suite was available, paste the suite result here and record in **Behavior preservation** below why the suite is a sufficient oracle for this change._
 
 ### Behavior preservation
 
 - Are the test results before and after the refactor identical? If tests changed, do the changes reflect mechanical adaptation (e.g., import paths) or behavioural drift?
+  Answer:
+- What equivalence check proves behaviour is unchanged — one that would *fail if behaviour changed* (property-based / differential / golden-output)? A green existing suite is necessary but not sufficient. If you relied on the existing suite alone, state explicitly why it is a sufficient oracle for this change (e.g. the changed lines are exhaustively covered by named tests — show the coverage).
   Answer:
 
 ### Architectural cleanliness

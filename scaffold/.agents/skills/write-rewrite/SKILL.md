@@ -36,6 +36,16 @@ Acceptance criteria cover both:
 
 A rewrite that only tests the new behaviour misses the regression risk.
 
+### 2a. The delta gets acceptance-criteria coverage; the non-delta gets behaviour-preservation
+
+A rewrite has two surfaces, and each is verified differently:
+
+- **The delta (what changed).** Each changed behaviour is a spec acceptance criterion, and the spec bound each one to a check — `test`, `command`, or `manual`. Honour that binding: in `## Self-review`, list every changed-behaviour criterion, the check the spec named for it, and the pasted result of running that check. A `test`-bound criterion is covered only when its oracle is shown to be valid — it fails when the criterion is violated and passes when satisfied (prove it by flipping the assertion); a `command`-bound criterion by the pasted output of the project command (resolved via `AGENTS.md > Commands`); a `manual` criterion by the one-line reason it can't be runnable plus the judgement made. A green suite is not coverage — the delta is covered only when each changed behaviour's result is in the task file.
+
+- **The non-delta (everything else).** Everything *outside* the recorded delta must be behaviour-preserved, and the proof is an *equivalence check that would fail if behaviour changed* — not merely "the suite is green". Where the project has one, name a property-based, differential, or golden-output check that pins the preserved surface; where it doesn't, record explicitly *why* the existing test suite is a sufficient oracle for this change (which preserved behaviours it actually exercises). The existing suite passing is necessary but not sufficient. This generalises the fix discipline's fail-before / pass-after oracle to the whole non-delta surface.
+
+The two are complementary: AC-coverage proves you built the *intended* change; behaviour-preservation proves you changed *nothing else*.
+
 ### 3. Identify all affected callers
 
 For every changed behaviour, grep for callers. Update each one for the new behaviour, or verify each one still works under the preserved behaviour.
@@ -64,7 +74,9 @@ The project's validation command runs after every batch of changes, not only at 
 - Not updating callers for behaviour changes
 - Calling it a refactor when behaviour changes (mislabelling)
 - Calling it a rewrite when behaviour is preserved (over-marking; should be refactor)
+- Treating a green suite as proof the non-delta surface was preserved (no equivalence check that fails if behaviour changed)
+- Declaring done with a changed behaviour that isn't mapped to its check and a pasted result
 
 ## Bundled resources
 
-- `references/task-template.md` — a fillable rewrite-task template with behaviour-delta table, acceptance criteria, module plan, progress checklist, and a self-review hard gate. Copy it into your project's task file location, substitute the `{{...}}` placeholders, and fill it in as you work.
+- `references/task-template.md` — a fillable rewrite-task template with behaviour-delta table, acceptance criteria, module plan, progress checklist, and a self-review hard gate whose Self-review carries both a behaviour-delta regression paste slot (each changed behaviour → its check → result) and a behaviour-preservation paste slot for the non-delta surface (the equivalence check that fails if anything outside the delta changed). Copy it into your project's task file location, substitute the `{{...}}` placeholders, and fill it in as you work.

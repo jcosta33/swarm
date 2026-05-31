@@ -69,6 +69,8 @@ Implement the functionality detailed in the linked specification. One paragraph 
 - [ ] `{{cmdValidateDeps}}` clean (or `n/a` documented)
 - [ ] Findings promoted upstream (if any)
 - [ ] Self-review: Verification outputs pasted
+- [ ] Self-review: Every acceptance criterion mapped to its check with a pasted result (acceptance-criteria-coverage)
+- [ ] Self-review: Integration boundary checks pasted (only if this feature is an integration)
 - [ ] Self-review: Spec adherence answered
 - [ ] Self-review: Architecture answered
 - [ ] Self-review: Conventions answered
@@ -115,6 +117,24 @@ Stop. A feature that diverges silently from the spec ships drift. Act as a senio
 - `{{cmdValidate}}` (last 2 lines):
 - `{{cmdTest}}` (last 2 lines):
 - `{{cmdValidateDeps}}` (last 2 lines, or `n/a`):
+
+### Acceptance-criteria coverage (one row per criterion — do not paraphrase)
+
+> Map every acceptance criterion in the spec to the check the spec bound it to (`test` / `command` / `manual`) and paste the result. A green toolchain suite above is not coverage; this is. The task is not done with an unmapped criterion.
+
+| Criterion (from spec) | Check binding | Pasted result |
+| --------------------- | ------------- | ------------- |
+| AC1 — `<text>`        | `test` · `<oracle path/name>` | (paste fail-when-violated / pass-when-satisfied proof — e.g. assertion-flip output) |
+| AC2 — `<text>`        | `command` · `AGENTS.md > Commands > <name>` | (paste last 2 lines of the command output) |
+| AC3 — `<text>`        | `manual` · `<one-line reason it can't be a runnable check>` | (record the human judgement made) |
+
+### Integration boundary (only if this feature is an integration — else `n/a`)
+
+> Required when the feature wires a third-party SDK / API / MCP server. Delete or mark `n/a` for a pure in-codebase feature.
+
+- Secret-grep negative (no credentials hardcoded — paste the `grep` returning no matches):
+- SDK / API version pinned and documented (paste the pinned version + where it's recorded):
+- Contract / integration test exercises the boundary (paste last 2 lines, or the one-line reason a contract test isn't feasible):
 
 ### Spec adherence
 

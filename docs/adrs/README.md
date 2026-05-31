@@ -26,3 +26,7 @@ Numbers **0011 and 0012 are intentionally vacant** — they were vacated during 
 | [0018](./0018-agents-md-command-contract.md) | Commands resolve through the `AGENTS.md` contract |
 | [0019](./0019-personas-ship-as-individual-skills.md) | Personas ship as individual skills |
 | [0020](./0020-activation-by-self-assessment.md) | Activation by self-assessment |
+| [0021](./0021-verification-contract.md) | Verification contract — required validations bind through `AGENTS.md > Commands` |
+| [0022](./0022-acceptance-criteria-are-executable-checks.md) | Acceptance criteria are expressible as runnable checks |
+| [0023](./0023-harness-enforcement-contract.md) | Harness-enforcement contract (what a compliant runtime must honour) |
+| [0026](./0026-conformance-contract.md) | Machine-readable conformance contract + fixtures |

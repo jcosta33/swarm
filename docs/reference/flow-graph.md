@@ -132,7 +132,7 @@ Project-specific skills under `.agents/skills/domain/` self-activate in addition
 
 ## 🔌 Task type → verification commands
 
-The framework defines **slots**; the project binds slots to commands. The table below shows *when* slots fire.
+The framework defines **slots**; the project binds slots to commands via `AGENTS.md > Commands` ([ADR 0021](../adrs/0021-verification-contract.md)). This is the **canonical required-suite matrix** per task type — the table shows *when* each slot fires; the Self-review column is the per-task hard-gate paste set (one pasted proof per required command). The **spec-intent & equivalence gates** ([ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)) augment the Self-review column for several task types, listed under the table.
 
 | Task type             | Pre-implementation                       | Periodic                              | Post-implementation                                              | Self-review                            |
 | --------------------- | ---------------------------------------- | ------------------------------------- | ---------------------------------------------------------------- | -------------------------------------- |
@@ -156,6 +156,19 @@ The framework defines **slots**; the project binds slots to commands. The table 
 | `kickback`            | (same as original task type)             | (same)                                | (same)                                                           | (same) + delta from prior head         |
 
 For the placeholder contract (what `cmdInstall`, `cmdValidate`, etc. mean for tool builders), see [`template-placeholders.md`](template-placeholders.md).
+
+### Spec-intent & equivalence additions ([ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md))
+
+Toolchain slots above prove form; these augment the Self-review hard gate to verify *intent* (each gate defined in [`verification-gates.md`](verification-gates.md)):
+
+| Task type | Added Self-review gate |
+| --------- | ---------------------- |
+| `feature`, `integration` | `acceptance-criteria-coverage` — each criterion → its check binding (`test` / `command` / `manual`) → pasted result |
+| `integration` | `integration-boundary` — secret-grep negative, SDK/API version pin, contract test |
+| `refactor`, `migration`, `rewrite` | `behaviour-preservation` — an equivalence check that fails if behaviour changed, not just "the suite is green" |
+| `spec-writing` | acceptance criteria carry check bindings (the deliverable itself, not a run) |
+| `review` | validation + tests re-run **by the reviewer** in their own worktree (independent of the worker's paste) |
+| `fix` | `regression-test` fails before the fix, passes after (already a validated oracle) |
 
 ---
 

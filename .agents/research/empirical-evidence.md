@@ -1,5 +1,7 @@
 # Empirical Evidence on Documentation Frameworks for Coding Agents
 
+> ⚠️ **Originating design exploration — superseded on the skill layer.** This file predates the skills-repo merge and [ADR 0017](../../docs/adrs/0017-no-always-load-skills.md) (no always-loaded skills). It specifies skills (`manage-task`, `documentation-gatekeeper`, `write-orchestration`) and a persona/task taxonomy the shipped framework no longer matches. It is kept for provenance and the empirical evidence it cites; **canonical truth lives in [`docs/`](../../docs/) + [`docs/adrs/`](../../docs/adrs/).**
+
 ## Executive summary
 
 The empirical literature on documentation frameworks for coding agents is still young, but it is already strong enough to support some high-confidence design decisions for Swarm. The best-supported conclusion is **not** “more documentation is always better.” Instead, the evidence consistently points toward a narrower rule: **focused, well-matched, execution-relevant documentation helps; broad, generic, or stale documentation often adds cost, noise, and failure modes**. citeturn10view0turn11view2turn9view3turn9view4turn26view0

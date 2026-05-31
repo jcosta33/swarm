@@ -34,7 +34,7 @@ Markdown skeleton + XML-ish helper tags remain **only** in `/scaffold` so consum
 |--------|-------------------------|
 | Goal vs scope fences | Keeps exploratory narrative outside executable requirements surface. |
 | User-visible behaviours | Bridges product language ↔ engineering validation without prescribing internals. |
-| Acceptance criteria checklist | Gives Test Author / Builder unanimous oracle for completeness tests. |
+| Acceptance criteria with check bindings | Gives Test Author / Builder unanimous oracle for completeness tests. Each criterion declares *how it is verified* — `test` / `command` / `manual` — so the downstream `feature` task checks against the spec rather than re-interpreting it ([ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)). |
 | Design decisions (+ rejected options) | Freezes ambiguity resolution historically—prevents reopened religious wars later. |
 | Open questions taxonomy (`[CRITICAL]` / `[MINOR]`) | Forces explicit chokepoints before Implementation begins burning calendar. |
 | Distillation Loss Statement | When derived from research, proves Architect acknowledged compression risk. |
@@ -43,9 +43,22 @@ Verbatim headings, placeholders, and tag blocks: **do not mirror from `/docs`** 
 
 ---
 
+## 🔗 Acceptance criteria carry check bindings (the spec's half of spec-as-code)
+
+A testable criterion is not enough on its own — each acceptance criterion **declares how it is verified**, its *check binding*, so intent is checkable rather than re-interpreted by every implementer ([ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)). The binding is one of:
+
+- **`test`** (preferred) — a test exercises it, and that test is a valid *oracle*: it fails when the criterion is violated and passes when satisfied (the downstream `feature` / `testing` work proves this by flipping the assertion).
+- **`command`** — the output of a named `AGENTS.md > Commands` entry demonstrates it.
+- **`manual`** — verification is unavoidably human; the criterion carries a one-line reason why it cannot be a runnable check.
+
+In the scaffold the criteria are a structured block — criterion, check kind, binding, and a result paste slot — and a criterion with no binding is **not finalisable**. This is the spec's half of the spec-as-code contract: the spec binds each criterion to a check, and the downstream `feature` task maps each criterion to that check and pastes the result (the `acceptance-criteria-coverage` gate in [`../reference/verification-gates.md`](../reference/verification-gates.md)). The spec is checked *against*, not merely read.
+
+---
+
 ## ⚠️ Failure modes the `write-spec` skill targets
 
 - Unmeasurable adjectives posing as requirements.
+- Acceptance criteria left without a check binding (`test` / `command` / `manual`) — leaving the downstream task to re-interpret intent.
 - Sneaking implementation recipe into supposedly behavioural contract.
 - Shipping with unanswered `[CRITICAL]` questions silently demoted.
 - Mixing observations of today's code with prescriptions for tomorrow.

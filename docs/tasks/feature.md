@@ -27,7 +27,13 @@ If the spec is incomplete, the task type is `spec-writing` (with The Architect),
 | **Secondary**        | [The Skeptic](../personas/the-skeptic.md) (review) |
 | **Output**           | Code (with tests) + Skeptic handoff                |
 | **Recommended skills** | `write-feature`, `empirical-proof` (the Builder mindset is carried by `write-feature`) |
-| **Verification gate slots** | `cmdInstall` (pre), `cmdValidate` (periodic + post), `cmdTest` (post), `cmdValidateDeps` (post, where applicable) |
+| **Verification gate slots** | `cmdInstall` (pre), `cmdValidate` (periodic + post), `cmdTest` (post), `cmdValidateDeps` (post, where applicable), `acceptance-criteria-coverage` (self-review) |
+
+---
+
+## Acceptance-criteria coverage gate
+
+A feature task carries the `acceptance-criteria-coverage` gate ([ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)): in `Self-review`, every acceptance criterion is mapped to the check the spec bound it to (`test` / `command` / `manual`) and the result is pasted. A `test`-bound criterion counts only when its oracle is shown valid (fails when violated, passes when satisfied). The toolchain suite ([ADR 0021](../adrs/0021-verification-contract.md)) proves the code is well-formed; this gate proves it does what the spec asked. The gate is defined in [`reference/verification-gates.md`](../reference/verification-gates.md).
 
 ---
 
@@ -46,6 +52,7 @@ Every task template shares the same structural clusters; see [Why these structur
 - Implementing past the spec ("while I'm here…")
 - Silent ambiguity resolution (the spec was unclear; the Builder picked one interpretation)
 - Declaring done without pasting validation output
+- Declaring done with an acceptance criterion that isn't mapped to its check and a pasted result (treating a green suite as coverage)
 - Refactoring during the feature task (different scope; promote)
 - Reinventing helpers that already exist
 

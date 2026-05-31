@@ -47,11 +47,11 @@ What capability is being specified and what decision it informs. One paragraph m
 
 - [ ] Read upstream sources (research, audit) in full
 - [ ] Survey existing patterns; record consulted modules in the deliverable's `## Pattern survey`
-- [ ] Draft the deliverable's `## Goal`, `## Scope`, `## User-visible behaviour`, `## Acceptance criteria`
+- [ ] Draft the deliverable's `## Goal`, `## Scope`, `## User-visible behaviour`, `## Acceptance criteria` (each criterion carrying a check binding — `test` / `command` / `manual`)
 - [ ] Draft `## Design decisions` with named alternatives + reasoning
 - [ ] Identify and flag `[CRITICAL]` and `[MINOR]` open questions
 - [ ] Distillation Loss Statement (if distilling from research)
-- [ ] Self-review: every question answered
+- [ ] Self-review: every question answered; every acceptance criterion confirmed bound (`test` / `command` / `manual`)
 - [ ] Copy the `## Deliverable` block to its final home
 
 ---
@@ -87,9 +87,13 @@ What's true when this is built. One paragraph; no implementation.
 
 ### Acceptance criteria
 
-(Each testable; a downstream test-authoring session can derive a test directly.)
+(Each testable; a downstream test-authoring session can derive a test directly. Each criterion **declares its check binding** — how it is verified — so the downstream `feature` task checks *against* the spec rather than re-interpreting it. `test` is preferred (a valid oracle: fails when the criterion is violated, passes when satisfied — proven downstream by an assertion-flip); `command` cites an `AGENTS.md > Commands` entry whose output demonstrates it; `manual` carries a one-line reason it cannot be a runnable check. A criterion with no binding is not finalisable.)
 
-- [ ] **AC1:** <criterion>
+| Criterion | Check kind (`test` / `command` / `manual`) | Binding (test path / command / reason) | Result (paste slot) |
+| --------- | ------------------------------------------ | --------------------------------------- | ------------------- |
+| **AC1:** <criterion> | `test` | `<test file path / name of the oracle test>` | (paste at delivery — for `manual`, n/a) |
+| **AC2:** <criterion> | `command` | `AGENTS.md > Commands > <name>` | (paste the command output) |
+| **AC3:** <criterion> | `manual` | <one-line reason it cannot be a runnable check> | n/a (human judgement) |
 
 ### Design decisions
 
@@ -170,6 +174,17 @@ What's true when this is built. One paragraph; no implementation.
 ### Verifiability
 
 - Is every requirement testable? Any "the system should be fast"-style requirements lurking?
+  Answer:
+
+### Acceptance-criteria bindings
+
+> Every acceptance criterion carries a check binding (`test` / `command` / `manual`), else the spec is not finalisable. Confirm each below; an unbound criterion blocks delivery.
+
+- AC1 → `test`: <path or name of the test that is its oracle>
+- AC2 → `command`: `AGENTS.md > Commands > <name>`
+- AC3 → `manual`: <one-line reason it cannot be a runnable check>
+
+- Does every criterion in the table above appear here with a binding? Any criterion still unbound?
   Answer:
 
 ### Pattern survey

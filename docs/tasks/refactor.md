@@ -14,6 +14,8 @@ A `refactor` task is right when:
 - The change is *structural*, not behavioural — observable behaviour is preserved.
 - Tests pass before, during (at every checkpoint), and after.
 
+Behaviour preservation is verified by the [`behaviour-preservation` gate](../reference/verification-gates.md#-spec-intent--equivalence-gates-adr-0022): an equivalence check that would *fail if behaviour changed* — property-based, differential, or golden-output testing where available. A green existing suite is necessary but not sufficient (it only covers what was already tested); where no stronger check exists for a change, the task records explicitly why the existing suite is a sufficient oracle for that change.
+
 If the change is mechanical replacement of API A with API B, that's `migration`, not `refactor`. If observable behaviour changes, that's `rewrite`, not `refactor`. If the audit triggers a structural rethink, that's `spec-writing`, not `refactor`.
 
 ---
@@ -27,7 +29,7 @@ If the change is mechanical replacement of API A with API B, that's `migration`,
 | **Secondary**        | [The Skeptic](../personas/the-skeptic.md) (review) |
 | **Output**           | Restructured code, behaviour preserved             |
 | **Recommended skills** | `write-refactor`, `empirical-proof`, `persona-janitor` |
-| **Verification gate slots** | `cmdInstall` (pre), `cmdValidateDeps` (every 10 files), `cmdValidateDeps` (post), `cmdTypecheck` (post), `cmdTest` (post) |
+| **Verification gate slots** | `cmdInstall` (pre), `cmdValidateDeps` (every 10 files), `cmdValidateDeps` (post), `cmdTypecheck` (post), `cmdTest` (post), [`behaviour-preservation`](../reference/verification-gates.md#-spec-intent--equivalence-gates-adr-0022) (self-review) |
 
 ---
 

@@ -125,7 +125,7 @@ Tracking by wave:
 - [ ] Self-review: Wave integrity answered
 - [ ] Self-review: Callsite coverage answered
 - [ ] Self-review: Shim contracts answered
-- [ ] Self-review: Behaviour preservation answered
+- [ ] Self-review: Behaviour preservation answered (equivalence check named and pasted)
 - [ ] Self-review: Final state answered
 
 ---
@@ -163,6 +163,9 @@ Tracking by wave:
 - Final `{{cmdValidate}}` (last 2 lines):
 - Final `{{cmdTest}}` (last 2 lines):
 - `grep -rn "<old-api-marker>"` showing remaining callsites (should be zero or only inside shims):
+- **`behaviour-preservation`** — the equivalence check that would *fail if behaviour changed* (property-based / differential / golden-output). Name the check and paste its result:
+
+  > _If no stronger check than the existing suite was available, paste the suite result here and record in **Behaviour preservation** below why the suite is a sufficient oracle for this migration._
 
 ### Wave integrity
 
@@ -182,6 +185,8 @@ Tracking by wave:
 ### Behaviour preservation
 
 - Did the migration change behaviour anywhere? A migration is a mechanical change of surface, not a rewrite of semantics. If behaviour did change, is it documented and was a spec/audit updated?
+  Answer:
+- What equivalence check proves behaviour is unchanged — one that would *fail if behaviour changed* (property-based / differential / golden-output)? A green existing suite is necessary but not sufficient. If you relied on the existing suite alone, state explicitly why it is a sufficient oracle for this migration (e.g. the migrated callsites are exhaustively covered by named tests — show the coverage).
   Answer:
 
 ### Final state

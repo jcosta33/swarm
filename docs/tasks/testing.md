@@ -18,6 +18,17 @@ If you're adding tests *as part of* a feature task, that's `feature` — the Bui
 
 ---
 
+## 🎯 When a test is a spec's oracle
+
+When a `testing` task authors the test that a spec acceptance criterion points to (the criterion's check binding is `test`, per [ADR 0022](../adrs/0022-acceptance-criteria-are-executable-checks.md)), two *separate* proofs are required, and the self-review records both:
+
+- **Assertion-flip** — flip the assertion, the test fails; restore, it passes. Proves the test fires, not a tautology.
+- **Criterion encoding** — the test asserts the behaviour the *criterion* describes, in the criterion's own terms (not an adjacent passing condition), and fails when the *criterion* is violated. Proves the test verifies the right thing.
+
+A green test that flips correctly but tests an adjacent path satisfies the first proof and fails the second. If a criterion cannot be turned into a fail-when-violated test, that's a finding for the spec author (rebind to `command` / `manual`) — not licence to ship a green-but-irrelevant test.
+
+---
+
 ## 🧬 Metadata
 
 | Field                | Value                                              |
@@ -27,7 +38,7 @@ If you're adding tests *as part of* a feature task, that's `feature` — the Bui
 | **Secondary**        | [The Skeptic](../personas/the-skeptic.md) (review) |
 | **Output**           | New test cases; coverage gap closed                |
 | **Recommended skills** | `write-testing`, `empirical-proof` (the Test Author mindset is carried by `write-testing`) |
-| **Verification gate slots** | `cmdInstall` (pre), `cmdTest` (after each new test), `cmdTest` + coverage report (post), `cmdValidate` (post) |
+| **Verification gate slots** | `cmdInstall` (pre), `cmdTest` (after each new test), `cmdTest` + coverage report (post), `cmdValidate` (post), `assertion-flip-proof` (self-review), criterion-encoding mapping for any acceptance-criterion-bound test (self-review) |
 
 ---
 

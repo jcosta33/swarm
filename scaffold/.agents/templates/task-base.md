@@ -143,8 +143,10 @@ Stop. (Persona-specific framing — see each task template for the opening stanc
 
 ### Verification outputs (paste actual command output — do not paraphrase)
 
-- `git status` →
-- (per-task verification slots, e.g. `{{cmdValidate}}` / `{{cmdTest}}` last 2 lines)
+This block lists **one paste slot per REQUIRED command for this task type**, drawn from `AGENTS.md > Commands` and fixed by the per-task-type required-suite matrix (the "Task type → verification commands" Self-review column in the recommended-routing reference). Every slot carries verbatim output — never a paraphrase, never "passed". A slot that genuinely cannot run is marked `n/a` with a one-line reason (or recorded in `## Blockers`), not silently dropped.
+
+- `git status` → (only the intended files changed; no orphans)
+- (one slot per required command for this task type — e.g. `{{cmdValidate}}` / `{{cmdTest}}` last 2 lines — plus any task-type-specific oracle, such as a fail-before/pass-after regression check)
 
 ### (persona-specific Self-review questions)
 

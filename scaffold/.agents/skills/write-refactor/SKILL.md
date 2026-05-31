@@ -17,9 +17,17 @@ Resolves project commands via the consuming repo's `AGENTS.md` — `Commands > V
 
 ## Core rules
 
-### 1. Behaviour preservation is non-negotiable
+### 1. Behaviour preservation is non-negotiable — proven by an equivalence check that fails if behaviour changed
 
 The test suite passes before, during (at every checkpoint), and after. If a test fails after a refactor, the refactor changed behaviour — investigate before "fixing" the test.
+
+But a green suite is **necessary, not sufficient**: "the existing tests still pass" only proves the refactor didn't break what was already covered, not that behaviour is unchanged where coverage is thin. The gate is an *equivalence check* — one that would **fail if behaviour changed**, generalising a bug-fix's fail-before / pass-after oracle to the whole refactored surface. Pick the strongest available:
+
+- **Property-based** — assert invariants over generated inputs across the old and new code paths.
+- **Differential** — run old and new implementations on the same inputs and assert byte-equal outputs (keep the pre-refactor code reachable behind the shim until the diff is clean).
+- **Golden-output** — capture the pre-refactor output for a representative input set, then assert the post-refactor output matches it.
+
+If no stronger check than the existing suite is available for a given change, **record explicitly in `## Self-review` why the existing suite is a sufficient oracle for this change** — e.g. the changed lines are exhaustively covered by named tests, with the coverage shown. "The suite is green" stated without that justification does not satisfy this gate.
 
 ### 2. Periodic architectural validation
 
@@ -60,6 +68,7 @@ Anything you discover that's not on the audit's list gets *promoted* to the audi
 ## Anti-patterns
 
 - Silencing a validation failure by editing the validator config
+- Treating "the existing suite is green" as proof of equivalence without a check that would fail if behaviour changed (or a recorded reason the suite is a sufficient oracle)
 - "While I'm here" semantic changes
 - Bulk codemods touching hundreds of files in one commit
 - Deleting code without grep-evidence
@@ -69,6 +78,6 @@ Anything you discover that's not on the audit's list gets *promoted* to the audi
 
 ## Bundled resources
 
-- `references/task-template.md` — a fillable refactor-task template with before/after state, shim contracts table, plan, progress checklist with per-batch validation slots, and a self-review hard gate covering behaviour preservation, architectural cleanliness, shim hygiene, and deletion safety.
+- `references/task-template.md` — a fillable refactor-task template with before/after state, shim contracts table, plan, progress checklist with per-batch validation slots, and a self-review hard gate covering behaviour preservation (the equivalence-check paste slot), architectural cleanliness, shim hygiene, and deletion safety.
 
 Substitute the `{{...}}` placeholders and fill in as you work.

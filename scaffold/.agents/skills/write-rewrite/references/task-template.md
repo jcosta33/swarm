@@ -98,7 +98,8 @@ Which modules will be touched and what changes in each.
 - [ ] Verify preserved behaviors still work (regression tests)
 - [ ] `{{cmdValidate}}` passes
 - [ ] Self-review: Verification outputs pasted
-- [ ] Self-review: Behavior delta integrity answered
+- [ ] Self-review: Behavior delta coverage answered — each changed behavior → its check → pasted result (acceptance-criteria-coverage)
+- [ ] Self-review: Behavior preservation answered — equivalence check that fails if the non-delta surface changed (behaviour-preservation)
 - [ ] Self-review: Caller migration answered
 - [ ] Self-review: Architecture answered
 - [ ] Self-review: Conventions answered
@@ -143,10 +144,21 @@ Stop. Rewrites are riskier than refactors precisely because behavior is permitte
 - `{{cmdValidate}}` (last 2 lines):
 - `{{cmdTest}}` (last 2 lines):
 
-### Behavior delta integrity
+### Behavior delta coverage (acceptance-criteria-coverage on the delta)
 
-- Does every behavior change you made appear in the delta table? Did any behavior change sneak in that wasn't planned? Were preserved behaviors actually preserved (paste the regression test output that proves it)?
+- For each changed behavior in the delta table: which spec acceptance criterion covers it, what check did the spec bind it to (`test` / `command` / `manual`), and what is the pasted result of running that check? A `test`-bound criterion is covered only when its oracle is shown to be valid (it fails when the criterion is violated, passes when satisfied — prove it by flipping the assertion). Does every behavior change you made appear in the delta table, and did any behavior change sneak in that wasn't planned?
   Answer:
+
+  - Changed behavior → check binding → pasted result:
+    - [Paste output]
+
+### Behavior preservation (non-delta surface)
+
+- Everything *outside* the delta must be behavior-preserved. Paste the equivalence check that would *fail if behavior changed* on the non-delta surface — a property-based / differential / golden-output check where the project has one; otherwise record explicitly why the existing test suite is a sufficient oracle for this change (which preserved behaviors it actually exercises). A green suite alone is necessary but not sufficient.
+  Answer:
+
+  - Equivalence check (or sufficient-oracle justification) and its output:
+    - [Paste output]
 
 ### Caller migration
 

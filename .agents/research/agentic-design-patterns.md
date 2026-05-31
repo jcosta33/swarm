@@ -1,5 +1,7 @@
 # Key Learnings from the Swarm Research
 
+> ⚠️ **Originating design exploration — superseded on the skill layer.** This file predates the skills-repo merge and [ADR 0017](../../docs/adrs/0017-no-always-load-skills.md) (no always-loaded skills). It specifies skills (`manage-task`, `documentation-gatekeeper`, `write-orchestration`) and a persona/task taxonomy the shipped framework no longer matches. It is kept for provenance and the empirical evidence it cites; **canonical truth lives in [`docs/`](../../docs/) + [`docs/adrs/`](../../docs/adrs/).**
+
 ## 1. Swarm’s core identity
 
 Swarm should be defined as a **documentation-layer contract system for agentic software work**.

@@ -17,7 +17,7 @@ Migrations fail in two characteristic ways, and the skill is built against both:
 
 ## Core rules (summarised)
 
-- **Surface behaviour is preserved.** The test suite passes before, at every wave checkpoint, and after. The implementation moves; the contract doesn't. A failing test after a wave is a signal to investigate, not a test to "fix".
+- **Surface behaviour is preserved — proven by an equivalence check.** The test suite passes before, at every wave checkpoint, and after; the implementation moves, the contract doesn't, and a failing test after a wave is a signal to investigate, not a test to "fix". But a green suite is *necessary, not sufficient*: it only proves what was already covered. The [`behaviour-preservation`](../reference/verification-gates.md) gate requires an equivalence check that would *fail if behaviour changed* — property-based, differential (run old and new API on the same inputs while the old path is still reachable behind the shim), or golden-output — or, where no stronger check exists, an explicit record of why the existing suite is a sufficient oracle for this migration.
 - **Plan in waves, up front.** A wave is the smallest atomic change that leaves the codebase compiling and green. Document the waves before you start — don't discover them mid-flight.
 - **Validate after every wave.** Run `Validation` and `Test` at the end of each wave. Final-only validation lets drift accumulate across waves until untangling it becomes its own project.
 - **Each file migrated deliberately.** No bulk codemods, no `sed` over hundreds of files, no shell loops. Bulk substitution silently breaks the one callsite that used the API in an unusual way.
@@ -42,7 +42,7 @@ The skill resolves commands through the consuming repo's `AGENTS.md > Commands` 
 
 ## What it ships
 
-`references/task-template.md` — a fillable migration-task template: source/target APIs, the wave plan, compatibility-shim table (path / forward target / removable-when), a callsite tracker, per-wave validation slots, and a self-review hard gate covering wave integrity, callsite coverage, shim hygiene, and final state. Substitute the `{{...}}` placeholders and fill it in as you work.
+`references/task-template.md` — a fillable migration-task template: source/target APIs, the wave plan, compatibility-shim table (path / forward target / removable-when), a callsite tracker, per-wave validation slots, and a self-review hard gate covering wave integrity, callsite coverage, shim hygiene, behaviour preservation (the named equivalence check), and final state. Substitute the `{{...}}` placeholders and fill it in as you work.
 
 ## Related
 

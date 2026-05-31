@@ -134,6 +134,7 @@ The single test (or test family) being stabilised, in one sentence. *Example: "S
 - [ ] No quarantine as the resolution
 - [ ] Inline note added so the failure mode is recognisable next time
 - [ ] Verification loop-run executed (typically 500×); all runs pass
+- [ ] Full `{{cmdTest}}` suite still passes (the fix did not break sibling tests)
 - [ ] If cause is in production code, a separate fix task has been surfaced
 - [ ] Self-review answered
 
@@ -186,8 +187,9 @@ The single test (or test family) being stabilised, in one sentence. *Example: "S
 ### Verification outputs (paste actual command output — do not paraphrase)
 
 - `git status` →
-- Reproduction loop-run (last 30 lines / pass-fail summary) →
-- Verification loop-run after fix (last 30 lines / pass-fail summary) →
+- Reproduction loop-run before the fix (the flake fires — last 30 lines / pass-fail summary) →
+- Verification loop-run after the fix (same loop shape that reproduced the flake, all runs pass — last 30 lines / pass-fail summary) →
+- Full `{{cmdTest}}` after the fix (the rest of the suite still passes — last 2 lines):
 
 ### Reproduction
 
