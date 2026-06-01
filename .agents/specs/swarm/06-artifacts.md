@@ -460,7 +460,7 @@ A task is a *pass frame and execution companion*: the lowered work packet for on
 
 | Section | Meaning |
 | --- | --- |
-| frontmatter | `type: task`, `id`, `status` (`active \| blocked \| done \| abandoned`; `done` is terminal), `task_kind` (enum), `source`, `assigned_obligations`, `constraints`, `invariants`, `interfaces`, `write_surfaces`, `verification_bindings`, `parallel_group`, `blocked_by`, `produces`. |
+| frontmatter | `type: task`, `id`, `status` (`active \| blocked \| done \| abandoned`; `done` is terminal), `task_kind` (enum), `source`, `assigned_obligations`, `constraints`, `invariants`, `interfaces`, `write_surfaces`, `verification_bindings`, `parallel_group`, `blocked_by`, `produces`, plus the optional `pass_guides` and `profile` the task activates (§26.4). |
 | `## Parent contract` | The inherited hand-off contract: objective + deliverable + acceptance bar + boundaries (owned vs forbidden paths). |
 | `## Scope` | An explicit **In / Out** list bounding the pass. |
 | `## Assigned obligations` | The exact assigned SOL blocks, pasted verbatim. |

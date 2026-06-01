@@ -271,8 +271,10 @@ A discovery during a task does not become memory by being written down; it becom
 | `deferred` | Recorded for a future task with reason. |
 | `rejected` | Judged non-durable with reason. |
 | `blocked` | Cannot promote yet (e.g. needs an ADR) with reason. |
+| `validated` | High-consequence intermediate (`pending → validated → promoted`); requires independent corroboration (§23.4.3). |
+| `rolled-back` | A promoted finding later withdrawn (poisoned / `CONTRADICTED` / `STALE`), recorded as a retraction (§23.4.3). |
 
-Normative rule: a task MUST NOT close while any promotion item is `pending`. A `promoted` finding MUST appear in `memory/INDEX.md` with a `Load when` condition (§23.1.1) and carry full provenance (§23.3). A promotion that would *weaken* an obligation is forbidden — it is a `SOL-M002` contradiction routed to amendment, because `memory` is the floor domain on Axis B (§22.4).
+The promotion-status enum is therefore these **seven** values. Normative rule: a task MUST NOT close while any promotion item is `pending`. A `promoted` finding MUST appear in `memory/INDEX.md` with a `Load when` condition (§23.1.1) and carry full provenance (§23.3). A promotion that would *weaken* an obligation is forbidden — it is a `SOL-M002` contradiction routed to amendment, because `memory` is the floor domain on Axis B (§22.4).
 
 #### 23.4.1 G9 tie-break — "universal workflow rule" promotions
 

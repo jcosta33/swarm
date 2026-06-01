@@ -117,7 +117,7 @@ lint:
   retired_prefixes: [APS-]                     # APS- is no longer a code prefix
 ```
 
-The manifest MUST also encode the per-task-type required verification suite (the `(proof-type, phase)` defaults of §15, resolving to `cmd*` slots). The canonical matrix lives in `docs/reference/flow-graph.md`; the manifest is its machine-readable shadow. Bare entries are `cmd*` adapter slots (§31, resolved through `AGENTS.md > Commands`); `gate:<name>` entries are equivalence/coverage gates whose checks `flow-graph.md` defines (`acceptance-criteria-coverage`, `regression-test`, `behaviour-preservation`, `scope-disjointness`, `merge-intent`); a `merged:` prefix means the slot runs on the post-integration merged result.
+The manifest MUST also encode the per-task-type required verification suite (the `(proof-type, phase)` defaults of §15, resolving to `cmd*` slots). The canonical matrix lives in `docs/reference/flow-graph.md`; the manifest is its machine-readable shadow. Bare entries are `cmd*` adapter slots (§31, resolved through `AGENTS.md > Commands`); `gate:<name>` entries are equivalence/coverage gates whose checks `flow-graph.md` defines (`acceptance-criteria-coverage`, `regression-test`, `behaviour-preservation`, `scope-disjointness`, `merge-intent`); a `merged:` prefix means the slot runs on the post-integration merged result. The gate tokens are defined here (the `flow-graph.md` matrix is the human-readable companion, not their sole definition): **`acceptance-criteria-coverage`** — every acceptance criterion of the obligation maps to a passing proof; **`regression-test`** — a test that failed before the change and passes after; **`behaviour-preservation`** — a property/differential/metamorphic check that the change preserves prior behaviour; **`scope-disjointness`** — the merged workers' OWNED paths are pairwise disjoint (§18); **`merge-intent`** — each merge-conflict resolution preserves both obligations' intent.
 
 ```yaml
 required_suite:
@@ -405,7 +405,7 @@ Additionally, the corpus MUST ship at least one minimal syntax negative for each
 
 ### 33.5 Prose precision/recall baseline (G12)
 
-The `SOL-P` prose rules are heuristic and so carry a measurable false-positive risk. The corpus MUST ship a **labeled good/bad prose fixture set** so the high-risk-word list's accuracy is measurable. The baseline targets are normative for v0.1:
+The `SOL-P` prose rules are heuristic and so carry a measurable false-positive risk. The corpus MUST ship a **labeled good/bad prose fixture set** so the high-risk-word list's accuracy is measurable. The baseline targets are normative v0.1 **design targets** (chosen acceptance bars for the curated gold corpus — not an empirical measurement; cf. the field ceiling below, §0.7):
 
 | Metric | Target | Meaning |
 |---|---|---|
