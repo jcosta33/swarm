@@ -162,7 +162,7 @@ risk              = "RISK", ws, ( "low" | "medium" | "high" | "critical" ), nl;
 
 (* ===== Modal terminals: exactly five. SHALL / SHALL NOT removed; CAN / WILL are NOT modals. ===== *)
 modal             = "MUST NOT" | "MUST" | "SHOULD NOT" | "SHOULD" | "MAY"; (* longest-match: NOT before bare *)
-(* "SHALL", "SHALL NOT": illegal as modals (lint SOL-S003-family / removed).                              *)
+(* "SHALL", "SHALL NOT": recognized deprecated aliases of MUST / MUST NOT (lint SOL-P058 advisory; NORMALIZE rewrites them).                              *)
 (* "CAN", "WILL": non-modal; if used as a modal in a binding clause, lint SOL-P003 (informal force). *)
 
 (* ===== Shared lexical productions ===== *)
@@ -301,6 +301,7 @@ These fire at `PARSE`; all are BLOCKING (a malformed block cannot be parsed into
 | `SOL-S007` | BLOCKING | malformed-header | Block header is missing the mandatory trailing colon, or the id is malformed (spaces, illegal characters). | Edit: write `TYPE PREFIX-NNN:`. |
 | `SOL-S008` | BLOCKING | non-control-first-line | The first non-empty line of a block is not a control sentence (metadata or prose appears before the obligation sentence). | Edit: lead with the actor-clause / control sentence. |
 | `SOL-S010` | BLOCKING | unknown-metadata-field | A trailing metadata field is not one of the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`OWNED BY`). | Edit: use a valid field (§5) or move the text to commentary. |
+| `SOL-S014` | BLOCKING | missing-required-clause | A block omits a clause its grammar makes mandatory — e.g. a `TRACE` with `IMPLEMENTS` but no `PROOF` line (§6.6; Appendix A `trace_body` requires one-or-more `PROOF`). | Edit: add the required clause (for `TRACE`, at least one `PROOF` line). |
 
 Note: legacy `SOL-S007`/`SOL-S010` (verification / verdict-value checks) and legacy `SOL-S008` (planner parallelism) do **not** keep these S-numbers — they re-layer to V and O respectively (see B.6). The S007/S008 rows above are the *re-allocated* v0.1 syntax meanings; `SOL-S010` is re-allocated from the legacy verdict-value check (now `SOL-V005`) to `unknown-metadata-field`.
 
@@ -335,6 +336,7 @@ The **high-risk-word list** (the union of the subjective/promotional list + Femm
 | `SOL-P055` | ADVISORY | redundancy | Repeated context that adds no constraint. | `COMPRESS` (was `APS-R001`). |
 | `SOL-P056` | ADVISORY / BLOCKING | comparative-no-baseline | Comparative/superlative with no baseline. **BLOCKING in a binding clause, ADVISORY in commentary** (G2). | `QUANTIFY`: supply the baseline. |
 | `SOL-P057` | ADVISORY | terminology-drift | A term in a binding clause or commentary is used inconsistently with its `memory/glossary.md` definition (a synonym, casing variant, or competing label for an already-defined term). Advisory: the term still resolves, so it is not the blocking `SOL-P006` undefined-term defect. | `NORMALIZE`: replace the variant with the canonical glossary term. |
+| `SOL-P058` | ADVISORY | deprecated-modal-alias | `SHALL`/`SHALL NOT` used as a modal — a recognized deprecated alias of `MUST`/`MUST NOT` (§5.4). | `NORMALIZE`: rewrite to `MUST`/`MUST NOT`. |
 
 ### B.4 Layer M — SEMANTIC (cross-reference)
 
@@ -387,7 +389,7 @@ The closed 10-op improve set (§10) is wired to the codes above; this is the can
 
 | Improve op | Resolves codes |
 |---|---|
-| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053` |
+| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P058` |
 | `ATOMIZE` | `SOL-P004` (and `SOL-P052` by splitting) |
 | `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-M001` |
 | `QUANTIFY` | `SOL-P005`, `SOL-P056` |
@@ -728,7 +730,7 @@ Notes on the instance: `meta.language` (`SOL/0.1`), `meta.version` (`0.1.0`), an
 
 ## Appendix D — Worked example: auth-refresh, full pipeline
 
-This appendix carries the `auth-refresh` obligation set through every pass of the pipeline (§9), in order: authored source, lint, improve, IR, task frame, trace, review with merge gate, and promotion. Identifiers, hashes, and verdicts are stable across stages so the chain reads as a single run. It is the positive (`must-compile`) `auth-refresh` golden-corpus fixture (§33), exercising a dangling-condition defect (`SOL-S001`), a `SHOULD` without `BECAUSE` (`SOL-P003`), a missing-verification defect (`SOL-V001`), the no-unbounded-retry `INVARIANT`, and a blocking `QUESTION`. Terms are defined in Appendix F; the IR conforms to Appendix C; the grammar to Appendix A.
+This appendix carries the `auth-refresh` obligation set through every pass of the pipeline (§9), in order: authored source, lint, improve, IR, task frame, trace, review with merge gate, and promotion. Identifiers, hashes, and verdicts are stable across stages so the chain reads as a single run. It is the positive (`must-compile`) `auth-refresh` golden-corpus fixture (§33), exercising a vague-quality defect (`SOL-P005`), a `SHOULD` without `BECAUSE` (`SOL-S006`), a missing-verification defect (`SOL-V001`), the no-unbounded-retry `INVARIANT`, and a blocking `QUESTION`. Terms are defined in Appendix F; the IR conforms to Appendix C; the grammar to Appendix A.
 
 ### D.1 Stage 1 — authored `spec.swarm.md` (pass: `author`)
 
@@ -790,24 +792,23 @@ AFFECTS AC-002
 
 ### D.2 Stage 2 — lint diagnostics (pass: `lint`)
 
-The `lint` pass emits SARIF-shaped diagnostic records `{code, severity, layer, span, message, suggest}` in the unified `SOL-<LAYER><NNN>` namespace (§8). Three diagnostics fire on the authored source; each names the closed `improve` op (§10) that repairs it. All three are BLOCKING because each changes *what* gets built (§8.4 binding-clause rule, G2).
+The `lint` pass emits SARIF-shaped diagnostic records `{code, severity, layer, span, message, suggest}` in the unified `SOL-<LAYER><NNN>` namespace (§8). Three diagnostics fire on the authored source; each names the closed `improve` op (§10) or direct edit that repairs it. All three are BLOCKING because each changes *what* gets built (§8.4 binding-clause rule, G2).
 
 ```text
 SOL-V001  ERROR  layer=V  AC-002:L1-L4
   message: obligation AC-002 has no VERIFY BY binding; no verification path.
   suggest: improve op BIND — add VERIFY BY <type>:<adapter>:<artifact>.
 
-SOL-P003  ERROR  layer=P  AC-002:L2 ("THE auth client SHOULD clear the local session")
+SOL-S006  ERROR  layer=S  AC-002:L2 ("THE auth client SHOULD clear the local session")
   message: SHOULD without an accompanying BECAUSE or EXCEPT clause.
-  suggest: improve op NORMALIZE — add BECAUSE <reason>, or raise to MUST.
+  suggest: Edit — add BECAUSE <reason>, or raise to MUST.
 
-SOL-S001  ERROR  layer=S  I-001:L1
-  message: INVARIANT predicate uses the bare noun phrase "MUST NOT exceed one"
-           with no observable subject binding; reads as a dangling condition.
-  suggest: improve op CONCRETIZE — name the measured quantity and threshold.
+SOL-P005  ERROR  layer=P  I-001:L1
+  message: INVARIANT predicate uses a vague quality phrase with no same-line observable criterion.
+  suggest: improve op CONCRETIZE or QUANTIFY — name the measured quantity and threshold.
 ```
 
-A fourth, non-blocking note records that `Q-001` is `[blocking]` and `AFFECTS AC-002`, so `AC-002` MUST NOT reach the `lower` pass until the question is resolved (`SOL-O…` orchestration class; see §9, §18).
+A fourth diagnostic note records that `Q-001` is `[blocking]` and `AFFECTS AC-002`: `AC-002` MUST NOT reach the `lower` pass until the question is resolved, and a blocking `QUESTION` that does reach `lower` is `SOL-O003` (blocking-question-reaches-lowering; see §9, §11.6, §18).
 
 ### D.3 Stage 3 — improved `spec.swarm.md` (pass: `improve`)
 

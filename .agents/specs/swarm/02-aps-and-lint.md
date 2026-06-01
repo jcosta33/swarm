@@ -252,7 +252,7 @@ The codes below are the canonical blocking set. One-line definitions follow; the
 
 ### 8.4 Principal ADVISORY codes (inline)
 
-The advisory prose set is `SOL-P050`–`SOL-P056`. They emit `warning` and never block on their own (subject to strict mode, §8.6).
+The advisory prose set is `SOL-P050`–`SOL-P058`. They emit `warning` and never block on their own (subject to strict mode, §8.6).
 
 | Code | Defect (style only) |
 |---|---|
@@ -263,6 +263,8 @@ The advisory prose set is `SOL-P050`–`SOL-P056`. They emit `warning` and never
 | `SOL-P054` | Prose noise: a decorative phrase that adds no constraint, context, or evidence. |
 | `SOL-P055` | Redundancy: repeated context that adds no new constraint. |
 | `SOL-P056` | Comparative / superlative without a baseline — **advisory in commentary, blocking in a binding clause** (§7.2). |
+| `SOL-P057` | Terminology drift: a term used inconsistently with its `memory/glossary.md` definition (still resolves, so not the blocking `SOL-P006`). |
+| `SOL-P058` | Deprecated modal alias: `SHALL`/`SHALL NOT` used as a modal (a recognized alias of `MUST`/`MUST NOT`, §5.4). |
 
 ### 8.5 `APS-` retirement and the full catalogue
 

@@ -116,11 +116,11 @@ SOL v0.1 defines exactly **five modals**, uppercase only:
 | `SHOULD NOT` | Strong prohibition; REQUIRES a same-block `BECAUSE` or `EXCEPT`. |
 | `MAY` | Optional; carries no obligation. |
 
-`SHALL` and `SHALL NOT` are **REMOVED** from SOL: RFC 2119 §1 defines `MUST` ≡ `REQUIRED` ≡ `SHALL` (RFC 8174 only clarifies that the force applies in uppercase) `[RFC2119]`, `[RFC8174]`, so `SHALL` is redundant, and courts/plain-language standards read "shall" inconsistently. `SHALL`/`SHALL NOT` are recognized only as **deprecated migration aliases** of `MUST`/`MUST NOT`: a parser accepts them on input, `lint` flags them advisory (`SOL-P003`-family), and the `NORMALIZE` improve op (§10) rewrites them to `MUST`/`MUST NOT`. They MUST NOT appear in canonical or new sources, and no template emits them.
+`SHALL` and `SHALL NOT` are **REMOVED** from SOL: RFC 2119 §1 defines `MUST` ≡ `REQUIRED` ≡ `SHALL` (RFC 8174 only clarifies that the force applies in uppercase) `[RFC2119]`, `[RFC8174]`, so `SHALL` is redundant, and courts/plain-language standards read "shall" inconsistently. `SHALL`/`SHALL NOT` are recognized only as **deprecated migration aliases** of `MUST`/`MUST NOT`: a parser accepts them on input, `lint` flags them advisory (`SOL-P058`, deprecated-modal-alias), and the `NORMALIZE` improve op (§10) rewrites them to `MUST`/`MUST NOT`. They MUST NOT appear in canonical or new sources, and no template emits them.
 
-`CAN` and `WILL` are **non-modal** (capability and prediction, respectively) and are **forbidden in binding clauses**; their use where a modal is expected is a `SOL-P003` warning (informal/missing modality).
+`CAN` and `WILL` are **non-modal** (capability and prediction, respectively) and are **forbidden in binding clauses**; their use where a modal is expected is `SOL-P003` (missing/informal modality, BLOCKING).
 
-`SHOULD` and `SHOULD NOT` without an accompanying `BECAUSE` or `EXCEPT` in the same block is a defect (`SOL-P003`-family; grammar-level `SOL-S006`).
+`SHOULD` and `SHOULD NOT` without an accompanying `BECAUSE` or `EXCEPT` in the same block is a defect (`SOL-S006`, should-without-because).
 
 ```sol
 REQ AC-010:
@@ -337,7 +337,7 @@ bullet_list = { ws, "-", ws, item, nl };
 
 `ACCEPTS:` and `ERRORS:` introduce contiguous bullet continuation lines (not blank-separated — a blank line would close the body, §5.3). `OWNED BY` records the owning surface/team/module.
 
-**Semantics and the required contract binding.** An INTERFACE **MUST carry a `VERIFY BY contract:` binding** — a `contract`-type proof asserting that the named boundary's shape (signature, accepted inputs, returned type, declared errors) matches reality. An INTERFACE with **no** `VERIFY BY` at all is `SOL-V001` (no-verification-path); an INTERFACE that carries a `VERIFY BY` whose proof type is **not** `contract` is `SOL-V006` (interface-without-contract). An undeclared interface referenced by an obligation is `SOL-M004`.
+**Semantics and the required contract binding.** An INTERFACE **MUST carry a `VERIFY BY contract:` binding** — a `contract`-type proof asserting that the named boundary's shape (signature, accepted inputs, returned type, declared errors) matches reality. An INTERFACE with **no** `VERIFY BY` at all is `SOL-V001` (no-verification-path); an INTERFACE that carries a `VERIFY BY` whose proof type is **not** `contract` is `SOL-V006` (interface-without-contract). An obligation referencing an interface id that is not declared is `SOL-M003` (unbound-cross-reference).
 
 **Worked example:**
 
@@ -393,7 +393,7 @@ trace_block = "TRACE", ws, t_id, ":", nl,
               { "PROOF", ws, verify_ref, ws, proof_result, nl };
 ```
 
-**Semantics.** `IMPLEMENTS` lists the REQ ids the change satisfies; `PRESERVES` lists the CONSTRAINT/INVARIANT ids the change must not violate; `CHANGED` names the modified surfaces (the basis for staleness detection, §16); each `PROOF` line names a verification reference (`verify_ref`, §15) and its observed `proof_result` — one of `passed | failed | blocked | unverified` (Appendix A; the lowercase `proof_result` is the observed run outcome, mapped by case-fold to the uppercase VERDICT `core_value` at the `verify`/`review` step, §14); `manual` is a proof *type* (§15), never a result. A TRACE referencing an unknown obligation is `SOL-S009`; a TRACE that claims `IMPLEMENTS` MUST carry at least one `PROOF` line — the grammar (Appendix A) makes `PROOF` mandatory in a trace body, so a no-`PROOF` trace is a structural parse error (`SOL-S`-class), not a missing-evidence lint. A `PROOF` line MUST reference real output — an unqualified "tests passed" is not an admissible proof (§15, §17).
+**Semantics.** `IMPLEMENTS` lists the REQ ids the change satisfies; `PRESERVES` lists the CONSTRAINT/INVARIANT ids the change must not violate; `CHANGED` names the modified surfaces (the basis for staleness detection, §16); each `PROOF` line names a verification reference (`verify_ref`, §15) and its observed `proof_result` — one of `passed | failed | blocked | unverified` (Appendix A; the lowercase `proof_result` is the observed run outcome, mapped by case-fold to the uppercase VERDICT `core_value` at the `verify`/`review` step, §14); `manual` is a proof *type* (§15), never a result. A TRACE referencing an unknown obligation is `SOL-S009`; a TRACE that claims `IMPLEMENTS` MUST carry at least one `PROOF` line — the grammar (Appendix A) makes `PROOF` mandatory in a trace body, so a no-`PROOF` trace is a structural parse error (`SOL-S014`, missing-required-clause), not a missing-evidence lint. A `PROOF` line MUST reference real output — an unqualified "tests passed" is not an admissible proof (§15, §17).
 
 **Worked example:**
 
