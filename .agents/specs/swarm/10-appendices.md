@@ -110,9 +110,8 @@ hold_text         = ? verb phrase asserting the held property ?;
 interface_body    = signature, ws, "RETURNS", ws, type_ref, nl,
                     [ accepts_block ]
                     [ errors_block ]
-                    verify_line,                                (* MUST be a contract: proof (lint SOL-V…) *)
                     [ owned_by_clause ]
-                    { metadata_clause };
+                    verify_line;                                (* OWNED BY before VERIFY BY, matching §6.4; INTERFACE carries no scope/metadata clauses, §18.2 *)
 signature         = "`", ? function/endpoint signature ?, "`";
 type_ref          = "`", ? type expression ?, "`" | bare_type;
 accepts_block     = "ACCEPTS:", nl, list_item, { list_item };
@@ -136,7 +135,7 @@ proof_result      = "passed" | "failed" | "blocked" | "unverified";
 
 (* ===== VERDICT: core value on header; REASON, EVIDENCE in body ===== *)
 verdict_body      = "REASON", ws, prose_text, nl,
-                    "EVIDENCE", ws, evidence_ref, nl;
+                    "EVIDENCE", ws, evidence_ref, nl, { "EVIDENCE", ws, evidence_ref, nl };
 verdict_value     = verdict_core, [ ws, verdict_lifecycle ];
 verdict_core      = "PASS" | "FAIL" | "BLOCKED" | "UNVERIFIED";
 verdict_lifecycle = "(", lifecycle, " by ", authority, ": ", reason, ")";

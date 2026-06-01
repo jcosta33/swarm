@@ -388,11 +388,12 @@ AFFECTS AC-001
 trace_block = "TRACE", ws, t_id, ":", nl,
               "IMPLEMENTS", ws, id_list, nl,
               [ "PRESERVES", ws, id_list, nl ],
-              "CHANGED", ws, path_list, nl,
+              [ "CHANGED", ws, path_list, nl ],
+              "PROOF", ws, verify_ref, ws, proof_result, nl,
               { "PROOF", ws, verify_ref, ws, proof_result, nl };
 ```
 
-**Semantics.** `IMPLEMENTS` lists the REQ ids the change satisfies; `PRESERVES` lists the CONSTRAINT/INVARIANT ids the change must not violate; `CHANGED` names the modified surfaces (the basis for staleness detection, §16); each `PROOF` line names a verification reference (`verify_ref`, §15) and its observed `proof_result` — one of `passed | failed | blocked | unverified` (Appendix A); `manual` is a proof *type* (§15), never a result. A TRACE referencing an unknown obligation is `SOL-S009`; a TRACE that claims implementation with no `PROOF` is `SOL-M007`. A `PROOF` line MUST reference real output — an unqualified "tests passed" is not an admissible proof (§15, §17).
+**Semantics.** `IMPLEMENTS` lists the REQ ids the change satisfies; `PRESERVES` lists the CONSTRAINT/INVARIANT ids the change must not violate; `CHANGED` names the modified surfaces (the basis for staleness detection, §16); each `PROOF` line names a verification reference (`verify_ref`, §15) and its observed `proof_result` — one of `passed | failed | blocked | unverified` (Appendix A; the lowercase `proof_result` is the observed run outcome, mapped by case-fold to the uppercase VERDICT `core_value` at the `verify`/`review` step, §14); `manual` is a proof *type* (§15), never a result. A TRACE referencing an unknown obligation is `SOL-S009`; a TRACE that claims `IMPLEMENTS` MUST carry at least one `PROOF` line — the grammar (Appendix A) makes `PROOF` mandatory in a trace body, so a no-`PROOF` trace is a structural parse error (`SOL-S`-class), not a missing-evidence lint. A `PROOF` line MUST reference real output — an unqualified "tests passed" is not an admissible proof (§15, §17).
 
 **Worked example:**
 
@@ -415,8 +416,8 @@ PROOF static:cmdLint:dependency-boundary-check passed
 ```ebnf
 verdict_block = "VERDICT", ws, judged_id, ":", ws, core_value,
                 [ ws, "(", lifecycle, " by ", authority, ": ", reason_txt, ")" ], nl,
-                [ "REASON", ws, prose, nl ],
-                [ "EVIDENCE", ws, reference, nl ];
+                "REASON", ws, prose, nl,
+                "EVIDENCE", ws, reference, nl, { "EVIDENCE", ws, reference, nl };
 core_value = "PASS" | "FAIL" | "BLOCKED" | "UNVERIFIED";
 lifecycle  = "WAIVED" | "STALE" | "CONTRADICTED";
 ```
