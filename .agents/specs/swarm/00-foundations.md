@@ -41,7 +41,7 @@ This document is exhaustive and may be read front to back, but the following ord
 5. **§14–§17** — truth and control: verdicts, the proof taxonomy, drift, and the soft/hard control boundary.
 6. **§18–§24** — orchestration, the artifact set, conformance, source authority, memory, and the distillation loss budget.
 7. **§25–§35** — versioning, the recast subsystems (skills, personas, task types, documents, ADRs, the bootloader), the conformance contract, the golden corpus, acceptance criteria, and non-goals.
-8. **Appendices A–F** — the consolidated grammar, the full lint catalogue, the IR schema, the auth-refresh worked example, the residual-gap judgment calls, and the glossary.
+8. **Appendices A–G** — the consolidated grammar, the full lint catalogue, the IR schema, the auth-refresh worked example, the residual-gap judgment calls, the glossary, and the copy-paste rework brief.
 
 A newcomer who reads only §1–§4 should be able to hold the whole framework in their head; the remaining sections make every construct precise.
 
@@ -67,6 +67,11 @@ This specification deliberately leaves a small set of environment and process va
 | Repo host / VCS / forge | **Unspecified.** Examples assume git-compatible workflows (branches, diffs, merge gates) but require no specific forge; nothing in the spec depends on a named host's APIs, review UI, or permission model. |
 | Human approval roles | **Unspecified — the spec defines *which* changes need approval, not *who* grants it.** The amendment and source-authority rules (§22) determine which edits are mere normalization versus intent changes that require sign-off; the identity, title, and headcount of approvers are a local org decision the adopting repository binds. |
 | Legacy inventory | **Target-state, not file-by-file conversion.** This spec defines the normative target state and the migration rules to reach it; it does not enumerate or convert specific pre-existing repository files. Conformance work MUST converge on the target state defined here, not attempt to reconstruct or preserve guessed legacy contents. |
+
+
+### 0.7 Evidence base
+
+This specification holds itself to the same standard it imposes on agents: **real science, not astrology.** Every load-bearing empirical claim and every standards-grounded normative choice in these parts is catalogued in `sources.md`, which records, per source, the exact verified finding and any required corrected framing. A claim that cites a source key (e.g. `[OTELGENAI]`, `[TTC]`, `[OWASP-LLM01]`) MUST use the finding as recorded there, with the recorded caveats. Entries that `sources.md` marks rejected, fabricated, or unverifiable MUST NOT be cited as fact — neither in the spec nor in any artifact a conformant repository produces. Any **new** empirical claim introduced by a future amendment MUST first add a verified `sources.md` entry; a claim with no such backing MUST be stated as design rationale, not as evidence. A fact-shaped statement that cites no verified source and is not labelled design rationale is a defect.
 
 ## 1. What Swarm is — the specification-compiler thesis
 

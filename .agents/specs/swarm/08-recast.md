@@ -307,9 +307,9 @@ task_kind:  feature | fix | refactor | rewrite | migration | upgrade
           | deepen-audit                                  ← parameterizes `author` (audit)
 ```
 
-### 28.2 The 18 → pass mapping
+### 28.2 The `task_kind` → pass mapping
 
-The mapping is normative (verbatim from this specification):
+The mapping is normative:
 
 | Legacy task type | Family | Pass(es) | Follow-on passes |
 |---|---|---|---|
@@ -504,7 +504,7 @@ The last two are explicitly added because the lint-namespace unification and the
 
 > **Normative.** `AGENTS.md` (and any always-loaded kernel bootloader prose) MUST NOT exceed a **hard cap of 200 lines / 25 KB**. It SHOULD target **~50–150 lines**. It MUST contain only persistent facts and gap-filling content; everything procedural or conditional MUST move to lazily-loaded pass guides (§26), profiles (§27), or reference docs.
 
-Rationale (this specification Q-density-1): **minimize always-on density to protect adherence and control cost.** The cap is *not* anchored on a claim that models cannot follow many instructions — the legacy "IFScale 68%@500" figure is **superseded** (2026 re-runs show ≈99% adherence at far higher instruction counts) and MUST NOT be cited as the load-bearing rationale. The durable mechanism is the bloat-versus-gap-filling tradeoff: bloat costs success rate and tokens; gap-filling content (facts the model genuinely lacks) earns its place.
+Rationale (this specification Q-density-1): **minimize always-on density to protect adherence and control cost.** The cap is *not* anchored on a claim that models cannot follow many instructions — the IFScale "68%@500" figure is real but MUST NOT be cited as a capability *ceiling* — its actual finding (accuracy degrades with density, primacy bias toward earlier instructions `[IFSCALE]`) *supports* the cap; a 2026 vendor re-run on a keyword-inclusion proxy reports higher counts `[ARIZE26]` but is preliminary, non-peer-reviewed evidence and is not the load-bearing rationale. The durable mechanism is the bloat-versus-gap-filling tradeoff: bloat costs success rate and tokens; gap-filling content (facts the model genuinely lacks) earns its place.
 
 A conformant repo MUST include a regression check that fails when `AGENTS.md` exceeds the hard cap.
 
@@ -556,6 +556,8 @@ The full SOL or APS manual MUST NOT be pasted into `AGENTS.md`. A "universal wor
 | cmdLint       | `npm run lint`           | static                |
 | cmdTypecheck  | `npm run typecheck`      | static                |
 | cmdBenchmark  | `npm run bench`          | perf                  |
+| cmdValidate   | `npm run validate`       | static (aggregate)    |
+| cmdFormat     | `npm run format --check` | (format hygiene)      |
 ```
 
 Normatively:

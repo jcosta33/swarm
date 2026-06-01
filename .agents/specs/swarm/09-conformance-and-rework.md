@@ -40,17 +40,18 @@ The manifest MUST encode, as inert data, the structural and content rules a well
 version: 0.1.0
 language: SOL/0.1                 # the discriminator this manifest targets (§25, meta.language)
 task_file:
-  required_sections:             # H2 headings that MUST be present
-    - Objective
-    - Linked docs
-    - Plan
+  required_sections:             # H2 headings that MUST be present (the §21.3.1 task.md contract)
+    - Parent contract
+    - Scope
+    - Assigned obligations
+    - Constraints and invariants
+    - Implementation or pass trace
+    - Verification matrix
+    - Promotion queue
     - Self-review
-  required_subsections:
-    - parent: Self-review
-      heading: Verification outputs
   content_rules:
     - id: non-empty-paste
-      applies_to: "Self-review > Verification outputs"
+      applies_to: "Verification matrix"
       rule: >-
         every required paste slot holds non-empty, non-placeholder text — a fenced
         command-output block, or `n/a` with a one-line reason — never a bare
@@ -153,7 +154,7 @@ The checker that would consume `conformance.yaml` is itself part of this deferre
 
 ### 32.8 Conformance maturity ladder
 
-§32.2 / §20.4 give conformance as a single binary predicate. That predicate is the *terminal* judgement, but a repository adopting Swarm passes through observable intermediate states, and the buffet-adoption stance (a repo MAY install the kernel incrementally) needs a vocabulary for "how far in" a repository is without overloading the word *conformant*. This subsection defines a five-tier ladder. Each tier is named, each is BOUND to checkable clauses already specified elsewhere in this document (so the ladder introduces no new obligations), and each is a strict superset of the tier below it — a repository at tier *n* satisfies tiers `1..n`. The tiers are diagnostic labels for adoption progress; the only tier that coincides with the normative `Swarm-conformant` predicate is **Swarm-verifiable** (tier 4), stated explicitly below.
+§32.2 / §20.4 give conformance as a single binary predicate. That predicate is the *terminal* judgement, but a repository adopting Swarm passes through observable intermediate states, and the incremental-adoption stance (a repo MAY install the kernel incrementally) needs a vocabulary for "how far in" a repository is without overloading the word *conformant*. This subsection defines a five-tier ladder. Each tier is named, each is BOUND to checkable clauses already specified elsewhere in this document (so the ladder introduces no new obligations), and each is a strict superset of the tier below it — a repository at tier *n* satisfies tiers `1..n`. The tiers are diagnostic labels for adoption progress; the only tier that coincides with the normative `Swarm-conformant` predicate is **Swarm-verifiable** (tier 4), stated explicitly below.
 
 | Tier | Meaning | Minimum acceptance criteria |
 |---|---|---|
@@ -163,7 +164,7 @@ The checker that would consume `conformance.yaml` is itself part of this deferre
 | **4 — Swarm-verifiable** | For implemented work, trace and review are complete and every completion claim is tied to evidence. | `trace.md` and `review.md` exist for the implemented obligations; each `IMPLEMENTS`/`PRESERVES`/`PROOF` claim carries content-hashed evidence and a core verdict (§15); every completion claim binds to pasted proof output, never a bare "tests passed" claim (the `content_rules.non-empty-paste` rule, §32.3; Invariant 5 — schema-valid ≠ verified). **This tier is, exactly, the §20.4 / §32.2 `Swarm-conformant` if-and-only-if definition**: a repository is Swarm-verifiable iff it is Swarm-conformant. The tiers above (5) and below (1–3) are adoption labels; tier 4 is the normative line. |
 | **5 — Swarm-orchestratable** | Work can be partitioned across agents and sequenced safely: the static coordination contract is complete. | §18 and §19 are fully satisfied: declared write surfaces (named `SURFACE`s, no `locks` primitive, §18.3) with the safe-parallelism predicate holding (no `SOL-O001`, §18.5/§18.7); preserved obligation IDs across the source→execution tiers; the §19 coordination-artifact hand-off fields (owned/forbidden paths, status, parent contract); liveness/stall states; and the promotion queue (§23). Per Invariant 1 (NO RUNTIME) this tier certifies the *contract*, not a live scheduler — the scheduler is a deferred launcher concern (§35.1 N5). |
 
-A repository MAY sit at any tier; the buffet stance means tiers 3–5 are optional adoption depth, not a defect when unmet. A tool or human reporting a repository's standing SHOULD report the highest fully-satisfied tier (see the §34.7 replacement below), and MUST NOT report a higher tier than is fully satisfied BECAUSE a partially-satisfied tier is, within that tier, non-conformant (§34.7).
+A repository MAY sit at any tier; the incremental-adoption stance means tiers 3–5 are optional adoption depth, not a defect when unmet. A tool or human reporting a repository's standing SHOULD report the highest fully-satisfied tier (see the §34.7 replacement below), and MUST NOT report a higher tier than is fully satisfied BECAUSE a partially-satisfied tier is, within that tier, non-conformant (§34.7).
 
 ## 33. The golden corpus
 
@@ -180,7 +181,7 @@ The corpus is built on the three recurring domains — **auth-refresh**, **check
 
 ### 33.2 The full pipeline chain (every positive fixture)
 
-Each positive domain fixture MUST ship the complete pipeline chain, one file per stage, so the corpus exercises the whole `intent → promotion` arc (§27 of the brief):
+Each positive domain fixture MUST ship the complete pipeline chain, one file per stage, so the corpus exercises the whole `intent → promotion` arc:
 
 ```text
 spec.swarm.md  →  expected obligation list  →  task frame  →  trace  →  verdict  →  promotion
@@ -331,7 +332,7 @@ The `SOL-P` prose rules are heuristic and so carry a measurable false-positive r
   expect: none          # observable criterion present on the same line
 ```
 
-The labeled set lets a future linter's precision/recall be computed against ground truth without running on production specs; until a linter exists, the labels document the intended accuracy bar.
+The labeled set lets a future linter's precision/recall be computed against ground truth without running on production specs; until a linter exists, the labels document the intended accuracy bar. Because the `SOL-P` grader is itself an LLM judge today (not a deterministic detector), the gold set MUST record an inter-annotator agreement floor (Cohen's κ ≥ 0.6), and these targets are measured against that gold set — never asserted of an LLM grader at runtime: single-judge scores are not internally reliable and SHOULD be replicated/aggregated `[TRUSTJUDGE]` (strong judges reach ~80% agreement with humans `[MTBENCH]`). The deterministic `SOL-S` family is exempt from this caveat; only the heuristic `SOL-P` family needs it.
 
 ### 33.6 Pass-output rubrics
 
@@ -364,6 +365,32 @@ Four predicates are not owned by a single pass but are scored wherever the relev
 
 Drift-detection is defined without a runtime: drift is found by the `review` and `promote` passes comparing the approved obligation set against the recorded evidence and the higher-authority sources, never by observing a running system. A pass that fails to flag a drift class present in its fixture fails the drift-detection predicate even if every other predicate holds.
 
+
+### 33.7 Evaluation hygiene: contamination and held-out fixtures
+
+A golden corpus that ships only the canonical fixtures of §33.1–§33.6 has a latent failure mode of its own: once the fixtures and their expected verdicts are public (they live in `scaffold/.agents/conformance/fixtures/` and are read by every adopter), an agent-as-compiler can be tuned — by training, by an over-stuffed instruction file, or simply by an author copying the corpus — to reproduce the *labels* without performing the *passes*. This is benchmark data contamination: training on (or memorizing) the evaluation data yields "inaccurate or unreliable performance" rather than a measurement of capability [BDCSURVEY]. The risk is not hypothetical for this corpus specifically — benchmark-building rigor is broadly deficient: the HOW2BENCH survey finds that roughly 70% of code benchmarks took no data-quality-assurance measures, and applies a 55-item lifecycle checklist precisely because contamination, duplicated samples, and unreproducible provenance are the norm, not the exception [HOW2BENCH]. The corpus must therefore be designed so that a passing verdict evidences a correctly executed pass, not a recognized string.
+
+Two further design pressures sharpen this. First, the §33.6 pass-output rubrics grade *compiler behaviour*, and the cheapest way to fake that behaviour is to memorize the expected-obligation lists and `VERDICT` blocks the fixtures pin verbatim. Second, the corpus must test the kernel's own "curate, don't dump" stance, not just happy-path lowering: over-specified context and instruction files have been shown to *reduce* task success versus no context at all and to raise inference cost by more than 20% [AGENTSMD-HARM] (corroborated by the preliminary, not-yet-peer-reviewed [SKILLSBENCH] and [AGENTREADMES]). A corpus that only rewards completeness would push authors toward exactly the bloated specs that harm agents; the hygiene fixtures below make the harm measurable.
+
+**33.7.1 Held-out and mutated-variant fixtures (normative).** The golden corpus MUST ship, alongside each canonical domain fixture (§33.2–§33.3), at least one **held-out mutated variant** whose obligation text has been *regenerated* — paraphrased triggers/responses, renamed obligation ids, reordered blocks, substituted actors and interface names — while preserving the identical semantic structure, the identical canonical defect class, and the identical expected verdict. The mutated variant is the conformance gate; the canonical fixture is the documented walkthrough. This mirrors the survey's Data Refactoring mitigation (data regeneration plus content filtering) against contamination [BDCSURVEY]: a pass that resolves the canonical fixture but not its semantically equivalent mutated twin has memorized the label, not executed the transformation, and MUST be scored a fail on that pass. Concretely:
+
+- The mutated variant MUST NOT reuse the canonical label strings (e.g. not the literal `"THE service MUST handle failures gracefully"` of §33.5/P-001) yet MUST still trip the same `SOL-<LAYER>NNN` code on the same construct.
+- The mutated variant's expected obligation list, trace, and `VERDICT` set (the 4-core + 3-lifecycle model, §14) MUST be derived from its own text, never copied from the canonical fixture's `<domain>.expected-obligations.md`.
+- A reviewer (today) checks the variant by hand exactly as in §33.6; a future eval harness MAY hold the mutated variants out of any material an agent-as-compiler is conditioned on. The corpus header MUST mark which fixtures are held-out so a tool cannot silently fold them back into the visible set.
+
+**33.7.2 Benchmark-hygiene practice (recommended).** The corpus SHOULD follow established benchmark-building hygiene so its measurements are reproducible and auditable [HOW2BENCH]: each fixture SHOULD record **documented provenance** (which domain, defect class, and §-anchor it exercises, and whether it is canonical or mutated); the corpus SHOULD carry an explicit **data-QA** note per fixture (the expected verdict was confirmed by a human against the spec, not assumed); and the fixtures SHOULD remain **open** for human inspection in `scaffold/.agents/conformance/fixtures/` while the mutated-variant gate keeps openness from becoming a contamination vector. These are SHOULDs, not MUSTs, because Swarm is NO-RUNTIME: the hygiene practice is a contract a future eval harness builds against, and until that harness exists the provenance and data-QA notes are documentation that a manual reviewer reads.
+
+**33.7.3 The missing `research-fanout` fixture (normative addition).** The reconciliation claimed a `research-fanout` golden-corpus fixture that the spec then omitted; the corpus MUST ship it. It is the corpus's only **fan-out provenance** fixture: a single `research.md` evidence source (§20.3.4) promoted by `author` passes into **multiple** `*.swarm.md` specs plus one `adr.md`, where every derived obligation cites the originating research span by its cross-file id (`research#R-NNN`, e.g. a derived `payments.swarm.md#AC-001` carrying `BECAUSE research#R-003`). It exercises the "one research artefact MAY feed many downstream artefacts" property (§20.3.4, §29) that no per-domain fixture covers.
+
+| Fixture file | Holds | Asserts |
+|---|---|---|
+| `research-fanout/research.md` | one detached evidence source with citable spans `R-001…R-NNN` | observation/evidence stance; promotes rather than governs (§20.2.2, §29) |
+| `research-fanout/<spec-a>.swarm.md` | derived obligations citing `research#R-…` | every obligation resolves to a research span; bare-header SOL parses clean |
+| `research-fanout/<spec-b>.swarm.md` | further derived obligations citing the same source | the source feeds more than one spec (the fan-out property) |
+| `research-fanout/<decision>.adr.md` | a decision whose constraints cite `research#R-…` | the source also feeds a decision artefact, not only specs |
+
+Expected verdict: **PASS**. The pass criterion is provenance resolution, not a verdict on the research itself: every derived obligation in every `*.swarm.md` and every `adr.md` constraint MUST resolve backward to exactly one `research#R-NNN` span in the single `research.md`, and that backward chain MUST be unbroken (the Trace-completeness / source-fidelity predicates, §33.6 `author`, §22.5). The `research.md` artefact itself yields **no `VERDICT`** — it is an evidence source, not an obligation-bearing spec, so it carries no `REQ`/`CONSTRAINT`/`INVARIANT` to verify and never reaches the merge gate (§14); only the obligations it was promoted into do. A fixture in which a derived obligation cites no source span, or cites a span absent from `research.md`, is the negative companion and MUST be rejected as a source-fidelity / provenance failure. As with every §33.7 fixture, `research-fanout` MUST also ship a held-out mutated variant per §33.7.1 (regenerated research-span text and obligation ids, same fan-out topology, same PASS verdict).
+
 ## 34. Acceptance criteria for the repo rework
 
 This section is the checkable acceptance checklist for when this specification drives the repository rework. Each item is phrased as a verifiable check (a search, a file-existence test, or a count reconciliation). The rework is complete only when every check passes.
@@ -386,7 +413,7 @@ The rework proceeds as seven ordered waves. Each wave has a single goal and a fi
 
 | # | Check | How to verify |
 |---|---|---|
-| A1 | Every `*sources change*` note in this specification is applied | an earlier research draft, `swarm-an earlier research draft, an earlier research draft, and this specification reflects each per-question reconciliation; no file retains a superseded construct |
+| A1 | Every reconciled decision is applied | the spec reflects each per-question reconciliation from the prior research, build brief, and parallel spec; no file retains a superseded construct |
 | A2 | The four cross-cluster conflicts are resolved one way each | one lint namespace, one verdict set, one `VERIFY BY` form, surface/IR casing split appear consistently across all docs |
 
 ### 34.2 Template and catalogue existence
@@ -461,7 +488,7 @@ These are not omissions to be filled later; they are deliberate boundaries that 
 | N1 | **No shipped CLI, runtime, scheduler, differ, or parser** | Invariant 1 (NO RUNTIME). Everything that "runs" is documented as a contract a future tool builds against (§32.7), never shipped by this repo |
 | N2 | **No checker shipped** | the conformance contract (§32) and corpus (§33) are inert data; the checker is a deferred launcher concern |
 | N3 | **Provider-neutral** | the spec makes no assumption about which model or agent runs it; SOFT control is context, not enforcement (Invariant 2). No section names a vendor as load-bearing |
-| N4 | **Output reproducibility is a non-goal** | sampling, temperature, and determinism are launcher concerns; Swarm specifies obligations and proofs, not the generative process that satisfies them |
+| N4 | **Generative reproducibility is a non-goal; verdict stability is an obligation** | Two layers, deliberately split. **(a) Generative reproducibility** — identical token streams from the model on identical inputs — remains a NON-GOAL: sampling, temperature, and inference determinism are launcher concerns, and current evidence holds that this nondeterminism is an *engineering choice* (it stems from lack of batch-invariance, not inherent randomness; batch-invariant kernels gave 1 unique output across 1,000 completions vs 80 for standard inference) `[DETERMINISM]` (lab blog, not peer-reviewed) — so Swarm specifies obligations and proofs, not the generative process that satisfies them. **(b) Verdict stability**, by contrast, *is* in scope, because the merge gate (§14.4) is the one normative predicate and it can flip on agent-rendered passes: `verify`/`review` render verdicts, and a `manual` proof is recorded agent/human judgment with no executable oracle (§15.1). Normative clarification: a `verify`/`review`/`manual` verdict on **unchanged inputs** (same obligation surface-text, same evidence refs, same source/surface hashes — §16) SHOULD be **stable** across runs; a verdict that **flips across runs on identical inputs** is itself a `CONTRADICTED` condition (§14.1.2), routed through the existing §14 machinery — the two conflicting run results are recorded as the two mandatory conflicting evidence refs, and the gate blocks per §14.4 / §17.4. This adds **no runtime requirement**: like every gate disposition it is a contract, enforced by a deterministic check outside the model where one exists and manual today (§14.4, §17.1). |
 | N5 | **No live multi-agent orchestration** | the kernel ships the static coordination contract (declarations + two graphs + the safe-parallelism predicate + the artifact schema, §18); live scheduling, stall detection, and inter-agent wire protocols (A2A/MCP) are launcher concerns |
 | N6 | **No enforcement claim** | Invariant 2: prose/SOL/APS/skills/`AGENTS.md` are SOFT control and MUST NOT be presented as enforcement; the deterministic enforcement lane (§17) is today aspirational/manual |
 
@@ -478,6 +505,21 @@ These features are explicitly deferred. v0.1 conformance MUST NOT depend on them
 | D5 | **Memory automation** — embedding/dense retrieval, LRU eviction, automatic staleness hashing, cross-session identity, dashboards | Invariant 1 (NO RUNTIME); the kernel ships the provenance/staleness *fields* (§23), automation needs a runtime | a launcher that computes hashes, evicts, and retrieves against the shipped fields |
 
 ```sol
+
+The following deferred rows EXTEND the D1–D5 table above. They are recorded for the same reason: v0.1 conformance MUST NOT depend on them, and a v0.1 spec MUST NOT use any deferred surface they imply.
+
+| # | Deferred feature | Why deferred | v0.2 direction |
+|---|---|---|---|
+| D6 | **Per-pass COST/TELEMETRY schema** — a declared, machine-readable cost record attached to each pass run | Invariant 1 (NO RUNTIME): the kernel has no execution loop to meter, and the load-bearing standard is still experimental. The OpenTelemetry GenAI semantic conventions expose `gen_ai.usage.input_tokens` / `gen_ai.usage.output_tokens` and the `gen_ai.client.token.usage` metric, with **no first-class cost attribute** and a status of "Development" (names may still change) [OTELGENAI] | a telemetry block that records token usage per pass *from which cost is computed*, bound to the GenAI conventions once they freeze; pinning the field names today would couple the kernel to an unstable standard |
+| D7 | **Test-time-compute budgeting for hard passes** — allowing a pass to declare more inference/search budget for harder obligations rather than escalating to a larger model | needs an execution model the kernel does not have (Invariant 1), and the supporting evidence is agent-specific, not a general law: external TTC (budget=8) raised a 32B SWE-Reasoner from 37.60% to 46.00% on SWE-bench Verified, but this is **SWE-agent-specific, not a general scaling law** [TTC] | a per-pass budget hint (e.g. on `implement`/`verify`) that a launcher MAY honor; v0.2 MUST treat it as a SOFT control hint, never an enforced limit (Invariant 2) |
+| D8 | **Behavioral / embedding DRIFT detection** — drift signals beyond the declared-write `content_hash` staleness already shipped (§23.3, §16) | **OPEN: no verified general source.** The kernel today detects only *declared-write* drift via hashing; behavioral or embedding-space degradation has no verified, citable general definition in `sources.md`. RIVA is Infrastructure-as-Code configuration drift only and MUST NOT be cited for representation drift | left open. v0.2 authors MUST supply a verified `sources.md` entry before specifying any behavioral/embedding drift signal; until then this row is a recorded gap, not a design commitment |
+| D9 | **Assurance-case / uncertainty-quantification layer for verdicts** — attaching a calibrated confidence or structured assurance argument to the 4-core + 3-lifecycle verdict model (§14) | v0.1 verdicts are categorical (`PASS`/`FAIL`/…); a confidence or assurance-case layer is a research surface with no settled kernel contract, and adding it would change the verdict model — a one-way version trigger (§25) | a per-verdict assurance/UQ annotation (claim → evidence → confidence) that refines, but does not replace, the categorical verdict; design rationale only, pending a verified evidence base |
+| D10 | **Concurrent-write memory governance for parallel `implement`** — extending the single-writer rule to the `memory/INDEX.md` promotion surface | the v0.1 single-writer / safe-parallelism predicate (§18.5, ADR-0010) serializes by *declared write surface*; it does not yet model concurrent promotion writes to the shared `memory/INDEX.md` index (§23.1.1) when multiple `implement` tasks run in parallel | a memory-governance rule that treats `memory/INDEX.md` as a single-writer surface (or specifies a merge/append discipline) so parallel promotion cannot corrupt the index; extends, not relaxes, the §18.5 predicate |
+| D11 | **SOL/APS internationalization** — non-English keyword/diagnostic surfaces for the language and the `SOL-<LAYER><NNN>` lint namespace | v0.1 fixes the English keyword set and the S/P/M/V/O lint layers as the single normative surface; localizing keywords or diagnostic text is a language change (one-way version trigger, §25) and risks ambiguity in the obligation graph | an OPTIONAL localized presentation layer that lowers to the canonical English keywords and `SOL-<LAYER><NNN>` codes, leaving the normative form unchanged |
+| D12 | **Project `LICENSE` and `GOVERNANCE` files** — repository-level legal/governance surfaces for the spec itself | these are repository-meta files, not part of the kernel's obligation/proof/memory contracts; deferring them keeps v0.1 scoped to the language and pipeline | add `LICENSE` and `GOVERNANCE.md` at the repository root, governing contribution and amendment authority (§22) without altering any normative kernel surface |
+
+Each row obeys the §25 one-way trigger: any deferred surface that adds language, verdict-model, or lint-namespace structure (D7–D11 as applicable) forces at least a framework MINOR release when specified. D8's drift signal in particular MUST NOT be specified until a verified `sources.md` entry grounds it — the same "no astrology for agents" discipline that governs every empirical claim in this spec (§0, Evidence base).
+
 # v0.2-DEFERRED syntax — REJECTED in a v0.1 spec (illustrative)
 REQ AC-099:
   WHEN a 503 is returned

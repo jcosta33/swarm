@@ -113,7 +113,7 @@ Rationale (terse): shared/global/append-only files (lockfiles, CI definitions, m
 
 The `lower` pass (§9, §11) MUST emit, from a parsed and normalized spec, exactly two coordination graphs into the IR `edges[]`:
 
-1. **The dependency DAG** — built from every `DEPENDS ON` clause as `depends_on` edges. It MUST be acyclic; a cycle is an ORCHESTRATION-layer error (`SOL-O3xx`, see §8). Topologically sorting it yields the legal partial order of work.
+1. **The dependency DAG** — built from every `DEPENDS ON` clause as `depends_on` edges. It MUST be acyclic; a cycle is an ORCHESTRATION-layer error (`SOL-O002`, see §8). Topologically sorting it yields the legal partial order of work.
 2. **The write-surface conflict graph** — an undirected graph whose nodes are obligations and whose edges connect any two obligations that are **not write-disjoint** under the surface rules of §18.3 and the read rules of §18.6. Two obligations share an edge iff they write the same non-attribute surface, or write a `shared`/`integration` surface, or stand in a read/write conflict on the same surface.
 
 These two graphs are the entire mechanical substrate of safe parallelism. The kernel emits them; it MUST NOT schedule against them. Any document or tool that presents these graphs as a live scheduler violates Principle 1 and §17.
@@ -164,7 +164,7 @@ Worked example: `AC-014` (`READS auth.config`) and `AC-031` (`WRITES auth.config
 
 ### 18.7 Orchestration lint codes
 
-Two ORCHESTRATION-layer lint codes (`SOL-O3xx`, §8) govern the coordination contract. Both are NORMATIVE in v0.1.
+Two ORCHESTRATION-layer lint codes (`SOL-O001` write-surface conflict marked parallel and `SOL-O005` owned-path outside `WRITES`, §8) govern the coordination contract. Both are NORMATIVE in v0.1.
 
 | Code | Layer | Severity | Triggers when |
 |---|---|---|---|
@@ -223,7 +223,7 @@ Status values MUST be drawn from: `not-started`, `in-progress`, `stalled`, `awai
 
 ### 19.3 The hand-off contract (per worker)
 
-Each worker row carries a **hand-off contract** — the four fields below. This is what defeats "vague subtask descriptions," the field's named #1 multi-agent failure mode (MAST: specification + verification account for ~79% of multi-agent failures), so it MUST be recorded, not left to prose.
+Each worker row carries a **hand-off contract** — the four fields below. This is what defeats "vague subtask descriptions," the field's named #1 multi-agent failure mode (MAST: specification issues 41.8% + inter-agent coordination 36.9% together ≈ 79% of multi-agent failures — and a recorded hand-off contract attacks both `[MAST]`), so it MUST be recorded, not left to prose.
 
 | Hand-off field | Meaning |
 |---|---|

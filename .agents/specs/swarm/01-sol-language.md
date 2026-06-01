@@ -30,7 +30,7 @@ REQ AC-001:
 
 The trailing colon is REQUIRED. A header without it (`REQ AC-001`) is not a block header; it is prose, and any obligation clauses that follow are unparsed. A parser MUST treat the colon as the delimiter that opens a block body.
 
-> Rationale: EARS, FRETish, and Gherkin all use leading-keyword bare lines; bare headers are used throughout. The mandatory colon (from an earlier research draft) makes the header unambiguously machine-detectable inside free Markdown.
+> Rationale: EARS, FRETish, and Gherkin all use leading-keyword bare lines; bare headers are used throughout. The mandatory colon (a deliberate v0.1 choice) makes the header unambiguously machine-detectable inside free Markdown.
 
 A QUESTION header additionally carries a blocking tag *before* the colon (§6.5); this is the only header variation:
 
@@ -116,7 +116,7 @@ SOL v0.1 defines exactly **five modals**, uppercase only:
 | `SHOULD NOT` | Strong prohibition; REQUIRES a same-block `BECAUSE` or `EXCEPT`. |
 | `MAY` | Optional; carries no obligation. |
 
-`SHALL` and `SHALL NOT` are **REMOVED** from SOL: RFC 8174 makes `MUST` ≡ `SHALL`, so `SHALL` is redundant, and courts/plain-language standards read "shall" inconsistently. `SHALL`/`SHALL NOT` are recognized only as **deprecated migration aliases** of `MUST`/`MUST NOT`: a parser accepts them on input, `lint` flags them advisory (`SOL-P003`-family), and the `NORMALIZE` improve op (§10) rewrites them to `MUST`/`MUST NOT`. They MUST NOT appear in canonical or new sources, and no template emits them.
+`SHALL` and `SHALL NOT` are **REMOVED** from SOL: RFC 2119 §1 defines `MUST` ≡ `REQUIRED` ≡ `SHALL` (RFC 8174 only clarifies that the force applies in uppercase) `[RFC2119]`, `[RFC8174]`, so `SHALL` is redundant, and courts/plain-language standards read "shall" inconsistently. `SHALL`/`SHALL NOT` are recognized only as **deprecated migration aliases** of `MUST`/`MUST NOT`: a parser accepts them on input, `lint` flags them advisory (`SOL-P003`-family), and the `NORMALIZE` improve op (§10) rewrites them to `MUST`/`MUST NOT`. They MUST NOT appear in canonical or new sources, and no template emits them.
 
 `CAN` and `WILL` are **non-modal** (capability and prediction, respectively) and are **forbidden in binding clauses**; their use where a modal is expected is a `SOL-P003` warning (informal/missing modality).
 
@@ -171,7 +171,7 @@ Every `*.swarm.md` source spec MUST begin with a YAML frontmatter block. The ver
 | `aps_version` | `0.1` | The APS prose-standard version (§7). MUST be present. |
 | `spec_version` | `0.1.0` | The spec *content* version (semver of this document's intent). MUST be present. |
 | `title` | string | Human title. |
-| `status` | `draft \| approved \| superseded` | Lifecycle status of the spec. |
+| `status` | `draft \| review \| approved \| superseded` | Lifecycle status of the spec (one enum across §5.8, §12.3, Appendix C). |
 | `owners` | list | Accountable owners. |
 | `imports` | list of spec ids | Specs whose obligations this spec may reference cross-spec (§5.7). |
 
@@ -228,7 +228,7 @@ metadata_clause  = depends_on | touches | writes | reads | affects | risk;
 
 Notes on the order and keywords:
 
-- `WHERE` (optional ubiquitous context) → `WHILE` (state/precondition) → `WHEN` (trigger/event) → `IF` (fault/error condition). These four are the EARS condition keywords; their text is opaque (§5.5).
+- `WHERE` (optional-feature inclusion, per EARS `[EARS]`; a keyword-less requirement is ubiquitous) → `WHILE` (state/precondition) → `WHEN` (trigger/event) → `IF` (fault/error condition). These four are the EARS condition keywords; their text is opaque (§5.5).
 - **`THEN` is optional sugar after `IF` only** (the EARS unwanted-behavior pattern). It MUST NOT appear after `WHEN`, `WHILE`, or `WHERE`. `IF … THEN …` and `IF … <newline> THE …` are equivalent.
 - `THE <actor> <MODAL> <response>` is the mandatory consequence. A condition keyword with no following actor clause is `SOL-S001` (dangling condition); an actor clause with no modal is `SOL-S003`.
 - **`AND THE` chaining is permitted.** Each `AND THE …` adds a second consequence; on lowering, each `THE …`/`AND THE …` becomes a **separate IR obligation** (§11). More than two chained consequences emits a **warning** (`SOL-P004`-adjacent, atomize suggested), never a hard error (G3).

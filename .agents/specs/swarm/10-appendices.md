@@ -60,7 +60,7 @@ interface_id      = "IF-", digits;
 question_id       = "Q-", digits;
 trace_id          = "T-", digits;
 obligation_id     = req_id | constraint_id | invariant_id;   (* VERDICT reuses the judged obligation id *)
-cross_spec_ref    = spec_id, ":", ( req_id | constraint_id | invariant_id
+cross_spec_ref    = spec_id, "#", ( req_id | constraint_id | invariant_id
                                     | interface_id | question_id | trace_id );
 digits            = digit, { digit };
 
@@ -294,6 +294,7 @@ These fire at `PARSE`; all are BLOCKING (a malformed block cannot be parsed into
 | `SOL-S004` | BLOCKING | duplicate-block-id | Two blocks share the same surface id within one spec (intra-spec duplicate). | Edit: renumber. (Cross-spec collisions are `SOL-M001`.) |
 | `SOL-S011` | BLOCKING | missing-obligation-id | A block header is present but carries no `*_id` after the block type (block type is recognized but ID is absent). | Edit: add a valid `PREFIX-NNN` id after the block type. |
 | `SOL-S012` | BLOCKING | required-section-missing | A `spec.swarm.md` is missing a required top-level section from the ordered set of §21.2.1 (e.g. `## Intent`, `## Non-goals`, `## Obligations`), or carries them out of order. Document-level structural defect, distinct from the per-obligation scope gap `SOL-O004`. | Edit: add the missing `## ` section heading (or reorder) per §21.2.1. |
+| `SOL-S013` | BLOCKING | untrusted-source-character | An agent-read artifact (`*.swarm.md`, `AGENTS.md`, skill/pass guide, promoted source-doc) contains a zero-width, bidirectional-control, other non-printing, or homoglyph-suspect codepoint in obligation/instruction bytes — hidden-instruction injection (§17.5.1). | Edit: strip the offending codepoints or re-author in printable characters. |
 | `SOL-S005` | BLOCKING | prefix↔type-mismatch | The id prefix does not match the block type (e.g. `REQ C-001:`). | Edit: use the canonical prefix (REQ→`AC-`, CONSTRAINT→`C-`, INVARIANT→`I-`, INTERFACE→`IF-`, QUESTION→`Q-`, TRACE→`T-`). |
 | `SOL-S006` | BLOCKING | should-without-because | `SHOULD`/`SHOULD NOT` used without an accompanying `BECAUSE` or `EXCEPT` clause in the same block (§5.6). | Edit: add a `BECAUSE` or `EXCEPT` clause, or strengthen to `MUST`/`MUST NOT`. |
 | `SOL-S007` | BLOCKING | malformed-header | Block header is missing the mandatory trailing colon, or the id is malformed (spaces, illegal characters). | Edit: write `TYPE PREFIX-NNN:`. |
@@ -319,7 +320,7 @@ P-layer rules are single-obligation-local. `001`–`049` are BLOCKING; `050`–`
 | `SOL-P007` | BLOCKING | negation-ambiguity | A bare `MUST NOT` whose scope is ambiguous; not paired with the affirmative behavior. | `CLARIFY`: state the affirmative alongside the prohibition. |
 | `SOL-P008` | BLOCKING | uncaptured-uncertainty | Behavioral uncertainty left in prose, not lifted to a `QUESTION` block. | `CLARIFY`: raise a `QUESTION` (was `APS-Q001`). |
 
-The **high-risk-word list** (the union of the brief's subjective/promotional list + Femmer loopholes & comparatives + Tjong/Berry quantifiers/connectives) and the **same-line-makes-it-observable rule** govern `SOL-P005`/`SOL-P056`: a high-risk word is permitted only when the same sentence, bullet, or immediately-following line converts it to observable behavior (actor+action+object, a measurable threshold, or a named verification target); otherwise the rule fires BLOCKING and is fixed by `CONCRETIZE`/`QUANTIFY` — never an open-ended rewrite.
+The **high-risk-word list** (the union of the subjective/promotional list + Femmer loopholes & comparatives + Tjong/Berry quantifiers/connectives) and the **same-line-makes-it-observable rule** govern `SOL-P005`/`SOL-P056`: a high-risk word is permitted only when the same sentence, bullet, or immediately-following line converts it to observable behavior (actor+action+object, a measurable threshold, or a named verification target); otherwise the rule fires BLOCKING and is fixed by `CONCRETIZE`/`QUANTIFY` — never an open-ended rewrite.
 
 #### B.3.2 Advisory prose rules
 
@@ -362,6 +363,8 @@ V-layer rules fire at `VERIFY`; they gate the merge gate (§14). The `VERIFY BY 
 | `SOL-V007` | BLOCKING | invalid-lifecycle-decoration | A lifecycle decorator applied to the wrong core value (e.g. `WAIVED` on a `PASS`/`BLOCKED`, or `STALE` on anything other than a prior `PASS`). | Edit: remove or correct the lifecycle decorator per §14.1.2. |
 | `SOL-V008` | BLOCKING | missing-verdict-at-merge-gate | A required `VERIFY BY` binding has no `VERDICT` at the merge gate (counts as `UNVERIFIED` at the gate; see §14.4). | `BIND`: run the proof and record a verdict, or `WAIVE`. |
 | `SOL-V009` | BLOCKING | unknown-proof-type | A `verify_ref` whose `proof_type` is outside the closed 9-set (`static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor`). | Edit: use one of the nine canonical proof types (§15.1). |
+| `SOL-V010` | BLOCKING | missing-human-authority | A high-oversight-band obligation (§22.7) carries a `manual`/`WAIVED` verdict with no named human authority. | Edit: record the human authority on the `manual @ REVIEW` verdict / waiver (§17.3, §22.7). |
+| `SOL-V011` | ADVISORY | oracle-adequacy-unrecorded | A proof does not record what it exercised relative to the obligation predicate where §15.10 requires it (ADVISORY by default; BLOCKING in strict mode for `RISK high`/`critical`). | Edit: add the `oracle_adequacy` record (§15.10.1). |
 
 ### B.6 Layer O — ORCHESTRATION (planning / parallelism)
 
@@ -375,6 +378,7 @@ O-layer rules fire at `LOWER`; they gate plan emission (§13) and safe paralleli
 | `SOL-O004` | ADVISORY | scope-too-broad | An obligation has no `WRITES`/`READS`/`AFFECTS`, leaving it unscoped (serializes by default and harms planning). | `SCOPE`: declare write/read/affect surfaces (was `SOL305`). |
 | `SOL-O005` | BLOCKING | owned-path-outside-write-surface | A work packet writes a path outside its declared `WRITES` surface (the two-tier lowering check, G7). | `SCOPE`: declare the path, or stop writing it (new in v0.1). |
 | `SOL-O006` | ADVISORY | import-policy-overlap | An imported file creates a duplicate/overlapping policy obligation. | `DECONFLICT` / `COMPRESS` (was `SOL306`). |
+| `SOL-O007` | BLOCKING | uncovered-obligation | A lowered obligation maps to no task packet, or a TRACE/VERDICT target resolves to no obligation — the §11.6.2 coverage gate. | `SCOPE` / `decompose`: assign the obligation to a packet, or remove the orphan target. |
 
 ### B.7 Improve-op ↔ lint-code map (normative)
 
@@ -414,7 +418,7 @@ This is the authoritative legacy-code mapping; the remaps in this appendix (§B.
 | `APS-V001` | `SOL-V001` | no verification path |
 | `APS-X001` | `SOL-M002` | contradiction |
 
-#### B.8.2 an earlier research draft flat scheme (SOL00x / 10x / 20x / 30x)
+#### B.8.2 Legacy flat research scheme (SOL00x / 10x / 20x / 30x)
 
 | Legacy code | v0.1 code | Note |
 |---|---|---|
@@ -448,7 +452,7 @@ This is the authoritative legacy-code mapping; the remaps in this appendix (§B.
 
 Allocation rule applied above: flat `SOL00x/10x → SOL-S`; `SOL20x → SOL-M` (cross-ref) / `SOL-V` (proof) / `SOL-O` (planner); `SOL30x → SOL-P`.
 
-#### B.8.3 `swarm-an earlier research draft scheme (SOL-S00x / SOL-L1xx / SOL-M2xx / SOL-O3xx / SOL-V4xx)
+#### B.8.3 Legacy layered research scheme (SOL-S00x / SOL-L1xx / SOL-M2xx / SOL-O3xx / SOL-V4xx)
 
 | Legacy code | v0.1 code | Note |
 |---|---|---|
@@ -571,7 +575,8 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
               }
             }
           },
-          "status": { "enum": ["PASS", "FAIL", "BLOCKED", "UNVERIFIED", "WAIVED", "STALE", "CONTRADICTED"], "description": "4 core + 3 lifecycle; UNVERIFIED is the default before a verdict exists" },
+          "status": { "enum": ["PASS", "FAIL", "BLOCKED", "UNVERIFIED"], "description": "Core verdict (one of four); UNVERIFIED is the default before a verdict exists (§14)" },
+          "lifecycle": { "type": "array", "items": { "enum": ["WAIVED", "STALE", "CONTRADICTED"] }, "default": [], "description": "Lifecycle decorators on the core verdict (§14, §16); empty for a plain core verdict. Carried as a separate field, never fused into status (§12.4.4)" },
           "source": {
             "type": "object",
             "additionalProperties": false,
@@ -747,6 +752,7 @@ ERRORS:
   - network-timeout
   - invalid-refresh-token
 OWNED BY auth-client
+VERIFY BY contract:cmdContract:refresh-session-contract
 
 ## Obligations
 
@@ -1038,7 +1044,7 @@ retries at most once.
 
 ## Appendix E — Residual gaps and v0.1 judgment calls (G1–G12)
 
-The this specification (§(b) of this specification) enumerates twelve residual gaps requiring an author's judgment. This appendix states each as the NORMATIVE v0.1 position, using the recommended resolution, and cross-references the body section that owns it. Nothing here is left implicit; an item is "Revisit in v0.2?" only where this specification expects the resolution to deepen (it does not reopen the v0.1 disposition).
+This appendix enumerates twelve residual gaps requiring an author's judgment. This appendix states each as the NORMATIVE v0.1 position, using the recommended resolution, and cross-references the body section that owns it. Nothing here is left implicit; an item is "Revisit in v0.2?" only where this specification expects the resolution to deepen (it does not reopen the v0.1 disposition).
 
 | Gap | The question | v0.1 disposition (normative) | Owner | Revisit in v0.2? |
 | --- | --- | --- | --- | --- |
@@ -1118,7 +1124,7 @@ OBJECTIVE
   templates, fixtures, and inert data files.
 
 AUTHORITY ORDER (highest first)
-  1. This specification (swarm-kernel.md) — the single source of truth.
+  1. This specification (the `.agents/specs/swarm/` folder) — the single source of truth.
   2. Explicit user instructions for this rework.
   3. Existing repo content, only where it does not contradict (1) or (2).
   Resolve every conflict in favor of (1). Do not import authority from any

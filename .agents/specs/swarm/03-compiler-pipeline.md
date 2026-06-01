@@ -262,6 +262,59 @@ Authority (§22) MUST be carried onto each lowered node so that, downstream, a c
 
 The conflict graph that `lower` emits uses conflict-serializability semantics: a `READS`/`READS` pair on the same surface is parallel-safe (no edge); a `READS`/`WRITES` or `WRITES`/`WRITES` pair on the same surface is a conflict (`conflicts_with` edge). A `SURFACE` MAY carry an attribute (`append-only`, `integration`, `shared`) so that shared/global/append-only surfaces are not treated as ordinary write conflicts. The full predicate and `SURFACE` attribute mechanism are specified in §18; `lower` is responsible only for emitting the edges that predicate consumes.
 
+
+### 11.6 The clarify gate and the coverage gate
+
+`LOWER` is bracketed by two **pipeline gates**: a checkpoint that guards entry *into* `lower`, and a checkpoint that guards exit from `decompose` *into* `implement`. A gate is not a transformation — it transforms nothing and writes no artifact. It is a precondition predicate over already-emitted state: the pipeline MUST NOT advance the affected obligation past the gate while the predicate is unsatisfied. Mature spec-driven-development tools make these checkpoints explicit rather than implicit: GitHub Spec Kit runs `/clarify` (interactive disambiguation) and `/analyze` (cross-artifact consistency) as standard quality gates positioned around planning, before `implement` [SPECKIT]; AWS Kiro gates the requirements → design → tasks progression so a later artifact is not produced from an unsettled earlier one [KIRO]. Swarm names these two checkpoints normatively here.
+
+Both gates are **contracts checkable today by review** and **enforced by a future tool** — there is no runtime that runs them (Invariant 1, §2). Today a human or a `lint`/`decompose` carrier verifies the predicate by hand against the IR; a future compiler computes it from `nodes[]`, `edges[]`, and the plan `packets[]`.
+
+> **Gate vs improve-op (reconciliation, normative).** The CLARIFY *gate* (this section) and the `CLARIFY` *improve operation* (§10.2, op 7) are distinct and MUST NOT be conflated. The `CLARIFY` op is a **local edit** in the `NORMALIZE` phase: it lifts one buried prose ambiguity (`SOL-P008`) into an explicit interpretation or a `QUESTION` block. The CLARIFY gate is a **pipeline checkpoint** at the `NORMALIZE`→`LOWER` boundary: it refuses to advance the spec while any such question is still open and blocking. The op *creates* the QUESTION; the gate *waits on* it. One is the repair; the other is the precondition that the repair has been discharged.
+
+#### 11.6.1 The CLARIFY gate (pre-`lower`)
+
+> **R-CLARIFY-GATE.** The `lower` pass MUST NOT proceed for any obligation while, for that obligation, any of the following holds:
+> - an unresolved `[blocking]` `QUESTION` (§6.5) `AFFECTS` it — answered, or downgraded to `[non-blocking]` with rationale, clears it;
+> - a blocking `SOL-M002` (contradiction) names it (§8.3, §10.2 `DECONFLICT`);
+> - an unresolved `SOL-P008` (uncaptured behavioral ambiguity) attaches to it (§8.3, §10.2 `CLARIFY`).
+>
+> A spec carrying any of these for an in-scope obligation is **not lowerable**; lowering past it would commit a guess as an obligation.
+
+This is the **named generalization** of the existing halt-on-blocking-`QUESTION` rule (R-BLOCKING-Q, §11.1.2): R-BLOCKING-Q says a `[blocking]` `QUESTION` reaching `lower` is the orchestration error `SOL-O003`; R-CLARIFY-GATE lifts that single rule into a three-condition pre-lowering checkpoint that also catches unresolved contradiction (`SOL-M002`) and uncaptured ambiguity (`SOL-P008`). The codes are unchanged — a tripped CLARIFY gate surfaces as the *existing* code for the condition that tripped it (`SOL-O003` for the blocking question, `SOL-M002` for the contradiction, `SOL-P008` for the buried ambiguity); the gate is the checkpoint that aggregates them, not a new diagnostic.
+
+Rationale (cite): the planner→coder handoff is the dominant failure surface in multi-agent code generation — the planner-coder gap "accounts for 75.3% of failures," driven by underspecified plans and coder misinterpretation [PLANCODER]; and agents do not reliably ask: with messy/ambiguous specs the best model solves only ~24% of tasks even when handed a tool to ask for help [HILBENCH]. A clarification checkpoint *before* the spec is lowered into task packets is therefore a precondition for safe handoff, not a nicety — it forces selective escalation at the boundary where ambiguity is cheapest to resolve.
+
+#### 11.6.2 The COVERAGE gate (pre-`implement`)
+
+After `decompose` emits work packets (§11.2) and before any `implement` pass runs, a **coverage check** MUST hold over the lowered IR and the plan:
+
+> **R-COVERAGE-GATE.** For the lowered spec, the following MUST hold before `implement`:
+> 1. **Total coverage.** Every lowered obligation node (every `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`, including each `AND THE`-split sub-obligation, §11.1.1) is assigned to **exactly one** task packet (`packets[].inputs`, §13.5) — no obligation is unassigned (uncovered) and none is assigned to two packets (double-owned).
+> 2. **No orphan targets.** Every `verified_by` edge and every TRACE `implements`/`preserves` edge (§12.5) resolves to a real obligation node id present in `nodes[]`. A TRACE or VERDICT whose target id does not resolve is an orphan and MUST NOT be admitted.
+
+An obligation that satisfies neither (1) — i.e. an obligation no packet covers — is lint code **`SOL-O007`** ("uncovered obligation: a lowered obligation assigned to no task packet"), the next free code in the orchestration layer (the O-block currently runs `SOL-O001`–`SOL-O006`, §8.3, Appendix B.6). `SOL-O007` is **BLOCKING** and resolves by `SCOPE` (assign the obligation to a packet, or record it as an explicit non-goal). A double-owned obligation is the existing scope/ownership defect surface (`SOL-O005`, §11.3); an orphan TRACE/VERDICT target is the unbound-reference / contradiction surface already owned by the M layer (`SOL-M002`-adjacent, surfaced at `review`, §9.3). The COVERAGE gate aggregates these into one pre-`implement` checkpoint.
+
+```text
+COVERAGE gate (manual today, tool-enforced later):
+  for each obligation node N in IR.nodes (incl. AND THE-split sub-obligations):
+      count = | { p in plan.packets : N.id in p.inputs } |
+      count == 0  -> SOL-O007  (uncovered obligation)        [BLOCKING]
+      count > 1   -> SOL-O005  (double-owned / scope overlap) [BLOCKING]
+  for each verified_by / implements / preserves edge E:
+      E.to NOT in IR.nodes  -> orphan target (SOL-M002-adjacent, at review)
+```
+
+This gate is the structural complement of the distillation-loss discipline (§11.4, §24): distillation-loss forbids *dropping* an obligation, modality, binding, or authority during lowering; the COVERAGE gate forbids *stranding* one afterward — an obligation that survived lowering intact but that no packet picks up, or a trace/verdict that claims an obligation that does not exist. Together they make the lowered work a bijection over obligations: nothing lost in lowering (§11.4), nothing left uncovered or pointed at a phantom (§11.6.2).
+
+#### 11.6.3 Gate placement in the pipeline
+
+| Gate | Sits at boundary | Predicate (MUST hold to advance) | Surfaced as | Carrier (manual today) |
+| --- | --- | --- | --- | --- |
+| CLARIFY gate | `NORMALIZE` → `LOWER` (before `lower`) | No open `[blocking]` `QUESTION`, no blocking `SOL-M002`, no unresolved `SOL-P008` on an in-scope obligation | `SOL-O003` / `SOL-M002` / `SOL-P008` (existing codes) | `lint` (Skeptic, §9.4) |
+| COVERAGE gate | `LOWER` → `EXECUTE` (after `decompose`, before `implement`) | Every obligation covered by exactly one packet; every TRACE/verdict target resolves | `SOL-O007` (new), `SOL-O005`, `SOL-M002`-adjacent | `decompose` (Lead Engineer, §9.4) |
+
+Neither gate is a new pass; both reuse the existing pass surface (`lint` decides the CLARIFY predicate, `decompose` decides the COVERAGE predicate) and the existing `SOL-<LAYER><NNN>` namespace, adding only the single new orchestration code `SOL-O007`. A future tool MUST compute both predicates mechanically from the IR and plan; until one ships, a conformant repository MUST state both gates as review-checkable contracts and MUST NOT claim either is enforced by shipped tooling (Principle 1, §2; §12.1, §13.1).
+
 ## 12. The intermediate representation (IR)
 
 ### 12.1 Purpose and status
@@ -320,7 +373,7 @@ The IR layer is snake_case throughout. Every surface keyword that is English-sha
 | `title` | string | MUST | Human-readable spec title. |
 | `language` | string | MUST | The SOL language discriminator, exactly `SOL/0.1` for this version (§12.7, §25). Answers "which grammar/blocks/modals/lint codes." |
 | `version` | string | MUST | The **spec content** version (semver-shaped, e.g. `0.1.0`). Distinct from `language`. |
-| `status` | string | MUST | Spec lifecycle state; one of `draft`, `active`, `deprecated`. |
+| `status` | string | MUST | Spec lifecycle state; one of `draft`, `review`, `approved`, `superseded` (the same enum as §5.8 / Appendix C — `source-authority` keys on `approved`, §22). |
 | `owners` | array of string | MUST | Accountable maintainers (handles). MAY be empty only for a `draft`. |
 | `imports` | array of string | MUST (MAY be empty) | Relative paths to imported `*.swarm.md` specs whose nodes are in scope for cross-spec reference resolution. |
 

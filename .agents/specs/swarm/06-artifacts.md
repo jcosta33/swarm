@@ -32,7 +32,7 @@ docs/                              # explains Swarm (prose + tables; not install
     implement.md  verify.md  review.md  promote.md
   library/                         # the parameterizing layers
     pass-guides.md                 # the skill/pass-guide model (§26)
-    heuristic-profiles.md          # the 6 profiles (§27)
+    heuristic-profiles.md          # the 6 stdlib profile files (the full 13-persona set maps to passes, §27)
     overlays.md                    # project rule bundles (§27)
   reference/                       # cross-cutting reference pages
     glossary.md                    # one-word-one-meaning term store
@@ -53,7 +53,7 @@ evals/                             # framework SELF-TESTS (tests the spec itself
 
 scaffold/                         # the installable payload root (see note below)
   AGENTS.md                        # the populated bootloader a consumer adopts (§31)
-.agents/                         # everything copied into a consuming repo's.agents/
+  .agents/                       # everything copied into a consuming repo's .agents/
     language/                      # self-contained copies of the Tier-2 references (§20.3.2)
       SOL.md  APS.md  errors.md  versioning.md
     templates/                     # copyable skeletons (§21); NO verdict.md (§20.2.3)
@@ -280,9 +280,11 @@ Only load-bearing background. Link research, findings, ADRs, audits — do not p
 ## Interfaces
 
 INTERFACE IF-001:
-RETURNS <type>
-ACCEPTS <type>
-ERRORS <error-set>
+`<fn-or-boundary>` RETURNS <type>
+ACCEPTS:
+  - <input>
+ERRORS:
+  - <error>
 OWNED BY <owner>
 VERIFY BY contract:<adapter>:<artifact>
 

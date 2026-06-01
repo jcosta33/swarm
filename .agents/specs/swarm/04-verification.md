@@ -262,7 +262,7 @@ A conformant linter MUST apply the following block-type → proof-type rules:
 
 `model` means **model-checking OR an economical proof** of a property. It MUST NOT be read as a requirement to discharge a full mechanized theorem for each obligation.
 
-> Rationale: mechanized end-to-end proof success rates are far too low (single-digit percent in current tooling) to mandate per obligation. `model` covers bounded model checking, an SMT-discharged property, an exhaustive small-scope check, or any economical argument an oracle can replay. When even that is infeasible, `manual` is the honest type.
+> Rationale: end-to-end *per-obligation* proof is unreliable for frontier models at single trial (e.g. ~4.9% Lean proof success in VERINA `[VERINA]`), and verified-code synthesis is strongly *language-specific* — high for Dafny (~82%, and 68%→96% over one year `[VERICODING]`, `[DAFNYBENCH]`) but still low for Lean/Verus — so mandating a full theorem per obligation is neither portable nor economical. `model` therefore covers bounded model checking, an SMT-discharged property, an exhaustive small-scope check, or any economical argument an oracle can replay. When even that is infeasible, `manual` is the honest type.
 
 ### 15.6 The proof-strength order
 
@@ -323,6 +323,71 @@ The following MUST be rejected as invalid proofs and MUST NOT yield `PASS`:
 - **A `manual` verdict without recorded reasoning** is `UNVERIFIED` — `manual` is an *honest* escape hatch, not a blank cheque; it MUST carry a `REASON` and an `EVIDENCE` ref to the recorded judgment.
 
 ---
+
+
+### 15.10 Oracle adequacy
+
+A `PASS` is only as trustworthy as the **oracle** that produced it — the decision procedure that says whether the observed behaviour satisfies the obligation. A bound proof can pass against a *weak* oracle and still be wrong about the obligation. This is not a corner case: on SWE-bench Verified, 7.8% of patches that pass the official developer-written test suite are in fact incorrect, and the bundled tests inflate reported resolution rates by 6.2 absolute percentage points [SWEBENCH-ADQ]. The underlying issue is the **test-oracle problem** — when a precise oracle is unavailable, a single concrete example cannot stand in for the obligation's predicate, and metamorphic/property-based pseudo-oracles are the principled response [ORACLE]. Swarm therefore treats "the proof passed" as **necessary but not sufficient**: a proof MUST also record *what it exercised* relative to the obligation, and stronger obligations demand stronger oracles.
+
+This section is a **contract, not shipped tooling** (§2, §17.1): the adequacy record below is a field a future harness reads, and the `SOL-V011` check is manual-today.
+
+#### 15.10.1 A proof MUST record what it exercised (the adequacy record)
+
+A bound proof's `PASS` MUST carry an **adequacy record** describing *what the oracle exercised relative to the obligation's predicate* — not merely that the bound `cmd*` exited zero. "Tests passed" with no statement of coverage is already `UNVERIFIED` (§15.9); this strengthens that floor for obligations whose predicate is universal or high-consequence.
+
+The adequacy record is one optional object on the trace-provenance schema (§16.1), keyed `oracle_adequacy`:
+
+```json
+{
+  "oracle_adequacy": {
+    "predicate_form": "universal",
+    "exercised": "concrete-examples",
+    "evidence_path": ["src/auth/session-store.ts"],
+    "adequacy_evidence": [
+      { "kind": "mutation",    "ref": "mutation-report#score", "value": "0.91" },
+      { "kind": "metamorphic", "ref": "mr-idempotent-refresh"  }
+    ]
+  }
+}
+```
+
+| Field | Meaning |
+| --- | --- |
+| `predicate_form` | `existential` (an example suffices) \| `universal` (for-all — an example does not). Mirrors the `INVARIANT` rationale in §15.4. |
+| `exercised` | What the oracle actually ranged over: `concrete-examples` \| `generated-inputs` \| `boundary-shape` \| `state-space` \| `observation`. |
+| `evidence_path[]` | The **declared write surfaces** (§16.1, `per_surface_hash[]`; §18 `WRITES`) the oracle actually executed/analysed to reach its verdict. This is the proof's footprint on the code — used by the staleness rule below. |
+| `adequacy_evidence[]` | Zero or more `{kind, ref[, value]}` records, `kind` ∈ `mutation` \| `metamorphic` \| `property` \| `coverage`, that substantiate the oracle is adequate for the predicate. |
+
+A missing `oracle_adequacy` object is permitted for `existential` predicates proven by `test`; it is a `SOL-V011` finding (oracle-adequacy-unrecorded) wherever §15.10.2 requires it.
+
+#### 15.10.2 Stronger obligations demand stronger oracles
+
+For an obligation carrying `RISK high` or `RISK critical` (§18; IR `risk` scalar), a single concrete `test` is an **inadequate oracle** [ORACLE], because one example cannot establish a high-consequence or universally-quantified claim. For such obligations the bound proof SHOULD be a `property` or `model` oracle (which range over generated inputs / a state space), **or** it MUST carry `adequacy_evidence` — mutation-adequacy or metamorphic-relation evidence — that substantiates the concrete oracle.
+
+| Obligation `RISK` | Adequate bound oracle |
+| --- | --- |
+| `low` \| `medium` | Any type per §15.4; `test` alone is acceptable. |
+| `high` \| `critical` | `property` \| `model`, OR a `test`/`contract` whose `oracle_adequacy.adequacy_evidence[]` carries `mutation` or `metamorphic` evidence. A bare concrete `test` with no adequacy evidence is `SOL-V011` (ADVISORY by default; BLOCKING in strict mode). |
+
+> Rationale: this is the same move as the `INVARIANT` type-preference (§15.4, `SOL-V003`) generalised to consequence. An `INVARIANT` is flagged because a universal predicate outruns an example; a `RISK high|critical` obligation is flagged because the *cost of a missed defect* outruns an example. In both cases the fix is an oracle that ranges over more than one input, or explicit evidence that the example-based oracle is hard to fool.
+
+#### 15.10.3 Adequacy is a prior that strength can be overridden by
+
+The proof-strength order (§15.6, `model > property|contract > test > static > manual|monitor`) is a **prior**, not a verdict: it ranks proof *types* by how much an oracle of that type typically establishes. The adequacy record refines that prior with evidence about *this* oracle. Concretely, in a `CONTRADICTED` tie-break (§17.4):
+
+- Strength sets the **default** authoritative side, as today.
+- Recorded `adequacy_evidence` **MAY override** the default *within the recorded contradiction*: a `test` carrying strong mutation/metamorphic evidence and an `evidence_path` covering the disputed surface MAY be treated as authoritative over a nominally-stronger proof that exercised neither — but the reviewer MUST record the override and its reason (the two `EVIDENCE` refs of `SOL-V005` still apply). An override is a recorded judgment, never a silent re-rank, and never closes the contradiction on its own (§17.4).
+
+> Rationale: strength-by-type is a useful default precisely because adequacy is usually unrecorded; once a proof states what it exercised, that specific evidence is a better guide than the type's average. Honouring adequacy over rank is what stops the order from becoming astrology-by-tier.
+
+#### 15.10.4 Adequacy binds to staleness via the evidence path
+
+Staleness (§16.2) decorates a `PASS` `STALE` when its obligation source-hash changes (intent moved) or a declared write surface changes (code moved). The `evidence_path` sharpens condition (b): **a proof participates in a surface's freshness only if that surface is on the proof's `evidence_path`.** A write surface that the obligation declares in `WRITES` but that the oracle never exercised does not, on its own, falsify *that proof's* `PASS` — the proof never depended on it.
+
+- If a modified surface **is** on the `evidence_path`, the `PASS` goes `STALE` per §16.2(b) — the oracle's footprint moved under it.
+- If a modified surface is declared (`per_surface_hash[]`) but **not** on the `evidence_path`, modification alone does not force `STALE` for that proof; this is the **proof-exercised staleness** refinement already anticipated for shared/global surfaces in §16.5. The obligation's own `source_hash` change (condition (a)) still forces `STALE` regardless.
+
+> Rationale: drift should track *what the proof actually relied on*. Marking a `PASS` stale because an unrelated, un-exercised surface changed manufactures noise (the §16.5 problem); refusing to mark it stale when its real evidence path changed manufactures a false `PASS` (the §15.10 problem). The `evidence_path` is the one record that resolves both: freshness follows evidence, and an empty or unrecorded `evidence_path` on a `RISK high|critical` obligation is itself a `SOL-V011` finding — an oracle that cannot say what it exercised cannot be shown adequate.
 
 ## 16. Drift and staleness
 
@@ -398,11 +463,28 @@ drift_coverage = ( count of required obligations whose latest verdict is STALE )
                  / ( count of required obligations )
 ```
 
-### 16.5 Drift granularity for shared global surfaces (note)
+### 16.5 Proof-exercised staleness (the participation rule, replaces the binary exemption)
 
-Some write surfaces are shared and global (lockfiles, CI config, manifests, schemas). A naive per-surface hash would mark *every* obligation that declares such a surface `STALE` on any unrelated edit. v0.1 records the surface hashes as above; whether shared/global/append-only surfaces are exempted from blanket staleness (versus proof-exercised staleness) is governed by the `SURFACE` attribute mechanism (§18) and is refined in v0.2. v0.1 default: a declared write surface participates in the staleness check unless its `SURFACE` is attributed `append-only` or `shared`, in which case modification alone does not force `STALE` (the obligation's own `source_hash` change still does).
+§16.2 fires `STALE` only on a change to the obligation `source_hash` (condition (a)) or to a **declared write surface** in `per_surface_hash[]` (condition (b)). Two gaps follow from that narrow trigger, and v0.1 closes both here:
 
----
+1. **The binary exemption was unsound.** A naive per-surface hash marks *every* obligation that declares a shared/global surface `STALE` on any unrelated edit; the obvious fix — binary-exempting `append-only` and `shared` surfaces from condition (b) — over-corrects. Under a binary exemption a *real behavioral* change on an exempt surface does **not** force `STALE`, while a whitespace-only edit on an ordinary one does. That inverts the honesty the staleness rule exists to protect.
+2. **Drift via an undeclared read is invisible.** A proof can keep passing while no longer exercising the obligation it was bound to — the oracle has gone inadequate even though nothing in `per_surface_hash[]` moved [SWEBENCH-ADQ]. Syntactic equality of a write surface is not behavioral equality of the obligation [ORACLE]; a behavioral change reached through a dependency the obligation `READS` (or through the bound adapter) leaves condition (b) untouched.
+
+**The participation rule (normative).** A surface participates in an obligation's freshness **if and only if it lies on the evidence path of that obligation's last `PASS`** — i.e. the surface appears in the recorded `per_surface_hash[]` of the proof that produced that `PASS` (§16.1). Participation is decided **per obligation, per recorded proof**, not by a blanket attribute toggle:
+
+- A surface that the last `PASS` actually exercised participates **regardless of its `SURFACE` attribute** — an in-place behavioral edit to an `append-only` or `shared` surface that the proof's evidence path traversed MUST force `STALE`. The attribute (§18.3.1) governs *conflict serialization and blanket fan-out*, never an exemption from drift on an exercised surface.
+- A surface that the last `PASS` did **not** exercise does **not** participate — an unrelated edit to a `shared`/global surface (a lockfile bump, an orthogonal CI-matrix entry) MUST NOT mark that obligation `STALE`. This is exactly the "staleness is scoped to proof-exercised obligations" treatment §18.3.1 records for `integration`/`shared`; §16.5 is its canonical home, and §18.3.1's `append-only` row is read accordingly (an in-place, non-append edit on an exercised append-only surface still participates).
+
+**Extended `STALE` trigger.** The condition-(a)/(b) pair of §16.2 is extended with two further conditions; a prior `PASS` becomes `STALE` when **any** of them holds:
+
+> **(c)** a surface in the obligation's declared **`READS`** set (§18.2) that lies on the evidence path of the last `PASS` is modified after that `PASS` (its current hash differs from the recorded `per_surface_hash` entry); **or**
+> **(d)** the **bound adapter changes** — the `cmd*` slot the proof resolved through (§15.3, recorded as `adapter` in §16.1) is rebound, retargeted, or removed relative to the last `PASS`.
+
+Condition (c) makes read-side behavioral drift detectable to the same degree write-side drift already is: the obligation's `READS` set is hashed into `per_surface_hash[]` alongside its `WRITES` set so the recorded evidence path is complete. Condition (d) catches the case where the proof itself moved underneath an unchanged obligation and unchanged code. Both are still **content-hash** comparisons computed by a future harness; no condition here requires a runtime (§2). All four conditions surface as the existing `STALE` verdict and the `SOL-V004` (`stale-proof`) lint; a `STALE` raised under (c) or (d) MUST still carry its prior-verdict ref and the changed `READS`-surface or adapter in the **changed-surface** field (`SOL-V005`, §14.3) so the 3-way reconcile (§16.3) can act on it.
+
+**Scope limit (honesty per §17).** This rule detects **declared-write-and-read drift and adapter drift** — drift reachable through a surface or adapter that was recorded on the last `PASS`'s evidence path. It does **not** and **cannot** detect behavioral drift through an *undeclared* dependency, a hidden global, or an environmental input the obligation never declared and the proof never recorded: a missing `READS` declaration means a missing hash, and what is unhashed is unseen. Closing that gap requires observing behavior, which has no home in a markdown-only kernel (§17.1, "no runtime today"). The spec therefore claims **declared-drift detection**, never full behavioral-drift detection; an obligation whose true read set exceeds its declared `READS` is a soft-control gap to be caught by the enforcement lane (§17.2), not a guarantee §16 makes. Property/metamorphic oracles (§15) narrow this residual gap by checking behavioral relations rather than syntactic equality [ORACLE], but they reduce it; they do not let v0.1 overclaim full drift detection.
+
+Recording behavior (informative): a tool that bumps a lockfile that no proof exercised leaves drift coverage (§16.4) unchanged; an in-place edit to a CI step that an obligation's proof did exercise raises that obligation to `STALE`. Whether to recompute evidence-path participation incrementally or on demand is a harness concern; the **participation rule, the four `STALE` conditions, and the scope limit are the kernel contract** today.
 
 ## 17. The soft/hard control boundary and the enforcement lane
 
@@ -470,3 +552,67 @@ An expired or source-changed waiver MUST be re-evaluated: re-run the proof, re-i
 4. **Reconcile.** Reconciliation re-runs the disagreeing proofs, fixes the weaker oracle (e.g. a misbuilt manual judgment or a flaky test), corrects the code, or amends the obligation — the same not-silent discipline as the 3-way reconcile (§16.3). Only when both proofs agree (or one is withdrawn as invalid with a recorded reason) is the `CONTRADICTED` decorator removed.
 
 > Rationale (G6): blocking-plus-stronger-oracle keeps the gate honest (no silent pick-the-pass) while keeping review actionable (a working assumption exists). Placing executable oracles above an LLM-judge `manual` verdict reflects that judge bias is a known failure mode; an executable `model`/`contract`/`test` result is harder to fool than a narrative judgment.
+
+
+### 17.5 The untrusted-source boundary (spec/config injection)
+
+Every artifact Swarm relies on is **agent-readable markdown** — `*.swarm.md` obligations, `AGENTS.md` adapters, skills/pass guides, promoted source-docs. That readability is also an **attack surface**: an agent that loads a rule or config file as instructions can be steered by whoever authored those bytes. This is not theoretical. The "Rules File Backdoor" hides attacker instructions inside AI-assistant rule files using zero-width joiners, bidirectional-text markers, and other invisible Unicode — invisible to a human reviewer, parsed by the model — with working exploits against GitHub Copilot and Cursor that persist across forks `[RULESBACKDOOR]`. A compromised dependency can write a malicious `AGENTS.md` that overrides user instructions and hides its own modifications from PR summaries `[NVIDIA-AGENTSMD]`. This class has reached remote code execution in a shipped coding agent (Cursor ≤ v1.7, CVSS 3.1 base **8.8 HIGH**) `[CVE-2025-61592]`. Prompt injection — explicitly including the indirect, file-and-content-borne variant whose payload "need not be human-visible … as long as the content is parsed by the model" — is the **#1 LLM risk** `[OWASP-LLM01]`. Swarm therefore MUST treat the bytes it reads as data with a provenance, never as trusted instructions.
+
+Consistent with §17.1, none of the controls below is shipped tooling. Each is a **contract a future harness builds against** — a deterministic check OUTSIDE the model — and is **manual today** (a reviewer eyeballing, a CI/hook check that does not yet exist).
+
+#### 17.5.1 Non-printing character rejection (`SOL-S013`, HARD lane)
+
+A new SYNTAX-layer diagnostic, `SOL-S013`, REJECTS any `*.swarm.md` file or other agent-read artifact (`AGENTS.md`, skills/pass guides, promoted source-docs) that contains **non-printing, zero-width, bidirectional-control, or homoglyph-suspect** characters in obligation or instruction bytes. Because the check is purely lexical — fixed Unicode codepoint classes, no model judgment — it belongs in the **HARD/deterministic lane** of §17: its eventual home is a PreToolUse hook or CI gate (per §17.2), and it is **manual today**.
+
+| Code | Severity | Short name | Condition |
+| --- | --- | --- | --- |
+| `SOL-S013` | BLOCKING | untrusted-source-character | An agent-read artifact contains a zero-width codepoint (e.g. ZWSP `U+200B`, ZWNJ `U+200C`, ZWJ `U+200D`), a bidirectional-control codepoint (the `U+202A`–`U+202E` / `U+2066`–`U+2069` range), other non-printing control characters outside `\t`/`\n`, or a homoglyph-suspect mixed-script identifier. Detection of `[RULESBACKDOOR]`-class hidden instructions and `[OWASP-LLM01]` not-human-visible injection. |
+
+`SOL-S013` is BLOCKING (§8.2: a defect that changes *what gets built* — invisible bytes can alter an obligation's meaning, so it is unsafe to compile). It MUST be added to the Appendix B catalogue under layer S; the S-layer block has `SOL-S013` free (the namespace is append-only with tombstoning — §8.1.1). Resolution is `Edit: strip the offending codepoints, or re-author the clause in printable characters.` This sits in §17's deterministic lane alongside secret redaction and the write-surface gate — it is enforcement only once a hook/CI runs it, and the spec MUST NOT claim it runs today (§17.1).
+
+#### 17.5.2 Source-authority rule for externally-authored sources
+
+The promotion path of §24.4 lets an `audit.md` (observation) become spec obligations only via a re-stating `author` act. That control assumes the source-doc was authored **inside the repo trust boundary**. An `audit.md`, `research.md`, or `bug-report.md` whose provenance is **external** — generated by a third party, lifted from a dependency, or produced by an untrusted agent — is exactly the `[NVIDIA-AGENTSMD]` vector: hostile content masquerading as a benign observation in order to inject obligations downstream.
+
+Normative rule: a conformant repo MUST flag any agent-read source whose provenance lies **outside the repo trust boundary** as **approval-required and never auto-promotable**.
+
+- An externally-authored `audit.md` / `research.md` / `bug-report.md` MUST NOT auto-promote along its §24.4 route. Its promotion is an explicit **human-approval-required change** (§22.6), routed to the source-authority owner of the target artifact's domain (§22). An external source carries the *lowest* applicable source authority pending that approval and MUST NOT silently amend an approved `spec.swarm.md` (a lower-ranked actor amending a higher-ranked artifact is `SOL-M002`, §22.1.1).
+- Provenance MUST be recorded on the source-doc (the `content_hash` + origin provenance fields of §23.3 already exist for this). A source whose provenance cannot be established as in-boundary is treated as external by default — the safer assumption under `[OWASP-LLM01]`.
+- This is a SOFT/governance control (a promotion-gate discipline), distinct from the HARD lexical check of §17.5.1. The two compose: `SOL-S013` cleans the *bytes*, the source-authority rule governs the *trust* of the source those bytes came from.
+
+#### 17.5.3 The conditional `threat-model.md` source-doc
+
+For any change whose domain is `security` (Axis B rank 3, §22) or that touches an attack surface, the stdlib SHOULD make available a conditional **Tier-3 `threat-model.md`** source-doc, mapped to `[OWASP-LLM01]`. Like the other Tier-3 source-docs (§20.3.3, §21.9), it is plain `.md`, carries `type` + `id` frontmatter, holds **no obligation blocks**, preserves a fixed epistemic stance (*threat observation*, not intent), and is **CONDITIONAL** — never conformance-required: a conformant scaffold MUST ship the template, a conformant repo MAY have zero instances. It promotes forward only through an `author` pass that re-states each modelled threat as a `CONSTRAINT`/`INVARIANT` with its own id, modality, and `VERIFY BY` (typically a `security` proof, §15.1) — and, being an externally-informed observation, is subject to the §17.5.2 source-authority rule before any obligation it implies becomes binding.
+
+
+### 17.6 When the oracle is a model judge (the soft-oracle complement to §17.4)
+
+§14.4 is candid that Swarm ships no runtime, so **every verdict today is recorded by a human or agent** in `review.md`; and the `review` task kind's default suite is `manual @ REVIEW` over the recorded evidence (§15.8). Taken together, this means the de-facto oracle for a large share of obligations is **an LLM judge** rendering a `manual` verdict (§15.1). The proof-strength order already ranks `manual`/`monitor` at the bottom (§15.6) precisely because such a judgment is fallible; this subsection makes the *why* normative and gives the **soft-oracle** discipline that complements the hard-oracle tie-break of §17.4. Where §17.4 governs what to do when an executable proof and a judgment *disagree*, §17.5 governs how a judgment is *rendered* in the first place, so it is trustworthy enough to enter that contest.
+
+The empirical case for distrusting a bare single-judge `manual` verdict is threefold:
+
+- **Judge bias is documented and directional.** Strong LLM judges can match human preferences well — achieving over 80% agreement, the same level of agreement seen between humans — but they carry measurable **position, verbosity, and self-preference (self-enhancement) bias** [MTBENCH]. High agreement does not make the biases vanish; it makes them easy to mistake for ground truth.
+- **A single judgment is not internally reliable.** Single-judge scores show only "questionable"-to-"acceptable" internal-consistency reliability (McDonald's omega 0.462–0.803 over replicated evaluations), so a lone judgment SHOULD be replicated or aggregated rather than trusted as a point estimate [TRUSTJUDGE].
+- **A related judge inflates its own kin.** A judge that shares lineage with the generator — the same model, a teacher→student inheritance, or the same model family — is empirically biased toward the related implementer's output via **preference leakage**, a contamination "harder to detect" than the classic position/verbosity biases [PREFLEAK].
+
+#### 17.6.1 Normative requirements for any `manual`/judge-rendered verdict
+
+A `VERDICT` whose proof type is `manual` (§15.1), or any verdict otherwise rendered by an LLM judge rather than by an executable oracle, MUST satisfy all of the following. These are SOFT-control contracts today (§17.1): manual to record and check, with a deterministic home (a `review.md` schema validator / CI gate) when a harness exists.
+
+1. **Record judge identity.** The verdict MUST record **who judged** — the model (name + version/family) or the named human — in the trace-provenance schema (§16.1). This is the one schema §14/§16/§23 share; judge identity is recorded alongside the existing `adapter`/`verdict`/`tier` fields so a later auditor can reconstruct *which* oracle rendered the call. A `manual` verdict whose judge identity is unrecorded is an unverifiable judgment and MUST be treated as `UNVERIFIED` (it joins the §15.9 list of non-proofs: a judgment with no recordable judge is no better than "tests passed" with no output).
+2. **No shared lineage with the generator (preference-leakage guard).** The judge model MUST NOT share model lineage or family with the implementer/generator that produced the change under judgment — not the same model, not a teacher→student inheritance, not the same model family [PREFLEAK]. A `manual` verdict where judge and implementer share lineage is a contaminated oracle; it MUST be re-judged by an unrelated model (or a human) before it may count toward the merge gate, and SHOULD be recorded `CONTRADICTED` if the inflated `PASS` conflicts with any executable proof (§17.4).
+3. **Implementer ≠ reviewer (separation of duties).** The agent (or human) that implemented the change MUST NOT be the one that renders its `manual` verdict. A self-judged obligation is a self-preference hazard [MTBENCH] and MUST be treated as `UNVERIFIED` until an independent reviewer renders the judgment. This is the soft-oracle analogue of the waiver rule that the implementing agent MUST NOT self-issue a waiver (§17.3).
+4. **Dual independent judgment for `RISK high`/`critical`.** For any obligation carrying `RISK high` or `RISK critical`, a single `manual` judgment is insufficient: the verdict MUST be rendered by **two independent judges** (two unrelated models, or a model plus a human — neither sharing lineage with the generator, per (2), and neither being the implementer, per (3)), reflecting that a lone judgment is not internally reliable [TRUSTJUDGE]. If the two judges **agree**, the verdict stands on the dual record. If they **disagree**, the obligation MUST be decorated `CONTRADICTED` (§14.1.2) — recording the two judgments as the two conflicting evidence refs required by `SOL-V005` — and routed through the §17.4 protocol, where any executable proof outranks both `manual` judgments under the proof-strength order (§15.6).
+
+#### 17.6.2 Lint disposition
+
+These requirements extend the `SOL-V` (VERIFICATION) layer and are enforced by hand or by the documented `lint-spec` pass today (§14.3, §26), with a deterministic home in a `review.md` validator when a harness exists:
+
+| Condition | Disposition |
+| --- | --- |
+| `manual` verdict with no recorded judge identity (§17.5.1.1) | Treated as `UNVERIFIED` at the gate (§15.9); raise a `SOL-V` judge-provenance smell. |
+| Judge shares lineage/family with the implementer/generator (§17.5.1.2) | Verdict does not count; re-judge by an unrelated oracle. BLOCKING. |
+| Implementer rendered its own `manual` verdict (§17.5.1.3) | Treated as `UNVERIFIED`; require an independent reviewer. BLOCKING. |
+| `RISK high`/`critical` obligation with only one `manual` judgment (§17.5.1.4) | Treated as `UNVERIFIED` (dual judgment owed); judges that disagree → `CONTRADICTED` → §17.4. |
+
+> Rationale (soft-oracle complement to G6): §17.4 keeps the gate honest when proofs *disagree* by ranking the stronger executable oracle above an LLM-judge `manual` verdict (§15.6). But ranking a judgment last does nothing if the judgment itself is silently biased — a self-judged, same-family, single-shot `manual` `PASS` can sail through whenever no executable proof contests it. §17.5 closes that hole: judge identity is recorded (§16.1), the judge is structurally independent of the generator [PREFLEAK][MTBENCH], and high-risk judgments are replicated so that an unreliable single call surfaces as `CONTRADICTED` rather than as false confidence [TRUSTJUDGE]. This is the "no astrology for agents" discipline applied to the one oracle Swarm cannot make executable: when the oracle is a model, name it, isolate it, and double it where the risk is highest.

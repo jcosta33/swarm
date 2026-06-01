@@ -14,7 +14,7 @@ All **load-bearing meaning** in a Swarm repo — modality, actor, trigger/state,
 
 A Swarm tool, author, or downstream agent MUST NOT treat any prose span as a source of an obligation, a verdict, a verification requirement, an authority ranking, or any other load-bearing fact. If a fact is load-bearing, it MUST be expressed as (or promoted into) a typed SOL block; until it is, it has no force.
 
-*Rationale (terse):* prompt-format sensitivity (±40% on identical content), multi-turn reliability decay (≈−39%), and lost-in-the-middle / context-rot degradation (20–50%) make prose an unreliable carrier of meaning across turns and agents; only the typed surface and its IR are stable enough to bind on (see §7.6).
+*Rationale (terse):* prompt-format sensitivity (up to ~40% on identical content for weaker models such as GPT-3.5-turbo; larger models are more robust `[FORMAT]`), multi-turn reliability decay, and lost-in-the-middle / context-rot degradation — relevant information in the middle of a long context is used markedly worse than at the ends `[LOSTMID]` — make prose an unreliable carrier of meaning across turns and agents; only the typed surface and its IR are stable enough to bind on (see §7.6).
 
 #### 7.1.2 The word-economy rule (normative)
 
@@ -116,7 +116,7 @@ Permitted via QUANTIFY (same-line measurable threshold):
 
 ### 7.5 APS rule families mapped to `SOL-P` codes (normative)
 
-Every APS rule family resolves to exactly one prose-layer lint code in the unified taxonomy (§8). `APS-` codes are retired (§8.5); the mapping below is canonical and supersedes the brief's §8.8 `APS-*` table. Full definitions live in §8.2–§8.4; the legacy translation table lives in Appendix B.
+Every APS rule family resolves to exactly one prose-layer lint code in the unified taxonomy (§8). `APS-` codes are retired (§8.5); the mapping below is canonical and supersedes the earlier `APS-*` table. Full definitions live in §8.2–§8.4; the legacy translation table lives in Appendix B.
 
 | APS rule family | `SOL-P` code | Severity | Repair op (§10) |
 |---|---|---|---|
@@ -143,12 +143,12 @@ Cross-layer companions an APS reviewer commonly meets (defined in §8): `SOL-M00
 
 APS exists because of a **durable mechanism**, not a transient capability ceiling. Specifications, refs, and ADRs that justify APS MUST anchor on the following four properties, and MUST NOT anchor on any dated model-accuracy number:
 
-1. **Format sensitivity** — identical content reformatted can change model output by up to ±40%; controlled, predictable prose shape reduces this variance.
+1. **Format sensitivity** — identical content reformatted can change model output by up to ~40% for weaker models (GPT-3.5-turbo on code translation; larger/newer models are more format-robust) `[FORMAT]`; controlled, predictable prose shape reduces this variance.
 2. **Multi-turn decay** — reliability drops ≈39% across multi-turn generation as early loose assumptions compound; stable artifacts beat accumulating chat.
 3. **Context rot / lost-in-the-middle** — relevant content buried in long inputs is used 20–50% less reliably; low-entropy prose keeps the load-bearing signal legible.
 4. **Minimize always-on density to protect adherence and control cost** — every always-loaded normative line competes for adherence and is paid for on every turn; APS removes non-load-bearing words so the surviving instructions are followed and cheap.
 
-**Superseded figure (MUST NOT cite as a ceiling).** The IFScale "68% accuracy at 500 instructions" figure MUST NOT be cited as a capability ceiling or as the justification for APS density limits. It is superseded by a 2026 re-run (≈99% at 5,000 instructions, inflection ≈2,000). Any numeric capability claim that survives MUST carry an "evidence as of <date>" caveat. The density discipline rests on adherence-and-cost economics (#4), not on a claim that models cannot follow many instructions.
+**Superseded figure (MUST NOT cite as a ceiling).** The IFScale "68% accuracy at 500 instructions" figure MUST NOT be cited as a capability ceiling or as the justification for APS density limits. The real finding is that instruction-following accuracy *degrades* with density — even the best frontier models reach only ~68% at 500 instructions, with a primacy bias toward earlier instructions `[IFSCALE]` — which *supports* a density cap rather than refuting it. (A non-peer-reviewed 2026 vendor re-run reports much higher counts on a keyword-inclusion proxy task `[ARIZE26]`; it is preliminary evidence only and MUST NOT be cited as an established capability ceiling.) Any numeric capability claim that survives MUST carry an "evidence as of <date>" caveat. The density discipline rests on adherence-and-cost economics (#4), not on a claim that models cannot follow many instructions.
 
 ---
 
@@ -265,7 +265,7 @@ The advisory prose set is `SOL-P050`–`SOL-P056`. They emit `warning` and never
 
 ### 8.5 `APS-` retirement and the full catalogue
 
-`APS-` is **retired as a code prefix.** "APS" survives only as the *name* of the prose standard (§7); it MUST NOT appear in any diagnostic code. Every legacy `APS-*` code, every flat an earlier research draft code (`SOL101`/`SOL201`/`SOL301`), and every `swarm-an earlier research draft SOL-L###` code is remapped into the `SOL-<LAYER><NNN>` namespace. The complete per-layer catalogue and the full legacy translation table (e.g. `APS-A001→SOL-P005`, `APS-O001→SOL-P004`, `APS-P001→SOL-P054`, `APS-R001→SOL-P055`, `APS-Q001→SOL-P008`, `APS-V001→SOL-V001`, `APS-X001→SOL-M002`, `SOL-L###→SOL-P###`) live in **Appendix B**. Tools and authors MUST cite only the unified codes; the legacy codes are non-normative aliases retained for migration only.
+`APS-` is **retired as a code prefix.** "APS" survives only as the *name* of the prose standard (§7); it MUST NOT appear in any diagnostic code. Every legacy `APS-*` code, every flat legacy research code (`SOL101`/`SOL201`/`SOL301`), and every legacy `SOL-L###` code is remapped into the `SOL-<LAYER><NNN>` namespace. The complete per-layer catalogue and the full legacy translation table (e.g. `APS-A001→SOL-P005`, `APS-O001→SOL-P004`, `APS-P001→SOL-P054`, `APS-R001→SOL-P055`, `APS-Q001→SOL-P008`, `APS-V001→SOL-V001`, `APS-X001→SOL-M002`, `SOL-L###→SOL-P###`) live in **Appendix B**. Tools and authors MUST cite only the unified codes; the legacy codes are non-normative aliases retained for migration only.
 
 ### 8.6 Severity override and the waiver record (normative)
 

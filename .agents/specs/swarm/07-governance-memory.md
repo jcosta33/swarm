@@ -47,7 +47,7 @@ An obligation's domain MUST be discoverable from its container or an explicit do
 
 When two obligations conflict (they constrain the same trigger/state/surface with incompatible modality), a conformant tool MUST resolve them by this exact procedure, in order:
 
-1. **Compare DOMAIN rank (Axis B) first — but only when at least one obligation is in the hard-policy band (Axis-B ranks 1–3: enforced-policy, compliance, security).** When a hard-policy-band obligation is involved, the higher domain wins **regardless of artifact rank** (a `security` obligation governs a `product` obligation even from a lower-ranked artifact). If **neither** obligation is in the hard-policy band, domain rank does **not** override artifact authority — go to step 2.
+1. **Compare DOMAIN rank (Axis B) first — but only when at least one obligation is in the hard-policy band (Axis-B ranks 1–3: enforced-policy, compliance, security).** When a hard-policy-band obligation is involved, the higher domain wins **regardless of artifact rank** (a `security` obligation governs a `product` obligation even from a lower-ranked artifact). If **neither** obligation is in the hard-policy band, domain rank does **not** override artifact authority — go to step 2. The in-band obligation exercises domain-dominance only when it lives in a **durable, reviewed artifact** (Axis-A rank ≤ 6); a hard-policy claim existing only in chat/ephemeral conversation (rank 7–8) MUST first be promoted to a durable artifact before it can govern — an un-reviewed note cannot override an accepted ADR.
 2. **Otherwise — neither obligation is in the hard-policy band, or the two are in the same domain — compare ARTIFACT authority (Axis A).** The obligation in the higher-ranked artifact wins; if artifact rank also ties, the higher domain rank breaks the tie.
 3. **If both axes are equal, STOP.** A conformant tool MUST NOT auto-select a winner. It MUST emit `SOL-M002` (semantic-layer contradiction, §8) and route the conflict to amendment/review (§14). Resolution is an authoring act, never an inference.
 
@@ -79,7 +79,7 @@ AFFECTS auth.refresh
 
 `C-014` (security) governs. The product REQ `AC-031` is not deleted; it is routed to amendment so its trigger can be narrowed to exclude rotated tokens. Had both obligations been `product`, the procedure would fall to Axis A and the approved spec would win over the reviewed audit.
 
-> **Second example (below the hard-policy band).** A reviewed `audit.md` records a `team`-domain note: *new modules SHOULD live under `src/v2/`*. An approved `spec.swarm.md` records a `product` obligation on the same surface. Neither is in the hard-policy band (ranks 1–3), so domain rank does **not** decide; ARTIFACT authority does (step 2), and the approved spec (rank 3) outranks the reviewed audit (rank 5). The product obligation wins; the audit note is advisory. Were the audit note instead a `security` obligation (in-band), step 1 would flip the result.
+> **Second example (below the hard-policy band).** A reviewed `audit.md` records a `team`-domain note: *new modules SHOULD live under `src/v2/`*. An approved `spec.swarm.md` records a `product` obligation on the same surface. Neither is in the hard-policy band (ranks 1–3), so domain rank does **not** decide; ARTIFACT authority does (step 2), and the approved spec (rank 2) outranks the reviewed audit (rank 4). The product obligation wins; the audit note is advisory. Were the audit note instead a `security` obligation (in-band), step 1 would flip the result.
 
 ### 22.4 Invariants on both axes
 
@@ -88,7 +88,7 @@ These hold on Axis A and Axis B simultaneously, and a conformant tool MUST NOT l
 | Invariant | Statement |
 | --------- | --------- |
 | Code is reality, not intent | Code and tests are implementation reality. They MAY **falsify** an obligation (producing `FAIL`/`CONTRADICTED`/`STALE`, §14, §16) but MUST NOT **silently amend** intent. A divergence routes to the §16 three-way reconcile, never to a quiet edit of the obligation. |
-| Memory and task-map are a floor | `memory` (Axis B rank 8) and `task-map` (rank 7) are the lowest domains and never outrank any governing domain; equivalently, a promoted finding or a task scoping note can **inform** but never **weaken** an obligation. A promotion that would weaken an obligation is itself a `SOL-M002` contradiction (§23). |
+| Memory and task-map are a floor | `memory` (Axis B rank 8) and `task-map` (rank 7) are the lowest domains and never outrank any governing domain; equivalently, a promoted finding or a task scoping note can **inform** but never **weaken** an obligation. A promotion that would weaken an obligation *as memory* is itself a `SOL-M002` contradiction (§23). Promotion to a spec is a **domain-promotion**, not memory overriding intent: a finding *qua memory* never outranks an obligation, but once it is re-stated as a spec obligation via the `author` pass (§23.4.2) it carries its **new container's** authority — that is intent acquiring rank, not the `memory` floor being breached. |
 | Planning hints reorder, never weaken | `DEPENDS ON`, `parallel_group`, and other planning metadata (§13, §18) change the **order** work runs in. They MUST NOT change modality, scope, or verification bindings of any obligation. |
 
 ### 22.5 Bidirectional traceability framing
@@ -117,12 +117,57 @@ Source authority (§22) decides which obligation governs when two conflict; this
 | Promote a `finding.md` into an approved `spec.swarm.md` (§23) | Yes |
 | Normalize formatting, casing, or keyword form (§4.10) | No |
 | Fix an editorial typo with no semantic effect | No |
-| Add a missing link or proof-ref without changing meaning | No |
+| Add a missing link, or complete a reference to an **already-declared** proof, without changing meaning | No (normalization, §10.4 cat 12) |
+| Add, remove, or repoint a `VERIFY BY` proof binding | Yes — amendment (§10.4 cat 7) |
 | Compress redundant prose while preserving semantics | No |
 
 The "Yes" rows are exactly the changes that alter what the system is obligated to build, what counts as proof, or which decision governs — each one corresponds to a non-normalization category in §10.4 and MUST route to amendment/review (§14) rather than being applied inside `improve` (§10.1). The "No" rows are the pure-normalization class (§10.4, category 12): they are semantics-preserving by definition and a conformant tool MAY apply them without approval.
 
 > **R-APPROVAL-AUTHORITY.** This spec is provider- and org-neutral about **who** approves; it defines only **what** requires approval. Approval **authority** for any "Yes" row MUST be resolved through the source-authority ladder (§22): the approver is the owner of the highest-ranked governing artifact in the relevant domain — the accepted `adr.md` owner for an ADR change, the approved `spec.swarm.md` owner for an obligation or interface change, the domain owner (Axis B, §22.1.2) for a cross-domain conflict. There is **no** undefined "human role" in the kernel; "approval required: Yes" means "an authoring act by the relevant source-authority owner is required," never an appeal to an unspecified gatekeeper. A change applied without the authority resolved by §22 is itself a `SOL-M002` contradiction (a lower-ranked actor silently amending a higher-ranked artifact, §22.1.1).
+
+
+### 22.7 Risk-based human oversight (HITL escalation)
+
+The `RISK <low|medium|high|critical>` clause (§4.3, §6.8) is, in the rest of the kernel, **inert**: it lowers to a `risk` scalar in the IR (§12) and feeds nothing — no gate, no verdict requirement, no escalation. This subsection wires it to a normative obligation. The wiring is motivated, not decorative: agents are unreliable at knowing **when to stop and ask a human**. On messy or ambiguous specs the best measured agent solves only **~24%** of tasks *even when handed an explicit tool to escalate*, and selective escalation (the `Ask-F1` metric) is the measured weak point [HILBENCH]; independently, prompt-injection and irreversible-action risk is the **top-ranked** LLM security concern [OWASP-LLM01]. A risk tier that triggers nothing is therefore the exact failure the field was meant to prevent — high-stakes work proceeding on agent self-assessment alone. As elsewhere in Swarm this is NO-RUNTIME: the rule below is a **contract** (a lint + a verdict-field requirement) that is manual-today (§26) and that future tooling builds against; nothing here ships an escalation engine.
+
+#### 22.7.1 The high-oversight band
+
+An obligation is in the **high-oversight band** iff **either** of these holds:
+
+| Trigger | Condition |
+| --- | --- |
+| Declared critical risk | The obligation carries `RISK critical` (§6.8). |
+| Irreversible / shared write surface | Any surface in the obligation's `WRITES` set is tagged `integration` or `shared` (§18.3.1), or is otherwise irreversible (a migration, a destructive or non-replayable action). |
+
+The two `WRITES`-attribute triggers are deliberately reused from the safe-parallelism predicate: `integration` and `shared` are already the surfaces the kernel treats as high-conflict and serializes through a single dedicated step (§18.3.1, §18.4), so they are the same surfaces whose blast radius is hardest to undo. `RISK high`, `RISK medium`, and `RISK low` are **not** in the band on the strength of the tier alone (a `high`-risk obligation that writes only an ordinary exclusive feature surface is out of band) — but any obligation, at any tier, enters the band the moment its `WRITES` touches an `integration`/`shared`/irreversible surface.
+
+#### 22.7.2 Normative rule
+
+For an obligation in the high-oversight band (§22.7.1), a conformant repo MUST satisfy **both** of the following:
+
+1. **Named-human REVIEW binding.** The obligation MUST carry a `manual @ REVIEW` proof binding (`VERIFY BY manual:…`, §15) in addition to whatever executable proofs its task-kind default suite requires (§15.8). This makes a recorded human judgment a *required* verdict for the obligation, not an optional one — the band's work cannot reach the merge gate on executable proofs alone.
+2. **Named human on the verdict and on any waiver.** That `manual` verdict MUST name its human **authority** (the same `authority` discipline a `WAIVED` verdict carries, §14.3, §17.3); and any `WAIVED` verdict on a band obligation MUST be issued by a **human or the spec owner**, never self-issued by a skill, persona, or the implementing agent (§17.3). An in-band `manual` verdict or waiver lacking a named human authority is a `SOL-V010` diagnostic (below).
+
+Lower risk tiers **MAY** be agent-verified: an out-of-band obligation (`RISK low|medium|high` with no irreversible/`integration`/`shared` write) is governed by its ordinary task-kind default suite (§15.8) and MAY be discharged entirely by executable proofs and an agent-recorded `manual` verdict where its suite calls for one. The rule raises the floor only for the band; it does not put a human in the loop of every obligation, which would re-create the over-serialization the `RISK` tiers exist to avoid.
+
+| Risk / surface | REVIEW binding | Verdict / waiver authority |
+| --- | --- | --- |
+| `RISK critical` (any surface) | `manual @ REVIEW` REQUIRED | Named human (verdict + any waiver) |
+| Any tier, `WRITES` an `integration`/`shared`/irreversible surface | `manual @ REVIEW` REQUIRED | Named human (verdict + any waiver) |
+| `RISK low|medium|high`, ordinary exclusive `WRITES` | Per task-kind default suite (§15.8) | MAY be agent-verified |
+
+#### 22.7.3 Authority and waiver are the §22.6 / §17.3 authority, not a new role
+
+The "named human" here is **not** a new kernel role. *Who* the human is stays unspecified and is bound locally by the adopting repository, per the §0.6 approval-role assumption — the kernel fixes **what** the band requires (a `manual @ REVIEW` plus a named authority), never the identity, title, or headcount of the approver. Concretely:
+
+- A band obligation's `manual @ REVIEW` verdict is exactly the §22.6 row **"Accept a `manual` proof where no automated proof previously existed"** when it stands in for an automated proof — an approval-required (`Yes`) change whose **authority is resolved through the source-authority ladder** (§22.6, `R-APPROVAL-AUTHORITY`): the approver is the owner of the highest-ranked governing artifact in the relevant domain (Axis A / Axis B, §22.1).
+- A **waiver** on a band obligation is the §17.3 `WAIVER` lifecycle unchanged: authority is a **human or the spec owner**, with mandatory `authority + reason + expiry` and auto-expiry on source-hash change (§17.3). There are no permanent waivers and no agent-self-issued waivers in the band.
+
+A band obligation whose `manual`/`WAIVED` verdict names no human authority is a `SOL-V010` diagnostic (a high-oversight obligation discharged without named human authority), placed in the `SOL-V` verification-binding layer (`SOL-<LAYER>NNN`, layer `V`) alongside `SOL-V001` (missing verification path) and `SOL-V005` (missing mandatory verdict fields). Like every `SOL-V` code today it is enforced by hand or by the documented `lint-spec` pass guide (§26), aspirational/manual until tooling exists (Principle 1, §2). A change that records an agent-only verdict on a band obligation, or that lets a skill self-issue a band waiver, is additionally a `SOL-M002` contradiction by the §22.6 rule — a lower-ranked actor (the agent) silently amending what only a named source-authority owner may approve (§22.1.1).
+
+> Worked example — a migration obligation. `CONSTRAINT C-022` carries `WRITES db.migrations` (a `SURFACE … [integration]`, §18.3.1) and `RISK high`. Both band triggers fire: the `integration` surface alone would suffice, and so the tier `high` (out of band on tier alone) is moot. `C-022` MUST therefore bind `manual @ REVIEW` in addition to its `migration` default suite (`test @ VERIFY`, `static @ VERIFY`, `contract @ VERIFY`, §15.8); its `manual` verdict MUST name the human authority who reviewed the migration; and any `WAIVED` on it MUST be issued by that human or the spec owner with `reason + expiry` (§17.3). An agent-recorded `PASS` on `C-022` with no named human authority does not reach the merge gate — it is `SOL-V010`.
+
+The conformant repo's source-authority reference (`docs/language/source-authority.md`, §20) MUST state the high-oversight band, the §22.7.2 two-part rule, and the tie to §17.3 waiver authority and the §22.6 approval table.
 
 ## 23. The memory model
 
@@ -244,7 +289,7 @@ This keeps the bootloader a map (consistent with §31) and the procedure lazily 
 
 #### 23.4.2 Discovery-to-promotion-target table
 
-Promotion is **mandatory before task closure** (§23.4): every discovery a task surfaces enters the **promotion queue** and MUST resolve to one of `pending | promoted | deferred | rejected | blocked`, and a task MUST NOT close while any item is `pending` — all five statuses except `pending` are terminal-for-this-task, and `deferred`/`rejected`/`blocked` each carry a reason. This subsection is the consolidated routing table the §20.3.2 promotion-protocol reference doc cites: given the *kind* of discovery, it fixes the single durable target the `promote` pass (§) writes to. The kinds are mutually exclusive by intent; when a discovery has two faces (e.g. it is both a durable decision and a reusable pattern), it is promoted to each applicable target and each lands as its own queue item.
+Promotion is **mandatory before task closure** (§23.4): every discovery a task surfaces enters the **promotion queue** and MUST resolve to one of `pending | promoted | deferred | rejected | blocked`, and a task MUST NOT close while any item is `pending` — all five statuses except `pending` are terminal-for-this-task, and `deferred`/`rejected`/`blocked` each carry a reason. This subsection is the consolidated routing table the §20.3.2 promotion-protocol reference doc cites: given the *kind* of discovery, it fixes the single durable target the `promote` pass (§9) writes to. The kinds are mutually exclusive by intent; when a discovery has two faces (e.g. it is both a durable decision and a reusable pattern), it is promoted to each applicable target and each lands as its own queue item.
 
 | Discovery | Promote to |
 | --------- | ---------- |
@@ -259,6 +304,16 @@ Promotion is **mandatory before task closure** (§23.4): every discovery a task 
 | Purely local execution detail (relevant only to this task's run) | Keep in the task only (`task.md`); it is **not** durable and is dispositioned `rejected` for promotion with reason "execution-local". |
 
 Two normative consequences hold across every row. First, a promotion that would *weaken* an existing obligation is forbidden at any target — it is a `SOL-M002` contradiction routed to amendment, because `memory` is the floor domain on Axis B (§22.4). Second, "keep in the task only" is a real disposition, not an omission: such an item is still recorded in the queue and resolved (`rejected`, with reason), so that the mandatory-before-close rule (§23.4) admits no silent drops.
+
+
+#### 23.4.3 Validation and rollback (memory governance)
+
+Authorization is not validation. Governance research argues a memory write MUST pass consistency verification — not merely owner approval — before consolidation, and names three failure points: poisoning at ingestion, semantic drift at consolidation, and conflict/hallucination at retrieval `[SSGM]` (conceptual framework). The v0.1 model of §23.4 (`pending → promoted` on approval) is forward-only and addresses none of these. Two additions close the gap:
+
+- **The `validated` status.** A high-consequence promotion MUST pass `pending → validated → promoted`, where `validated` requires **independent corroboration** — a second finding, a re-run proof, or a reviewer who is not the promoting agent — generalizing the §23.2 two-finding rule for patterns. A `pending` finding produced by an externally-authored source (the §17.5.2 untrusted-source boundary; the `[NVIDIA-AGENTSMD]` / `[RULESBACKDOOR]` poisoning vector) MUST NOT skip `validated`.
+- **Rollback.** Promotion gains a `rolled-back` disposition: a promoted finding later shown poisoned, `CONTRADICTED` (§14), or `STALE` (§16) MUST be withdrawable, recording a **retraction entry in `memory/INDEX.md`** (not a silent delete — the chain stays auditable, per Nygard immutability, §30) and re-opening any obligation it had narrowed (§22.4, §23.4.2). Supersession replaces a fact with a better one; rollback withdraws a fact that should never have been promoted.
+
+The two-tier index/store model of §23.1 is consistent with the agent-memory literature — OS-style two-tier context management `[MEMGPT]`, extract–consolidate–retrieve pipelines `[MEM0]`, self-linking agentic notes `[AMEM]`, and tiered episodic→semantic consolidation `[MEMTIER]` (tripartite, not two-tier) — cited as design lineage, not as validation of any Swarm-specific number. Automated validation scoring, decay, and embedding retrieval remain deferred (§23.6, §35.2).
 
 ### 23.5 Staleness
 
@@ -312,7 +367,7 @@ The following MUST survive intact across **every** boundary. Dropping or weakeni
 | Its authority and scope | The domain/artifact rank (§22) and `WRITES`/`READS`/`AFFECTS` scope (§18). |
 | Constraints, invariants, non-goals, unresolved `QUESTION`s | These bound the build; dropping a non-goal silently widens scope. |
 
-The this specification's loss-budget matrix is canonical and reproduced here as the per-boundary specialization of these two lists:
+This specification's loss-budget matrix is canonical and reproduced here as the per-boundary specialization of these two lists:
 
 | From | To | Permitted loss | Forbidden loss |
 | ---- | -- | -------------- | -------------- |
@@ -379,6 +434,8 @@ The framework version answers "**which scaffold, templates, and pass guides ship
 The axes are independent, but coupled by exactly **one** directional rule:
 
 > **Any change to the SOL/APS language version MUST force at least a framework MINOR release** — additive language change → framework MINOR; breaking language change → framework MAJOR. The framework MAY release any number of versions (PATCH/MINOR/MAJOR) **without** changing the language version.
+>
+> **SemVer 0.y.z caveat.** While both axes are at major-version-zero, SemVer 2.0.0 §4 holds that *anything MAY change at any time* `[SEMVER]`, so this trigger is **advisory until each axis reaches 1.0**. Even after 1.0 it is a one-directional *floor* (a language change forces at least a framework MINOR), not a guarantee that every framework release re-issues the language — mirroring Rust editions plus the MSRV floor (independent axes, one-way constraint) `[RUSTED]`, not a fixed release cadence.
 
 ```text
 language change ──(MUST)──▶ framework MINOR (additive) or MAJOR (breaking)
@@ -438,4 +495,3 @@ Key resolutions encoded, all marked NORMATIVE per this specification:
 - **§24**: MAY-drop vs MUST-survive lists, the per-boundary matrix, the discipline-not-gatekeeper rule (lint + source authority), and forbidden-compositions prevention via loss budget + source authority.
 - **§25**: the two axes, the one-way trigger (language ⇒ framework MINOR/MAJOR), the three never-merged IR fields, and the **G10** frontmatter normalization (`swarm_language: SOL/0.1`, `aps_version: 0.1`, `spec_version: 0.1.0`).
 
-Now I'll draft my six sections (§26–§31). Writing the final canonical specification text.
