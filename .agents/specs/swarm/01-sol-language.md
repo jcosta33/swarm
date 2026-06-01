@@ -428,7 +428,7 @@ verdict_block = "VERDICT", ws, judged_id, ":", ws, core_value,
                 "EVIDENCE", ws, reference, nl, { "EVIDENCE", ws, reference, nl };
 core_value = "PASS" | "FAIL" | "BLOCKED" | "UNVERIFIED";
 lifecycle  = "WAIVED" | "STALE" | "CONTRADICTED";
-lifecycle_fields = field, { ";", ws, field };   (* per-decorator required fields (§14.2, SOL-V005): WAIVED→expiry; STALE→prior-verdict + changed-surface; CONTRADICTED→evidence ×2 *)
+lifecycle_fields = field, { ";", ws, field };   (* per-decorator required fields (§14.2, SOL-V005): WAIVED→expiry (as a lifecycle_field); STALE→changed-surface (as a lifecycle_field; prior-verdict given as the reason); CONTRADICTED→its two evidence refs carried as EVIDENCE body lines, not lifecycle_fields *)
 ```
 
 **Semantics.** A VERDICT carries exactly one **core** value plus an optional **lifecycle decorator** in parentheses (the full 7-value model and the merge gate are specified in §14). The four core values:

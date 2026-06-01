@@ -294,6 +294,8 @@ The expected end-state verdict is recorded in the spec fixture's header and is k
 
 Each domain carries one canonical defect class (or small cluster), encoded with unified `SOL-<LAYER>NNN` codes (§8). The positive variant proves the obligation the negative violates.
 
+> **Fixture notation (editorial).** In the fenced fixtures below, the inline `# … -> SOL-Xxxx` annotations are **editorial commentary, not SOL** — each fixture's expected verdict is pinned in its metadata header (§33.2), never parsed from the comment text — and the 2-space indentation of block-body lines is **non-semantic**: leading whitespace on body lines is permitted and stripped before parsing per Appendix A (file 10). Stripping the annotations and the indentation yields the bare-header SOL the grammar generates.
+
 #### 33.3.1 auth-refresh — dangling condition, SHOULD-without-BECAUSE, missing verification
 
 | Variant | Construct | Expected |

@@ -178,7 +178,7 @@ Every emitted diagnostic MUST be the object `{ code, severity, layer, span, mess
 | Field | Type | Meaning |
 |---|---|---|
 | `code` | string | A `SOL-<LAYER><NNN>` code from this taxonomy / Appendix B |
-| `severity` | enum | `BLOCKING` (blocking) \| `ADVISORY` (advisory); a recorded waiver (§8.6) demotes its IR `level` to `warning`/`off` |
+| `severity` | enum | `BLOCKING` (blocking) \| `ADVISORY` (advisory); a recorded waiver (§8.6) demotes its IR `level` to `warning`, or to `off` — which is not an IR `level` (the closed enum is `error`/`warning`/`note`, Appendix C.1) but a directive to **suppress** the diagnostic from `diagnostics[]` (§8.6) |
 | `layer` | enum | `S` \| `P` \| `M` \| `V` \| `O` (redundant with `code`'s letter; explicit for filtering) |
 | `span` | object | Source location: `{ file, block, line, col }` (at minimum `{ file, block }`; the IR lowers this to `source: { file, line_start, line_end }`) |
 | `message` | string | One-line human-readable defect statement |
@@ -200,6 +200,8 @@ Every emitted diagnostic MUST be the object `{ code, severity, layer, span, mess
 A rule is **BLOCKING** if and only if its defect changes **what gets built** — the obligation is incomplete, non-binding, untestable, ambiguous, contradictory, or unsafe to parallelize. A blocking diagnostic carries `severity: BLOCKING` (IR `level: error`) and MUST be resolved before the artifact advances past the gate its layer is checked at (S/P/M block at the lint→`lower` gates, §11.6; V/O block at the merge gate, §14); no blocking diagnostic may remain unresolved at promotion (unless waived, §8.6). That a defect changes what gets built is detectable cheaply *before* generation: a small parameter-efficiently-finetuned classifier reaches F1 0.804 / MCC 0.745, beating frontier LLMs (≈0.47–0.52 F1), and finds under-specification the most severe defect `[SPECVALIDATOR]` — supporting BLOCKING status for actor/object incompleteness (`SOL-M001`) and uncaptured ambiguity (`SOL-P008`).
 
 A rule is **ADVISORY** if and only if its defect affects only **how it reads** — style, length, voice, redundancy — without changing the built behavior. An advisory diagnostic carries `severity: ADVISORY` (IR `level: warning`) and does not block on its own.
+
+The surface severity model is strictly binary: every surface code lowers to `error` (BLOCKING) or `warning` (ADVISORY). The third IR `level` value `note` (Appendix C.1, §12.8) has **no surface producer in v0.1** — it is reserved for informational annotations a future emitter MAY attach and MUST NOT be produced by a conformant v0.1 checker.
 
 The binding-clause vs commentary boundary (§7.2) re-classifies position-sensitive codes: `SOL-P056` (comparative without baseline) is BLOCKING inside an obligation block and ADVISORY in commentary; the high-risk word rules of §7.3–§7.4 are BLOCKING only inside binding clauses.
 
@@ -235,7 +237,7 @@ The codes below are the canonical blocking set. One-line definitions follow; the
 | Code | Defect |
 |---|---|
 | `SOL-M001` | Actor / object incompleteness: the obligation names a modal but not a resolvable actor *and* object. |
-| `SOL-M002` | Contradiction: two obligations share a contradiction key (normalized actor + trigger/state + surface/object) with opposed modalities (positive vs negative force, or `MUST NOT` vs `MAY`) — **exact-key match only in v0.1** (Appendix B.4). |
+| `SOL-M002` | Contradiction: two obligations share a contradiction key (normalized actor + trigger/state + the `affects[]`/`writes[]` surface set) with opposed modalities (positive vs negative force, or `MUST NOT` vs `MAY`) — **exact-key match only in v0.1** (Appendix B.4). |
 
 **V layer — verification:**
 
@@ -301,6 +303,6 @@ A `swarm.config` MUST NOT redefine, rename, or invent codes; it MUST NOT change 
 }
 ```
 
-The **waiver-record fields** are: `code` (required), `scope` (required — a code applies repo-wide; an obligation id/glob narrows it), `to` (required, `warning` or `off`), `authority` (required), `reason` (required), `expiry` (required, ISO date), `recorded_at` (required). A waiver with any required field missing is invalid and the demotion does not take effect. Consistent with the verdict model (§14) and G5, a waiver **auto-expires** at its `expiry` date *and* on the next change to the waived obligation's source content-hash (whichever comes first), preventing zombie waivers; on expiry the code returns to its default severity. A severity demotion at the lint layer is distinct from a `WAIVED` verdict at the verification layer (§14): the former silences a *diagnostic*, the latter accepts a *failing proof* — both require the same authority+reason+expiry discipline.
+The **waiver-record fields** are: `code` (required), `scope` (required — a code applies repo-wide; an obligation id/glob narrows it), `to` (required, `warning` or `off`), `authority` (required), `reason` (required), `expiry` (required, ISO date), `recorded_at` (required). `to: warning` lowers the diagnostic's IR `level` to `warning`; `to: off` is **not** an IR `level` (the closed enum is `error`/`warning`/`note`, Appendix C.1) — it **suppresses** the diagnostic, which is omitted entirely from the IR `diagnostics[]` array (§12.8). A waiver with any required field missing is invalid and the demotion does not take effect. Consistent with the verdict model (§14) and G5, a waiver **auto-expires** at its `expiry` date *and* on the next change to the waived obligation's source content-hash (whichever comes first), preventing zombie waivers; on expiry the code returns to its default severity. A severity demotion at the lint layer is distinct from a `WAIVED` verdict at the verification layer (§14): the former silences a *diagnostic*, the latter accepts a *failing proof* — both require the same authority+reason+expiry discipline.
 
 *Rationale (terse):* one config, two legal moves — strict-up freely, blocking-down only on the record — keeps every relaxation of the kernel's defaults auditable, time-boxed, and attributable.

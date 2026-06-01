@@ -296,7 +296,7 @@ An obligation that satisfies neither (1) — i.e. an obligation no packet covers
 
 ```text
 COVERAGE gate (manual today, tool-enforced later):
-  for each obligation node N in IR.nodes (incl. AND THE-split sub-obligations):
+  for each node N in IR.nodes where N.kind ∈ {REQ, CONSTRAINT, INVARIANT, INTERFACE} (incl. AND THE-split sub-obligations):
       count = | { p in plan.packets : p.pass == "implement" ∧ N.id in p.inputs } |
       count == 0  -> SOL-O007  (uncovered obligation)        [BLOCKING]
       count > 1   -> SOL-O008  (double-owned obligation)     [BLOCKING]
@@ -583,7 +583,7 @@ Each diagnostic is a SARIF-shaped finding (§8 owns the taxonomy; §12 owns its 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
 | `code` | string | MUST | A unified lint code `SOL-<LAYER>NNN` where `<LAYER>` ∈ {`S`,`P`,`M`,`V`,`O`} (§8). |
-| `level` | string | MUST | SARIF level: `error`, `warning`, or `note`. Maps to the §8 BLOCKING/ADVISORY split (BLOCKING ⇒ `error`). |
+| `level` | string | MUST | SARIF level: `error`, `warning`, or `note`. Maps to the §8 BLOCKING/ADVISORY split (BLOCKING ⇒ `error`; ADVISORY ⇒ `warning`); `note` carries informational findings and an advisory that a waiver has explicitly downgraded below `warning` (§8.6). `off` is **not** a level: a waiver that demotes a code to `off` (§8.6) suppresses the diagnostic — it is omitted from `diagnostics[]` entirely, not emitted with an `off` level. |
 | `node` | string\|null | one of `node`/`source` MUST be present | The node id the finding attaches to, if node-scoped. |
 | `source` | object\|null | one of `node`/`source` MUST be present | A source span (same shape as §12.4.5 minus `content_hash`), for findings with no resolved node (e.g. a parse error). |
 | `message` | string | MUST | Human-readable finding text. The §8 `suggest` field MAY also appear. |

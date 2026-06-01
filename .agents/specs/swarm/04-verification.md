@@ -65,22 +65,19 @@ Worked examples:
 
 ```sol
 VERDICT AC-001: PASS
-REASON The client clears the session store and issues a redirect to `/login`
-       when the refresh token expiry is simulated.
+REASON The client clears the session store and issues a redirect to `/login` when the refresh token expiry is simulated.
 EVIDENCE test:cmdTest:auth-refresh-expired-token#it_clears_session — exit 0, 1 passed
 ```
 
 ```sol
 VERDICT AC-014: FAIL (WAIVED by spec-owner@example: known flaky upstream sandbox; expiry 2026-06-30)
-REASON The payment sandbox returns 502 intermittently; the obligation is unmet
-       but accepted for this release window.
+REASON The payment sandbox returns 502 intermittently; the obligation is unmet but accepted for this release window.
 EVIDENCE test:cmdTest:payment-timeout#retryable_attempt — exit 1, 1 failed
 ```
 
 ```sol
 VERDICT I-001: PASS (STALE by drift-check: prior-verdict T-009; changed-surface src/auth/session-store.ts)
-REASON The token-family invariant last passed at trace T-009; src/auth/session-store.ts
-       was modified after that PASS, so the evidence no longer matches the current code.
+REASON The token-family invariant last passed at trace T-009; src/auth/session-store.ts was modified after that PASS, so the evidence no longer matches the current code.
 EVIDENCE property:cmdTest:token-family-invariant#single_active_family — last PASS 2026-05-20
 ```
 
@@ -358,7 +355,7 @@ The adequacy record is one optional object on the trace-provenance schema (§16.
 | --- | --- |
 | `predicate_form` | `existential` (an example suffices) \| `universal` (for-all — an example does not). Mirrors the `INVARIANT` rationale in §15.4. |
 | `exercised` | What the oracle actually ranged over: `concrete-examples` \| `generated-inputs` \| `boundary-shape` \| `state-space` \| `observation`. |
-| `evidence_path[]` | The **declared write surfaces** (§16.1, `per_surface_hash[]`; §18 `WRITES`) the oracle actually executed/analysed to reach its verdict. This is the proof's footprint on the code — used by the staleness rule below. |
+| `evidence_path[]` | The surfaces the oracle actually executed/analysed to reach its verdict — the declared `WRITES` surfaces **and** the exercised `READS` surfaces (§16.1, `per_surface_hash[]`; §18). This is the *derived* exercised subset of `per_surface_hash[]` (its entries with `exercised: true`), not a separate stored field; it is the proof's footprint on the code, used by the staleness rule below. |
 | `adequacy_evidence[]` | Zero or more `{kind, ref[, value]}` records, `kind` ∈ `mutation` \| `metamorphic` \| `property` \| `coverage`, that substantiate the oracle is adequate for the predicate. |
 
 A missing `oracle_adequacy` object is permitted for `existential` predicates proven by `test`; it is a `SOL-V011` finding (oracle-adequacy-unrecorded) wherever §15.10.2 requires it.
@@ -404,8 +401,8 @@ Every `VERIFY BY` binding's **last `PASS`** MUST record enough provenance to det
 {
   "source_hash": "sha256:…",
   "per_surface_hash": [
-    { "surface": "src/auth/client.ts", "hash": "sha256:…" },
-    { "surface": "src/auth/session-store.ts", "hash": "sha256:…" }
+    { "surface": "src/auth/client.ts", "hash": "sha256:…", "exercised": true },
+    { "surface": "src/auth/session-store.ts", "hash": "sha256:…", "exercised": false }
   ],
   "adapter": "cmdTest",
   "verdict": "PASS",
@@ -418,7 +415,7 @@ Every `VERIFY BY` binding's **last `PASS`** MUST record enough provenance to det
 | Field | Meaning |
 | --- | --- |
 | `source_hash` | Content hash of the *obligation source* (the exact bytes of the obligation block in `*.swarm.md`) at the time of the `PASS`. |
-| `per_surface_hash[]` | One `{surface, hash}` per surface on the proof's **evidence path** — the obligation's declared `WRITES` set **and** the `READS` surfaces the proof exercised (§16.5(c)) — at the time of the `PASS`. (Recording READS hashes is what makes read-side drift, §16.5(c), detectable.) |
+| `per_surface_hash[]` | One `{surface, hash, exercised}` per surface in the obligation's declared `WRITES` set **and** the `READS` surfaces the proof exercised (§16.5(c)), at the time of the `PASS`. `exercised` is a bool — `true` iff the proof actually executed/analysed that surface. The proof's **evidence path** is the *derived* exercised subset (the entries with `exercised: true`); it is not a separate stored field. (Recording READS hashes is what makes read-side drift, §16.5(c), detectable.) |
 | `adapter` | The `cmd*` slot the proof resolved through (§15.3). |
 | `verdict` | The core verdict recorded (`PASS` for a drift-trackable binding). |
 | `tier` | The proof type (§15.1) — the same value recorded as `type` in the IR `verify_by[]` element (§15.2); used for the proof-strength tie-break (§15.6). |
@@ -438,8 +435,7 @@ Condition (a) means *intent moved*: the proof confirmed an obligation that no lo
 
 ```sol
 VERDICT AC-001: PASS (STALE by drift-check: prior-verdict T-001; changed-surface src/auth/client.ts)
-REASON src/auth/client.ts changed after the last PASS at T-001; the recorded
-       per-surface hash no longer matches the working tree.
+REASON src/auth/client.ts changed after the last PASS at T-001; the recorded per-surface hash no longer matches the working tree.
 EVIDENCE prior PASS recorded 2026-05-20 against source_hash sha256:ab12…
 ```
 
@@ -473,7 +469,7 @@ drift_coverage = ( count of required obligations whose latest verdict is STALE )
 1. **The binary exemption was unsound.** A naive per-surface hash marks *every* obligation that declares a shared/global surface `STALE` on any unrelated edit; the obvious fix — binary-exempting `append-only` and `shared` surfaces from condition (b) — over-corrects. Under a binary exemption a *real behavioral* change on an exempt surface does **not** force `STALE`, while a whitespace-only edit on an ordinary one does. That inverts the honesty the staleness rule exists to protect.
 2. **Drift via an undeclared read is invisible.** A proof can keep passing while no longer exercising the obligation it was bound to — the oracle has gone inadequate even though nothing in `per_surface_hash[]` moved [SWEBENCH-ADQ]. Syntactic equality of a write surface is not behavioral equality of the obligation [ORACLE]; a behavioral change reached through a dependency the obligation `READS` (or through the bound adapter) leaves condition (b) untouched.
 
-**The participation rule (normative).** A surface participates in an obligation's freshness **if and only if it lies on the evidence path of that obligation's last `PASS`** — i.e. the proof that produced that `PASS` actually exercised the surface (the exercised subset of its recorded `per_surface_hash[]`, §16.1). A surface present in `per_surface_hash[]` only as a *declared* `WRITES` the oracle never exercised does **not** participate on that ground alone (§15.10.4). Participation is decided **per obligation, per recorded proof**, not by a blanket attribute toggle:
+**The participation rule (normative).** A surface participates in an obligation's freshness **if and only if it has an `exercised: true` entry in that obligation's last `PASS`'s recorded `per_surface_hash[]` (§16.1)** — i.e. the proof that produced that `PASS` actually exercised the surface. (This exercised subset is the proof's evidence path of §15.10.1; it is read directly from the always-present `per_surface_hash[]` flag, not from the optional `oracle_adequacy.evidence_path` view.) A surface present in `per_surface_hash[]` only as a *declared* `WRITES` the oracle never exercised (`exercised: false`) does **not** participate on that ground alone (§15.10.4). Participation is decided **per obligation, per recorded proof**, not by a blanket attribute toggle:
 
 - A surface that the last `PASS` actually exercised participates **regardless of its `SURFACE` attribute** — an in-place behavioral edit to an `append-only` or `shared` surface that the proof's evidence path traversed MUST force `STALE`. The attribute (§18.3.1) governs *conflict serialization and blanket fan-out*, never an exemption from drift on an exercised surface.
 - A surface that the last `PASS` did **not** exercise does **not** participate — an unrelated edit to a `shared`/global surface (a lockfile bump, an orthogonal CI-matrix entry) MUST NOT mark that obligation `STALE`. This is exactly the "staleness is scoped to proof-exercised obligations" treatment §18.3.1 records for `integration`/`shared`; §16.5 is its canonical home, and §18.3.1's `append-only` row is read accordingly (an in-place, non-append edit on an exercised append-only surface still participates).

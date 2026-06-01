@@ -202,7 +202,7 @@ A repository is **Swarm-conformant** if and only if all of the following hold:
 
 1. It contains a self-contained copy of all six **Tier-2 language/reference docs** (§20.3.2).
 2. It contains a copyable template for each of the seven **Tier-1 core artifacts** (§20.3.1), and each template satisfies its §21 contract.
-3. It contains a **populated `AGENTS.md` bootloader** (§31) — not an empty placeholder — within the ≤200-line / ≤25 KB density cap (§2, §17).
+3. It contains a **populated `AGENTS.md` bootloader** (§31) — not an empty placeholder — within the ≤200-line / ≤25 KB density cap (§2, §31.1).
 4. It contains the framework/package version file — `scaffold/.agents/.swarm-version` in the framework-dev repo, or `.swarm/VERSION` in an adopted project (§20.5.1, §25) — carrying a valid semver.
 
 A repository that omits any of the four MUST NOT be described as Swarm-conformant. Conditional artifacts (Tier 3) and the reserved `.swarm.*.json` contract files are **not** required for conformance. The full mechanically-checkable conformance contract — the exact checks, their inputs, and the deferral of an automated checker to a future CLI — is given in §32; the golden corpus that exercises it is given in §33.
@@ -567,7 +567,7 @@ A trace records implementation *claims* against obligations and binds them to *e
 | --- | --- |
 | frontmatter | `type: trace`, `id`, `source_task`, `source_spec`, `created`. |
 | `## Claimed implementation` | The `TRACE` blocks. |
-| `## Provenance` | The §16 / G11 fields **per binding**: `source_hash` (obligation content hash at PASS), `per_surface_hash[]` (each declared `WRITES` and proof-exercised `READS` file hash/SHA, §16.5), `adapter`, `verdict`, `tier`, `timestamp`. These are what flips a PASS to `STALE` when source or surface drifts (§16). |
+| `## Provenance` | The canonical seven §16.1 / G11 fields **per binding**: `source_hash` (obligation content hash at PASS), `per_surface_hash[]` (one `{surface, hash, exercised}` per declared `WRITES` and proof-exercised `READS` surface, §16.5), `adapter`, `verdict`, `tier`, `origin_obligations[]`, `origin_traces[]`. These are what flips a PASS to `STALE` when source or surface drifts (§16); the recording timestamp lives in the frontmatter `created`, not the provenance base. |
 | `## Verification matrix` | ID → required proof → actual proof → 7-value status. |
 | `## Unassigned changes` | Any change outside assigned obligations, with reason + authorizing ID or `none`. |
 | `## Promotion items` | Discoveries to promote, with target + status. |
@@ -595,9 +595,9 @@ PROOF <verification output reference>
 
 ## Provenance
 
-| Binding | source_hash | per_surface_hash[] | adapter | verdict | tier | timestamp |
-| ------- | ----------- | ------------------ | ------- | ------- | ---- | --------- |
-| AC-001  |             |                    |         | PASS    |      |           |
+| Binding | source_hash | per_surface_hash[] | adapter | verdict | tier | origin_obligations[] | origin_traces[] |
+| ------- | ----------- | ------------------ | ------- | ------- | ---- | -------------------- | --------------- |
+| AC-001  |             |                    |         | PASS    |      |                      |                 |
 
 ## Verification matrix
 

@@ -137,7 +137,7 @@ verdict_body      = "REASON", ws, prose_text, nl,
 verdict_value     = verdict_core, [ ws, verdict_lifecycle ];
 verdict_core      = "PASS" | "FAIL" | "BLOCKED" | "UNVERIFIED";
 verdict_lifecycle = "(", lifecycle, " by ", authority, ": ", reason, [ ";", ws, lifecycle_fields ], ")";
-lifecycle_fields  = field, { ";", ws, field };          (* WAIVED→expiry; STALE→prior-verdict + changed-surface; CONTRADICTED→evidence ×2 (SOL-V005) *)
+lifecycle_fields  = field, { ";", ws, field };          (* WAIVED→expiry (as a lifecycle_field); STALE→changed-surface (as a lifecycle_field; prior-verdict given as the reason); CONTRADICTED→its two evidence refs carried as EVIDENCE body lines, not lifecycle_fields (SOL-V005; §14.2/§14.3) *)
 field             = field_key, ws, field_value;         (* e.g. "expiry 2026-07-01" *)
 lifecycle         = "WAIVED" | "STALE" | "CONTRADICTED";
 
@@ -226,6 +226,9 @@ Notes on opacity and deferral (normative for v0.1):
 2. Timing keywords `WITHIN`, `BEFORE`, `UNTIL`, `IMMEDIATELY`, `EVENTUALLY` are **not productions in this grammar**; they are reserved for v0.2 (FRETish temporal semantics). Their appearance in a `.swarm.md` is parsed as opaque prose and SHOULD raise an advisory pointing to the deferral.
 3. `ALWAYS`/`NEVER` (legacy INVARIANT openers), `EXPOSES`/`INPUT`/`OUTPUT` (legacy INTERFACE), and `MAP`/`TO`/`ORDER`/`ASK` (legacy TASK-MAP/QUESTION) are removed and have no production; they MUST be rejected.
 4. `THEN` is legal only as the optional trailing sugar of `if_clause`; after `WHEN`/`WHILE` it MUST be rejected as a parse error.
+5. **Leading indentation on body lines is non-semantic.** A block body **clause** line MAY carry leading whitespace; that whitespace is stripped before the line is matched against its body production. Block **headers** (`req_header`, `constraint_header`, … and `surface_decl`) MUST remain flush-left (no leading whitespace). The `[ ws ]` allowance applies only to body clause lines, so the indented block bodies seen in the §33 conformance fixtures are conformant.
+6. **SOL has no comment token.** There is no `comment` production anywhere in this grammar; `#` is reserved exclusively for the `cross_spec_ref` separator (`spec_id#id`) and the `verify_ref` `#selector`. A trailing or standalone `# …` annotation is therefore **not** part of the language; any `# …` annotation appearing in the §33 fixtures is **editorial** (explanatory marginalia surrounding the example), not a parseable line a conformant parser admits.
+7. **Opaque-text line continuation.** Where a clause's value is opaque text (`condition_text`, `question_text`, `response`, `hold_text`, `prose_text` — note 1; in particular a `REASON` line's `prose_text` in `verdict_body`), a following physical line that does **not** begin with a recognized keyword (a block header, a clause keyword such as `EVIDENCE`/`AFFECTS`/`VERIFY BY`, or a metadata field) is a **continuation** of the preceding clause: it is joined to that clause's opaque text (with a single separating space) before matching. This is why the §14.2/§16.2/§6.7 `VERDICT` worked examples may wrap a `REASON` across two physical lines while `verdict_body` shows `REASON` as a single logical clause. The continuation joins text only; it never introduces structure (no expression grammar — note 1).
 
 ## Appendix B — Full lint-code catalogue and legacy translation table
 
@@ -351,7 +354,7 @@ M-layer rules fire at `NORMALIZE` after all blocks are parsed; they are cross-ob
 | Code | Severity | Short name | Definition | Resolves by |
 |---|---|---|---|---|
 | `SOL-M001` | BLOCKING | actor/object-incompleteness | A referenced actor, object, or surface is unresolved across the spec / imports (also catches cross-spec id collision). | `BIND` / `CONCRETIZE`: resolve or declare the referent (was `APS-C001` completeness + `SOL-M201`/`SOL202`). |
-| `SOL-M002` | BLOCKING | contradiction | Two obligations share a **contradiction key** — the tuple (normalized actor, normalized trigger/state, normalized surface/object), where *normalized* = case-folded, whitespace-collapsed exact match of the opaque clause strings (§5.5; the interior is not tokenized) — AND carry **opposed modalities** per the fixed table: positive force (`MUST`/`SHOULD`) vs negative force (`MUST NOT`/`SHOULD NOT`) on the same key, or `MUST NOT` vs `MAY`. Detection is this exact-key rule only; paraphrase/entailment contradiction is **out of scope for v0.1** (a tool MAY surface it as an advisory judge-rendered diagnostic, but the BLOCKING gate fires only on the exact-key match). | `DECONFLICT` (was `APS-X001` / `SOL207` / `SOL-M202`). |
+| `SOL-M002` | BLOCKING | contradiction | Two obligations share a **contradiction key** — the tuple (normalized actor = the node's `clauses.subject`, normalized trigger/state = the node's `clauses.trigger`/`clauses.where`/`clauses.while`, normalized surface set = the node's `affects[]` ∪ `writes[]`), where *normalized* = case-folded, whitespace-collapsed exact match of those opaque clause/surface strings (§5.5; the interior is not tokenized) — AND carry **opposed modalities** per the fixed table: positive force (`MUST`/`SHOULD`) vs negative force (`MUST NOT`/`SHOULD NOT`) on the same key, or `MUST NOT` vs `MAY`. Detection is this exact-key rule only; paraphrase/entailment contradiction is **out of scope for v0.1** (a tool MAY surface it as an advisory judge-rendered diagnostic, but the BLOCKING gate fires only on the exact-key match). | `DECONFLICT` (was `APS-X001` / `SOL207` / `SOL-M202`). |
 | `SOL-M003` | BLOCKING | unbound-cross-reference | A `DEPENDS ON` / `IMPLEMENTS` / `PRESERVES` reference names an id that does not exist. | `BIND`: fix the reference (was `SOL202` unresolved-dependency, kept in M). |
 | `SOL-M004` | BLOCKING | authority-conflict | A lower-authority block attempts to weaken a higher-authority obligation (source-authority order, §22). | `DECONFLICT` / amendment (was `SOL206`). |
 
@@ -387,7 +390,7 @@ O-layer rules fire at `LOWER`; they gate plan emission (§13) and safe paralleli
 | `SOL-O004` | ADVISORY | scope-too-broad | An obligation has no `WRITES`/`READS`/`AFFECTS`, leaving it unscoped (serializes by default and harms planning). | `SCOPE`: declare write/read/affect surfaces (was `SOL305`). |
 | `SOL-O005` | BLOCKING | owned-path-outside-write-surface | A work packet writes a path outside its declared `WRITES` surface (the two-tier lowering check, G7). | `SCOPE`: declare the path, or stop writing it (new in v0.1). |
 | `SOL-O006` | ADVISORY | import-policy-overlap | An imported file creates a duplicate/overlapping policy obligation. | `DECONFLICT` / `COMPRESS` (was `SOL306`). |
-| `SOL-O007` | BLOCKING | uncovered-obligation | A lowered obligation maps to no task packet, or a TRACE/VERDICT target resolves to no obligation — the §11.6.2 coverage gate. | `SCOPE` / `decompose`: assign the obligation to a packet, or remove the orphan target. |
+| `SOL-O007` | BLOCKING | uncovered-obligation | A lowered obligation maps to no task packet — the §11.6.2 coverage gate. (An orphan TRACE/VERDICT target that resolves to no obligation is `SOL-M003`, not `SOL-O007`, per §11.6.2.) | `SCOPE` / `decompose`: assign the obligation to a packet. |
 | `SOL-O008` | BLOCKING | double-owned-obligation | A lowered obligation is assigned to more than one `implement` packet (`packets[].inputs`) — the §11.6.2 coverage gate. (Appearing across *different* passes — implement/verify/review — is legitimate and does NOT trip this.) | `SCOPE` / `decompose`: assign the obligation to exactly one implement packet. |
 
 ### B.7 Improve-op ↔ lint-code map (normative)
@@ -396,11 +399,11 @@ The closed 10-op improve set (§10) is wired to the codes above; this is the can
 
 | Improve op | Resolves codes |
 |---|---|
-| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P058` |
+| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
 | `ATOMIZE` | `SOL-P004` (and `SOL-P052` by splitting) |
 | `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-M001` |
 | `QUANTIFY` | `SOL-P005`, `SOL-P056` |
-| `BIND` | `SOL-V001`, `SOL-V002`, `SOL-V003`, `SOL-V006`, `SOL-M003`, `SOL-P006` |
+| `BIND` | `SOL-V001`, `SOL-V002`, `SOL-V003`, `SOL-V006`, `SOL-V008`, `SOL-M003`, `SOL-P006` |
 | `SCOPE` | `SOL-O001`, `SOL-O002`, `SOL-O004`, `SOL-O005`, `SOL-O007`, `SOL-O008` |
 | `CLARIFY` | `SOL-P008`, `SOL-P001`, `SOL-P007`, `SOL-P050`, `SOL-O003` |
 | `DECONFLICT` | `SOL-M002`, `SOL-M004`, `SOL-O006` |
@@ -916,7 +919,7 @@ VERIFY BY property:cmdTest:web/tests/auth-refresh.properties.ts#no_unbounded_ret
 
 ### D.4 Stage 4 — IR excerpt (pass: `lower`)
 
-The `lower` pass emits the typed IR (`auth-refresh.swarm.ir.json`) conforming to Appendix C: surface keywords become snake_case fields, relationships move into `edges[]` (the single source of relationship truth — never node scalars), and node ids are namespaced. A 3-node slice is shown.
+The `lower` pass emits the typed IR (`auth-refresh.swarm.ir.json`) conforming to Appendix C: surface keywords become snake_case fields, relationships move into `edges[]` (the single source of relationship truth — never node scalars), and node ids are namespaced. A slice is shown; note that `AC-001`'s `AND THE` chain is split per §11.1.1 into the distinct IR obligations `AC-001.1` and `AC-001.2`.
 
 ```json
 {
@@ -942,12 +945,30 @@ The `lower` pass emits the typed IR (`auth-refresh.swarm.ir.json`) conforming to
                   "content_hash": "sha256:1f4a…c0" }
     },
     {
-      "id": "REQ.auth-refresh.AC-001",
+      "id": "REQ.auth-refresh.AC-001.1",
       "kind": "REQ",
       "modality": "MUST",
       "clauses": { "trigger": { "kw": "WHEN", "expr": "a request returns 401 AND a refresh token is present" },
                    "subject": "auth client",
-                   "predicate": "call refreshSession once and replay the original request" },
+                   "predicate": "call refreshSession once" },
+      "risk": "high",
+      "writes": ["web/src/http/client.ts"],
+      "verify_by": [
+        { "type": "test", "adapter": "cmdTest",
+          "ref": "web/tests/auth-refresh-401.spec.ts",
+          "selector": "replays-after-refresh", "gate": "required" }
+      ],
+      "status": "UNVERIFIED",
+      "source": { "file": "auth-refresh.swarm.md", "line_start": 19, "line_end": 27,
+                  "content_hash": "sha256:9b2e…41" }
+    },
+    {
+      "id": "REQ.auth-refresh.AC-001.2",
+      "kind": "REQ",
+      "modality": "MUST",
+      "clauses": { "trigger": { "kw": "WHEN", "expr": "a request returns 401 AND a refresh token is present" },
+                   "subject": "auth client",
+                   "predicate": "replay the original request with the new session" },
       "risk": "high",
       "writes": ["web/src/http/client.ts"],
       "verify_by": [
@@ -963,7 +984,8 @@ The `lower` pass emits the typed IR (`auth-refresh.swarm.ir.json`) conforming to
       "id": "INVARIANT.auth-refresh.I-001",
       "kind": "INVARIANT",
       "modality": "MUST NOT",
-      "clauses": { "predicate": "retry count for a single original request exceeds 1" },
+      "clauses": { "subject": "the retry count for a single original request",
+                   "predicate": "exceed 1" },
       "verify_by": [
         { "type": "property", "adapter": "cmdTest",
           "ref": "web/tests/auth-refresh.properties.ts",
@@ -975,9 +997,13 @@ The `lower` pass emits the typed IR (`auth-refresh.swarm.ir.json`) conforming to
     }
   ],
   "edges": [
-    { "from": "REQ.auth-refresh.AC-001", "to": "INTERFACE.auth-refresh.IF-001",
+    { "from": "REQ.auth-refresh.AC-001.1", "to": "INTERFACE.auth-refresh.IF-001",
       "type": "depends_on", "hard": true },
-    { "from": "REQ.auth-refresh.AC-001", "to": "INVARIANT.auth-refresh.I-001",
+    { "from": "REQ.auth-refresh.AC-001.2", "to": "INTERFACE.auth-refresh.IF-001",
+      "type": "depends_on", "hard": true },
+    { "from": "REQ.auth-refresh.AC-001.1", "to": "INVARIANT.auth-refresh.I-001",
+      "type": "affects", "hard": false },
+    { "from": "REQ.auth-refresh.AC-001.2", "to": "INVARIANT.auth-refresh.I-001",
       "type": "affects", "hard": false }
   ],
   "diagnostics": [],
@@ -1013,11 +1039,16 @@ blocked_by: []
 
 # Task: Implement auth-refresh client behavior
 
-## 3. Do not do
+## Scope
+
+### In
+- Implement AC-001, AC-002, and preserve I-001 within web/src/http/client.ts.
+
+### Out
 - Do not implement unassigned obligations.
 - Do not change behavior outside web/src/http/client.ts.
 
-## 6. Verification matrix
+## Verification matrix
 | Obligation | Required proof              | Actual proof                          | Status |
 | ---------- | --------------------------- | ------------------------------------- | ------ |
 | AC-001     | test:#replays-after-refresh | auth-refresh-401.spec.ts passed       | pass   |
@@ -1027,7 +1058,7 @@ blocked_by: []
 
 ### D.6 Stage 6 — `trace.md` excerpt (pass: `verify`)
 
-The `verify` pass records a `TRACE` block plus the provenance the drift join depends on (§16, G11): per-binding `source_hash` (echoing the IR node `content_hash`), per-surface file hash, adapter, core verdict, and confidence tier.
+The `verify` pass records a `TRACE` block plus the provenance the drift join depends on — the canonical seven §16.1/G11 fields: `source_hash` (echoing the IR node `content_hash`), `per_surface_hash[]` (each entry `{surface, hash, exercised}`, §16.5), `adapter`, `verdict`, `tier` (the **proof type** of §15.1, never a RISK value), `origin_obligations[]`, and `origin_traces[]`.
 
 ```text
 ---
@@ -1048,11 +1079,11 @@ PROOF test:cmdTest:web/tests/auth-refresh-expired.spec.ts#clears-and-redirects p
 PROOF property:cmdTest:web/tests/auth-refresh.properties.ts#no_unbounded_retry passed
 
 ## Provenance
-| binding | source_hash      | per_surface_hash               | adapter | verdict | tier   |
-| ------- | ---------------- | ------------------------------ | ------- | ------- | ------ |
-| AC-001  | sha256:9b2e…41   | client.ts=sha256:5510…b3       | cmdTest | PASS    | high   |
-| AC-002  | sha256:e8f7…2d   | client.ts=sha256:5510…b3       | cmdTest | PASS    | high   |
-| I-001   | sha256:7d10…aa   | properties.ts=sha256:aa90…1c   | cmdTest | PASS    | high   |
+| binding | source_hash      | per_surface_hash[]                       | adapter | verdict | tier     | origin_obligations | origin_traces |
+| ------- | ---------------- | ---------------------------------------- | ------- | ------- | -------- | ------------------ | ------------- |
+| AC-001  | sha256:9b2e…41   | {client.ts, sha256:5510…b3, exercised}   | cmdTest | PASS    | test     | [AC-001]           | [T-001]       |
+| AC-002  | sha256:e8f7…2d   | {client.ts, sha256:5510…b3, exercised}   | cmdTest | PASS    | test     | [AC-002]           | [T-001]       |
+| I-001   | sha256:7d10…aa   | {properties.ts, sha256:aa90…1c, exercised}| cmdTest | PASS    | property | [I-001]            | [T-001]       |
 ```
 
 ### D.7 Stage 7 — `review.md` excerpt and merge-gate outcome (pass: `review`)
@@ -1069,13 +1100,13 @@ source_spec: .swarm/sources/specs/auth-refresh.swarm.md
 
 # Review: auth-refresh client
 
-## Obligation verdicts
+## Per-obligation verdicts
 
 VERDICT AC-001: PASS
 REASON Replay-after-refresh test exercises a 401 with a present refresh token and asserts one replay.
 EVIDENCE auth-refresh-401.spec.ts output in review log
 
-VERDICT AC-002: PASS (STALE by source-hash: client.ts modified after last PASS at sha256:5510…b3)
+VERDICT AC-002: PASS (STALE by review: prior-verdict T-001; changed-surface web/src/http/client.ts)
 REASON Prior PASS evidence no longer matches current write-surface hash; requires 3-way reconcile.
 EVIDENCE prior verdict + changed-surface diff in review log
 
@@ -1083,7 +1114,7 @@ VERDICT I-001: PASS
 REASON Property test fails on any path producing retry_count > 1; current run is green.
 EVIDENCE auth-refresh.properties.ts output in review log
 
-## Merge gate
+## Final verdict
 Gate: every required obligation is PASS or WAIVED; none STALE/CONTRADICTED/FAIL/BLOCKED/UNVERIFIED.
 Result: BLOCKED — AC-002 is STALE. Re-run the bound proof against the current surface
 (reconcile option 1), then re-evaluate. After re-run AC-002 → PASS, the gate opens.

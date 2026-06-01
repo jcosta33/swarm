@@ -227,8 +227,8 @@ The worker tracker is a table with one row per worker. Two columns are load-bear
 
 | Worker | Source doc | Task kind | Profile | OWNED paths | FORBIDDEN paths | Hand-off (deliverable / acceptance bar) | Branch | Status | Last progress | Last verdict |
 | ------ | ---------- | --------- | ------- | ----------- | --------------- | --------------------------------------- | ------ | ------ | ------------- | ------------ |
-| auth-client | auth-refresh.swarm.md | implement | builder | src/auth/client/** | src/auth/server/**, migrations/** | refresh-on-expiry works; AC-014 PASS | feat/auth-client | in-progress | 2026-05-31 grafted token store | — |
-| auth-server | auth-refresh.swarm.md | implement | builder | src/auth/server/** | src/auth/client/**, migrations/** | issuer rotation; AC-021 PASS | feat/auth-server | awaiting-review | 2026-05-31 endpoint done | PASS |
+| auth-client | auth-refresh.swarm.md | implement | builder | src/auth/client/** | src/auth/server/**, migrations/** | refresh-on-expiry works; AC-014 PASS | swarm/auth-refresh/auth-client | in-progress | 2026-05-31 grafted token store | — |
+| auth-server | auth-refresh.swarm.md | implement | builder | src/auth/server/** | src/auth/client/**, migrations/** | issuer rotation; AC-021 PASS | swarm/auth-refresh/auth-server | awaiting-review | 2026-05-31 endpoint done | PASS |
 ```
 
 Status values MUST be drawn from: `not-started`, `in-progress`, `stalled`, `awaiting-review`, `kicked-back`, `merged`, `abandoned`. The pairwise-disjointness of OWNED paths MUST be confirmed *before* spawning any worker; if two sub-tasks need the same file they are not independent and MUST be sequenced (a `DEPENDS ON` edge / serial order), not parallelized.
@@ -252,7 +252,7 @@ When the lead spawns a worker, the worker's task file MUST contain a `## Parent 
 ## Parent contract
 
 - Objective: implement refresh-on-expiry in the auth client.
-- Expected deliverable: branch `feat/auth-client` with AC-014 implemented.
+- Expected deliverable: branch `swarm/auth-refresh/auth-client` with AC-014 implemented.
 - Acceptance bar: AC-014 reaches VERDICT PASS (VERIFY BY test:cmdTest:...).
 - Boundaries:
   - OWNED: `src/auth/client/**`
