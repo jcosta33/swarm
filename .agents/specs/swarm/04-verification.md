@@ -486,6 +486,86 @@ Condition (c) makes read-side behavioral drift detectable to the same degree wri
 
 Recording behavior (informative): a tool that bumps a lockfile that no proof exercised leaves drift coverage (§16.4) unchanged; an in-place edit to a CI step that an obligation's proof did exercise raises that obligation to `STALE`. Whether to recompute evidence-path participation incrementally or on demand is a harness concern; the **participation rule, the four `STALE` conditions, and the scope limit are the kernel contract** today.
 
+
+### 16.6 Source-code surface policies
+
+§16 detects drift *after* a `PASS`; this subsection declares, *before* any of that, **how Swarm is permitted to govern a given region of code at all**. The two are one mechanism viewed at two times: the policy says what an edit to a surface is *allowed* to be, and §16.2/§16.5 say what an edit that violated that allowance *becomes*. The policy is the obligation-trace contract made explicit per path.
+
+The doctrine here is a direct reading of **Invariant 4 — code is reality** (§2.1.4): specs are primary for *intent*, code is primary for *implementation reality*, and the trace/review/status layer reconciles the two. A surface policy records, per code region, which side of that reconciliation the region sits on.
+
+This is a **design decision**, not an empirical claim — it follows from Invariant 1 (NO RUNTIME, §2.1.1) and Invariant 4, and the policy set below is a closed taxonomy chosen for completeness, not measured.
+
+#### 16.6.1 The wrong doctrine (rejected explicitly)
+
+A surface-policy model is *not* a licence to treat the codebase as regenerable. Swarm MUST NOT assert any of the following, in any canonical artifact:
+
+> code is disposable; all source SHOULD be regenerated from specs; manual code edits are forbidden; specs contain every implementation detail; the model MAY rewrite the codebase from specs.
+
+Code is reconciled implementation reality, not a minified build product of the spec. Only a surface explicitly marked `generated` (below) is regenerated, and even then only from a *named source artifact* — never from prose intent at large. Every other surface preserves hand-written reality; the spec governs whether and how that reality may change, not whether it gets to exist.
+
+#### 16.6.2 The five surface policies (closed set)
+
+A code region declares exactly one policy. The set is closed: a surface that fits none of these is `observed` until it is classified.
+
+| Policy | Meaning | Manual edits |
+| --- | --- | --- |
+| `generated` | Regenerated from a named source artifact (an OpenAPI doc, a schema, an interface spec). The artifact is the truth; the file is its emission. | **Forbidden** — edit the source artifact and regenerate; a hand-edit is overwritten and is a finding. |
+| `governed` | Reconciled implementation reality under an obligation. A spec owns intent; the code owns realization; trace/review reconcile them. | **Allowed only with an obligation trace** (`allowed_with_trace`) — every change carries an obligation id and emits a trace. |
+| `observed` | Existing code not yet governed by Swarm — pre-existing reality with no obligation behind it. | Allowed, but the surface needs an audit and a spec before it can become `governed`. |
+| `external` | Vendor or third-party code (dependencies, generated SDKs you do not own, copied upstream). | **Do not modify** — changes belong upstream or in an owned wrapper, not here. |
+| `deprecated` | Scheduled for removal or migration; retained only until cutover. | Discouraged; permitted edits SHOULD be migration/removal steps, not new behavior. |
+
+`observed` is the **honest default** for brownfield adoption: code that exists, runs, and is real, but that no obligation yet claims. It is the on-ramp — an audit (§6 audit artifact / `.swarm/sources/audits/`) and a spec promote `observed` → `governed`; it is never silently treated as if a spec already governed it.
+
+#### 16.6.3 The declaration shape
+
+Surface policies are declared as a `surfaces:` map, each path → `{policy, source, manual_edits}` (and policy-specific fields such as `requires_audit`). Computing and enforcing this map is a **future-tool concern** (NO RUNTIME, §2.1.1); the **map shape is the kernel contract** today.
+
+```yaml
+surfaces:
+  src/generated/api-client:
+    policy: generated
+    source: .swarm/sources/interfaces/payments.openapi.yaml
+    manual_edits: forbidden
+
+  src/auth/client.ts:
+    policy: governed
+    source: .swarm/sources/specs/auth/auth-refresh.swarm.md
+    manual_edits: allowed_with_trace
+
+  src/legacy:
+    policy: observed
+    source: none
+    manual_edits: allowed
+    requires_audit: true
+```
+
+The `source` field names the artifact that owns the surface: for `generated`, the artifact it is emitted from; for `governed`, the `*.swarm.md` spec that owns its intent; for `observed`, `none` (with `requires_audit: true` marking the on-ramp). This is the per-path projection of the source/status/generated separation that Swarm holds for the whole workspace.
+
+#### 16.6.4 `governed` + `allowed_with_trace` is the §16 drift contract
+
+The `governed` policy is the load-bearing one, and it ties directly to the rest of §16:
+
+- **An edit to a `governed` surface without an obligation trace is drift.** A `governed` surface lives in the `per_surface_hash[]` of the proofs whose evidence path traversed it (§16.1). When it changes, §16.2(b) (declared write surface modified) and §16.5's participation rule (modified *and* on the evidence path) fire `STALE` on every obligation that exercised it. A change that carried an obligation id and emitted a fresh trace resolves that `STALE` via re-run (§16.3 resolution 1); a change with *no* trace leaves the binding `STALE` against the merge gate (§14.4) with nothing to reconcile it. The trace is therefore not bookkeeping — it is the only thing that distinguishes a sanctioned edit from undetected drift.
+- **It is the `WRITES`/`READS` write-surface model (§18) projected onto files.** A `governed` surface is the file-level shadow of an obligation's declared write surface (§18.2, §18.3): the obligation declares `WRITES <surface>`, the policy map binds that surface to a path and to its owning spec, and the same hash that §18 uses for conflict serialization is the hash §16 uses for staleness. The policy adds no new enforcement primitive — it names, per path, which obligations are permitted to write there. An edit reaching a `governed` path outside any obligation's `WRITES` set is an **unscoped write** (§18.5: "unscoped serializes") *and* an untraced governed edit — the same event seen through the orchestration lens and the drift lens.
+
+#### 16.6.5 A passing test does not discharge the obligation
+
+The trace requirement on `governed` is about the **obligation**, not about the test suite. A `governed` edit that ships with a green build has *not*, by that fact, satisfied its obligation: the bundled suite can pass while the patch is wrong, and aggregate resolution rates inflate precisely because the bundled oracle is inadequate [SWEBENCH-ADQ]. This is why `allowed_with_trace` requires a trace bound to the obligation's `VERIFY BY` proof (§15), not merely a passing `cmd*`; and why §16.5's participation rule refuses to call a surface fresh just because its hash matched. Schema-valid output and green tests are *shape*, not truth (Invariant 5, §2.1.5) — the trace exists so a reviewer can ask whether the obligation was met, not only whether the build was.
+
+#### 16.6.6 Cross-references
+
+| Concern | Section |
+| --- | --- |
+| Code-is-reality invariant the policies read from | §2.1.4 (Invariant 4) |
+| NO RUNTIME — enforcement is a future-tool contract | §2.1.1 (Invariant 1) |
+| Staleness conditions (a)–(d) a `governed` edit can trip | §16.2, §16.5 |
+| The 3-way reconcile a `STALE` governed surface forces | §16.3 |
+| Trace-provenance schema (`per_surface_hash[]`) | §16.1 |
+| Write-surface model (`WRITES`/`READS`, SURFACE attributes) | §18.2, §18.3, §18.5 |
+| `observed` → `governed` on-ramp (audit artifact) | §6 (audit), workspace `.swarm/sources/audits/` |
+| Shape-is-not-truth (green tests ≠ verified) | §2.1.5 (Invariant 5) |
+
 ## 17. The soft/hard control boundary and the enforcement lane
 
 This section states the single most important honesty constraint in Swarm. Everything Swarm ships is **markdown**. Markdown cannot stop an agent from doing anything. Therefore Swarm MUST be precise about what is *guidance* and what is *enforcement*, and MUST NOT dress up the former as the latter.

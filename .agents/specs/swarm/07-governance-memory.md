@@ -337,6 +337,57 @@ v0.1 ships the two-tier file model, the provenance fields, the promotion statuse
 
 ---
 
+
+### 23.7 The ledger (compact reconciled history)
+
+Memory (§23.1–§23.6) preserves *durable facts*; the **ledger** preserves *compact reconciled history* — the audit trail of completed work after its execution material has been thrown away. The two are complementary, not redundant: a `finding.md` records *what we learned* and is loaded *when its `Load when` fires*; a ledger entry records *what a task did, covered, and proved* and is read *when an auditor reconstructs why the codebase is the way it is*. This subsection is **design rationale**, not an empirical claim — it specifies the files and the append-only discipline a future reconciliation tool builds against (Principle 1, §2, NO-RUNTIME); nothing here ships a reconciliation engine, a compactor, or a git driver.
+
+**Motivation.** Swarm MUST NOT preserve every task scratchpad forever. A task surfaces a `task.md` frame, one or more `trace.md` implementation claims, and a `review.md` verdict record — all under `generated/` (§23.7.2). Once the work is merged or abandoned and its discoveries are promoted (§23.4), those execution packets have served their purpose; keeping them indefinitely re-creates exactly the unindexed accumulation that §23's rationale rejects for chat transcripts. The ledger is the bright line: traces and reviews are **compacted into** a ledger entry on reconciliation, and the verbose packets MAY then be removed. (This is design layer 9 — Principle 9 of the workspace doctrine: *the ledger preserves compact history* — wired to the kernel's already-defined verdict, provenance, and promotion machinery.)
+
+#### 23.7.1 Location and shape
+
+The ledger lives in the canonical Swarm workspace at:
+
+```text
+.swarm/ledger/
+  changes/          # one entry per completed change set (covered obligations, surfaces, proofs, verdicts)
+  merges/           # one entry per merge-gate decision (§14.4) at the change-set level
+  promotions/       # one entry per resolved promotion queue (§23.4)
+```
+
+A **ledger entry is an immutable, append-only record** under the same discipline as an ADR (§30.1, Nygard): an entry is never edited in place; a correction is a *new* entry that references the one it amends, so the truth of any change is the full chain, not the latest row. The ledger is therefore the change-history analogue of the ADR chain — ADRs record *decisions* immutably; the ledger records *reconciled task outcomes* immutably. This append-only-with-supersession shape mirrors the catalogue and ADR conventions already normative elsewhere in the kernel (§8.1.1, §30.1) and is a design choice, not a measured property.
+
+#### 23.7.2 What is ephemeral vs. what is durable
+
+The ledger fixes the durability boundary across the three workspace knowledge layers:
+
+| Layer | Path | Durability | Git disposition |
+| ----- | ---- | ---------- | --------------- |
+| Execution packets | `.swarm/generated/{tasks,traces,reviews}/` | **Ephemeral** — recreatable from sources; compacted into the ledger on reconciliation | MAY be gitignored (`.swarm/generated/tasks/` and, optionally, `traces/`/`reviews/` once governance accepts ledger compaction as the system of record) |
+| Ledger | `.swarm/ledger/{changes,merges,promotions}/` | **Durable** — the compact audit trail that outlives the packets | Committed |
+| Memory + sources | `.swarm/memory/`, `.swarm/sources/` | **Durable** — recall + desired truth | Committed |
+
+`generated/` is, by definition, generated or derived material (§23.4.2 routes a *purely local execution detail* to "keep in the task only," i.e. it dies with the task). Because the ledger captures the load-bearing summary of a trace/review on reconciliation, a project MAY gitignore the verbose `generated/` packets without losing auditability — the ledger is what survives. By contrast, `ledger/`, `memory/`, and `sources/` are never gitignored as a matter of governance: deleting them deletes the project's reconciled history, durable recall, and desired truth respectively. (Whether a given repo gitignores active `traces/`/`reviews/` is a per-project governance choice, not a kernel mandate; the kernel mandate is only that *if* they are dropped, their load-bearing content MUST first have compacted into a ledger entry.)
+
+#### 23.7.3 What a ledger entry records (per completed task)
+
+A `changes/` ledger entry is the compaction target of a task's trace + review. It MUST capture, for the completed task:
+
+| Field | Content | Source it compacts |
+| ----- | ------- | ------------------ |
+| Covered obligation IDs | The `AC-`/`C-`/`I-`/`IF-` IDs the task discharged | The trace's `IMPLEMENTS`/`PRESERVES` claims (§21.4) and the review's verdict matrix (§21.5) |
+| Changed write-surfaces + hashes | Each surface in the task's `WRITES` set with its `per_surface_hash` | The **one trace-provenance schema** (§16.1): the `per_surface_hash[]` and `source_hash` recorded on each binding's last `PASS` — the ledger pins the same hashes, so the change record and the drift/staleness join (§16) never diverge |
+| Proofs run + their verdicts | Each `VERIFY BY` binding's recorded verdict, in the **4-core + 3-lifecycle** model (§14.1): core ∈ {PASS, FAIL, BLOCKED, UNVERIFIED}, lifecycle ∈ {WAIVED, STALE, CONTRADICTED} | The review's per-obligation `VERDICT` blocks and obligation-verdict matrix (§14, §21.5) |
+| Promotion results | The disposition of every promotion-queue item — `promoted` / `deferred` / `rejected` / `blocked` (and `validated`/`rolled-back` where §23.4.3 applied) | The resolved promotion queue (§23.4); a task cannot close while any item is `pending`, so the ledger entry records a fully-resolved queue by construction |
+
+A `merges/` entry records the **merge-gate decision** itself: the change-set-level `PASS`/`BLOCKED` verdict under the §14.4 gate (promotable iff every required obligation's latest verdict is `PASS`/`WAIVED` and none is `STALE`/`CONTRADICTED`/`FAIL`/`BLOCKED`/`UNVERIFIED`), together with the **unauthorized-change list** the review computed (`## Unauthorized changes`, §21.5.1 — every diff hunk not traceable to an authorizing obligation, judged `allowed`/`suspect`/`reject`). The merge-gate decision and the unauthorized-change list are precisely what make the ledger an **audit trail**: they record *that the gate was evaluated, with what result, and what fell outside authorized scope* — the falsifiable record that the change set was admitted by the gate rather than waved through. A `promotions/` entry records the durable targets each promoted discovery landed at (§23.4.2: spec amendment, ADR, finding, pattern, glossary, pass-guide-plus-pointer), closing the loop between a task's discoveries and `memory/` + `sources/`.
+
+Because every field above is **compacted from artifacts the kernel already specifies** — the trace-provenance schema (§16.1, G11), the verdict model (§14), the review's unauthorized-change and final-verdict sections (§21.5), and the promotion queue (§23.4) — the ledger introduces no new evidence type and no new empirical claim. It is a projection of the existing reconciliation outputs into a compact, immutable, committed history, so that `generated/` may be discarded without severing the backward trace (§22.5) from today's code to the obligations, proofs, and verdicts that produced it.
+
+#### 23.7.4 Cross-references
+
+The ledger is defined entirely by reference to existing kernel machinery: the merge gate and the 4-core+3-lifecycle verdict it records (§14); the single trace-provenance schema whose `source_hash`/`per_surface_hash[]` it pins so its change record stays joinable to drift/staleness (§16); the promotion queue and dispositions whose resolved state it captures (§23.4); and the Nygard append-only immutability discipline it inherits for its own entries (§30). A conformant repo's workspace reference (the doc that states the `.swarm/` layout and the §23.7.2 ephemeral-vs-durable boundary) MUST state that `generated/` traces/reviews compact INTO `.swarm/ledger/` on reconciliation and MAY then be gitignored, while `.swarm/ledger/`, `.swarm/memory/`, and `.swarm/sources/` are durable and committed.
+
 ## 24. The distillation loss budget
 
 Distillation is the deliberate **dropping of detail** that happens whenever information crosses a boundary in the pipeline — most acutely at the **spec → task lowering boundary** (§11) and the **promotion boundary** (§23.4). The loss budget is the discipline governing *what may be dropped* versus *what must survive*. Its purpose is to let lowering and promotion compress aggressively without ever silently losing binding force.

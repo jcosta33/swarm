@@ -90,7 +90,7 @@ scaffold/                         # the installable payload root (see note below
     bugs/                          # bug-report.md diagnosis-only source docs
 ```
 
-**Note — the installable payload directory.** The installable payload directory is `scaffold/.agents/`; it is conceptually "the kernel" — the unitary framework a consuming repository adopts wholesale (§2). A consumer copies the contents of `scaffold/.agents/` to its own `.agents/` and adopts `scaffold/AGENTS.md` as `AGENTS.md`. A v0.2 ADR MAY rename `scaffold/` → `kernel/` to make the conceptual name literal; if it does, `scaffold/` MUST be kept as a one-cycle compatibility alias so in-flight adopters do not break, and the alias MUST be removed no later than the following MINOR release. The rename is cosmetic: it changes the payload's directory name, never the `.agents/` interior, the artifact filenames (§20.2), or the conformance definition (§20.4).
+**Note — the installable payload directory.** The installable payload directory is `scaffold/.agents/`; it is conceptually "the kernel" — the unitary framework a consuming repository adopts wholesale (§2). A consumer copies the contents of `scaffold/.agents/` to its own `.agents/` and adopts `scaffold/AGENTS.md` as `AGENTS.md`. The framework-dev repo's `scaffold/` is therefore the **shipping location of the installable payload** (the kernel) — *this* repository's authoring-side directory — and is a different artifact from the **adopted-project workspace** the payload installs *into*: in a consuming repo the kernel installs to `.swarm/kernel/`, under which `.swarm/` is the canonical Swarm workspace and `.agents/` is only an agent-tool compatibility surface (the workspace model is specified in §20.5; the framework-dev vs adopted-project distinction is design rationale, not an empirical claim). A v0.2 ADR MAY rename `scaffold/` → `kernel/` to make the conceptual name literal; if it does, `scaffold/` MUST be kept as a one-cycle compatibility alias so in-flight adopters do not break, and the alias MUST be removed no later than the following MINOR release. The rename is cosmetic: it changes the payload's directory name, never the `.agents/` interior, the artifact filenames (§20.2), or the conformance definition (§20.4).
 
 **Note — `evals/` is not the conformance suite.** `evals/` and `scaffold/.agents/conformance/fixtures/` are distinct and MUST NOT be conflated. `evals/` holds the *framework's self-tests* — the `evals/fixtures/` inputs and the `evals/rubrics/` per-pass quality rubrics (§33.6) that measure whether *this specification and its scaffold* hold together; it is authoring-side and is not part of the installable payload. `scaffold/.agents/conformance/fixtures/` holds the *shipped conformance suite* — the golden corpus (§33) that a consuming repository carries to validate *its own* adoption against the conformance contract (§32). The first tests the kernel; the second is tested *by* every kernel adopter. Neither directory executes anything (Invariant 1, NO RUNTIME — §2): both are inert data a future tool would consume.
 
@@ -216,6 +216,127 @@ A repository is **Swarm-conformant** if and only if all of the following hold:
 A repository that omits any of the four MUST NOT be described as Swarm-conformant. Conditional artifacts (Tier 3) and the reserved `.swarm.*.json` contract files are **not** required for conformance. The full mechanically-checkable conformance contract — the exact checks, their inputs, and the deferral of an automated checker to a future CLI — is given in §32; the golden corpus that exercises it is given in §33.
 
 ---
+
+
+### 20.5 The adopted-project workspace (`.swarm/`)
+
+§20.0 maps the **framework-dev repository** — the repo in which Swarm *itself* is authored: the `docs/`, `examples/`, `evals/`, and `scaffold/` siblings that explain, demonstrate, self-test, and package the kernel. This subsection maps a different artifact: the **adopted-project workspace** — the directory shape that appears inside a *consuming* project after it adopts Swarm. The two are distinct artifacts and MUST NOT be conflated: `docs/`+`examples/`+`evals/`+`scaffold/` describe how Swarm is built and shipped; `.swarm/`+`.agents/`+`AGENTS.md` describe how an adopted project is laid out. A reader holding the framework repo open is looking at the producer; a reader holding a consuming project open is looking at the product.
+
+The bridge between the two is **installation**. The installable payload — the kernel — ships in the framework repo under `scaffold/` (the `scaffold/.agents/` interior of §20.0, with the v0.2 rename note thereof). On adoption, that payload INSTALLS to **`.swarm/kernel/`** in the consuming project, and `scaffold/AGENTS.md` is adopted as the project's `AGENTS.md`. Nothing executes during or after this copy (Invariant 1, NO RUNTIME — §2): the kernel is inert reference data and copyable templates, and every "workspace" path below is a directory a human or an agent populates, or that a future Swarm toolchain (§12, §32.7) would populate as a CONTRACT it builds against — never a runtime Swarm ships.
+
+#### 20.5.1 The canonical adopted-project tree
+
+The following tree is normative for path *shape* inside an adopted project. As with §20.0, it fixes which directory each kind of artifact lives in; it does not by itself impose conformance (conformance is defined in §20.4 against the kernel's installed contents and the `AGENTS.md` bootloader).
+
+```text
+project/
+  AGENTS.md                          # the bootloader (§31): how an agent STARTS; short, ≤200 lines / ≤25 KB
+
+  .swarm/                            # THE CANONICAL SWARM WORKSPACE (everything that defines/tracks/reconciles intent)
+    VERSION                          # adopted kernel version, semver (§25); the workspace mirror of .agents/.swarm-version
+    config.yaml                      # project-level Swarm configuration (surface policies §20.5.3-adjacent, agent adapters)
+
+    kernel/                          # the INSTALLED framework payload (copied from the framework repo's scaffold/)
+      language/                      # self-contained Tier-2 references (§20.3.2): SOL.md APS.md errors.md versioning.md
+      templates/                     # copyable Tier-1 + Tier-3 skeletons (§21); NO verdict.md (§20.2.3)
+      passes/                        # one page per pass (§26); the 9 passes
+      skills/                        # pass guides + companion guides (§26); 1 dir per skill
+      profiles/                      # the 6 heuristic profiles (§27)
+      overlays/                      # project rule bundles (§27)
+
+    sources/                         # DESIRED truth + durable source artifacts (the obligation source)
+      specs/                         # *.swarm.md source specs (compiler-visible; §20.1)
+      prds/  rfcs/  research/        # intent / proposal / detached evidence (§20.3.4)
+      audits/  bugs/  findings/      # observation / defect / discovery
+      adrs/  interfaces/  nfrs/      # decisions / boundary shapes / quality attributes
+
+    status/                          # OBSERVED satisfaction + drift (reconciles desired vs. real; never redefines intent)
+      specs/                         # per-spec satisfaction reports (.status.md alongside the .swarm.md)
+      tasks/  worktrees/  drift/     # task state, worktree state, detected drift
+
+    generated/                       # EXECUTION PACKETS — generated/derived; recreatable from sources
+      tasks/  traces/  reviews/      # task frames (§28), trace.md, review.md
+      tests/  docs/                  # generated tests + generated docs
+
+    memory/                          # DURABLE recall (§23)
+      INDEX.md                       # Tier-1 recall map (a map, not a dump)
+      glossary.md                    # Tier-2 one-word-one-meaning term store
+      patterns/                      # Tier-2 recurring multi-finding knowledge
+      stale/                         # superseded/contradicted memory, linked to replacements
+
+    ledger/                          # COMPACT reconciled history (§23) — prevents permanent scratchpad accumulation
+      changes/  merges/  promotions/ # change / merge / promotion summaries
+
+    archive/                         # retired durable source artifacts (linked to replacements; not silently deleted)
+    tmp/                             # scratch only; no durable knowledge; gitignored
+
+  .agents/                           # COMPATIBILITY MIRROR ONLY (so an agent CLI can load instructions; not canonical)
+    skills/                          # mirrored/pointer skills → .swarm/kernel/skills/
+    profiles/                        # mirrored/pointer profiles → .swarm/kernel/profiles/
+```
+
+The mapping from the framework repo to the adopted project is fixed and load-bearing: `scaffold/.agents/{language,templates,skills,profiles,overlays}` (§20.0) becomes `.swarm/kernel/{language,templates,passes,skills,profiles,overlays}`, and `scaffold/.agents/.swarm-version` (§25) becomes `.swarm/VERSION`. The framework-dev repo's `docs/`, `examples/`, and `evals/` are authoring-side and are **not** installed into a consuming project. *Design rationale (layout/naming):* placing the kernel under `.swarm/kernel/` (rather than at `.agents/` as in §20.0's payload) keeps the canonical workspace self-describing — a project carries its own language, templates, and passes — while the bare `.agents/` directory is reserved for the compatibility role of §20.5.4.
+
+#### 20.5.2 The eight `.swarm/` directory contracts
+
+The workspace separates **desired** state (`sources/`), **observed** state (`status/`), and **generated** execution material (`generated/`), then layers durable recall, compact history, retirement, and scratch on top. The eight top-level workspace directories carry these contracts:
+
+| Directory | Purpose | Committed? | Populated by |
+| --- | --- | --- | --- |
+| `kernel/` | Installed framework payload (language, templates, passes, skills, profiles, overlays). Framework-owned; updated by kernel migrations; project edits belong in `overlays/`. | Yes | Installation from the framework repo's `scaffold/`; kernel migrations |
+| `sources/` | Desired truth + durable source artifacts: specs (primary behavioral intent), PRDs, RFCs, research, audits, bugs, findings, ADRs, interfaces, NFRs (§20.3.4). | Yes | Humans + the `author`/`improve` passes |
+| `status/` | Observed satisfaction + drift state: spec satisfaction reports, task/worktree state, drift reports. Records whether code satisfies the spec; never redefines intent. | Yes | The `verify`/`review` passes; drift detection (future toolchain) |
+| `generated/` | Generated/derived execution packets: task frames, traces, reviews, generated tests/docs. Recreatable from sources; compacted into `ledger/` on completion. | Mostly gitignored (task frames + active traces/reviews; see §20.5.5) | The `lower`/`decompose`/`implement`/`verify`/`review` passes (or a future toolchain) |
+| `memory/` | Durable project recall: `INDEX.md` map, glossary, patterns, stale records. The index says *when to load* each entry, never dumps content inline. | Yes | The `promote` pass |
+| `ledger/` | Compact reconciled history: change/merge/promotion summaries preserving obligation coverage, changed surfaces, proof, verdicts, and promotion results. | Yes | Reconciliation after merge/abandonment (future toolchain) |
+| `archive/` | Retired durable source artifacts (superseded specs/research, closed bugs, stale findings, resolved audits), each linked to a replacement or closure summary. | Yes | The `promote` pass / manual retirement |
+| `tmp/` | Scratch area. No durable knowledge lives here. | No (gitignored) | Ad-hoc agent/human scratch |
+
+#### 20.5.3 The `.agents/` compatibility model
+
+`.swarm/` is the specification-compiler workspace; `.agents/` is an **agent-tool compatibility surface**; `AGENTS.md` is the bootloader. `.agents/` exists only so a third-party agent CLI that looks for `.agents/skills/` or `.agents/profiles/` can find loadable instructions; it is never the canonical home of Swarm's project intent.
+
+| `.agents/` may contain (compatibility) | `.agents/` MUST NOT contain as canonical (forbidden) |
+| --- | --- |
+| Skills / pass guides mirrored for an agent tool — each pointing back to `.swarm/kernel/skills/…` | Primary specs (`*.swarm.md`) — these are canonical in `.swarm/sources/specs/` |
+| Profiles mirrored for compatibility — pointing back to `.swarm/kernel/profiles/…` | Source-authority docs (PRDs, RFCs, research, ADRs, audits, findings, NFRs, interfaces) |
+| Tool-specific config a given agent CLI requires | Durable memory (`INDEX.md`, glossary, patterns, stale records) |
+| Thin task **pointer** files if a tool expects `.agents/tasks/` — pointing back to `.swarm/generated/tasks/…` | The ledger (compact reconciled history) |
+| | Status reports (observed satisfaction + drift) |
+
+Every file in `.agents/` MUST either point back to its canonical `.swarm/kernel/` (or `.swarm/generated/`) original or be a verbatim compatibility copy of kernel material. *Design rationale (layout/naming):* the mirror is one-directional — `.agents/` derives from `.swarm/`, never the reverse — so that there is exactly one source of truth and the compatibility surface can be regenerated or deleted without losing project intent. A canonical artifact that exists *only* under `.agents/` is a layout defect, not a valid adoption.
+
+#### 20.5.4 The governing rule (normative)
+
+The placement of every adopted-project artifact is decided by one rule:
+
+```text
+If it defines, tracks, or reconciles project intent  → .swarm/
+If it exists only so an agent CLI can load instructions → .agents/
+If it starts an agent correctly                       → AGENTS.md
+```
+
+This rule is **design rationale** — a workspace layout and naming decision, not an empirical claim — and needs no `sources.md` citation. The only grounded claim in this subsection is the NO-RUNTIME framing of §20.5 (the kernel and every workspace directory are inert; the CLI/worktree/ledger automation is a CONTRACT a future Swarm toolchain builds against, never shipped here): that is **Invariant 1** (§2.1.1), a design invariant of this specification.
+
+#### 20.5.5 Commit policy (informative)
+
+Aligned with the committed?-column of §20.5.2, an adopted project SHOULD gitignore execution-local and scratch state while committing everything that defines, tracks, or reconciles intent:
+
+```gitignore
+# Swarm execution-local + scratch state (recreatable from sources)
+.swarm/generated/tasks/
+.swarm/tmp/
+
+# Optional: active traces/reviews are compacted into .swarm/ledger/ on completion.
+# Remove these two lines if governance requires committing active trace/review files.
+.swarm/generated/traces/
+.swarm/generated/reviews/
+```
+
+A project MUST NOT gitignore `.swarm/sources/`, `.swarm/status/`, `.swarm/memory/`, `.swarm/ledger/`, `.swarm/kernel/`, or `.swarm/archive/` unless it intentionally splits durable knowledge into a separate repository. *Rationale:* `generated/` and `tmp/` are reconstructible from `sources/` and need not bloat history, whereas `sources/`/`status/`/`memory/`/`ledger/` are the durable record the reconciliation model depends on.
+
+---
+
 
 ## 21. Artifact contracts and templates
 
@@ -465,7 +586,7 @@ A trace records implementation *claims* against obligations and binds them to *e
 ---
 type: trace
 id: {{slug}}-trace
-source_task:.agents/tasks/{{slug}}.md
+source_task: .swarm/generated/tasks/{{slug}}.md
 source_spec: {{spec-id}}.swarm.md
 created: {{createdAt}}
 ---
@@ -914,3 +1035,82 @@ Both templates obey the same no-obligation discipline as the §21.9 set: neither
 | --- | --- | --- |
 | `prd.md` | Intent-only (states the wanted outcome and why; authors no obligations). | A `spec.swarm.md` via the author pass; `## Success metrics` seed future `monitor:` proofs. |
 | `rfc.md` | Proposal / pre-decision (advocates one approach, commits to none). | An accepted `adr.md` and/or approved `spec.swarm.md` via the author pass once `## Decision requested` is answered. |
+
+
+### 21.11 The status artifact (observed state)
+
+#### 21.11.1 Motivation
+
+The workspace separates **desired state** from **observed state** as two distinct artifacts so neither corrupts the other (a design choice; cf. the source/status/generated split). A `spec.swarm.md` under `sources/specs/<ctx>/<slug>.swarm.md` is the *desired truth*: the obligation graph the author pass authored, immutable as intent until an explicit amendment moves it. Whether the codebase currently *satisfies* that intent is a different, time-varying fact, and it MUST NOT be recorded by editing the spec.
+
+A spec MUST NOT be continuously edited to add pass/fail annotations, per-obligation verdicts, or drift notes. Doing so would (a) churn the `source_hash` of every obligation on each verification cycle — falsely tripping the staleness rule (§16.2 condition (a)) for obligations whose *intent* never moved — and (b) blur the source-authority line by letting observed reality masquerade as authored intent. Observed satisfaction and drift therefore live in a separate **status artifact**: `status/specs/<ctx>/<slug>.status.md`, which observes exactly one spec.
+
+> *Design rationale.* This mirrors the spec/status separation already fixed for the workspace (`sources/specs/` holds desired behavioral state; `status/specs/` holds observed satisfaction of that behavior). The status artifact is the workspace's persisted projection of the judged obligation graph — the read-model the merge gate (§14) and drift detection (§16) consult, never a second place where intent is authored.
+
+#### 21.11.2 Contract
+
+A `*.status.md` is a **working artifact** (plain `.md`, no `.swarm.` infix — §20.1): it is an observed-state read-model governed by an artifact contract, not a SOL source. It is **never hand-authored as intent**; it is *regenerated or updated by the `verify`, `review`, and `promote` passes* (§9) from the trace/verdict record, and reflects only what those passes recorded. A conformant `*.status.md` MUST contain:
+
+| Section | Meaning | Carries |
+| --- | --- | --- |
+| frontmatter | Identity + the observed spec + freshness. | `type: status`, `id`, `spec` (the `spec.swarm.md` id this status observes), `updated`. |
+| `## Obligation status` | Per obligation, the **latest** 4-core + 3-lifecycle verdict (§14) plus the proof/evidence ref that justifies it. | Table: ID → core (`PASS`/`FAIL`/`BLOCKED`/`UNVERIFIED`) → lifecycle (`WAIVED`/`STALE`/`CONTRADICTED` or `—`) → evidence/proof ref. Mirrors the obligation-verdict matrix of §14 / §21.5 — it does not re-judge, it records the latest judgment. |
+| `## Drift` | The obligations whose latest verdict carries a `STALE` or `CONTRADICTED` lifecycle decorator (§16), each with the staleness reason. | Table: ID → `STALE`/`CONTRADICTED` → reason (the changed-surface or adapter that triggered staleness per §16.2/§16.5, or the two conflicting evidence refs for `CONTRADICTED`) → prior-verdict ref. |
+| `## Coverage` | Which obligations have a passing proof. | Table: ID → covered? (a binding whose latest verdict is `PASS` with no blocking lifecycle) → bound proof ref. Aggregate coverage and drift coverage (§16.4) MAY be summarized here. |
+
+Normative rules:
+
+- The status artifact is a **read-model, not an authority.** It MUST NOT introduce, modify, or weaken any obligation, constraint, invariant, or interface; the only authoritative source of intent is the `spec.swarm.md` it observes (§22). Status can falsify assumptions and route an amendment, but it does not redefine intent.
+- The `## Obligation status` rows MUST be the **latest** verdict per obligation, consistent with the merge-gate predicate (§14.4): an obligation passes the gate iff its row is `PASS` or `WAIVED` and no row is `STALE`/`CONTRADICTED`/`FAIL`/`BLOCKED`/`UNVERIFIED`. The status artifact does not re-evaluate the gate; it is the projection the gate is evaluated *over*.
+- A `STALE` or `CONTRADICTED` row in `## Drift` MUST carry the same mandatory fields its `VERDICT` block does (`SOL-V005`, §14.3): a `STALE` row cites its prior-verdict ref and the changed `WRITES`/`READS` surface or rebound adapter (§16.2, §16.5); a `CONTRADICTED` row cites its two conflicting evidence refs (§14.1.2).
+- The artifact is **regenerated/updated, never hand-edited as intent.** Because Swarm ships no runtime (Invariant 1, NO RUNTIME — §2), "regenerated by the `verify`/`review`/`promote` passes" today means an agent following those pass guides rewrites the status from the trace and `review.md` record; a future Swarm toolchain MAY produce it deterministically. Either way the status artifact is *derived* — it is rebuildable from the spec, the trace-provenance schema (§16.1, G11), and the `review.md` verdict record (§21.5). It MUST NOT be the only home of any fact.
+
+#### 21.11.3 Template
+
+```markdown
+---
+type: status
+id: {{slug}}-status
+spec: {{spec-id}}.swarm.md
+updated: {{updatedAt}}
+---
+
+# Status: {{title}}
+
+Observed satisfaction of `sources/specs/{{ctx}}/{{slug}}.swarm.md`.
+Regenerated by the verify / review / promote passes — never hand-authored as
+intent. The authoritative obligations live in the spec; this file records only
+the latest observed verdict, drift, and coverage.
+
+## Obligation status
+
+| ID     | Core verdict                          | Lifecycle                       | Evidence / proof ref |
+| ------ | ------------------------------------- | ------------------------------- | -------------------- |
+| AC-001 | PASS / FAIL / BLOCKED / UNVERIFIED    | — / WAIVED / STALE / CONTRADICTED |                      |
+| C-001  |                                       | —                               |                      |
+| I-001  |                                       | —                               |                      |
+| IF-001 |                                       | —                               |                      |
+
+## Drift
+
+| ID | Lifecycle           | Reason (changed surface / adapter / conflicting refs) | Prior-verdict ref |
+| -- | ------------------- | ----------------------------------------------------- | ----------------- |
+|    | STALE / CONTRADICTED |                                                       |                   |
+
+## Coverage
+
+| ID     | Covered (latest = PASS, no blocking lifecycle) | Bound proof |
+| ------ | ---------------------------------------------- | ----------- |
+| AC-001 | yes / no                                       |             |
+
+<!-- drift_coverage = (count latest-verdict STALE) / (count required obligations) — §16.4 -->
+```
+
+#### 21.11.4 Relationship to the verdict and drift models
+
+The status artifact is the persisted **read-model** that the two enforcement concerns consult:
+
+- **Merge gate (§14).** The gate is the predicate "every required obligation's latest verdict is `PASS` or `WAIVED`, and none is `STALE`/`CONTRADICTED`/`FAIL`/`BLOCKED`/`UNVERIFIED`" (§14.4). `## Obligation status` is the at-a-glance projection of exactly that set of latest verdicts; a reader (or a future deterministic check outside the model — §17.1) evaluates the gate by reading these rows rather than by re-scanning every `review.md`.
+- **Drift detection (§16).** `## Drift` is the persisted output of the staleness rule. When the obligation `source_hash` (§16.2 condition (a)), a declared write surface (condition (b)), an exercised `READS` surface (§16.5 condition (c)), or the bound adapter (condition (d)) changes after a recorded `PASS`, the prior `PASS` is decorated `STALE` and surfaces here with its changed-surface reason, forcing the 3-way reconcile (§16.3). `## Coverage` carries the denominator for the drift-coverage metric (§16.4).
+
+A status row is therefore always *downstream* of a `VERDICT` block in a `review.md` (§14.5, §21.5) and the trace-provenance schema (§16.1): the `review.md` records the judgment and the trace records the hashes; the `*.status.md` projects the latest of each per obligation so the spec stays a stable statement of intent while observed reality is tracked beside it. There is no `verdict.md` (§20.2.3); equally, there is no second authority — the status artifact observes, the spec intends, and the two are reconciled by the verify/review/promote passes, not by editing one into the other.

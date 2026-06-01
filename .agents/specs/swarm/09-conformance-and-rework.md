@@ -128,19 +128,124 @@ required_suite:
   orchestration:      [merged-Validation, merged-Test, scope-disjointness, merge-intent]
 ```
 
-### 32.7 The CLI command surface (documented contract only, not shipped)
+### 32.7 The CLI command surface and the toolchain↔agent-CLI boundary (documented contract only, not shipped)
 
-Swarm documents the verb set a future launcher would expose. This is **what a future launcher would expose**, never **a tool Swarm provides** (Invariant 1). The surface MUST appear in `docs/language/` as a one-page "tooling contract (not shipped)" note carrying that banner.
+Swarm documents the verb set a future **Swarm toolchain** would expose. Per Invariant 1 (NO RUNTIME), this is **what a future toolchain would expose**, never **a tool Swarm provides**: the surface is a contract a future launcher builds against, and until one exists a human validates a repo against it by hand. The surface MUST appear in `docs/language/` as a one-page "tooling contract (not shipped)" note carrying that banner.
+
+This subsection fixes the boundary between that Swarm toolchain and the **agent CLIs** it would coordinate. The boundary is **design rationale**, grounded in two empirical anchors: an orchestrator coordinates workers, and coding tasks parallelize poorly and need shared context `[ANTHROPIC-MA]`; and a single-threaded worker holding full context outperforms naive fan-out, because actions carry implicit decisions and conflicting decisions compound `[COGNITION]`. The toolchain therefore **prepares and reconciles** work; the agent CLI **performs the coding loop**. Swarm coordinates workers; it does not replace them.
+
+#### 32.7.1 The verb set the toolchain would drive
 
 | Verb | Phase(s) it would drive | Documented contract |
 |---|---|---|
+| `init` | (adoption) | install/refresh the kernel payload into a project's `.swarm/kernel/` and adopt `AGENTS.md` (the framework ships the payload under `scaffold/`; see §20.0) |
 | `lint` | PARSE, NORMALIZE | emit `diagnostics[]` of `SOL-<LAYER>NNN` records against a `*.swarm.md` source |
+| `format` | NORMALIZE | apply the canonical surface form (§4.10) without changing intent (§28 pure-normalization class) |
+| `improve` | AUTHOR/IMPROVE | apply intent-preserving edits (the `improve` pass predicate, §32 acceptance set) |
 | `build-ir` | PARSE → NORMALIZE | emit `*.swarm.ir.json` (the §12 envelope) |
-| `plan` | LOWER | emit `*.swarm.plan.json` (the §13 plan) |
+| `lower` / `plan` | LOWER | emit `*.swarm.plan.json` (the §13 plan): the schedulable projection of the IR |
+| `decompose` | LOWER → DECOMPOSE | partition the plan into work packets, one per disjoint write surface (§18) |
 | `verify` | VERIFY | run resolved `cmd*` adapters, record core verdicts + lifecycle decorators |
-| `promote` | PROMOTE | apply the §23 promotion protocol to findings |
+| `review` | REVIEW | prepare the review packet from trace + obligation set; record the §14 verdict |
+| `promote` | PROMOTE | apply the §23 promotion protocol to findings; update `memory/INDEX.md` |
 
 ```text
+# Tooling contract (NOT SHIPPED). Swarm is markdown-only (Invariant 1).
+# This is the surface a future Swarm toolchain would build against, not a tool Swarm provides.
+swarm init                                 -> install/refresh .swarm/kernel/ + AGENTS.md
+swarm lint      <spec>.swarm.md            -> diagnostics[] (SOL-<LAYER>NNN)
+swarm format    <spec>.swarm.md            -> canonical surface form (intent-preserving)
+swarm improve   <spec>.swarm.md            -> intent-preserving edits
+swarm build-ir  <spec>.swarm.md            -> <spec>.swarm.ir.json
+swarm lower     <spec>.swarm.ir.json       -> <spec>.swarm.plan.json
+swarm decompose <spec>.swarm.plan.json     -> work packets (1 per disjoint write surface)
+swarm verify    <task>.md                  -> verdicts (core + lifecycle)
+swarm review    <task>.md                  -> review packet + §14 verdict
+swarm promote   <finding>.md               -> memory/INDEX.md update
+```
+
+The checker that would consume `conformance.yaml` is itself part of this deferred surface (a `swarm conform`-class verb). Until a launcher exists, the contract still serves: a human validates a repo against it by hand, and the fixtures (§33) pin the expected verdicts independently of any tool.
+
+#### 32.7.2 What the Swarm toolchain OWNS
+
+The toolchain owns the **intent-structure and reconciliation** lane: everything that prepares work from obligations and judges work against obligations. A future toolchain MUST scope itself to these concerns:
+
+```text
+init                  install/refresh the kernel payload into .swarm/kernel/
+lint                  emit SOL-<LAYER>NNN diagnostics against a .swarm.md source
+format                apply the canonical surface form without changing intent
+improve               apply intent-preserving spec edits
+lower                 project the IR into a schedulable plan
+decompose             partition the plan into disjoint-surface work packets
+task generation       emit generated task frames under .swarm/generated/tasks/
+worktree creation     create the per-task worktree (one worktree ↔ one task)
+branch naming         derive the branch name from spec/task context
+agent-adapter invocation   launch an agent CLI as a worker via its adapter (§32.7.4)
+trace validation      check the emitted trace against assigned obligations (§15)
+review preparation     assemble the review packet from trace + obligation set
+promotion handling     apply the §23 promotion protocol to durable findings
+status reporting       report observed satisfaction/drift (.swarm/status/)
+drift detection        detect declared-write content-hash staleness (§16, §23.3)
+merge gating          enforce the §14.4 merge gate before a task may merge
+```
+
+This is **design rationale**, not an empirical claim: it places the toolchain exactly where a spec-driven framework adds value — at the obligation boundary on either side of the coding loop. It is the contract analogue of the kernel's own scope (§18.1: the kernel owns a coordination contract, not a scheduler).
+
+#### 32.7.3 What the Swarm toolchain does NOT own
+
+The toolchain MUST NOT own the **model-execution** lane. These concerns belong to the agent CLI it invokes as a worker, never to Swarm:
+
+```text
+the LLM chat / conversation UI
+the model reasoning loop
+agent file-editing mechanics (how an agent reads, patches, writes files)
+provider auth (model/provider credentials and token exchange)
+the MCP runtime
+the tool-calling runtime
+prompt-streaming UX
+```
+
+A Swarm toolchain that absorbed any of the above would **become an agent CLI** — which Invariant 1 (NO RUNTIME) forecloses for this repo and which the boundary forbids for any future toolchain. The rationale is empirical: coding tasks are mostly *not* parallelizable and need shared context, so the value of a coordinator is in framing and reconciliation, not in re-implementing the worker's reasoning loop `[ANTHROPIC-MA]`; and a single-threaded agent that holds full context is the unit that performs the loop well `[COGNITION]`. Swarm MUST NOT become an agent CLI.
+
+#### 32.7.4 Agent CLIs are worker backends (the adapter contract)
+
+Claude Code, Codex, OpenCode, Aider, Cursor, and similar tools are **worker backends**. A future Swarm toolchain MAY invoke an existing agent CLI as a worker via a per-agent **adapter** — a documented record, not a running process this repo ships. The adapter has three load-bearing fields: the `command` to launch, a `working_directory` that MUST be the task's own worktree (the one-worktree-↔-one-task mapping of §19/§32.7.2), and a `startup_instruction` that points the worker at `AGENTS.md` and its generated task frame.
+
+```yaml
+# Adapter contract (NOT SHIPPED). Documented record a future toolchain would consume.
+agents:
+  claude:
+    command: claude
+    working_directory: task_worktree
+    startup_instruction: "Read AGENTS.md, then read the Swarm task file."
+  codex:
+    command: codex
+    working_directory: task_worktree
+    startup_instruction: "Read AGENTS.md, then read the Swarm task file."
+  opencode:
+    command: opencode
+    working_directory: task_worktree
+    startup_instruction: "Read the Swarm task file first."
+  aider:
+    command: aider
+    working_directory: task_worktree
+    startup_instruction: "Read the Swarm task file first."
+```
+
+The division of labor is fixed by one rule:
+
+```text
+Swarm prepares the work.    (init/lower/decompose/task generation/worktree/branch/adapter invocation)
+The agent CLI performs the coding loop.    (the model loop, file edits, tool/MCP/provider runtime — §32.7.3)
+Swarm validates trace / review / promotion.    (trace validation/review prep/merge gate/promotion — §32.7.2)
+```
+
+This "prepare → delegate → reconcile" split is the toolchain projection of the kernel's static coordination contract (§18.1, §19): the orchestrator coordinates workers but does not perform their work `[ANTHROPIC-MA]`, and each worker runs single-threaded with full context for its packet `[COGNITION]`. Because the worker performs the actual coding loop, **Swarm MUST NOT become an agent CLI**; it remains a toolchain that prepares and reconciles obligation-bounded work, and the entire surface of this subsection is a documented contract a future tool builds against, never shipped here (Invariant 1).
+
+---
+
+Now the §35.1 cross-ref note. The existing N1 row already points to §32.7. I'll add a one-line cross-ref tying the no-CLI/runtime non-goal to the toolchain↔agent-CLI boundary specifically.
+
 # Tooling contract (NOT SHIPPED). Swarm is markdown-only (Invariant 1).
 # This is the surface a future launcher would build against, not a tool Swarm provides.
 swarm lint      <spec>.swarm.md            -> diagnostics[] (SOL-<LAYER>NNN)
@@ -409,6 +514,25 @@ The rework proceeds as seven ordered waves. Each wave has a single goal and a fi
 | 6 | **Add examples and evals** — ship the conformance evidence | the golden corpus and fixtures under `scaffold/.agents/conformance/fixtures/` (§33), the three pipeline-complete walkthroughs under `docs/examples/` (§34.3), and the review/profile rubrics |
 | 7 | **Remove deprecated aliases** — drive the surviving-construct count to zero | no canonical `SHALL`, `VERIFY_BY` (underscore), `TASK-MAP`, or fenced `:::`-delimited SOL anywhere in shipped files; each removal is one of the §34.6 regression greps (A19–A28) returning no matches |
 
+
+### 34.8 Workspace-model migration
+
+These acceptance checks fix the adopted-project workspace model (§20.5, §31): that `.swarm/` is the canonical Swarm workspace, `.agents/` is only an agent-tool compatibility surface, and `AGENTS.md` is a short bootloader. They are the regression searches of the approved workspace spec, reframed as binary A-checks (each is a search, a file-existence test, or a doc-presence test); they carry the same per-wave-and-final force as A1–A28 (§34.7). All are **design rationale** — the workspace/compatibility/bootloader split is a layout decision — and introduce **no new empirical claim**.
+
+| # | Check | How to verify |
+|---|---|---|
+| AW1 | No canonical reference to `.agents/specs`, `.agents/tasks`, or `.agents/memory` | `grep -R "\.agents/\(specs\|tasks\|memory\)"` returns no match in any shipped canonical file; the only permitted matches are lines explicitly marked **compatibility** or **migration** |
+| AW2 | `.swarm/` is named as the canonical Swarm workspace | a canonical page states `.swarm/` is the workspace and partitions `sources/ status/ generated/ memory/ ledger/ archive/ kernel/ tmp/` as distinct categories (§20.5) |
+| AW3 | `.agents/` is named as a compatibility surface | a canonical page states `.agents/` is an agent-tool compatibility surface, never the Swarm source-of-truth root; mirrored skills/profiles point back to `.swarm/kernel/` |
+| AW4 | `AGENTS.md` is short and inlines no SOL/APS manual | `AGENTS.md` is within the §31.1 density cap and a search for an inlined `SOL`/`APS` manual (`AGENTS\.md` against the §31.1 forbidden-inline rule) returns nothing; at most a one-line language pointer to `.swarm/kernel/language/` survives |
+| AW5 | Surface policies are documented | a canonical page defines the source-code surface policy set `generated` / `governed` / `observed` / `external` / `deprecated` (§20.5), establishing that code is reconciled implementation reality, not disposable generated output |
+| AW6 | The source/status/generated split is documented | a canonical page separates `sources/` (desired truth), `status/` (observed satisfaction/drift), and `generated/` (task frames, traces, reviews) as distinct workspace categories (§20.5) |
+| AW7 | The ledger is documented | a canonical page defines `.swarm/ledger/` as the compact reconciled history (obligation coverage, changed surfaces, proof, verdicts, promotion results) that prevents permanent task-scratchpad accumulation (§20.5) |
+| AW8 | The CLI/agent boundary is documented | a canonical page documents the future-launcher boundary — Swarm coordinates agent-CLI workers and prepares/validates work but does not own the model loop, file-editing mechanics, or provider/MCP runtime, and MUST NOT replace an agent CLI (a contract a future toolchain builds against, NO RUNTIME — Invariant 1) |
+| AW9 | No canonical page implies Swarm is an agent runtime | a search for "Swarm is an agent CLI" / "agent runtime" framing returns no canonical match; every "runs" verb resolves to a future-launcher contract (§35.1 N1), consistent with the orchestrator-worker single-threaded-writes boundary |
+
+A failing AW-check blocks acceptance at the tier whose clauses bind it, identically to A1–A28 (§34.7).
+
 ### 34.1 Source-file reconciliation
 
 | # | Check | How to verify |
@@ -485,7 +609,16 @@ These are not omissions to be filled later; they are deliberate boundaries that 
 
 | # | Non-goal | Rationale |
 |---|---|---|
-| N1 | **No shipped CLI, runtime, scheduler, differ, or parser** | Invariant 1 (NO RUNTIME). Everything that "runs" is documented as a contract a future tool builds against (§32.7), never shipped by this repo |
+| N1 | **No shipped CLI, runtime, scheduler, differ, or parser** | Invariant 1 (NO RUNTIME). Everything that "runs" is documented as a contract a future tool builds against (§32.7), never shipped by this repo. The toolchain↔agent-CLI boundary (§32.7.2–§32.7.4) is part of this non-goal: a future Swarm toolchain would *prepare and reconcile* obligation-bounded work and *coordinate* agent-CLI workers via adapters, but MUST NOT itself become an agent CLI (own the model loop, chat UI, file-editing, provider auth, or the MCP/tool-calling runtime) `[ANTHROPIC-MA]`, `[COGNITION]` |
+
+---
+
+Summary of what I authored and where it goes:
+
+- Edit 1 (`REPLACE-NEAR` the §32.7 heading at line 131): replaces the old 5-verb §32.7 with an expanded §32.7 split into §32.7.1 (the verb table — now 10 verbs incl. `init`, `format`, `improve`, `lower`, `decompose`, `review`), §32.7.2 (toolchain OWNS — all 16 owned concerns), §32.7.3 (does NOT own — the 7 agent-CLI concerns), and §32.7.4 (agent CLIs as worker backends + the 4-agent `yaml` adapter shape with `command`/`working_directory: task_worktree`/`startup_instruction`, plus the prepare→delegate→reconcile rule and the "Swarm MUST NOT become an agent CLI" rule).
+- Edit 2 (`REPLACE-NEAR` the §35.1 N1 row at line 488): extends the existing "no CLI/runtime" non-goal with a one-line cross-ref to §32.7.2–§32.7.4.
+
+Grounding discipline observed: empirical claims (orchestrator coordinates workers / coding parallelizes poorly / single-threaded full-context) cite `[ANTHROPIC-MA]` and `[COGNITION]` inline; the OWNS/does-NOT-own/adapter-shape/naming/path choices are stated as design rationale with no fabricated citation. NO-RUNTIME (Invariant 1) is preserved throughout — every verb, the adapter `yaml`, and the boundary are framed as a documented contract a future toolchain builds against, never shipped. Canonical vocabulary preserved (the passes, `SOL-<LAYER>NNN`, `.swarm/` canonical workspace, `scaffold/`→`.swarm/kernel/` install, §14 merge gate, §18 disjoint write surfaces). Framework-dev repo (`scaffold/`) vs adopted-project workspace (`.swarm/kernel/`) kept distinct: `init` is documented as installing the `scaffold/`-shipped payload to `.swarm/kernel/`.
 | N2 | **No checker shipped** | the conformance contract (§32) and corpus (§33) are inert data; the checker is a deferred launcher concern |
 | N3 | **Provider-neutral** | the spec makes no assumption about which model or agent runs it; SOFT control is context, not enforcement (Invariant 2). No section names a vendor as load-bearing |
 | N4 | **Generative reproducibility is a non-goal; verdict stability is an obligation** | Two layers, deliberately split. **(a) Generative reproducibility** — identical token streams from the model on identical inputs — remains a NON-GOAL: sampling, temperature, and inference determinism are launcher concerns, and current evidence holds that this nondeterminism is an *engineering choice* (it stems from lack of batch-invariance, not inherent randomness; batch-invariant kernels gave 1 unique output across 1,000 completions vs 80 for standard inference) `[DETERMINISM]` (lab blog, not peer-reviewed) — so Swarm specifies obligations and proofs, not the generative process that satisfies them. **(b) Verdict stability**, by contrast, *is* in scope, because the merge gate (§14.4) is the one normative predicate and it can flip on agent-rendered passes: `verify`/`review` render verdicts, and a `manual` proof is recorded agent/human judgment with no executable oracle (§15.1). Normative clarification: a `verify`/`review`/`manual` verdict on **unchanged inputs** (same obligation surface-text, same evidence refs, same source/surface hashes — §16) SHOULD be **stable** across runs; a verdict that **flips across runs on identical inputs** is itself a `CONTRADICTED` condition (§14.1.2), routed through the existing §14 machinery — the two conflicting run results are recorded as the two mandatory conflicting evidence refs, and the gate blocks per §14.4 / §17.4. This adds **no runtime requirement**: like every gate disposition it is a contract, enforced by a deterministic check outside the model where one exists and manual today (§14.4, §17.1). |

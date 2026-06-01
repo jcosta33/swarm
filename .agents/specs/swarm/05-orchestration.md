@@ -301,3 +301,75 @@ source tier (.swarm.md)         execution tier (task-orchestration.md)
 ```
 
 `DEPENDS ON` edges lower to the **merge-order partial order** (a branch MUST be merged after the branches it depends on); the write-surface conflict graph is the proof that the workers' OWNED paths are pairwise disjoint. Together these make the decomposition correctness — the property that makes parallel writes safe — re-derivable from the artifact alone rather than held in the lead's head.
+
+
+### 19.8 Task lifecycle, worktrees, and the merge gate (contract)
+
+This subsection specifies the **task lifecycle** an orchestration run follows, the **worktree/git etiquette** that makes the §18.5 single-writer discipline concrete on disk, and the **per-task merge gate** that is the §14 merge gate evaluated at the moment a task's branch would merge. Per Invariant 1 (NO RUNTIME, §2), nothing here is shipped: the CLI/worktree/branch/ledger automation is a **CONTRACT a future Swarm toolchain builds against**, never a runtime this repo runs. Every "the toolchain prepares…" / "the toolchain removes…" clause below is the recorded shape of an action a launcher MAY one day perform; the kernel fixes the artifacts and the gate predicate that action must respect, and nothing more. Paths and the branch/worktree/commit conventions are **design rationale**, not empirical claims, and carry no citation; the two single-writer/coordination clauses are anchored where they appear.
+
+#### 19.8.1 The task lifecycle (four phases)
+
+A task moves through four recorded phases. Each phase names the artifacts it reads and the artifacts it writes; the durable record at the end is the ledger entry (§23.x), the updated status artifact (§21.x), and any promoted findings — never the generated execution files, which are disposable (§20, Principle 7 of the workspace doctrine).
+
+| Phase | What is read | What is produced | Where |
+|---|---|---|---|
+| **1. Creation** | the source artifact (`spec.swarm.md`, §21.2) | the lowered chain `source artifact → obligation graph → task graph → generated task frame` | task frame under `.swarm/generated/tasks/<task-slug>.md` |
+| **2. Execution** | the task frame + the source spec | the toolchain prepares the task frame, a worktree, a branch, agent startup context, the verification matrix (§21.2), and the promotion queue (§23.x) | worktree at `.worktrees/swarm/<spec-slug>/<task-slug>`, branch `swarm/<spec-slug>/<task-slug>` |
+| **3. Completion** | the worktree diff + proof evidence | the agent emits a **trace**; review emits a **review** with per-obligation `VERDICT` blocks (§14, §21.5) | trace under `.swarm/generated/traces/`, review under `.swarm/generated/reviews/` |
+| **4. Reconciliation** | the trace + review | compact trace/review into the ledger; promote durable findings; update the status artifact; remove or archive the generated files; remove the worktree | ledger under `.swarm/ledger/` (§23.x), status under `.swarm/status/` (§21.x), worktree removed |
+
+Creation is the lowering chain of §11 and §18.4: the `lower` pass emits the obligation graph and the two derived graphs (dependency DAG + write-surface conflict graph, §18.4); the `decompose` pass projects those onto a task graph; each task graph node materializes as one **generated task frame** under `.swarm/generated/tasks/`. The task frame is a *generated execution packet*, not a durable source-of-truth document — it MAY be recreated from the source artifact and MUST NOT be relied on as authority after the task closes.
+
+Execution is the toolchain's preparation step. The toolchain prepares exactly six things and dispatches nothing the kernel owns: the task frame, the worktree, the branch, the agent startup context (the `## Parent contract` of §19.4 carried verbatim into the child task), the verification matrix the task must satisfy, and the promotion queue the task must drain before close (§23.x). Dispatching the agent that fills the worktree is a launcher concern (§18.8), out of the kernel.
+
+Completion is the trace/review pair. The agent emits its implementation claims as a **trace** (`.swarm/generated/traces/`, §21.4); the `review` pass judges those claims against the source spec, the diff, and the proof evidence — never against the trace's self-report (§14, §32) — and emits a **review** (`.swarm/generated/reviews/`, §21.5) carrying one `VERDICT` per required `VERIFY BY` binding (§15.7).
+
+Reconciliation is the only phase that produces durable record. After the merge gate (§19.8.3) passes and the branch merges — or the task is abandoned — the toolchain MUST: (1) compact the trace and review into a ledger entry (§23.x) preserving covered obligations, changed surfaces, proof, verdicts, and promotion results; (2) drain the promotion queue, promoting durable findings to their typed homes (§23.4.2); (3) update the status artifact (§21.x) so observed satisfaction reflects the merge; (4) remove or archive the generated task/trace/review files; and (5) remove the worktree (§19.8.2). A task MUST NOT be treated as closed while any promotion-queue item is still `pending` (§23.4).
+
+#### 19.8.2 Worktree and git etiquette (the contract)
+
+The worktree convention makes the §18.5 safe-parallelism predicate concrete on disk. The mapping is exact and load-bearing:
+
+> **Every worktree maps to exactly one task; every task maps to its assigned obligations; every worker writes only its OWNED surfaces.**
+
+This is the §18.5 single-writer / write-disjoint discipline made physical: one writer per surface, and the worktrees are the physical enforcement of the §19.2 OWNED-paths pairwise-disjointness invariant — two tasks that would write the same surface are not write-disjoint, hence not parallel-safe, hence MUST NOT be given concurrent worktrees but sequenced via a `DEPENDS ON` edge (§18.4). The doctrine that the **write side stays single-threaded** and that conflicting actions carry conflicting decisions is the empirical anchor for this rule `[COGNITION]` (writes single-threaded; share full context, not isolated messages) `[ANTHROPIC-MA]` (LLM agents are not yet reliable at real-time coordination; the orchestrator-worker split), and it is fixed as a design decision by ADR 0010.
+
+Recommended conventions (design rationale, not normative grammar):
+
+| Item | Recommended form |
+|---|---|
+| Branch | `swarm/<spec-slug>/<task-slug>` |
+| Worktree path | `.worktrees/swarm/<spec-slug>/<task-slug>` |
+
+A structured **commit-message pattern** records, in the commit itself, the same source→execution tie the coordination artifact records (§19.7), so the run is reconstructable from git history alone:
+
+```text
+swarm: implement <task-slug> <ID-list>
+
+Spec:      .swarm/sources/specs/<context>/<slug>.swarm.md
+Task:      .swarm/generated/tasks/<task-slug>.md
+Covers:    AC-001, AC-002          # the obligations this commit satisfies
+Preserves: C-001, I-001            # the constraints/invariants it must not break
+Trace:     .swarm/generated/traces/<task-slug>.trace.md
+Review:    .swarm/generated/reviews/<task-slug>.review.md
+```
+
+`Covers` MUST list only obligations assigned to the task; `Preserves` lists the constraints/invariants the §19.4 `## Parent contract` named as boundaries. The `Trace` and `Review` lines point at the artifacts the merge gate (§19.8.3) reads. A worktree MUST NOT be reused across tasks, and on completion the toolchain removes the worktree (reconciliation step 5, §19.8.1) so a stale worktree never masquerades as a live writer.
+
+#### 19.8.3 The per-task merge gate (the §14 gate, evaluated per task)
+
+The task merge gate is **not a second gate**. It is the §14.4 merge gate — the single normative predicate "every required obligation's required `VERIFY BY` bindings are all `PASS`/`WAIVED`" — evaluated at the point a task's branch would merge into its base. The kernel defines one merge gate; this subsection only fixes the scope (the task's assigned obligations) and the orchestration-specific blocking conditions layered on top of it.
+
+A task **MUST NOT merge** if any of the following holds:
+
+| # | Blocking condition | Anchor |
+|---|---|---|
+| 1 | The **trace is missing** or the **review is missing** for the task. | §19.8.1 phase 3; §32 (a verdict justified only by the implementer's summary fails) |
+| 2 | Any **assigned obligation's verdict is `FAIL` or `UNVERIFIED`** (including a required binding with no verdict — `SOL-V008` — and a `PASS (STALE)`, which is treated as not-`PASS`, §14.4). | §14.4 |
+| 3 | A **blocking `QUESTION` affects assigned work** — an unresolved `[blocking]` `QUESTION` (§6.5) whose `AFFECTS` set reaches an obligation the task covers. | §6.5, §11.1.2 (R-BLOCKING-Q) |
+| 4 | The **promotion queue is unhandled** — any promotion-queue item for the task is still `pending`. | §23.4 |
+| 5 | A **write-surface conflict remains** — a worker's OWNED path overlaps another's (`SOL-O001`), or a worker owns a path outside its obligations' declared `WRITES` (`SOL-O005`, §19.7), or an unmerged dependency in the `DEPENDS ON` merge-order remains. | §18.5, §18.7, §19.7 |
+
+Conditions 1–4 are the §14 merge gate read at task scope — a missing trace/review is a verification gap, a `FAIL`/`UNVERIFIED` verdict is a failed gate, a blocking `QUESTION` is an unresolved precondition, and an unhandled promotion queue blocks task close (§23.4). Condition 5 is the orchestration overlay: the per-task gate additionally requires that the §18 write-disjoint invariant still holds at merge time, because two tasks that have silently drifted into the same surface produce exactly the hard-to-review merge corruption that `SOL-O001` was raised to ERROR to prevent (§18.7). When all conditions clear, the branch merges, its resolution is recorded in the §19.6 merge log (with an INTENT-PRESERVED-PROOF for every non-trivial conflict), and the task advances to reconciliation (§19.8.1 phase 4).
+
+This is a recorded contract a future launcher (or eventual checker, §32) reads and could one day enforce — it is **not** a gate the kernel runs. Like every gate disposition in Swarm, it is enforced by a deterministic check OUTSIDE the model where one exists, and recorded by a human or agent today (§14.4, §18.1).

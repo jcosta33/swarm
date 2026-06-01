@@ -223,6 +223,42 @@ Meaning MUST be **preserved across every lowering**. Each downstream transformat
 - *Rationale:* prose-delivered semantics are unreliable under **prompt-format sensitivity** (±40% on identical content), **multi-turn reliability decay** (~−39%), and **lost-in-the-middle / context-rot** (20–50% degradation); Anthropic gives "no guarantee of strict compliance" for always-loaded prose.
 - *Consequence:* prose and skills are non-authoritative *delivery* layers; a regression check (§32) MUST confirm that **no skill, persona, or `AGENTS.md` section defines modality, authority order, or verification semantics**. Always-loaded normative prose is capped (≤200 lines / ≤25 KB; §17, §31), with everything procedural moved to lazily-loaded pass guides and profiles — to minimize always-on density and protect adherence and cost, *not* because models "cannot follow many instructions."
 
+
+### 2.7 `.swarm/` is the canonical workspace
+
+In an adopted project, Swarm's artifacts live under `.swarm/` by default; `.agents/` is an agent-tool **compatibility surface**, not the Swarm root. (This is a design/layout choice, not an empirical claim. It governs the *adopted-project* workspace, distinct from the *framework-dev* repository layout of §20.0; the installable payload ships in the framework repo under `scaffold/` and installs to `.swarm/kernel/`.)
+
+- *Rationale:* burying primary specs, memory, status, and ledger under a generic `.agents/` namespace conflates Swarm's source-of-truth workspace with the load surface a specific agent tool happens to read.
+- *Consequence:* canonical Swarm specs, memory, status, and ledger MUST live under `.swarm/` and MUST NOT live under `.agents/` as canonical; any pass guide, skill, or profile mirrored into `.agents/` for tool compatibility MUST point back to (or be copied from) `.swarm/kernel/`, and MUST be marked compatibility/migration material (§20).
+
+### 2.8 Source, status, and generated are separate categories
+
+Desired state (`sources/`), observed state (`status/`), and generated execution material (`generated/`) are **distinct artifact categories** in the workspace; a spec is the desired-state artifact and is never edited to record pass/fail. (Design rationale.)
+
+- *Rationale:* recording observed satisfaction back into the intent artifact destroys the boundary between *what is required* and *what was observed*, the same conflation Invariant 4 forbids between obligation and evidence.
+- *Consequence:* desired behavioral intent lives in `sources/` (`*.swarm.md`), observed satisfaction and drift live in `status/`, and derived task frames, traces, and reviews live in `generated/`; a `VERDICT`/`STALE`/`CONTRADICTED` result MUST be recorded as a status/verdict artifact, never folded into the source spec's obligation text (§16, §20).
+
+### 2.9 Specs own intent; code owns realization
+
+A `spec.swarm.md` owns desired behavioral **intent**; code owns implementation **reality**; and the trace/review/status layer reconciles the two. Code is NOT a disposable bundle regenerated from the spec. (Design rationale; this **strengthens** Invariant 4 — "code is reality," §2.1.4 — by stating the converse: just as code may not silently amend intent, the spec may not silently overwrite code as though code were a derived output.)
+
+- *Rationale:* treating code as regenerable-from-spec output would license a model to rewrite an existing codebase from intent alone, discarding the implementation reality that Invariant 4 makes load-bearing evidence.
+- *Consequence:* manual and agent edits to governed code are legitimate and reconcile through trace/review/status; no canonical text MAY claim application code is disposable, must always be regenerated, or that manual edits are forbidden, except where a per-surface policy explicitly declares it `generated` (§8 surface policies, §16, §22).
+
+### 2.10 The ledger preserves compact history
+
+Completed traces and reviews **compact** into ledger entries — covered obligations, changed surfaces, proof, verdicts, and promotions — rather than being retained forever as live scratchpads. (Design rationale.)
+
+- *Rationale:* keeping every task frame, trace, and review as an eternal working file accretes execution-local scratch into the durable record, blurring what is settled history from what is in-flight work.
+- *Consequence:* after merge or abandonment, `generated/` traces/reviews MUST be reducible to a ledger entry that preserves obligation coverage, changed surfaces, bound proof, review verdicts, and promotion results; generated task frames are execution-local and MUST NOT be treated as durable source of truth, whose home is the source artifact plus the ledger entry and any promoted finding/ADR/amendment (§20, §29).
+
+### 2.11 Swarm is a toolchain, not an agent CLI
+
+Swarm owns the **intent structure** — language, artifacts, passes, templates, the trace/review protocol, the memory model, and orchestration contracts — and coordinates existing agent CLIs as worker backends; it does NOT own the model loop, chat UI, tool-calling runtime, provider auth, or MCP runtime, and MUST NOT replace an agent CLI.
+
+- *Rationale:* the orchestrator-worker boundary keeps coordination spec-driven where naive parallel coding agents fail — most coding tasks have few truly parallel sub-tasks and agents coordinate poorly in real time `[ANTHROPIC-MA]`, and conflicting concurrent decisions carry bad results, favoring single-threaded, full-context execution `[COGNITION]`.
+- *Consequence:* every description of CLI/worktree/ledger automation is the **contract a future Swarm toolchain builds against** (Invariant 1 — no runtime, §2.1.1), never a runtime this repository ships; the toolchain prepares work and validates trace/review/promotion, while a coordinated agent CLI performs the coding loop, and no canonical text MAY frame Swarm as an agent runtime or chat assistant (§1.5, §18).
+
 ## 3. Architecture overview — the obligation graph and the layer cake
 
 ### 3.1 The layer cake

@@ -908,7 +908,7 @@ type: task
 id: auth-refresh-client
 status: active
 task_kind: feature
-source:.agents/specs/auth-refresh.swarm.md
+source: .swarm/sources/specs/auth-refresh.swarm.md
 assigned_obligations: [AC-001, AC-002]
 invariants: [I-001]
 interfaces: [IF-001]
@@ -943,8 +943,8 @@ The `verify` pass records a `TRACE` block plus the provenance the drift join dep
 ---
 type: trace
 id: auth-refresh-client-trace
-source_task:.agents/tasks/auth-refresh-client.md
-source_spec:.agents/specs/auth-refresh.swarm.md
+source_task: .swarm/generated/tasks/auth-refresh-client.md
+source_spec: .swarm/sources/specs/auth-refresh.swarm.md
 ---
 
 # Trace: auth-refresh client
@@ -974,7 +974,7 @@ The `review` pass (run under the `skeptic` profile, §27) consumes the trace and
 type: review
 id: auth-refresh-client-review
 source_trace:.agents/traces/auth-refresh-client-trace.md
-source_spec:.agents/specs/auth-refresh.swarm.md
+source_spec: .swarm/sources/specs/auth-refresh.swarm.md
 ---
 
 # Review: auth-refresh client

@@ -518,19 +518,19 @@ A conformant repo MUST include a regression check that fails when `AGENTS.md` ex
 | the language-reference pointer (where SOL/APS live) | the SOL/APS manual itself → `docs/language/` |
 | a small set of universal startup + universal "do not" rules | conditional, task-kind-specific rules → task templates / profiles |
 
-The startup block names the **load-what-the-task-names** doctrine (§26.4) and the universal invariants (assigned-scope-only, evidence-for-every-claim, handle-promotions-before-close, no chat-over-spec authority). A representative compliant bootloader:
+The startup block names the **load-what-the-task-names** doctrine (§26.4) and the universal invariants (assigned-scope-only, evidence-for-every-claim, handle-promotions-before-close, no chat-over-spec authority). It also names the **Swarm workspace** — `.swarm/` in an adopted project (§20.5) — so the agent knows where the canonical artifacts it is governed by live. A representative compliant bootloader:
 
 ```markdown
 # AGENTS.md
 
 ## Swarm startup
-1. Read the task file first.
-2. Treat `.swarm.md` blocks as authoritative over prose summaries.
-3. Use obligation IDs as scope.
-4. Load only the pass guides / profiles the task names.
-5. Map every completion claim to evidence.
-6. Promote durable discoveries before closing.
-7. If the task needs SOL/APS rules, read `.agents/language/SOL.md` and `.agents/language/APS.md`.
+1. Read the current task file first.
+2. The Swarm workspace is `.swarm/`.
+3. Treat `.swarm.md` blocks as authoritative over prose summaries.
+4. Use assigned obligation IDs as scope.
+5. Load only the pass/profile/context files the task names.
+6. Map every completion claim to evidence.
+7. Promote durable discoveries before closing.
 
 ## Universal rules
 - Do not implement behavior outside assigned obligations.
@@ -538,11 +538,15 @@ The startup block names the **load-what-the-task-names** doctrine (§26.4) and t
 - Do not close a task with unhandled promotion items.
 - Do not claim completion without evidence.
 
+## Compatibility
+`.agents/` MAY hold compatibility files for agent tools.
+Canonical Swarm artifacts live in `.swarm/`.
+
 ## Commands
 <!-- cmd* bindings, §31.3 -->
 ```
 
-The full SOL or APS manual MUST NOT be pasted into `AGENTS.md`. A "universal workflow rule" promotion (the §10 / §23 promotion target) resolves, per the G9 tie-break (this specification), to a **pass-guide edit plus at most a one-line pointer in `AGENTS.md`** — never an inline procedure. Rationale: ADR 0017 and the density cap reserve `AGENTS.md` for persistent *facts*; procedures live in pass guides.
+The full SOL or APS manual MUST NOT be pasted into `AGENTS.md`; if a task needs the language reference, it reads `.swarm/kernel/language/SOL.md` / `APS.md` (the installed kernel, §20.5) — `AGENTS.md` carries at most a one-line pointer, never the manual. A "universal workflow rule" promotion (the §10 / §23 promotion target) resolves, per the G9 tie-break (this specification), to a **pass-guide edit plus at most a one-line pointer in `AGENTS.md`** — never an inline procedure. Rationale: ADR 0017 and the density cap reserve `AGENTS.md` for persistent *facts*; procedures live in pass guides.
 
 ### 31.3 The Commands contract
 
