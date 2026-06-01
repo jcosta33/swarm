@@ -14,14 +14,12 @@ The grammar is **line-oriented**: a block is a bare header line `TYPE PREFIX-NNN
 (* ===== Document and frontmatter ===== *)
 document          = [ frontmatter ], { markdown_line | blank | surface_decl | block };
 
-frontmatter       = "---", nl,
-                    fm_language, fm_aps, fm_spec_version,
-                    { fm_other },
-                    "---", nl;
-fm_language       = "swarm_language", ":", ws, "SOL/", version_num, nl; (* discriminator, e.g. SOL/0.1 *)
-fm_aps            = "aps_version", ":", ws, version_num, nl;             (* e.g. 0.1 *)
-fm_spec_version   = "spec_version", ":", ws, semver, nl;                 (* content version, e.g. 0.1.0 *)
-fm_other          = yaml_key, ":", ws, yaml_scalar, nl;                  (* spec id, title, status, owners, imports *)
+frontmatter       = "---", nl, fm_field, { fm_field }, "---", nl;        (* YAML mapping — keys are UNORDERED *)
+fm_field          = yaml_key, ":", ws, yaml_scalar, nl;
+(* REQUIRED keys (each appears exactly once, in any order): type (= spec), id,
+   swarm_language (SOL/x.y), aps_version (x.y), spec_version (semver),
+   status (draft|review|approved|superseded).
+   OPTIONAL keys: title, owners, imports, domain (§22.1.2), created, updated. *)
 
 markdown_line     = ? any line not beginning a block header and not "---" ?, nl;
 blank             = ws, nl;
@@ -524,7 +522,7 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
     "meta": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "language", "version", "status"],
+      "required": ["id", "language", "version", "status"],
       "properties": {
         "id":      { "type": "string", "description": "Spec id (slug); e.g. auth-refresh" },
         "title":   { "type": "string" },
@@ -650,7 +648,7 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
     "provenance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["hash"],
+      "required": ["hash", "compiler_version", "compiled_at"],
       "properties": {
         "hash":             { "type": "string", "description": "Hash of the source *.swarm.md this IR was emitted from" },
         "compiler_version": { "type": ["string", "null"], "description": "Tool version; null until a tool exists; never merged with meta.language or meta.version" },

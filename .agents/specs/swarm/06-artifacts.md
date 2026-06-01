@@ -346,7 +346,7 @@ A spec is a behavioral contract: APS prose interleaved with SOL obligation block
 
 | Section | Meaning | Carries |
 | --- | --- | --- |
-| frontmatter | Identity + the two version axes. | `type: spec`, `id`, `swarm_language: SOL/0.1`, `aps_version`, `spec_version`, `status`, `created`, `updated`. |
+| frontmatter | Identity + the two version axes. | Required: `type: spec`, `id`, `swarm_language: SOL/0.1`, `aps_version`, `spec_version`, `status`. Optional: `title`, `owners`, `imports`, `domain` (§22.1.2), `created`, `updated`. (Canonical set, §5.8.) |
 | `## Intent` | One paragraph: the user- or system-visible outcome. | APS prose. |
 | `## Non-goals` | Explicit out-of-scope, to bound interpretation. | APS prose / bullets. |
 | `## Context` | Only load-bearing background; links, not pastes. | APS prose + links to findings/ADRs/audits. |

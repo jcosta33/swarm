@@ -163,17 +163,21 @@ Dotted / namespaced ids (`REQ.auth-refresh.AC-001`) are **IR-only** (§12); they
 
 ### 5.8 Frontmatter
 
-Every `*.swarm.md` source spec MUST begin with a YAML frontmatter block. The version fields are normalized (G10) as:
+Every `*.swarm.md` source spec MUST begin with a YAML frontmatter block (a YAML mapping — keys are unordered). The **required set** is `{type, id, swarm_language, aps_version, spec_version, status}`; the rest are optional. This set is canonical across §5.8, §12.3, §21.2.1, and Appendix A/C:
 
 | Field | Form | Meaning |
 |---|---|---|
-| `swarm_language` | `SOL/0.1` | The SOL language discriminator (the "which grammar/blocks/modals/lint-codes" axis, §25). MUST be present. |
-| `aps_version` | `0.1` | The APS prose-standard version (§7). MUST be present. |
-| `spec_version` | `0.1.0` | The spec *content* version (semver of this document's intent). MUST be present. |
-| `title` | string | Human title. |
-| `status` | `draft \| review \| approved \| superseded` | Lifecycle status of the spec (one enum across §5.8, §12.3, Appendix C). |
-| `owners` | list | Accountable owners. |
-| `imports` | list of spec ids | Specs whose obligations this spec may reference cross-spec (§5.7). |
+| `type` | `spec` | Artifact-type discriminator. **MUST be present.** |
+| `id` | slug | Stable spec id, e.g. `auth-refresh`; lowers to IR `meta.id` (§12.3). **MUST be present.** |
+| `swarm_language` | `SOL/0.1` | The SOL language discriminator (the "which grammar/blocks/modals/lint-codes" axis, §25). **MUST be present.** |
+| `aps_version` | `0.1` | The APS prose-standard version (§7). **MUST be present.** |
+| `spec_version` | `0.1.0` | The spec *content* version (semver of this document's intent). **MUST be present.** |
+| `status` | `draft \| review \| approved \| superseded` | Lifecycle status of the spec (one enum across §5.8, §12.3, Appendix C). **MUST be present.** |
+| `title` | string | Human title. *Optional.* |
+| `owners` | list | Accountable owners. *Optional* (recommended; MAY be empty for a draft). |
+| `imports` | list of spec ids | Specs whose obligations this spec may reference cross-spec (§5.7). *Optional.* |
+| `domain` | one of the eight governance domains (§22.1.2) | Default Axis-B domain for this spec's obligations; a per-obligation `DOMAIN` clause overrides it. *Optional* (defaults to `product` when absent, §22.1.2). |
+| `created` / `updated` | date | Provenance timestamps. *Optional.* |
 
 ```sol
 ---

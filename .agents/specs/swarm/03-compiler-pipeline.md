@@ -369,13 +369,13 @@ The IR layer is snake_case throughout. Every surface keyword that is English-sha
 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
-| `id` | string | MUST | Stable spec identifier; matches the surface frontmatter `spec`. |
-| `title` | string | MUST | Human-readable spec title. |
+| `id` | string | MUST | Stable spec identifier; matches the surface frontmatter `id` (§5.8). |
+| `title` | string | SHOULD | Human-readable spec title. |
 | `language` | string | MUST | The SOL language discriminator, exactly `SOL/0.1` for this version (§12.7, §25). Answers "which grammar/blocks/modals/lint codes." |
 | `version` | string | MUST | The **spec content** version (semver-shaped, e.g. `0.1.0`). Distinct from `language`. |
 | `status` | string | MUST | Spec lifecycle state; one of `draft`, `review`, `approved`, `superseded` (the same enum as §5.8 / Appendix C — `source-authority` keys on `approved`, §22). |
-| `owners` | array of string | MUST | Accountable maintainers (handles). MAY be empty only for a `draft`. |
-| `imports` | array of string | MUST (MAY be empty) | Relative paths to imported `*.swarm.md` specs whose nodes are in scope for cross-spec reference resolution. |
+| `owners` | array of string | SHOULD | Accountable maintainers (handles). MAY be empty. |
+| `imports` | array of string | SHOULD (MAY be empty) | Relative paths to imported `*.swarm.md` specs whose nodes are in scope for cross-spec reference resolution. |
 
 ### 12.4 `nodes[]` — the merged obligation record
 
@@ -440,6 +440,8 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 | `lifecycle` | array of string | MUST (MAY be empty) | Lifecycle decorators in effect on the core verdict — a subset of `{WAIVED, STALE, CONTRADICTED}` (§12.4.4, §14). Empty for a plain core verdict. |
 | `source` | object | MUST | Origin span and content hash (§12.4.5). |
 | `provenance` | array of object | MUST (MAY be empty) | Per-node provenance trail: prior verdicts, lowering ancestry, promotion lineage. Free-form objects whose minimal pinned shape is the trace-provenance schema of §16; not re-specified here. |
+
+*On the Required column.* "MUST" marks a field's **intent** (it carries a value); "MUST for `<kind>`" is conditional on node kind; "MUST (MAY be empty)" means the field **defaults** (to `[]`, or `UNVERIFIED` for `status`) when absent. The validatable JSON shape is Appendix C, which marks only `id`/`kind`/`source` as `required` and encodes the rest as optional-with-`default`. Per §12.10, Appendix C governs the shape and this table governs intent.
 
 #### 12.4.2 `clauses{}`
 
@@ -598,11 +600,11 @@ Diagnostics live only in `diagnostics[]`; they are never folded into node `statu
 |---|---|---|---|
 | `hash` | string | MUST | Content hash of the whole source `*.swarm.md` at emission. |
 | `compiler_version` | string\|null | MUST (MAY be `null`) | The emitting tool's version. `null` in this repo because no emitter ships (§12.1). The third version axis (§12.7). |
-| `compiled_at` | string | MUST | ISO-8601 timestamp of emission. |
+| `compiled_at` | string\|null | MUST (MAY be `null` until a tool emits) | ISO-8601 timestamp of emission; `null` in this repo (no emitter, §12.1). |
 
 ### 12.10 Conformance and the formal schema
 
-A document is a conformant SOL/0.1 IR iff it: (1) has exactly the five top-level keys of §12.2; (2) populates every MUST field of §12.3–§12.9; (3) uses only the closed enumerations (7 kinds, 5 modals, 9 proof types, 7 edge types, 7 verdict values, the `SOL-<LAYER>NNN` code space); (4) represents every relationship once, as an edge (§12.5.1); (5) keeps the three version fields distinct (§12.7). The normative machine-readable form is the JSON Schema in **Appendix C**; where this prose and Appendix C disagree, Appendix C governs the shape and this section governs the intent.
+A document is a conformant SOL/0.1 IR iff it: (1) has exactly the five top-level keys of §12.2; (2) populates every field Appendix C marks `required`, and supplies the documented `default` for any optional field it omits (§12.4.1 note); (3) uses only the closed enumerations (7 kinds, 5 modals, 9 proof types, 7 edge types, 7 verdict values, the `SOL-<LAYER>NNN` code space); (4) represents every relationship once, as an edge (§12.5.1); (5) keeps the three version fields distinct (§12.7). The normative machine-readable form is the JSON Schema in **Appendix C**; where this prose and Appendix C disagree, Appendix C governs the shape and this section governs the intent.
 
 ## 13. The plan
 
