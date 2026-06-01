@@ -251,7 +251,7 @@ Each layer is a 100-block. Within `SOL-P###`, codes `001`–`049` are reserved f
 
 #### B.1.2 Diagnostic record shape
 
-Every diagnostic a checker emits MUST be a record of exactly this shape, and the IR `diagnostics[]` array (§12) MUST carry records of this shape:
+Every diagnostic a checker emits MUST be a record of exactly this shape — the **checker-emit / SARIF-authoring** shape (the IR `diagnostics[]` array lowers it to the §12.8 / Appendix C shape; see the mapping note below):
 
 ```json
 {
@@ -272,6 +272,8 @@ Every diagnostic a checker emits MUST be a record of exactly this shape, and the
 | `span` | object | Source location: at minimum `{file, block}`; `line`/`col` SHOULD be present when available. |
 | `message` | string | Human-readable one-line defect description. |
 | `suggest` | string | The improve op (§10) or fix that resolves it; MUST name a closed op where one applies, never an open-ended rewrite. |
+
+**Relationship to the IR `diagnostics[]` shape (§12.8 / Appendix C).** The IR array carries the lowered form `{ code, level, node, source, message, suggest }`. The mapping is: `severity` → `level` (`BLOCKING` → `error`, `ADVISORY` → `warning`); `span` → `source` (`{ file, line_start, line_end }`); `layer` is derived from the `code`'s layer letter (checkable, not stored). These are the same diagnostic at two layers (authoring vs IR), not two contradictory schemas.
 
 #### B.1.3 Severity model
 
@@ -538,7 +540,7 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
           "id":   { "type": "string", "description": "IR node id; MAY be namespaced, e.g. REQ.auth-refresh.AC-001 (surface id is the short AC-001)" },
           "kind": { "enum": ["REQ", "CONSTRAINT", "INVARIANT", "INTERFACE", "QUESTION", "TRACE", "VERDICT"] },
           "authority": { "type": "string", "description": "Domain authority rank label (Axis B, §22): e.g. security, architecture, product" },
-          "modality":  { "enum": ["MUST", "MUST NOT", "SHOULD", "SHOULD NOT", "MAY"], "description": "Binding force; obligation kinds (REQ/CONSTRAINT/INVARIANT) only" },
+          "modality":  { "enum": ["MUST", "MUST NOT", "SHOULD", "SHOULD NOT", "MAY", null], "description": "Binding force; obligation kinds (REQ/CONSTRAINT/INVARIANT) only; null for INTERFACE/QUESTION/TRACE/VERDICT (§12.4.1)" },
           "clauses": {
             "type": "object",
             "additionalProperties": false,
@@ -546,11 +548,15 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
             "properties": {
               "where":     { "type": ["string", "null"] },
               "while":     { "type": ["string", "null"] },
-              "trigger":   { "type": ["string", "null"], "description": "Lowering of WHEN/IF [THEN]" },
+              "trigger":   { "type": ["object", "null"], "additionalProperties": false, "properties": { "kw": { "enum": ["WHEN", "IF", null] }, "expr": { "type": ["string", "null"] } }, "description": "Lowering of WHEN/IF — the {kw, expr} discriminator (§12.4.2)" },
               "subject":   { "type": ["string", "null"], "description": "The actor in THE <actor> <MODAL> <response>" },
               "modal":     { "enum": ["MUST", "MUST NOT", "SHOULD", "SHOULD NOT", "MAY", null] },
               "predicate": { "type": ["string", "null"], "description": "The response/predicate" },
-              "timing":    { "type": ["string", "null"], "description": "RESERVED; timing keywords deferred to SOL/0.2 (§35)" }
+              "timing":    { "type": ["string", "null"], "description": "RESERVED; timing keywords deferred to SOL/0.2 (§35)" },
+              "signature": { "type": ["string", "null"], "description": "INTERFACE signature (§6.4); null for non-INTERFACE kinds" },
+              "returns":   { "type": ["string", "null"], "description": "INTERFACE RETURNS type (§6.4)" },
+              "accepts":   { "type": "array", "items": { "type": "string" }, "default": [], "description": "INTERFACE ACCEPTS bullets (§6.4)" },
+              "errors":    { "type": "array", "items": { "type": "string" }, "default": [], "description": "INTERFACE ERRORS bullets (§6.4)" }
             }
           },
           "owner":  { "type": ["string", "null"], "description": "Lowering of OWNED BY" },
@@ -587,7 +593,7 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
               "content_hash": { "type": ["string", "null"], "description": "Hash of the obligation source span; drives STALE drift (§16)" }
             }
           },
-          "provenance": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Per-node trace/finding references (§23)" }
+          "provenance": { "type": "array", "items": { "type": "object" }, "default": [], "description": "Per-node trace/finding provenance objects; minimal pinned shape = the §16 trace-provenance schema (§12.4.1, §23)" }
         }
       }
     },
@@ -615,9 +621,10 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
         "type": "object",
         "additionalProperties": false,
         "required": ["code", "level", "message"],
+        "anyOf": [ { "required": ["node"] }, { "required": ["source"] } ],
         "properties": {
           "code":    { "type": "string", "pattern": "^SOL-[SPMVO][0-9]{3}$", "description": "Unified lint namespace (§8)" },
-          "level":   { "enum": ["error", "warning", "info"] },
+          "level":   { "enum": ["error", "warning", "note"] },
           "node":    { "type": ["string", "null"], "description": "Node id the diagnostic is bound to, if any" },
           "source": {
             "type": ["object", "null"],
@@ -671,7 +678,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
       "modality": "MUST",
       "clauses": {
         "where": null, "while": null,
-        "trigger": "response.status == 401 AND refresh_token present",
+        "trigger": { "kw": "WHEN", "expr": "response.status == 401 AND refresh_token present" },
         "subject": "web-client",
         "modal": "MUST",
         "predicate": "retry original_request once",
@@ -706,8 +713,8 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
     { "from": "INTERFACE.auth-refresh.IF-001", "to": "REQ.auth-refresh.AC-001", "type": "verified_by", "hard": false }
   ],
   "diagnostics": [
-    { "code": "SOL-V001", "level": "warning", "node": "REQ.auth-refresh.AC-001", "source": null,
-      "message": "INVARIANT-class property bound to a unit test; prefer property|model|static.", "suggest": "BIND a property: or model: proof" }
+    { "code": "SOL-V003", "level": "warning", "node": "REQ.auth-refresh.AC-001", "source": null,
+      "message": "obligation bound to a unit test where a stronger proof is preferred; prefer property|model|static.", "suggest": "BIND a property: or model: proof" }
   ],
   "provenance": {
     "hash": "sha256:c0ffee…",
@@ -854,7 +861,7 @@ The `lower` pass emits the typed IR (`auth-refresh.swarm.ir.json`) conforming to
       "id": "REQ.auth-refresh.AC-001",
       "kind": "REQ",
       "modality": "MUST",
-      "clauses": { "trigger": "a request returns 401 AND a refresh token is present",
+      "clauses": { "trigger": { "kw": "WHEN", "expr": "a request returns 401 AND a refresh token is present" },
                    "subject": "auth client",
                    "predicate": "call refreshSession once and replay the original request" },
       "risk": "high",
