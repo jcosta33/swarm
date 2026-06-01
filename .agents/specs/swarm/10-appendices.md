@@ -400,8 +400,8 @@ The closed 10-op improve set (§10) is wired to the codes above; this is the can
 | `ATOMIZE` | `SOL-P004` (and `SOL-P052` by splitting) |
 | `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-M001` |
 | `QUANTIFY` | `SOL-P005`, `SOL-P056` |
-| `BIND` | `SOL-V001`, `SOL-V002`, `SOL-V003`, `SOL-V006`, `SOL-V009`, `SOL-M003`, `SOL-P006` |
-| `SCOPE` | `SOL-O004`, `SOL-O005`, `SOL-O001`, `SOL-O002` |
+| `BIND` | `SOL-V001`, `SOL-V002`, `SOL-V003`, `SOL-V006`, `SOL-M003`, `SOL-P006` |
+| `SCOPE` | `SOL-O001`, `SOL-O002`, `SOL-O004`, `SOL-O005`, `SOL-O007`, `SOL-O008` |
 | `CLARIFY` | `SOL-P008`, `SOL-P001`, `SOL-P007`, `SOL-P050`, `SOL-O003` |
 | `DECONFLICT` | `SOL-M002`, `SOL-M004`, `SOL-O006` |
 | `COMPRESS` | `SOL-P054`, `SOL-P055`, `SOL-O006` |

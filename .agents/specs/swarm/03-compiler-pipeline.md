@@ -292,7 +292,7 @@ After `decompose` emits work packets (§11.2) and before any `implement` pass ru
 > 1. **Total coverage.** Every lowered obligation node (every `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`, including each `AND THE`-split sub-obligation, §11.1.1) is assigned to **exactly one `implement` packet** (`packets[].inputs`, §13.5) — no obligation is unassigned (uncovered) and none is assigned to two `implement` packets (double-owned). (An obligation legitimately appears in its `implement`, `verify`, and `review` packets across passes; the coverage count is per `implement` packet.)
 > 2. **No orphan targets.** Every `verified_by` edge and every TRACE `implements`/`preserves` edge (§12.5) resolves to a real obligation node id present in `nodes[]`. A TRACE or VERDICT whose target id does not resolve is an orphan and MUST NOT be admitted.
 
-An obligation that satisfies neither (1) — i.e. an obligation no packet covers — is lint code **`SOL-O007`** ("uncovered obligation: a lowered obligation assigned to no task packet"), the next free code in the orchestration layer (the O-block currently runs `SOL-O001`–`SOL-O006`, §8.3, Appendix B.6). `SOL-O007` is **BLOCKING** and resolves by `SCOPE` (assign the obligation to a packet, or record it as an explicit non-goal). A double-owned obligation (assigned to two `implement` packets) is `SOL-O008` (double-owned-obligation, Appendix B.6); an orphan TRACE/VERDICT target is the unbound-reference / contradiction surface already owned by the M layer (`SOL-M002`-adjacent, surfaced at `review`, §9.3). The COVERAGE gate aggregates these into one pre-`implement` checkpoint.
+An obligation that satisfies neither (1) — i.e. an obligation no packet covers — is lint code **`SOL-O007`** ("uncovered obligation: a lowered obligation assigned to no task packet"), the next free code in the orchestration layer (the O-block currently runs `SOL-O001`–`SOL-O006`, §8.3, Appendix B.6). `SOL-O007` is **BLOCKING** and resolves by `SCOPE` (assign the obligation to a packet, or record it as an explicit non-goal). A double-owned obligation (assigned to two `implement` packets) is `SOL-O008` (double-owned-obligation, Appendix B.6); an orphan TRACE/VERDICT target is the unbound-reference surface owned by the M layer (`SOL-M003`, unbound-cross-reference, surfaced at `review`, §9.3). The COVERAGE gate aggregates these into one pre-`implement` checkpoint.
 
 ```text
 COVERAGE gate (manual today, tool-enforced later):
@@ -301,7 +301,7 @@ COVERAGE gate (manual today, tool-enforced later):
       count == 0  -> SOL-O007  (uncovered obligation)        [BLOCKING]
       count > 1   -> SOL-O008  (double-owned obligation)     [BLOCKING]
   for each verified_by / implements / preserves edge E:
-      E.to NOT in IR.nodes  -> orphan target (SOL-M002-adjacent, at review)
+      E.to NOT in IR.nodes  -> orphan target (SOL-M003 unbound-cross-reference, at review)
 ```
 
 This gate is the structural complement of the distillation-loss discipline (§11.4, §24): distillation-loss forbids *dropping* an obligation, modality, binding, or authority during lowering; the COVERAGE gate forbids *stranding* one afterward — an obligation that survived lowering intact but that no packet picks up, or a trace/verdict that claims an obligation that does not exist. Together they make the lowered work a bijection over obligations: nothing lost in lowering (§11.4), nothing left uncovered or pointed at a phantom (§11.6.2).
@@ -311,7 +311,7 @@ This gate is the structural complement of the distillation-loss discipline (§11
 | Gate | Sits at boundary | Predicate (MUST hold to advance) | Surfaced as | Carrier (manual today) |
 | --- | --- | --- | --- | --- |
 | CLARIFY gate | `NORMALIZE` → `LOWER` (before `lower`) | No open `[blocking]` `QUESTION`, no blocking `SOL-M002`, no unresolved `SOL-P008` on an in-scope obligation | `SOL-O003` / `SOL-M002` / `SOL-P008` (existing codes) | `lint` (Skeptic, §9.4) |
-| COVERAGE gate | `LOWER` → `EXECUTE` (after `decompose`, before `implement`) | Every obligation covered by exactly one packet; every TRACE/verdict target resolves | `SOL-O007` (new), `SOL-O005`, `SOL-M002`-adjacent | `decompose` (Lead Engineer, §9.4) |
+| COVERAGE gate | `LOWER` → `EXECUTE` (after `decompose`, before `implement`) | Every obligation covered by exactly one packet; every TRACE/verdict target resolves | `SOL-O007` (uncovered), `SOL-O008` (double-owned), `SOL-M003` (orphan target) | `decompose` (Lead Engineer, §9.4) |
 
 Neither gate is a new pass; both reuse the existing pass surface (`lint` decides the CLARIFY predicate, `decompose` decides the COVERAGE predicate) and the existing `SOL-<LAYER><NNN>` namespace, adding only the single new orchestration code `SOL-O007`. A future tool MUST compute both predicates mechanically from the IR and plan; until one ships, a conformant repository MUST state both gates as review-checkable contracts and MUST NOT claim either is enforced by shipped tooling (Principle 1, §2; §12.1, §13.1).
 
@@ -457,7 +457,7 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 | `predicate` | `<response>` | string\|null | The required behaviour, opaque text. |
 | `timing` | (deferred) | null | RESERVED. Timing keywords (`WITHIN`/`BEFORE`/`UNTIL`/`IMMEDIATELY`/`EVENTUALLY`) are **deferred to v0.2**; in SOL/0.1 this MUST be `null` (§4, §35). |
 
-For a chained obligation (`THE … MUST … AND THE … MUST …`), the lowering pass MUST split it into multiple nodes, one per `THE <actor> <MODAL> <response>` clause (G3); each resulting node has a single-obligation `clauses` object. An INVARIANT lowers `<property> MUST|MUST NOT <hold>` into `subject` = the property and `predicate` = the held condition. An INTERFACE has no `subject`/`modal`/`predicate`; its `RETURNS`/`ACCEPTS`/`ERRORS`/`OWNED BY` are carried as the surface block requires and MAY be modeled as extension fields (out of this version's pinned shape, but the `contract` proof binding of §15 is still MUST-present in `verify_by`).
+For a chained obligation (`THE … MUST … AND THE … MUST …`), the lowering pass MUST split it into multiple nodes, one per `THE <actor> <MODAL> <response>` clause (G3); each resulting node has a single-obligation `clauses` object. An INVARIANT lowers `<property> MUST|MUST NOT <hold>` into `subject` = the property and `predicate` = the held condition. An INTERFACE has no `subject`/`modal`/`predicate`; its `RETURNS`/`ACCEPTS`/`ERRORS` lower into the pinned `clauses` slots `signature`/`returns`/`accepts`/`errors` (Appendix C.1), `OWNED BY` into the node `owner`, and the `contract` proof binding of §15 is MUST-present in `verify_by`.
 
 #### 12.4.3 `verify_by[]` — normalized proof bindings
 

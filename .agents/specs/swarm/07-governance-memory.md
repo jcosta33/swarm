@@ -26,7 +26,7 @@ Axis A ranks an obligation by **the kind of artifact that contains it** and that
 | 6 | task notes (`task.md`) | Execution-local; durable only after promotion (§23.4). |
 | 7 (lowest) | chat | Conversational context; never authoritative on its own. |
 
-A conformant tool MUST reject (lint `SOL-M002`, see §22.3) any claim that a lower-ranked artifact silently amended a higher-ranked one. An artifact below `approved`/`accepted` status occupies the rank of its **draft tier**, which is one step below its accepted tier; e.g. a `proposed` ADR does not outrank an `approved` spec.
+A conformant tool MUST reject (lint `SOL-M004` authority-conflict, see §22.3) any claim that a lower-ranked artifact silently amended a higher-ranked one (an irreconcilable *equal-rank* conflict is the distinct `SOL-M002`, §22.2 step 3). An artifact below `approved`/`accepted` status occupies the rank of its **draft tier**, which is one step below its accepted tier; e.g. a `proposed` ADR does not outrank an `approved` spec.
 
 #### 22.1.2 Axis B — domain authority (forward governing force)
 
