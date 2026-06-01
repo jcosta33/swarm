@@ -289,17 +289,17 @@ Rationale (cite): the planner→coder handoff is the dominant failure surface in
 After `decompose` emits work packets (§11.2) and before any `implement` pass runs, a **coverage check** MUST hold over the lowered IR and the plan:
 
 > **R-COVERAGE-GATE.** For the lowered spec, the following MUST hold before `implement`:
-> 1. **Total coverage.** Every lowered obligation node (every `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`, including each `AND THE`-split sub-obligation, §11.1.1) is assigned to **exactly one** task packet (`packets[].inputs`, §13.5) — no obligation is unassigned (uncovered) and none is assigned to two packets (double-owned).
+> 1. **Total coverage.** Every lowered obligation node (every `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`, including each `AND THE`-split sub-obligation, §11.1.1) is assigned to **exactly one `implement` packet** (`packets[].inputs`, §13.5) — no obligation is unassigned (uncovered) and none is assigned to two `implement` packets (double-owned). (An obligation legitimately appears in its `implement`, `verify`, and `review` packets across passes; the coverage count is per `implement` packet.)
 > 2. **No orphan targets.** Every `verified_by` edge and every TRACE `implements`/`preserves` edge (§12.5) resolves to a real obligation node id present in `nodes[]`. A TRACE or VERDICT whose target id does not resolve is an orphan and MUST NOT be admitted.
 
-An obligation that satisfies neither (1) — i.e. an obligation no packet covers — is lint code **`SOL-O007`** ("uncovered obligation: a lowered obligation assigned to no task packet"), the next free code in the orchestration layer (the O-block currently runs `SOL-O001`–`SOL-O006`, §8.3, Appendix B.6). `SOL-O007` is **BLOCKING** and resolves by `SCOPE` (assign the obligation to a packet, or record it as an explicit non-goal). A double-owned obligation is the existing scope/ownership defect surface (`SOL-O005`, §11.3); an orphan TRACE/VERDICT target is the unbound-reference / contradiction surface already owned by the M layer (`SOL-M002`-adjacent, surfaced at `review`, §9.3). The COVERAGE gate aggregates these into one pre-`implement` checkpoint.
+An obligation that satisfies neither (1) — i.e. an obligation no packet covers — is lint code **`SOL-O007`** ("uncovered obligation: a lowered obligation assigned to no task packet"), the next free code in the orchestration layer (the O-block currently runs `SOL-O001`–`SOL-O006`, §8.3, Appendix B.6). `SOL-O007` is **BLOCKING** and resolves by `SCOPE` (assign the obligation to a packet, or record it as an explicit non-goal). A double-owned obligation (assigned to two `implement` packets) is `SOL-O008` (double-owned-obligation, Appendix B.6); an orphan TRACE/VERDICT target is the unbound-reference / contradiction surface already owned by the M layer (`SOL-M002`-adjacent, surfaced at `review`, §9.3). The COVERAGE gate aggregates these into one pre-`implement` checkpoint.
 
 ```text
 COVERAGE gate (manual today, tool-enforced later):
   for each obligation node N in IR.nodes (incl. AND THE-split sub-obligations):
-      count = | { p in plan.packets : N.id in p.inputs } |
+      count = | { p in plan.packets : p.pass == "implement" ∧ N.id in p.inputs } |
       count == 0  -> SOL-O007  (uncovered obligation)        [BLOCKING]
-      count > 1   -> SOL-O005  (double-owned / scope overlap) [BLOCKING]
+      count > 1   -> SOL-O008  (double-owned obligation)     [BLOCKING]
   for each verified_by / implements / preserves edge E:
       E.to NOT in IR.nodes  -> orphan target (SOL-M002-adjacent, at review)
 ```

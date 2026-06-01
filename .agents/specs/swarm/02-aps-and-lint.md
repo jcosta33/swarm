@@ -235,7 +235,7 @@ The codes below are the canonical blocking set. One-line definitions follow; the
 | Code | Defect |
 |---|---|
 | `SOL-M001` | Actor / object incompleteness: the obligation names a modal but not a resolvable actor *and* object. |
-| `SOL-M002` | Contradiction: two obligations bind opposite outcomes to the same trigger/state, or trace/code disagrees with an obligation. |
+| `SOL-M002` | Contradiction: two obligations share a contradiction key (normalized actor + trigger/state + surface/object) with opposed modalities (positive vs negative force, or `MUST NOT` vs `MAY`) — **exact-key match only in v0.1** (Appendix B.4). |
 
 **V layer — verification:**
 

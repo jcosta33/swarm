@@ -143,9 +143,12 @@ lifecycle         = "WAIVED" | "STALE" | "CONTRADICTED";
 
 (* ===== VERIFY BY binding : typed, closed 9-set ===== *)
 verify_line       = "VERIFY BY", ws, verify_ref, nl;
-verify_ref        = proof_type, ":", adapter, ":", artifact, [ "#", selector ];
+verify_ref        = typed_ref | bare_ref;
+typed_ref         = proof_type, [ ":", test_scope ], ":", adapter, ":", artifact, [ "#", selector ];
 proof_type        = "static" | "test" | "contract" | "property" | "model"
                   | "perf"   | "security" | "manual" | "monitor";          (* closed; no other type is legal *)
+test_scope        = "unit" | "integration" | "e2e";                        (* only when proof_type = "test" *)
+bare_ref          = ? opaque proof ref, no proof_type segment; valid but raises the §15 advisory untyped-binding smell ?;
 adapter           = ? project free-string; resolves through AGENTS.md > Commands (cmd* slot) ?;
 artifact          = ? project free-string; file/target the adapter runs ?;
 selector          = ? optional sub-target, e.g. a test name or invariant name ?;
@@ -345,7 +348,7 @@ M-layer rules fire at `NORMALIZE` after all blocks are parsed; they are cross-ob
 | Code | Severity | Short name | Definition | Resolves by |
 |---|---|---|---|---|
 | `SOL-M001` | BLOCKING | actor/object-incompleteness | A referenced actor, object, or surface is unresolved across the spec / imports (also catches cross-spec id collision). | `BIND` / `CONCRETIZE`: resolve or declare the referent (was `APS-C001` completeness + `SOL-M201`/`SOL202`). |
-| `SOL-M002` | BLOCKING | contradiction | Two obligations contradict on the same normalized subject/action/object/trigger key (e.g. `MUST` vs `MUST NOT`). | `DECONFLICT` (was `APS-X001` / `SOL207` / `SOL-M202`). |
+| `SOL-M002` | BLOCKING | contradiction | Two obligations share a **contradiction key** — the tuple (normalized actor, normalized trigger/state, normalized surface/object), where *normalized* = case-folded, whitespace-collapsed exact match of the opaque clause strings (§5.5; the interior is not tokenized) — AND carry **opposed modalities** per the fixed table: positive force (`MUST`/`SHOULD`) vs negative force (`MUST NOT`/`SHOULD NOT`) on the same key, or `MUST NOT` vs `MAY`. Detection is this exact-key rule only; paraphrase/entailment contradiction is **out of scope for v0.1** (a tool MAY surface it as an advisory judge-rendered diagnostic, but the BLOCKING gate fires only on the exact-key match). | `DECONFLICT` (was `APS-X001` / `SOL207` / `SOL-M202`). |
 | `SOL-M003` | BLOCKING | unbound-cross-reference | A `DEPENDS ON` / `IMPLEMENTS` / `PRESERVES` reference names an id that does not exist. | `BIND`: fix the reference (was `SOL202` unresolved-dependency, kept in M). |
 | `SOL-M004` | BLOCKING | authority-conflict | A lower-authority block attempts to weaken a higher-authority obligation (source-authority order, §22). | `DECONFLICT` / amendment (was `SOL206`). |
 
@@ -382,6 +385,7 @@ O-layer rules fire at `LOWER`; they gate plan emission (§13) and safe paralleli
 | `SOL-O005` | BLOCKING | owned-path-outside-write-surface | A work packet writes a path outside its declared `WRITES` surface (the two-tier lowering check, G7). | `SCOPE`: declare the path, or stop writing it (new in v0.1). |
 | `SOL-O006` | ADVISORY | import-policy-overlap | An imported file creates a duplicate/overlapping policy obligation. | `DECONFLICT` / `COMPRESS` (was `SOL306`). |
 | `SOL-O007` | BLOCKING | uncovered-obligation | A lowered obligation maps to no task packet, or a TRACE/VERDICT target resolves to no obligation — the §11.6.2 coverage gate. | `SCOPE` / `decompose`: assign the obligation to a packet, or remove the orphan target. |
+| `SOL-O008` | BLOCKING | double-owned-obligation | A lowered obligation is assigned to more than one `implement` packet (`packets[].inputs`) — the §11.6.2 coverage gate. (Appearing across *different* passes — implement/verify/review — is legitimate and does NOT trip this.) | `SCOPE` / `decompose`: assign the obligation to exactly one implement packet. |
 
 ### B.7 Improve-op ↔ lint-code map (normative)
 

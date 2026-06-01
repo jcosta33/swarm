@@ -129,7 +129,7 @@ spec.swarm.md
 
 There is exactly one safe-parallelism predicate in Swarm. Conformant tools and authors MUST use it verbatim; no alternative or relaxed predicate is permitted in v0.1.
 
-> **Two work packets MAY run in parallel if and only if they are dependency-independent AND write-disjoint** — that is: neither is reachable from the other in the dependency DAG, **and** they share no write surface and no interface or migration node in the write-surface conflict graph. Anything unscoped or shared **serializes by default**.
+> **Two work packets MAY run in parallel if and only if they are dependency-independent AND write-disjoint** — that is: neither is reachable from the other in the dependency DAG, **and** they share no write surface and no shared boundary node (a shared `INTERFACE` referenced via `DEPENDS ON`/`AFFECTS`, or a shared `integration`/`shared` surface; §18.5.1). Anything unscoped or shared **serializes by default**.
 
 Formally, for work packets `a` and `b`:
 
@@ -144,9 +144,20 @@ parallel_safe(a, b)  ⇔
 Two defaults are normative and MUST NOT be weakened:
 
 - **Unscoped serializes.** An obligation with no `WRITES` clause MUST be treated as conflicting with every other obligation (its write set is unknown, hence assumed maximal). It MUST NOT be co-scheduled in a parallel batch. Rationale: a missing scope is a hidden conflict, and the write side stays single-threaded by default (ADR 0010).
-- **Shared serializes.** Any obligation touching a `shared` or `integration` SURFACE, or any INTERFACE/migration node, MUST serialize (§18.3.1).
+- **Shared serializes.** Any obligation touching a `shared` or `integration` SURFACE, or any `INTERFACE` referenced via `DEPENDS ON`/`AFFECTS` (§18.5.1), MUST serialize (§18.3.1).
 
 Read-only passes (`lint`, `review`, and any pass that declares only `READS`) MAY run broadly in parallel, because read/read never conflicts (§18.6).
+
+#### 18.5.1 Surface comparison semantics (normative)
+
+The predicate's set operations are defined **syntactically over path patterns**, never against a live filesystem (Principle 1 — no runtime):
+
+- **Surface resolution.** Every `SURFACE` name resolves to its declared set of repo-relative path patterns; a raw path or glob in a `WRITES`/`READS` clause is its own singleton pattern set. The glob dialect is the fixed POSIX-style subset: `**` matches any number of path segments, `*` matches exactly one segment (never `/`), `?` matches one character; every other character is a literal.
+- **Overlap** (`writes(a) ∩ writes(b) ≠ ∅`). Two surfaces overlap iff their pattern *languages* — the sets of repo-relative paths each pattern can match — intersect, computed by pattern intersection over the glob grammar above (e.g. `src/auth/**` overlaps `src/auth/client.ts`; `src/*/a.ts` overlaps `src/auth/a.ts`). String inequality does **not** imply disjointness.
+- **Subset** (OWNED ⊆ WRITES, `SOL-O005`). An owned pattern set is a subset of a `WRITES` pattern set iff every path the owned set matches is also matched by the `WRITES` set, under the same pattern-language semantics.
+- **Boundary nodes** (`shares_interface_or_migration`). Two packets share a boundary node iff (i) both reference the same `INTERFACE` id via `DEPENDS ON`/`AFFECTS` (an INTERFACE carries no `WRITES`, §18.2, so it enters the conflict graph only through these edges), or (ii) both write a surface tagged `integration` or `shared` (§18.3.1) — the "migration node" case, since migrations and shared schemas are the canonical `integration` surfaces.
+
+A conformant tool MUST compute overlap and subset over the pattern lattice above, so that two implementations derive the **identical** conflict graph from the same spec.
 
 ### 18.6 The READS conflict rule (gap G7)
 

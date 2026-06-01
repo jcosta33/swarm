@@ -180,15 +180,18 @@ The surface clause is `VERIFY BY` (two words, uppercase — §5) followed by a t
 
 ```ebnf
 verify_line  = "VERIFY BY", ws, verify_ref, nl;
-verify_ref   = proof_type, ":", adapter, ":", artifact, [ "#", selector ];
+verify_ref   = typed_ref | bare_ref;
+typed_ref    = proof_type, [ ":", test_scope ], ":", adapter, ":", artifact, [ "#", selector ];
 proof_type   = "static" | "test" | "contract" | "property" | "model"
              | "perf" | "security" | "manual" | "monitor";
+test_scope   = "unit" | "integration" | "e2e";   (* only legal when proof_type = "test" *)
+bare_ref     = ? opaque proof reference with no proof_type segment; structurally valid, raises the §15 advisory untyped-binding smell ?;
 adapter      = ident;            (* resolves through AGENTS.md > Commands, see 15.3 *)
 artifact     = path | ident | quoted_string;
 selector     = ident | path-fragment;   (* a case/scenario/property name *)
 ```
 
-- `<type>` is the **closed**, lint-typed, IR-typed dimension. For `test`, a scope qualifier MAY be inserted as `test:unit`, `test:integration`, `test:e2e` (the qualifier is part of the type segment, before the first `:` separating type from adapter — written `test:unit:cmdTest:...`).
+- `<type>` is the **closed**, lint-typed, IR-typed dimension. For `test`, an optional scope qualifier (`unit`/`integration`/`e2e`) follows the type as its own segment — `test:<scope>:<adapter>:<artifact>`, e.g. `test:unit:cmdTest:...` — modelled by the grammar as `proof_type [: test_scope] : adapter : artifact`. A bare `VERIFY BY <ref>` with no `type:` segment is structurally valid but raises the §15 advisory untyped-binding smell.
 - `<adapter>` is a **project free-string** that resolves to a command slot in `AGENTS.md > Commands` (15.3).
 - `<artifact>` is a **project free-string**: a file, test id, suite name, or contract file.
 - `<selector>` (optional, after `#`) narrows the artifact to a single case, scenario, or property.
@@ -415,10 +418,10 @@ Every `VERIFY BY` binding's **last `PASS`** MUST record enough provenance to det
 | Field | Meaning |
 | --- | --- |
 | `source_hash` | Content hash of the *obligation source* (the exact bytes of the obligation block in `*.swarm.md`) at the time of the `PASS`. |
-| `per_surface_hash[]` | One `{surface, hash}` per **declared write surface** (the obligation's `WRITES` set — §18) at the time of the `PASS`. |
+| `per_surface_hash[]` | One `{surface, hash}` per surface on the proof's **evidence path** — the obligation's declared `WRITES` set **and** the `READS` surfaces the proof exercised (§16.5(c)) — at the time of the `PASS`. (Recording READS hashes is what makes read-side drift, §16.5(c), detectable.) |
 | `adapter` | The `cmd*` slot the proof resolved through (§15.3). |
 | `verdict` | The core verdict recorded (`PASS` for a drift-trackable binding). |
-| `tier` | The proof type (§15.1) — used for the proof-strength tie-break (§15.6). |
+| `tier` | The proof type (§15.1) — the same value recorded as `type` in the IR `verify_by[]` element (§15.2); used for the proof-strength tie-break (§15.6). |
 | `origin_obligations[]` | The obligation ids this PASS judged. |
 | `origin_traces[]` | The trace(s) that produced the change being judged. |
 

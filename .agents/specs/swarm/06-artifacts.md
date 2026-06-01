@@ -564,7 +564,7 @@ A trace records implementation *claims* against obligations and binds them to *e
 | --- | --- |
 | frontmatter | `type: trace`, `id`, `source_task`, `source_spec`, `created`. |
 | `## Claimed implementation` | The `TRACE` blocks. |
-| `## Provenance` | The §16 / G11 fields **per binding**: `source_hash` (obligation content hash at PASS), `per_surface_hash[]` (each declared `WRITES` file hash/SHA), `adapter`, `verdict`, `tier`, `timestamp`. These are what flips a PASS to `STALE` when source or surface drifts (§16). |
+| `## Provenance` | The §16 / G11 fields **per binding**: `source_hash` (obligation content hash at PASS), `per_surface_hash[]` (each declared `WRITES` and proof-exercised `READS` file hash/SHA, §16.5), `adapter`, `verdict`, `tier`, `timestamp`. These are what flips a PASS to `STALE` when source or surface drifts (§16). |
 | `## Verification matrix` | ID → required proof → actual proof → 7-value status. |
 | `## Unassigned changes` | Any change outside assigned obligations, with reason + authorizing ID or `none`. |
 | `## Promotion items` | Discoveries to promote, with target + status. |
