@@ -227,7 +227,7 @@ req_block = "REQ", ws, ac_id, ":", nl,
 actor_clause     = "THE", ws, actor, ws, modal, ws, response, nl;
 and_actor_clause = "AND", ws, "THE", ws, actor, ws, modal, ws, response, nl;
 verify_line      = "VERIFY BY", ws, verify_ref, nl;
-metadata_clause  = depends_on | touches | writes | reads | affects | risk;
+metadata_clause  = depends_on | touches | writes | reads | affects | risk | domain;
 ```
 
 Notes on the order and keywords:

@@ -43,7 +43,7 @@ Axis B ranks an obligation by **the governance domain it belongs to**, independe
 | 7 | task-map | Per-task execution scoping (§19). |
 | 8 (lowest) | memory | Promoted findings/patterns (§23). |
 
-An obligation's domain MUST be discoverable from its container or an explicit domain tag; where a `spec.swarm.md` is single-domain its domain MAY be declared once in frontmatter (`domain: security`), otherwise each obligation block carries the governing domain in its `AFFECTS`/owner metadata as lowered into the IR (§12). The two lowest domains, `task-map` and `memory`, are also the two axis **floors** (§22.4).
+An obligation's domain MUST be discoverable **deterministically**: a `spec.swarm.md` MAY declare a default `domain:` in its frontmatter (§5.8), and any obligation block MAY carry a per-obligation `DOMAIN <name>` metadata clause (§5) that overrides the spec default. The `lower` pass populates the IR `node.authority` (§12.4.1) by this precedence: the obligation's own `DOMAIN` clause if present, else the spec frontmatter `domain`, else the default `product`. The eight legal domain names are the Axis-B ranks above (`enforced-policy` … `memory`); the two lowest, `task-map` and `memory`, are also the two axis **floors** (§22.4).
 
 ### 22.2 The conflict rule (normative)
 

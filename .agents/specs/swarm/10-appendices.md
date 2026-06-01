@@ -153,13 +153,16 @@ selector          = ? optional sub-target, e.g. a test name or invariant name ?;
 (* test scope qualifiers are spelled in the adapter position: test:unit:… test:integration:… test:e2e:… *)
 
 (* ===== Trailing metadata clauses (surface = space-separated UPPERCASE) ===== *)
-metadata_clause   = depends_on | touches | writes | reads | affects | risk;
+metadata_clause   = depends_on | touches | writes | reads | affects | risk | domain;
 depends_on        = "DEPENDS ON", ws, ref_list, nl;
 touches           = "TOUCHES", ws, surface_list, nl;
 writes            = "WRITES", ws, surface_list, nl;
 reads             = "READS", ws, surface_list, nl;
 affects           = "AFFECTS", ws, ref_list, nl;
 risk              = "RISK", ws, ( "low" | "medium" | "high" | "critical" ), nl;
+domain            = "DOMAIN", ws, domain_name, nl;                       (* per-obligation Axis-B domain, §22 *)
+domain_name       = "enforced-policy" | "compliance" | "security" | "architecture"
+                  | "product" | "team" | "task-map" | "memory";
 
 (* ===== Modal terminals: exactly five. SHALL / SHALL NOT removed; CAN / WILL are NOT modals. ===== *)
 modal             = "MUST NOT" | "MUST" | "SHOULD NOT" | "SHOULD" | "MAY"; (* longest-match: NOT before bare *)
@@ -301,7 +304,7 @@ These fire at `PARSE`; all are BLOCKING (a malformed block cannot be parsed into
 | `SOL-S006` | BLOCKING | should-without-because | `SHOULD`/`SHOULD NOT` used without an accompanying `BECAUSE` or `EXCEPT` clause in the same block (§5.6). | Edit: add a `BECAUSE` or `EXCEPT` clause, or strengthen to `MUST`/`MUST NOT`. |
 | `SOL-S007` | BLOCKING | malformed-header | Block header is missing the mandatory trailing colon, or the id is malformed (spaces, illegal characters). | Edit: write `TYPE PREFIX-NNN:`. |
 | `SOL-S008` | BLOCKING | non-control-first-line | The first non-empty line of a block is not a control sentence (metadata or prose appears before the obligation sentence). | Edit: lead with the actor-clause / control sentence. |
-| `SOL-S010` | BLOCKING | unknown-metadata-field | A trailing metadata field is not one of the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`OWNED BY`). | Edit: use a valid field (§5) or move the text to commentary. |
+| `SOL-S010` | BLOCKING | unknown-metadata-field | A trailing metadata field is not one of the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`DOMAIN`/`OWNED BY`). | Edit: use a valid field (§5) or move the text to commentary. |
 | `SOL-S014` | BLOCKING | missing-required-clause | A block omits a clause its grammar makes mandatory — e.g. a `TRACE` with `IMPLEMENTS` but no `PROOF` line (§6.6; Appendix A `trace_body` requires one-or-more `PROOF`). | Edit: add the required clause (for `TRACE`, at least one `PROOF` line). |
 
 Note: legacy `SOL-S007`/`SOL-S010` (verification / verdict-value checks) and legacy `SOL-S008` (planner parallelism) do **not** keep these S-numbers — they re-layer to V and O respectively (see B.6). The S007/S008 rows above are the *re-allocated* v0.1 syntax meanings; `SOL-S010` is re-allocated from the legacy verdict-value check (now `SOL-V005`) to `unknown-metadata-field`.

@@ -427,7 +427,7 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 |---|---|---|---|
 | `id` | string | MUST | IR node id. MAY be namespaced as `<KIND>.<spec>.<surface-id>` (e.g. `REQ.auth-refresh.AC-001`); the surface id (`AC-001`) MUST be recoverable from it. Surface ids are short per-type; IR ids MAY be dotted (§4). |
 | `kind` | string | MUST | One of `REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT`. |
-| `authority` | string | MUST for obligation kinds | The resolved domain-authority rank governing this node (e.g. `security`, `architecture`, `product`); see §22. MAY be `null` for QUESTION/TRACE. |
+| `authority` | string | MUST for obligation kinds | The resolved domain-authority rank governing this node (e.g. `security`, `architecture`, `product`), lowered from the obligation's `DOMAIN` clause or the spec `domain:` frontmatter (§22.1.2). MAY be `null` for QUESTION/TRACE. |
 | `modality` | string\|null | MUST for REQ/CONSTRAINT/INVARIANT | The binding modal: one of `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY`. `null` for kinds that carry no modal (INTERFACE, QUESTION, TRACE, VERDICT). Mirrors `clauses.modal`. |
 | `clauses` | object | MUST | The structured decomposition of the control sentence (§12.4.2). |
 | `owner` | string\|null | SHOULD | The accountable owner (surface `OWNED BY`). |
@@ -614,7 +614,7 @@ The **plan** is the schedulable projection of the IR: it takes the obligation gr
 
 The plan file uses the compiler-visible infix: `auth-refresh.swarm.ir.json` plans to `auth-refresh.swarm.plan.json` (§20).
 
-> **Contract, not executor (normative).** The plan schema is **documented, versioned data** — the shape a launcher/harness would consume. This repository ships **no planner and no scheduler**. The planner that would derive a plan from an IR, and the scheduler/harness that would execute the plan's work packets across agents, are **launcher concerns and MUST NOT be shipped by the kernel** (§18). A conformant repository MUST include the documented plan schema and MUST frame any `.swarm.plan.json` as "the contract a future launcher builds against," never as the output of a shipped tool. *Rationale: Principle 1 — no runtime; and the kernel owns the static coordination contract, never the live scheduler.*
+> **Contract, not executor (normative).** The plan schema is **documented, versioned data** — the shape a launcher/harness would consume. **Plan derivation is the `decompose` kernel pass** (§9.3, §11): the plan is the kernel's static coordination contract, derived from the IR by the same pass that emits the work packets — there is no separate "planner" step. What is **out of the kernel** is the **scheduler/harness** that would execute the plan's work packets live across agents (a launcher concern, §18.8). As with every pass, this repository ships **no running emitter and no scheduler** (Principle 1 — no runtime): a conformant repository MUST include the documented plan schema and MUST frame any `.swarm.plan.json` as "the contract a future tool emits and a future launcher consumes," never as the output of a shipped tool. *Rationale: Principle 1; the kernel owns the static coordination contract (including plan derivation), never the live scheduler.*
 
 ### 13.2 Resolution method (G8)
 
@@ -643,7 +643,7 @@ A SOL plan document MUST be a single JSON object with exactly these keys:
 | `edges` | array of edge objects | 0..n | Inter-packet relationships — the same single-source-of-relationship-truth rule as the IR (§12.5.1). |
 | `provenance` | object | exactly 1 | Emission facts; same shape as §12.9. |
 
-The plan reuses the IR's structural discipline: relationships between packets live only in `edges[]` (never duplicated as packet scalars), and the three version fields stay distinct (§12.7). The `depends_on[]` array on a packet (§13.5) is the surface declaration of ordering; the planner MUST also emit a `depends_on`-type edge for each, so that ordering is computable from the graph (the same scope-set-vs-edge relationship as §12.5.1).
+The plan reuses the IR's structural discipline: relationships between packets live only in `edges[]` (never duplicated as packet scalars), and the three version fields stay distinct (§12.7). The `depends_on[]` array on a packet (§13.5) is the surface declaration of ordering; the `decompose` pass MUST also emit a `depends_on`-type edge for each, so that ordering is computable from the graph (the same scope-set-vs-edge relationship as §12.5.1).
 
 ### 13.4 `meta`
 
@@ -745,6 +745,6 @@ For the auth-refresh spec (one INTERFACE, one REQ depending on it, one INVARIANT
 
 ### 13.8 Conformance and the formal schema
 
-A document is a conformant SOL/0.1 plan iff it: (1) has exactly the four top-level keys of §13.3; (2) populates every MUST field of §13.4–§13.5; (3) carries no `locks` field anywhere (§13.2); (4) uses only the closed pass set (§9) in `packets[].pass` and the closed edge-type set (§12.5) in `edges[]`; (5) represents inter-packet relationships once, as edges (§13.5.1); (6) keeps the three version fields distinct (§12.7). The plan schema is documented data only — no planner ships (§13.1). The formal JSON Schema for the plan is companion to **Appendix C**.
+A document is a conformant SOL/0.1 plan iff it: (1) has exactly the four top-level keys of §13.3; (2) populates every MUST field of §13.4–§13.5; (3) carries no `locks` field anywhere (§13.2); (4) uses only the closed pass set (§9) in `packets[].pass` and the closed edge-type set (§12.5) in `edges[]`; (5) represents inter-packet relationships once, as edges (§13.5.1); (6) keeps the three version fields distinct (§12.7). The plan schema is documented data only — no running emitter or scheduler ships (§13.1). The formal JSON Schema for the plan is companion to **Appendix C**.
 
 ---
