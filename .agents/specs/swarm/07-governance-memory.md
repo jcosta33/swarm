@@ -100,7 +100,7 @@ The two axes are the two directions of requirements traceability:
 - **Axis A is the backward trace.** Given an obligation, you trace it *back* to the artifact it came from; the artifact's rank tells you how settled the provenance is.
 - **Axis B is the forward governing force.** Given an obligation, you trace its domain *forward* over everything it governs; the domain's rank tells you how much force it projects downstream.
 
-A conformant repo's source-authority reference (`docs/language/source-authority.md`, a kernel-required reference per §20) MUST state both axes, the lexicographic rule, the three invariants, and at least the §22.3 worked tie-break.
+A conformant repo's source-authority reference (`docs/model/source-authority.md`, a kernel-required reference per §20) MUST state both axes, the lexicographic rule, the three invariants, and at least the §22.3 worked tie-break.
 
 ---
 
@@ -169,7 +169,7 @@ A band obligation whose `manual`/`WAIVED` verdict names no human authority is a 
 
 > Worked example — a migration obligation. `CONSTRAINT C-022` carries `WRITES db.migrations` (a `SURFACE … [integration]`, §18.3.1) and `RISK high`. Both band triggers fire: the `integration` surface alone would suffice, and so the tier `high` (out of band on tier alone) is moot. `C-022` MUST therefore bind `manual @ REVIEW` in addition to its `migration` default suite (`test @ VERIFY`, `static @ VERIFY`, `contract @ VERIFY`, §15.8); its `manual` verdict MUST name the human authority who reviewed the migration; and any `WAIVED` on it MUST be issued by that human or the spec owner with `reason + expiry` (§17.3). An agent-recorded `PASS` on `C-022` with no named human authority does not reach the merge gate — it is `SOL-V010`.
 
-The conformant repo's source-authority reference (`docs/language/source-authority.md`, §20) MUST state the high-oversight band, the §22.7.2 two-part rule, and the tie to §17.3 waiver authority and the §22.6 approval table.
+The conformant repo's source-authority reference (`docs/model/source-authority.md`, §20) MUST state the high-oversight band, the §22.7.2 two-part rule, and the tie to §17.3 waiver authority and the §22.6 approval table.
 
 ## 23. The memory model
 
@@ -454,7 +454,7 @@ These compositions are prevented by the **loss budget + source authority**, NOT 
 
 > Worked example — an `audit.md` notes "the refresh endpoint currently accepts rotated tokens." This is an **observation**, not intent. To affect the build it must promote into `spec.swarm.md` as a re-stated obligation (`CONSTRAINT C-014`, §22.3) carrying modality and `VERIFY BY`. The audit prose alone has Axis-A rank 4 and `audit`/`security` domain; it never silently overwrites the product spec — the §22 conflict procedure governs, and the loss budget forces the explicit re-statement. The epistemic stance is preserved end-to-end: an observation stayed labeled an observation until an author deliberately turned it into intent.
 
-The conformant repo's distillation-loss-budget reference (`docs/language/distillation-loss-budget.md`, §20) MUST state both lists (§24.1, §24.2), the per-boundary matrix, the discipline-not-gatekeeper rule, and the forbidden-composition treatment.
+The conformant repo's distillation-loss-budget reference (`docs/reference/distillation-loss-budget.md`, §20) MUST state both lists (§24.1, §24.2), the per-boundary matrix, the discipline-not-gatekeeper rule, and the forbidden-composition treatment.
 
 ---
 

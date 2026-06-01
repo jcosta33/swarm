@@ -349,7 +349,7 @@ A SOL IR document MUST be a single JSON object with exactly these five top-level
 
 A conformant IR document MUST contain all five keys. An empty spec (no blocks) still emits `nodes: []`, `edges: []`, `diagnostics: []` and fully-populated `meta` and `provenance`. No additional top-level keys are permitted in SOL/0.1; unknown top-level keys MUST be rejected by a validating consumer.
 
-The IR layer is snake_case throughout. Every surface keyword that is English-shaped UPPERCASE space-separated (`VERIFY BY`, `DEPENDS ON`, `OWNED BY`, `WRITES`, `READS`, `AFFECTS`) maps to a snake_case IR field (`verify_by`, `depends_on`, `owned_by`/`owner`, `writes`, `reads`, `affects`). This casing split is normative and is never mixed (§4).
+The IR layer is snake_case throughout. Every surface keyword that is English-shaped UPPERCASE space-separated (`VERIFY BY`, `DEPENDS ON`, `OWNED BY`, `WRITES`, `READS`, `AFFECTS`) maps to a snake_case IR field (`verify_by`, `depends_on`, `owner`, `writes`, `reads`, `affects`). This casing split is normative and is never mixed (§4).
 
 ### 12.3 `meta`
 

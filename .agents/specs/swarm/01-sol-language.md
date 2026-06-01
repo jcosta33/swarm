@@ -6,7 +6,7 @@
 
 ### 5.1 Scope and layering
 
-This section specifies the *surface syntax* of SOL (Swarm Obligation Language): the concrete, human-authored form that appears inside `*.swarm.md` files. SOL surface syntax is the only SOL form a human writes; the snake_case IR/JSON layer (§12) is *emitted*, never authored. This is the master layering of the language: **surface is English-shaped UPPERCASE keywords; IR is snake_case fields.** Where this section gives a surface keyword (`VERIFY BY`, `DEPENDS ON`, `OWNED BY`), the corresponding IR field name (`verify_by`, `depends_on`, `owned_by`) is reserved for §12 and MUST NOT appear at the surface.
+This section specifies the *surface syntax* of SOL (Swarm Obligation Language): the concrete, human-authored form that appears inside `*.swarm.md` files. SOL surface syntax is the only SOL form a human writes; the snake_case IR/JSON layer (§12) is *emitted*, never authored. This is the master layering of the language: **surface is English-shaped UPPERCASE keywords; IR is snake_case fields.** Where this section gives a surface keyword (`VERIFY BY`, `DEPENDS ON`, `OWNED BY`), the corresponding IR field name (`verify_by`, `depends_on`, `owner`) is reserved for §12 and MUST NOT appear at the surface.
 
 A conformant SOL document is a Markdown document (`*.swarm.md`) in which obligation content is expressed as SOL *blocks* interleaved with APS-controlled prose (§7). The full normative grammar lives in Appendix A; this section fixes the lexical and block-delimiting rules that grammar presupposes, and §6 gives the per-block clause grammars.
 

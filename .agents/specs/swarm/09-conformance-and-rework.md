@@ -373,7 +373,7 @@ The positive variant splits `AC-010` into three single-obligation REQs and gives
 ```sol
 # payment-5xx.swarm.md — NEGATIVE (expected: REJECTED)
 
-QUESTION Q-001: blocking
+QUESTION Q-001 [blocking]:
   Should a 503 from the processor be retried or surfaced to the user?
   AFFECTS AC-020                       # blocking QUESTION reaching lowering -> SOL-O003
 
@@ -481,7 +481,7 @@ The corpus SHOULD follow established benchmark-building hygiene so its measureme
 
 The reconciliation claimed a `research-fanout` golden-corpus fixture that the spec then omitted; the corpus MUST ship it. It is the corpus's only **fan-out provenance** fixture: a single `research.md` evidence source (§20.3.4) promoted by `author` passes into **multiple** `*.swarm.md` specs plus one `adr.md`, where every derived obligation cites the originating research span by its cross-file id (`research#R-NNN`, e.g. a derived `payments.swarm.md#AC-001` carrying `BECAUSE research#R-003`). It exercises the "one research artefact MAY feed many downstream artefacts" property (§20.3.4, §29) that no per-domain fixture covers.
 
-**Provenance-id grammar (normative).** A `research.md` tags citable evidence spans with ids `R-001`, `R-002`, … (the `R-` prefix marks an evidence span — parallel to the §4.1 block-id prefixes, but for a non-SOL evidence source). A derived obligation cites a span with the cross-file reference `research#R-NNN` — the `<source-stem>#<span-id>` form of the §5.7 cross-spec reference grammar (file stem `research`, span id `R-NNN`) — in its `BECAUSE` clause. A citation whose `<span-id>` is absent from the named `research.md`, or whose stem names no shipped source, is a provenance failure.
+**Provenance-id grammar (normative).** A `research.md` tags citable evidence spans with ids `R-001`, `R-002`, … (the `R-` prefix marks an evidence span — parallel to the §4.1 block-id prefixes, but for a non-SOL evidence source). A derived obligation cites a span with the cross-file reference `research#R-NNN` — the same `<stem>#<local-id>` shape as the §5.7 cross-spec reference (§5.7 defines `<spec-id>#<obligation-id>`; this extends it to an evidence-source stem `research` + a span id `R-NNN`) — in its `BECAUSE` clause. A citation whose `<span-id>` is absent from the named `research.md`, or whose stem names no shipped source, is a provenance failure.
 
 | Fixture file | Holds | Asserts |
 |---|---|---|
