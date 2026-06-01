@@ -356,6 +356,8 @@ Review:    .swarm/generated/reviews/<task-slug>.review.md
 
 `Covers` MUST list only obligations assigned to the task; `Preserves` lists the constraints/invariants the §19.4 `## Parent contract` named as boundaries. The `Trace` and `Review` lines point at the artifacts the merge gate (§19.8.3) reads. A worktree MUST NOT be reused across tasks, and on completion the toolchain removes the worktree (reconciliation step 5, §19.8.1) so a stale worktree never masquerades as a live writer.
 
+> **Scope of the worktree guarantee.** A worktree enforces **file/path** disjointness (the §18.2 OWNED-paths invariant), not **runtime-resource** disjointness: two write-disjoint parallel tasks can still collide on shared ports, dev databases, caches, secrets, or test state. Runtime-resource isolation is out of scope for the kernel's write-surface model and is a launcher / runtime-isolation concern (§18.8).
+
 #### 19.8.3 The per-task merge gate (the §14 gate, evaluated per task)
 
 The task merge gate is **not a second gate**. It is the §14.4 merge gate — the single normative predicate "every required obligation's required `VERIFY BY` bindings are all `PASS`/`WAIVED`" — evaluated at the point a task's branch would merge into its base. The kernel defines one merge gate; this subsection only fixes the scope (the task's assigned obligations) and the orchestration-specific blocking conditions layered on top of it.

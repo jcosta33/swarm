@@ -185,8 +185,8 @@ trace validation      check the emitted trace against assigned obligations (§15
 review preparation     assemble the review packet from trace + obligation set
 promotion handling     apply the §23 promotion protocol to durable findings
 status reporting       report observed satisfaction/drift (.swarm/status/)
-drift detection        detect declared-write content-hash staleness (§16, §23.3)
-merge gating          enforce the §14.4 merge gate before a task may merge
+drift detection        would detect declared-write content-hash staleness (§16, §23.3)
+merge gating          would gate via the §14.4 merge gate before a task may merge
 ```
 
 This is **design rationale**, not an empirical claim: it places the toolchain exactly where a spec-driven framework adds value — at the obligation boundary on either side of the coding loop. It is the contract analogue of the kernel's own scope (§18.1: the kernel owns a coordination contract, not a scheduler).
@@ -241,6 +241,8 @@ Swarm validates trace / review / promotion.    (trace validation/review prep/mer
 ```
 
 This "prepare → delegate → reconcile" split is the toolchain projection of the kernel's static coordination contract (§18.1, §19): the orchestrator coordinates workers but does not perform their work `[ANTHROPIC-MA]`, and each worker runs single-threaded with full context for its packet `[COGNITION]`. Because the worker performs the actual coding loop, **Swarm MUST NOT become an agent CLI**; it remains a toolchain that prepares and reconciles obligation-bounded work, and the entire surface of this subsection is a documented contract a future tool builds against, never shipped here (Invariant 1).
+
+> **Integrity (→ §17.5).** `AGENTS.md`, the `.agents/` compatibility mirror, and `.swarm/config.yaml` are auto-loaded instruction/config surfaces, and the adapter `startup_instruction` above propagates `AGENTS.md` into every worker — so the untrusted-source boundary of §17.5 applies to all of them: non-printing / bidirectional / homoglyph bytes are rejected (`SOL-S013`), and an externally-authored source is approval-required before it can govern (§17.5.2).
 
 ### 32.8 Conformance maturity ladder
 
@@ -461,15 +463,21 @@ A golden corpus that ships only the canonical fixtures of §33.1–§33.6 has a 
 
 Two further design pressures sharpen this. First, the §33.6 pass-output rubrics grade *compiler behaviour*, and the cheapest way to fake that behaviour is to memorize the expected-obligation lists and `VERDICT` blocks the fixtures pin verbatim. Second, the corpus must test the kernel's own "curate, don't dump" stance, not just happy-path lowering: over-specified context and instruction files have been shown to *reduce* task success versus no context at all and to raise inference cost by more than 20% [AGENTSMD-HARM] (corroborated by the preliminary, not-yet-peer-reviewed [SKILLSBENCH] and [AGENTREADMES]). A corpus that only rewards completeness would push authors toward exactly the bloated specs that harm agents; the hygiene fixtures below make the harm measurable.
 
-**33.7.1 Held-out and mutated-variant fixtures (normative).** The golden corpus MUST ship, alongside each canonical domain fixture (§33.2–§33.3), at least one **held-out mutated variant** whose obligation text has been *regenerated* — paraphrased triggers/responses, renamed obligation ids, reordered blocks, substituted actors and interface names — while preserving the identical semantic structure, the identical canonical defect class, and the identical expected verdict. The mutated variant is the conformance gate; the canonical fixture is the documented walkthrough. This mirrors the survey's Data Refactoring mitigation (data regeneration plus content filtering) against contamination [BDCSURVEY]: a pass that resolves the canonical fixture but not its semantically equivalent mutated twin has memorized the label, not executed the transformation, and MUST be scored a fail on that pass. Concretely:
+#### 33.7.1 Held-out and mutated-variant fixtures (normative)
+
+The golden corpus MUST ship, alongside each canonical domain fixture (§33.2–§33.3), at least one **held-out mutated variant** whose obligation text has been *regenerated* — paraphrased triggers/responses, renamed obligation ids, reordered blocks, substituted actors and interface names — while preserving the identical semantic structure, the identical canonical defect class, and the identical expected verdict. The mutated variant is the conformance gate; the canonical fixture is the documented walkthrough. This mirrors the survey's Data Refactoring mitigation (data regeneration plus content filtering) against contamination [BDCSURVEY]: a pass that resolves the canonical fixture but not its semantically equivalent mutated twin has memorized the label, not executed the transformation, and MUST be scored a fail on that pass. Concretely:
 
 - The mutated variant MUST NOT reuse the canonical label strings (e.g. not the literal `"THE service MUST handle failures gracefully"` of §33.5/P-001) yet MUST still trip the same `SOL-<LAYER>NNN` code on the same construct.
 - The mutated variant's expected obligation list, trace, and `VERDICT` set (the 4-core + 3-lifecycle model, §14) MUST be derived from its own text, never copied from the canonical fixture's `<domain>.expected-obligations.md`.
 - A reviewer (today) checks the variant by hand exactly as in §33.6; a future eval harness MAY hold the mutated variants out of any material an agent-as-compiler is conditioned on. The corpus header MUST mark which fixtures are held-out so a tool cannot silently fold them back into the visible set.
 
-**33.7.2 Benchmark-hygiene practice (recommended).** The corpus SHOULD follow established benchmark-building hygiene so its measurements are reproducible and auditable [HOW2BENCH]: each fixture SHOULD record **documented provenance** (which domain, defect class, and §-anchor it exercises, and whether it is canonical or mutated); the corpus SHOULD carry an explicit **data-QA** note per fixture (the expected verdict was confirmed by a human against the spec, not assumed); and the fixtures SHOULD remain **open** for human inspection in `scaffold/.agents/conformance/fixtures/` while the mutated-variant gate keeps openness from becoming a contamination vector. These are SHOULDs, not MUSTs, because Swarm is NO-RUNTIME: the hygiene practice is a contract a future eval harness builds against, and until that harness exists the provenance and data-QA notes are documentation that a manual reviewer reads.
+#### 33.7.2 Benchmark-hygiene practice (recommended)
 
-**33.7.3 The missing `research-fanout` fixture (normative addition).** The reconciliation claimed a `research-fanout` golden-corpus fixture that the spec then omitted; the corpus MUST ship it. It is the corpus's only **fan-out provenance** fixture: a single `research.md` evidence source (§20.3.4) promoted by `author` passes into **multiple** `*.swarm.md` specs plus one `adr.md`, where every derived obligation cites the originating research span by its cross-file id (`research#R-NNN`, e.g. a derived `payments.swarm.md#AC-001` carrying `BECAUSE research#R-003`). It exercises the "one research artefact MAY feed many downstream artefacts" property (§20.3.4, §29) that no per-domain fixture covers.
+The corpus SHOULD follow established benchmark-building hygiene so its measurements are reproducible and auditable [HOW2BENCH]: each fixture SHOULD record **documented provenance** (which domain, defect class, and §-anchor it exercises, and whether it is canonical or mutated); the corpus SHOULD carry an explicit **data-QA** note per fixture (the expected verdict was confirmed by a human against the spec, not assumed); and the fixtures SHOULD remain **open** for human inspection in `scaffold/.agents/conformance/fixtures/` while the mutated-variant gate keeps openness from becoming a contamination vector. These are SHOULDs, not MUSTs, because Swarm is NO-RUNTIME: the hygiene practice is a contract a future eval harness builds against, and until that harness exists the provenance and data-QA notes are documentation that a manual reviewer reads.
+
+#### 33.7.3 The missing `research-fanout` fixture (normative addition)
+
+The reconciliation claimed a `research-fanout` golden-corpus fixture that the spec then omitted; the corpus MUST ship it. It is the corpus's only **fan-out provenance** fixture: a single `research.md` evidence source (§20.3.4) promoted by `author` passes into **multiple** `*.swarm.md` specs plus one `adr.md`, where every derived obligation cites the originating research span by its cross-file id (`research#R-NNN`, e.g. a derived `payments.swarm.md#AC-001` carrying `BECAUSE research#R-003`). It exercises the "one research artefact MAY feed many downstream artefacts" property (§20.3.4, §29) that no per-domain fixture covers.
 
 | Fixture file | Holds | Asserts |
 |---|---|---|
@@ -497,24 +505,6 @@ The rework proceeds as seven ordered waves. Each wave has a single goal and a fi
 | 5 | **Migrate live sources** — convert the repository's own working material to the kernel artifact set | every live spec converted to `*.swarm.md` (bare-header SOL, §6), research detached into plain `research.md` source artifacts that promote rather than govern (§20.2.2, §29), and review artifacts added as `review.md` with VERDICT blocks (§14, §21.5) |
 | 6 | **Add examples and evals** — ship the conformance evidence | the golden corpus and fixtures under `scaffold/.agents/conformance/fixtures/` (§33), the three pipeline-complete walkthroughs under `docs/examples/` (§34.3), and the review/profile rubrics |
 | 7 | **Remove deprecated aliases** — drive the surviving-construct count to zero | no canonical `SHALL`, `VERIFY_BY` (underscore), `TASK-MAP`, or fenced `:::`-delimited SOL anywhere in shipped files; each removal is one of the §34.6 regression greps (A19–A28) returning no matches |
-
-### 34.8 Workspace-model migration
-
-These acceptance checks fix the adopted-project workspace model (§20.5, §31): that `.swarm/` is the canonical Swarm workspace, `.agents/` is only an agent-tool compatibility surface, and `AGENTS.md` is a short bootloader. They are the regression searches of the approved workspace spec, reframed as binary A-checks (each is a search, a file-existence test, or a doc-presence test); they carry the same per-wave-and-final force as A1–A28 (§34.7). All are **design rationale** — the workspace/compatibility/bootloader split is a layout decision — and introduce **no new empirical claim**.
-
-| # | Check | How to verify |
-|---|---|---|
-| AW1 | No canonical reference to `.agents/specs`, `.agents/tasks`, or `.agents/memory` | `grep -R "\.agents/\(specs\|tasks\|memory\|sources\|findings\|adrs\|audits\|bugs\|research\|nfrs\|interfaces\)"` returns no match in any shipped canonical file; the only permitted matches are lines explicitly marked **compatibility** or **migration** |
-| AW2 | `.swarm/` is named as the canonical Swarm workspace | a canonical page states `.swarm/` is the workspace and partitions `sources/ status/ generated/ memory/ ledger/ archive/ kernel/ tmp/` as distinct categories (§20.5) |
-| AW3 | `.agents/` is named as a compatibility surface | a canonical page states `.agents/` is an agent-tool compatibility surface, never the Swarm source-of-truth root; mirrored skills/profiles point back to `.swarm/kernel/` |
-| AW4 | `AGENTS.md` is short and inlines no SOL/APS manual | `AGENTS.md` is within the §31.1 density cap and a search for an inlined `SOL`/`APS` manual (`AGENTS\.md` against the §31.1 forbidden-inline rule) returns nothing; at most a one-line language pointer to `.swarm/kernel/language/` survives |
-| AW5 | Surface policies are documented | a canonical page defines the source-code surface policy set `generated` / `governed` / `observed` / `external` / `deprecated` (§20.5), establishing that code is reconciled implementation reality, not disposable generated output |
-| AW6 | The source/status/generated split is documented | a canonical page separates `sources/` (desired truth), `status/` (observed satisfaction/drift), and `generated/` (task frames, traces, reviews) as distinct workspace categories (§20.5) |
-| AW7 | The ledger is documented | a canonical page defines `.swarm/ledger/` as the compact reconciled history (obligation coverage, changed surfaces, proof, verdicts, promotion results) that prevents permanent task-scratchpad accumulation (§20.5) |
-| AW8 | The CLI/agent boundary is documented | a canonical page documents the future-launcher boundary — Swarm coordinates agent-CLI workers and prepares/validates work but does not own the model loop, file-editing mechanics, or provider/MCP runtime, and MUST NOT replace an agent CLI (a contract a future toolchain builds against, NO RUNTIME — Invariant 1) |
-| AW9 | No canonical page implies Swarm is an agent runtime | a search for "Swarm is an agent CLI" / "agent runtime" framing returns no canonical match; every "runs" verb resolves to a future-launcher contract (§35.1 N1), consistent with the orchestrator-worker single-threaded-writes boundary |
-
-A failing AW-check blocks acceptance at the tier whose clauses bind it, identically to A1–A28 (§34.7).
 
 ### 34.1 Source-file reconciliation
 
@@ -583,6 +573,24 @@ Each retired construct MUST have zero surviving instances. Each row is a search 
 ### 34.7 Acceptance gate
 
 The rework MUST satisfy A1–A28 and the workspace checks AW1–AW9 (§34.8). The gate is the merge-gate analogue (§14): every check is the conformance equivalent of a required obligation, and the rework promotes only when all are satisfied. **Conformance is binary *within* a tier** — at any one tier of the §32.8 maturity ladder there is no partial-conformance state: a single failing check for that tier blocks acceptance at it. Across tiers, conformance is graduated: **a repository's conformance level is its highest fully-satisfied tier** (§32.8), and a repo MAY deliberately target a tier below Swarm-orchestratable. The acceptance gate therefore applies *at the tier a repository targets*: a repo targeting tier *n* MUST pass every A-check that the clauses of tiers 1..*n* bind, and is accepted at tier *n* iff all pass; the unmet checks of higher tiers are out of scope for that repo, not failures. *Swarm-conformant* (§20.4, §32.2) remains reserved for tier 4 (Swarm-verifiable).
+
+### 34.8 Workspace-model migration
+
+These acceptance checks fix the adopted-project workspace model (§20.5, §31): that `.swarm/` is the canonical Swarm workspace, `.agents/` is only an agent-tool compatibility surface, and `AGENTS.md` is a short bootloader. They are the regression searches of the approved workspace spec, reframed as binary A-checks (each is a search, a file-existence test, or a doc-presence test); they carry the same per-wave-and-final force as A1–A28 (§34.7). All are **design rationale** — the workspace/compatibility/bootloader split is a layout decision — and introduce **no new empirical claim**.
+
+| # | Check | How to verify |
+|---|---|---|
+| AW1 | No canonical reference to `.agents/specs`, `.agents/tasks`, or `.agents/memory` | `grep -R "\.agents/\(specs\|tasks\|memory\|sources\|findings\|adrs\|audits\|bugs\|research\|nfrs\|interfaces\)"` returns no match in any shipped canonical file; the only permitted matches are lines explicitly marked **compatibility** or **migration** |
+| AW2 | `.swarm/` is named as the canonical Swarm workspace | a canonical page states `.swarm/` is the workspace and partitions `sources/ status/ generated/ memory/ ledger/ archive/ kernel/ tmp/` as distinct categories (§20.5) |
+| AW3 | `.agents/` is named as a compatibility surface | a canonical page states `.agents/` is an agent-tool compatibility surface, never the Swarm source-of-truth root; mirrored skills/profiles point back to `.swarm/kernel/` |
+| AW4 | `AGENTS.md` is short and inlines no SOL/APS manual | `AGENTS.md` is within the §31.1 density cap and a search for an inlined `SOL`/`APS` manual (`AGENTS\.md` against the §31.1 forbidden-inline rule) returns nothing; at most a one-line language pointer to `.swarm/kernel/language/` survives |
+| AW5 | Surface policies are documented | a canonical page defines the source-code surface policy set `generated` / `governed` / `observed` / `external` / `deprecated` (§20.5), establishing that code is reconciled implementation reality, not disposable generated output |
+| AW6 | The source/status/generated split is documented | a canonical page separates `sources/` (desired truth), `status/` (observed satisfaction/drift), and `generated/` (task frames, traces, reviews) as distinct workspace categories (§20.5) |
+| AW7 | The ledger is documented | a canonical page defines `.swarm/ledger/` as the compact reconciled history (obligation coverage, changed surfaces, proof, verdicts, promotion results) that prevents permanent task-scratchpad accumulation (§20.5) |
+| AW8 | The CLI/agent boundary is documented | a canonical page documents the future-launcher boundary — Swarm coordinates agent-CLI workers and prepares/validates work but does not own the model loop, file-editing mechanics, or provider/MCP runtime, and MUST NOT replace an agent CLI (a contract a future toolchain builds against, NO RUNTIME — Invariant 1) |
+| AW9 | No canonical page implies Swarm is an agent runtime | a search for "Swarm is an agent CLI" / "agent runtime" framing returns no canonical match; every "runs" verb resolves to a future-launcher contract (§35.1 N1), consistent with the orchestrator-worker single-threaded-writes boundary |
+
+A failing AW-check blocks acceptance at the tier whose clauses bind it, identically to A1–A28 (§34.7).
 
 ## 35. Non-goals and deferred-to-v0.2
 

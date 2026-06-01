@@ -223,7 +223,7 @@ project/
 
   .swarm/                            # THE CANONICAL SWARM WORKSPACE (everything that defines/tracks/reconciles intent)
     VERSION                          # adopted kernel version, semver (§25); the workspace mirror of .agents/.swarm-version
-    config.yaml                      # project-level Swarm configuration (surface policies §20.5.3-adjacent, agent adapters)
+    config.yaml                      # project-level config: surface policies (§16.6), agent adapters (§32.7.4), and (under a `lint:` key) the §8.6 lint-severity overrides
 
     kernel/                          # the INSTALLED framework payload (copied from the framework repo's scaffold/)
       language/                      # self-contained Tier-2 references (§20.3.2): SOL.md APS.md errors.md versioning.md

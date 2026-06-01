@@ -269,7 +269,7 @@ The advisory prose set is `SOL-P050`–`SOL-P056`. They emit `warning` and never
 
 ### 8.6 Severity override and the waiver record (normative)
 
-Default severities (§8.2–§8.4) are fixed by this specification. A project MAY adjust them only through a single configuration file, `swarm.config.json` (or `swarm.config.yaml`), validated against the schema below. There are exactly two legal adjustments:
+Default severities (§8.2–§8.4) are fixed by this specification. A project MAY adjust them only through one configuration surface — a root `swarm.config.json`/`swarm.config.yaml`, or equivalently the `lint:` section of the adopted-project `.swarm/config.yaml` (§20.5.1) — validated against the schema below. There are exactly two legal adjustments:
 
 1. **Promote (strict mode):** raise an ADVISORY code to `error`. Always permitted; no record required beyond the config entry.
 2. **Demote (waiver):** lower a BLOCKING code to `warning` or `off`. Permitted **only** with a recorded waiver carrying an authority, a reason, and an expiry. A demotion without a complete waiver record is itself a conformance defect.

@@ -263,15 +263,15 @@ Premature acceptance of plausible but unverified claims.
 
 ### 27.3 The profile → pass mapping
 
-The 13 personas map to passes as follows. This table is normative; it is the routing that **profile × pass replaces** the legacy persona × task-type and persona × document-type matrices.
+The 13 personas map to passes as follows. This table is normative; it is the routing that **profile × pass replaces** the legacy persona × task-type and persona × document-type matrices. The stdlib ships a six-file profile subset (§20.5.1); `reviewer.md` is a convenience alias carrying the **Skeptic** stance for the `review` pass (row 1), not a fourteenth persona.
 
 | Profile (legacy persona) | Pass(es) it parameterizes |
 |---|---|
 | Skeptic | `review` / `verify` |
 | Architect | `author` (spec) |
 | Auditor | `author` (audit) |
-| Surveyor | `author` (research) |
-| Researcher | `author` (research) |
+| Surveyor | `author` (research — breadth / inventory survey) |
+| Researcher | `author` (research — depth / external evidence) |
 | Bug Hunter | `author` (bug-report) |
 | Janitor | `implement` (by kind: refactor/cleanup) |
 | Migrator | `implement` (by kind: migration/upgrade) |
