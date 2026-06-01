@@ -136,3 +136,19 @@ The spec's own §0.7 forbids fact-shaped claims that cite no verified source and
 ---
 
 *Findings are traceable to the per-agent transcripts under `…/subagents/workflows/wf_f28b9106-794/`. Severity reflects adversarial adjudication: each upheld finding survived a verifier instructed to refute it and default to rejection when uncertain.*
+
+---
+
+## Pass 2 — fresh adversarial pass on the reconciled spec (2026-06-01, `wf_8341d9f7-e38`)
+
+A second 29-agent skeptic pass was run against the reconciled spec (independent read + a dedicated **reconciliation-seam audit**). It surfaced **~45 findings** (2 BLOCKER, ~18 MAJOR, ~25 MINOR/NIT) — including several seams the pass-1 reconciliation itself introduced (the §4 reference card never updated for DOMAIN/SHALL; the sub-id example still `.a/.b` while the new rule said `.1/.2`; §12.4.2 still calling INTERFACE fields "extension fields" after the schema pinned them; the new C.3 plan `meta` rejecting `max_parallel`; a `proof_result` "case-fold" claim that's false; `research#R-NNN` attributed to a §5.7 production that doesn't exist). This is exactly why the second pass was run.
+
+**Remediated (commits `e751ee4`…`0361243`, increments R1–R4):**
+- **Both BLOCKERs:** the VERDICT `lifecycle_fields` grammar reconciled across §6.7 / §14.2 / Appendix A (and `expires`→`expiry` unified); `SOL-S009` retired in favour of `SOL-M003` (it was absent from the B.2 catalogue and duplicated M003).
+- **All buildability-relevant MAJORs:** §4 card (DOMAIN clause + SHALL-as-deprecated-alias); sub-id example `.1/.2`; `proof_result` 1:1 map; §14.4 "latest" ordering primitive; C.3 `max_parallel`; orphan-target `SOL-M003` + COVERAGE-cell codes (`O007`/`O008`/`M003`); §8.3 V001 includes INTERFACE; §8.2 gate-split; §12.4.2 pinned INTERFACE clauses; B.7 op-map (drop V009 from BIND, add O007/O008 to SCOPE); §22.1.1 authority-conflict `SOL-M004`; IR field `owner` (not `owned_by`); §33.3.3 fixture QUESTION header; `research#R-NNN` extends §5.7; reference-doc paths (`docs/model/`, `docs/reference/`); install mapping lands conformance + memory; promotion-status enum (7 values); task `pass_guides`/`profile`; in-spec `gate:` token definitions; SOL-P targets labelled design targets.
+
+**Deferred (catalogued, low-risk — a tail of ~20 MINOR/NIT):** cross-reference label fixes (`(§proof types)`/`(§blocking-question handling)` placeholders; `(§24 source-authority)`→§22; "Principle 9/workspace doctrine" labels), a few schema-optional-field notes (`oracle_adequacy`/judge-identity on the §16.1 schema; §15.10.4 vs §16.5 participation wording), §8.1.2 diagnostic-record `off`/`note` hybrid, §18.3 `surface_def`↔Appendix A `surface_decl` naming, D.4 INVARIANT `subject` lowering, finding/review template-vs-contract section drifts, README arrow-chain/"ambiguity-repair" wording, and assorted `SOL-Pxxx`/`SOL-Vxxx` cross-layer attribution nits. These do not block a build; they are best closed during implementation, when the contracts are exercised by real code, or in a focused nit sweep.
+
+**Verification (post-R4):** every `[KEY]` resolves to `sources.md`; all fences balanced; all 23 normative Appendix C/D JSON schema/example blocks parse (the two `02`/`05` illustrative *fragments* are partial records, not schemas). The convergence signal: pass 2's BLOCKERs were narrower than pass 1's and the seam set is shrinking; a third pass would find fewer still.
+
+*Pass-2 findings are traceable to `…/subagents/workflows/wf_8341d9f7-e38/`.*
