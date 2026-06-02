@@ -1,8 +1,6 @@
 # Source Authority
 
-> Authoritative source: `.agents/specs/swarm/07-governance-memory.md` §22 (the two-axis source-authority model, the conflict / tie-break procedure, and the hard-policy band). This is a reference projection; where it and the spec disagree, the spec governs.
-
-Source authority is the **deterministic procedure** a conformant Swarm repo uses to decide, when two artifacts assert conflicting obligations, **which obligation governs**. It is the conflict-resolution complement to the obligation graph: the graph records *what* obligations exist and how they relate; source authority records *which wins* when they disagree.
+Source authority is the **deterministic procedure** a conformant Swarm repo uses to decide, when two artifacts assert conflicting obligations, **which obligation governs** — and, by the same ladder, **who may approve** an edit to the obligation set. It is the conflict-resolution complement to the obligation graph: the graph records *what* obligations exist and how they relate; source authority records *which wins* when they disagree and *whose authoring act* settles a change.
 
 Authority is **not** a planning hint and **not** a confidence score. It is the binding precedence order, and it is the only sanctioned alternative to silently letting the most recently written artifact win.
 
@@ -145,8 +143,45 @@ The `RISK` clause is otherwise inert in the kernel; the high-oversight band is w
 
 The "named human" is **not a new kernel role**: *who* the human is stays unspecified and is bound locally by the adopting repository. Approval **authority** is resolved through the source-authority ladder above — the approver is the owner of the highest-ranked governing artifact in the relevant domain. A waiver on a band obligation is the ordinary `WAIVER` lifecycle, with mandatory `authority + reason + expiry` and auto-expiry on source-hash change; there are no permanent waivers and no agent-self-issued waivers in the band. Recording an agent-only verdict on a band obligation, or letting a skill self-issue a band waiver, is additionally a `SOL-M004` authority-conflict.
 
-## Preserved / Dropped / Still-uncertain
+## Approval-required changes
 
-- **Preserved.** Both axes with their full rank tables; the lexicographic-with-hard-policy-gate conflict procedure (all three steps); the durable-artifact precondition for in-band domain dominance; the three invariants; both worked tie-break examples; the `SOL-M002` / `SOL-M004` distinction; and the high-oversight band (its two triggers, two-part rule, and the named-human / waiver-authority discipline) — because §22.3 and §22.7 explicitly require this reference to state the axes, the lexicographic rule, the invariants, at least one worked tie-break, the high-oversight band, and the tie to waiver / approval authority.
-- **Dropped (left to the spec).** The supporting empirical evidence for authority-ranking over flat retrieval (the `[DOCPROMPTING]` / `[RACG]` / `[REPOCODER]` citations); the full §22.6 human-approval change-classification table and the closed twelve-category semantic-diff mapping; the detailed cross-references to other sections (IR lowering internals, the `migration` default suite contents, the three-way reconcile mechanics); and the §22.7.3 migration worked example. These remain the spec's long-form responsibility.
-- **Still-uncertain (governed by the spec).** *Who* approves and the identity / title / headcount of any named human are deliberately unspecified by the kernel and bound by the adopting repo; the lint codes are manual-today and aspirational until tooling exists. This projection records that boundary rather than resolving it.
+The two axes decide which obligation *governs* when two conflict. A separate but adjacent question is which **edits** to the obligation set a conformant tool MAY apply on its own and which require an authoring act — an approval. The two questions share the same ladder: who governs a conflict is also who may approve a change in that domain.
+
+The dividing line is **semantic effect**, expressed as a closed twelve-category semantic diff: an edit either *preserves* the meaning of every obligation it touches (pure normalization) or it *changes* what the system is obligated to build, what counts as proof, or which decision governs (an amendment). Only the single normalization category may be applied without approval; the other eleven are amendments and MUST route to amendment / review rather than being applied silently as a routine cleanup.
+
+| Change type | Approval required |
+| --- | --- |
+| Add, remove, or renumber an obligation id (`AC-NNN` / `C-NNN` / `I-NNN` / `IF-NNN`) | Yes |
+| Change an obligation's actor, trigger, modality, response, or non-goal | Yes |
+| Make a breaking `INTERFACE` (`IF-NNN`) change | Yes |
+| Materially resolve a `[blocking]` `QUESTION` | Yes |
+| Accept a `manual` proof where no automated proof previously existed | Yes |
+| Approve or supersede an `adr.md` | Yes |
+| Promote a `finding.md` into an approved `spec.swarm.md` | Yes |
+| Add, remove, or repoint a `VERIFY BY` proof binding | Yes — what counts as proof changed |
+| Normalize formatting, casing, or surface-keyword form | No — normalization |
+| Fix an editorial typo with no semantic effect | No — normalization |
+| Add a missing link, or complete a reference to an **already-declared** proof, without changing meaning | No — normalization |
+| Compress redundant prose while preserving semantics | No — normalization |
+
+The "Yes" rows are exactly the edits that alter what the system must build, what counts as proof, or which decision governs — each is a non-normalization category in the semantic diff, so each MUST route to amendment / review, never be folded into a mechanical improvement pass. The "No" rows are the single normalization category: semantics-preserving by definition, a conformant tool MAY apply them without approval. The rationale is that a normalization edit cannot, by construction, change any verdict; an amendment can, so it inherits the same authoring discipline as the obligation it edits.
+
+### R-APPROVAL-AUTHORITY
+
+The kernel defines **what** requires approval; it is deliberately silent on **who** approves. Approval **authority** for any "Yes" row is resolved through the same source-authority ladder that resolves conflicts: the approver is the **owner of the highest-ranked governing artifact in the relevant domain**.
+
+- An ADR change is approved by the owner of the accepted `adr.md` (Axis-A rank 1).
+- An obligation or `INTERFACE` change is approved by the owner of the approved `spec.swarm.md` (Axis-A rank 2).
+- A cross-domain change is approved by the owner of the governing domain (Axis B) — e.g. a change touching a `security` obligation answers to the security-domain owner, not a `product` owner.
+
+There is **no** undefined "human role" in the kernel. "Approval required: Yes" means precisely "an authoring act by the relevant source-authority owner is required," never an appeal to an unspecified gatekeeper. *Who* that owner is — identity, title, headcount — stays a local org decision bound by the adopting repository, exactly as the high-oversight band's named human does; the kernel fixes only that the act must come from the resolved owner. A change applied without the authority resolved by this ladder is itself a `SOL-M004` authority-conflict: a lower-ranked actor (an agent, a skill, an un-promoted note) silently amending a higher-ranked artifact.
+
+This is the same authority that governs the high-oversight band above: a band obligation's `manual @ REVIEW` verdict, standing in for an automated proof, is the "Accept a `manual` proof where no automated proof previously existed" row of this table — an approval-required change whose authority is the relevant source-authority owner, not a new role.
+
+## Related
+
+- [SOL — the obligation language](../language/SOL.md) — the surface form of the obligations whose conflicts and edits this procedure governs.
+- [Verify — verdict model and proof taxonomy](../passes/verify.md) — the `WAIVED` / `STALE` / `CONTRADICTED` lifecycle and the named-authority discipline a band verdict and waiver carry.
+- [The `improve` pass](../passes/improve.md) — where the single normalization category MAY be applied without approval; the "Yes" rows are exactly what `improve` may not silently apply.
+- [The `promote` pass](../passes/promote.md) — promotion of a `finding.md` into a spec, an approval-required change that gives the finding its new container's authority.
+- [Swarm lint codes](../language/errors.md) — `SOL-M002`, `SOL-M004`, and `SOL-V010`, the diagnostics this procedure emits.

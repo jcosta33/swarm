@@ -1,10 +1,8 @@
 # Verify — the verdict model, the proof taxonomy, and oracle adequacy
 
-> Authoritative source: 04-verification.md §14 (the verdict model), §15 (proof taxonomy + `VERIFY BY`), and §15.10 (oracle adequacy). This is a reference projection; where it and the spec disagree, the spec governs.
+The **verify** pass answers one question: *did this obligation actually get done?* It is the confidence backbone of Swarm and the gate every change must pass before promotion. This page is the authority on **how Swarm judges an obligation as satisfied** — the seven-value verdict model, the closed nine-type proof taxonomy and its `VERIFY BY` binding, oracle adequacy, the per-task-type default suites, and the soft/hard control boundary that says exactly what "verified" can and cannot mean.
 
-Swarm ships **no runtime** (Invariant 1, NO RUNTIME). Everything described here — the linter, the merge gate, the drift differ, the adequacy harness — is a **contract a future tool builds against**, never shipped code. Today every verdict is recorded by a human or agent in markdown and re-checked by hand or by CI scaffolding that does not yet exist. This page never claims any of it is automatically enforced.
-
-This page is the short reference view of *how Swarm judges whether an obligation was satisfied*. The long-form source of truth is the kernel spec; read it when this projection is silent or ambiguous.
+Swarm ships **no runtime** (NO RUNTIME). Everything described here — the linter, the merge gate, the drift differ, the adequacy harness, the enforcement lane — is a **contract a future tool builds against**, never shipped code. Today every verdict is recorded by a human or agent in markdown and re-checked by hand or by CI scaffolding that does not yet exist. This page never claims any of it is automatically enforced; where it says a check "MUST raise" or the gate "blocks," read that as the obligation on a future deterministic check, manual until one exists.
 
 ---
 
@@ -207,7 +205,7 @@ Keeping the *type* in the obligation and the *command* in `AGENTS.md` means the 
 
 An `INVARIANT` asserts a universal ("for all states, P holds") that a single example-based `test` cannot establish; an `INTERFACE` is a boundary contract whose proof must exercise `RETURNS`/`ACCEPTS`/`ERRORS`.
 
-`model` means model-checking OR an economical proof — bounded model checking, an SMT-discharged property, an exhaustive small-scope check, or any economical argument an oracle can replay. It MUST NOT be read as a mandate to discharge a full mechanized theorem per obligation: end-to-end per-obligation proof is unreliable at single trial (~4.9% Lean proof success [VERINA]) and verified-code synthesis is strongly language-specific — high for Dafny (~82%, and 68%→96% over one year [VERICODING], [DAFNYBENCH]) but still low for Lean/Verus. When even `model` is infeasible, `manual` is the honest type.
+`model` means model-checking OR an economical proof — bounded model checking, an SMT-discharged property, an exhaustive small-scope check, or any economical argument an oracle can replay. It MUST NOT be read as a mandate to discharge a full mechanized theorem per obligation: end-to-end per-obligation proof is unreliable at single trial (Lean proof success on the order of 5%) and verified-code synthesis is strongly language-specific — high for Dafny (roughly 82%, climbing from 68% to 96% over a year) but still low for Lean/Verus. When even `model` is infeasible, `manual` is the honest type.
 
 ### 5.5 The proof-strength order
 
@@ -233,19 +231,29 @@ Each required `VERIFY BY` binding produces **exactly one** `VERDICT`. If an obli
 
 ### 5.7 Per-task-type default suites
 
-Each task kind (the `task_kind:` enum) carries a **default suite**: a set of `(proof-type @ phase)` recommendations for which proofs SHOULD be bound and when. The suites are **recommendations, not a closed law** — an author MAY override per obligation. Selected rows:
+Each task kind (the `task_kind` enum carried on a task frame) has a **default suite**: a set of `(proof-type @ phase)` recommendations for which proofs SHOULD be bound and at which phase they run. A suite says *"a task of this shape usually needs at least these proofs"* — a refactor must preserve behaviour, so it leans on a `test`; a performance task is meaningless without a `perf` measurement; a spec-writing task has no code yet, so its only proof is the `static` lint/APS check at `NORMALIZE`. The suites are **recommendations, not a closed law** — an author MAY override per obligation, and a binding-completeness check (the `SOL-V` layer) verifies that an obligation's bound proofs cover its task kind's default suite, or that any omission is explicitly justified.
 
-| `task_kind` | Default suite |
+| `task_kind` | Default suite `(proof-type @ phase)` |
 | --- | --- |
 | `feature` | `test @ VERIFY`, `static @ VERIFY`; `contract @ VERIFY` if any `INTERFACE` touched |
-| `fix` | `test @ VERIFY` (regression test reproducing the defect), `static @ VERIFY` |
+| `fix` | `test @ VERIFY` (a regression test that reproduces the defect), `static @ VERIFY` |
 | `refactor` | `test @ VERIFY` (behaviour-preservation), `property\|contract @ VERIFY` for invariants/boundaries |
+| `rewrite` | `test @ VERIFY`, `static @ VERIFY`; `contract @ VERIFY` if any `INTERFACE` touched |
 | `migration` | `test @ VERIFY`, `static @ VERIFY`, `contract @ VERIFY` (boundary conformance) |
+| `upgrade` | `test @ VERIFY`, `static @ VERIFY`, `contract @ VERIFY` (dependency contracts) |
 | `performance` | `perf @ VERIFY`, `test @ VERIFY`, `static @ VERIFY` |
+| `testing` | `test @ VERIFY`, `static @ VERIFY` |
+| `documentation` | `static @ VERIFY` (lint/APS); `manual @ REVIEW` for accuracy |
+| `integration` | `contract @ VERIFY`, `test @ VERIFY`, `static @ VERIFY` |
 | `spec-writing` | `static @ NORMALIZE` (lint/APS); no executable suite (no code yet) |
-| `review` | `manual @ REVIEW` over recorded evidence; re-run of bound `cmd*` proofs |
+| `research-writing` | `static @ NORMALIZE` (lint/APS); no executable suite |
+| `audit-writing` | `static @ NORMALIZE` (lint/APS); no executable suite |
+| `bug-report-writing` | `static @ NORMALIZE` (lint/APS); no executable suite |
+| `deepen-audit` | `static @ NORMALIZE` (lint/APS); `manual @ REVIEW` for evidence |
+| `review` | `manual @ REVIEW` over the recorded evidence; re-run of bound `cmd*` proofs |
+| `orchestration` | `static @ LOWER` (disjointness check); `manual @ REVIEW` |
 
-A binding-completeness check (the `SOL-V` layer) verifies that bound proofs cover the task kind's default suite, or that any omission is explicitly justified.
+The phase tag (`@ VERIFY`, `@ NORMALIZE`, `@ REVIEW`, `@ LOWER`) names the pass at which the proof is expected to run: source-only task kinds bind their `static` proof at `NORMALIZE` because there is no code to execute, while code-changing kinds bind their executable proofs at `VERIFY`. A `task_kind` with no executable suite still has an obligation — its `static` lint/APS pass — and a `PASS` there is a genuine verdict, not an exemption from judgment.
 
 ### 5.8 What is NOT a proof
 
@@ -257,9 +265,9 @@ These MUST be rejected and MUST NOT yield `PASS`:
 
 ---
 
-## 6. Oracle adequacy (§15.10)
+## 6. Oracle adequacy
 
-A `PASS` is only as trustworthy as the **oracle** that produced it — the decision procedure that says whether observed behaviour satisfies the obligation. A proof can pass against a *weak* oracle and still be wrong. This is not a corner case: on SWE-bench Verified, 7.8% of patches that pass the official developer-written suite are in fact incorrect, and the bundled tests inflate reported resolution rates by 6.2 absolute percentage points [SWEBENCH-ADQ]; an independent audit found 345 patches mislabeled as passing, affecting 40.9% of SWE-bench Lite and 24.4% of SWE-bench Verified leaderboard entries [UTBOOST]. The root issue is the **test-oracle problem** — a single concrete example cannot stand in for a universal predicate, and metamorphic/property-based pseudo-oracles are the principled response [ORACLE].
+A `PASS` is only as trustworthy as the **oracle** that produced it — the decision procedure that says whether observed behaviour satisfies the obligation. A proof can pass against a *weak* oracle and still be wrong. This is not a corner case: on SWE-bench Verified, an estimated 7.8% of patches that pass the official developer-written suite are in fact incorrect, and the bundled tests inflate reported resolution rates by roughly 6 absolute percentage points; an independent audit found hundreds of patches mislabeled as passing, affecting around 41% of SWE-bench Lite and 24% of SWE-bench Verified leaderboard entries. The root issue is the **test-oracle problem** — a single concrete example cannot stand in for a universal predicate, and metamorphic/property-based pseudo-oracles are the principled response.
 
 So Swarm treats "the proof passed" as **necessary but not sufficient**: a proof MUST also record *what it exercised* relative to the obligation, and stronger obligations demand stronger oracles. This is a **contract, not shipped tooling**; the `SOL-V011` check is manual-today.
 
@@ -278,7 +286,7 @@ A missing `oracle_adequacy` object is permitted for `existential` predicates pro
 
 ### 6.2 Stronger obligations demand stronger oracles
 
-For an obligation carrying `RISK high` or `RISK critical`, a single concrete `test` is an **inadequate oracle** [ORACLE] — one example cannot establish a high-consequence or universally-quantified claim.
+For an obligation carrying `RISK high` or `RISK critical`, a single concrete `test` is an **inadequate oracle** — one example cannot establish a high-consequence or universally-quantified claim.
 
 | Obligation `RISK` | Adequate bound oracle |
 | --- | --- |
@@ -302,10 +310,56 @@ A surface participates in a proof's freshness only if it lies on the proof's `ev
 
 ---
 
-## Preserved / Dropped / Still-uncertain
+## 7. The soft/hard control boundary
 
-**Preserved (this projection keeps the load-bearing contracts in full):** the 7-value verdict model (4 core + 3 lifecycle) with its decoration rules; the `VERDICT` line grammar and the three `SOL-V` well-formedness diagnostics (`SOL-V005`/`V007`/`V008`); the normative merge-gate predicate, its per-verdict dispositions, and the manual-today / deterministic-check-outside-the-model caveat; `review.md` as the only verdict container (no `verdict.md`); the closed 9 proof types with the `test`-scope and `runtime`→`monitor` notes; the `VERIFY BY` typed/bare syntax and two-layer `AGENTS.md` adapter resolution; the per-block type-selection rules; the proof-strength order; one-verdict-per-binding; "what is not a proof"; and the full §15.10 oracle-adequacy contract (adequacy record, RISK→oracle table, adequacy-as-overridable-prior, evidence-path/staleness link).
+This is the single most important honesty constraint in Swarm, and it governs what a verdict is *allowed to mean*. Everything Swarm ships is markdown, and markdown cannot stop an agent from doing anything. So Swarm MUST be precise about what is *guidance* and what is *enforcement*, and MUST NOT dress up the former as the latter.
 
-**Dropped (left to the spec — out of this page's named scope):** the §16 drift/staleness machinery beyond the adequacy link (the seven-field trace-provenance schema G11, the (a)–(d) `STALE` conditions, proof-exercised participation, drift coverage, the 3-way reconcile, surface policies); §17 soft/hard control, waiver lifecycle internals, and `CONTRADICTED` tie-break procedure in full; §18 `RISK`/`READS`/`WRITES`/`SURFACE` definitions; the full per-task default-suite table (only representative rows shown) and the `task_kind` enum (§28); the §17.6.1 `judge` provenance adjunct; phase/pass definitions referenced by `@ phase`.
+> **Soft control.** Swarm prose, SOL, APS, skills/pass guides, heuristic profiles, and `AGENTS.md` are **SOFT control**: they are context and guidance for a model. They influence behaviour; they do not constrain it. They **MUST NEVER** be presented as enforcement.
 
-**Still-uncertain (per the spec / sources):** the `SOL-V011` check, the merge gate, the adequacy harness, and the drift differ are all **contracts for a future tool**, not shipped code — nothing here is automatically enforced today. The `manual`/`monitor` floor of the strength order reflects fallible human/LLM-judge and lagging observational signals. The adequacy thresholds (`RISK high|critical` → `property`/`model`-or-evidence) are a design rationale generalising the `INVARIANT` preference to consequence, grounded by the test-oracle problem [ORACLE] and oracle-inadequacy measurements [SWEBENCH-ADQ], [UTBOOST]; the `model` framing is bounded by the language-specific proof-success evidence [VERINA], [VERICODING], [DAFNYBENCH].
+> **Hard control.** Anything that must hold **regardless of the model** — a `CONSTRAINT`, an `INVARIANT`, a stop-rule, secret redaction, a write-surface gate, the proof-required merge gate — MUST be specified as a **deterministic check OUTSIDE the model**: a PreToolUse hook, a CI gate, a permission deny-rule, or a schema validator.
+
+> **No runtime today.** Swarm is markdown-only. The hard lane is therefore **aspirational/manual today**. This page MUST NOT claim any deterministic check *exists* or *runs*. Every enforcement statement is "the deterministic home a future harness MUST provide," never "Swarm enforces."
+
+Three corollaries follow directly, each normative:
+
+- **Schema-valid output is not verification.** That a model emitted JSON matching a schema constrains *shape*, not *truth* (§5.8). Schema validation MAY be a gate *input*; it MUST NOT be presented as proof an obligation is met.
+- **Every completion claim maps to independent verification.** No obligation is `PASS` on the model's say-so; it is `PASS` only against an independent deterministic or evidentiary oracle (§4, §5).
+- **A SOFT-control artifact MUST NOT define hard semantics.** No skill, persona/profile, or `AGENTS.md` section may define modality, authority order, or verification semantics — those live in SOL and the typed IR.
+
+The rationale is empirical: model adherence is probabilistic (prompt-format sensitivity, multi-turn reliability decay, lost-in-the-middle / context-rot), so a model is an unsound enforcement substrate. Only an external deterministic check can guarantee a property holds. Honesty about this boundary is what lets a Swarm verdict be trusted: the markdown layer makes an omission *conspicuous*; it cannot make a property *hold*.
+
+## 8. The enforcement-lane artifact
+
+Because the hard lane is manual today, Swarm makes the gap **visible and accountable** rather than letting it hide. The **enforcement lane** is a first-class, currently-manual artifact: a markdown table that maps each hard-control obligation to its **eventual deterministic home**. It is the explicit ledger of "this is soft today; here is where it becomes hard," and it MUST be maintained as a table (no runtime).
+
+Each row maps one `CONSTRAINT` / `INVARIANT` / stop-rule / secret-redaction rule to its deterministic home and current status:
+
+```text
+| Obligation / rule          | Kind        | Deterministic home (eventual)    | Status today  |
+| -------------------------- | ----------- | -------------------------------- | ------------- |
+| C-001 (no server/* import) | CONSTRAINT  | CI: cmdLint dependency-boundary  | manual review |
+| I-001 (one token family)   | INVARIANT   | CI: property test in cmdTest     | manual review |
+| stop-rule: no force-push   | stop-rule   | PreToolUse hook (git deny)       | aspirational  |
+| secret redaction           | redaction   | PreToolUse hook + CI secret scan | aspirational  |
+```
+
+| Column | Meaning |
+| --- | --- |
+| Obligation / rule | The id or name of the hard-control item. |
+| Kind | `CONSTRAINT` \| `INVARIANT` \| `stop-rule` \| `redaction`. |
+| Deterministic home (eventual) | The PreToolUse hook / CI gate / permission deny-rule / schema validator that WILL enforce it when a harness exists. |
+| Status today | `manual review`, `aspirational`, or — only when a harness genuinely runs it — `enforced by <mechanism>`. |
+
+The four deterministic-home categories are exactly: **PreToolUse hook**, **CI gate**, **permission deny-rule**, **schema validator**. The lane MUST NOT mark any row `enforced` unless a deterministic check outside the model genuinely runs it; until then every hard-control obligation is honestly `manual review` or `aspirational`. The lane is the operational form of the boundary in §7: the merge gate of §4, the `SOL-V` lint diagnostics, the `RISK high|critical` oracle thresholds, and secret redaction are all hard-control obligations whose rows sit in this lane reading `manual review` or `aspirational` today.
+
+---
+
+## Related
+
+- **`docs/passes/lint.md`** — the `SOL-V` (VERIFICATION) lint layer in full, including the `SOL-V` codes referenced here (`V001`/`V002`/`V003`/`V005`/`V006`/`V007`/`V008`/`V009`/`V011`).
+- **`docs/reference/proof-types.md`** — the closed nine proof types and the `VERIFY BY` binding grammar, expanded.
+- **`docs/passes/review.md`** and **`docs/artifacts/review.md`** — `review.md`, the verdict container that holds the `VERDICT` blocks and the change-set-level merge-gate verdict.
+- **`docs/passes/promote.md`** — the merge gate as a promotion predicate and the promotion queue.
+- **`docs/artifacts/task.md`** — the task frame and its `task_kind` enum, which selects a default suite from §5.7.
+- **`docs/PRINCIPLES.md`** — the SOFT vs HARD control principle that §7–§8 operationalise for verification.
+- **`docs/artifacts/trace.md`** — the trace-provenance schema (the `oracle_adequacy` object and `per_surface_hash[]`) and the drift/staleness machinery the adequacy record links into.
