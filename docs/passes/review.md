@@ -111,6 +111,7 @@ Every artifact `review` reads is agent-readable markdown, which is also an attac
 | Section | Meaning |
 |---|---|
 | frontmatter | `type: review`, `id`, `source_trace`, `source_spec`, `reviewed_output`, `pass`, `profile` (e.g. `skeptic`), `created`. |
+| `## Claimed coverage` | Which trace step claims which obligation, with the evidence ref it claims — the adjudication target the per-obligation verdicts judge against. |
 | `## Per-obligation verdicts` | One `VERDICT` block per judged obligation, using the canonical verdict line plus `REASON`/`EVIDENCE`. |
 | `## Obligation-verdict matrix` | A compact table: obligation id → core → lifecycle → evidence checked. |
 | `## Constraint and invariant verdicts` | The same, for `C-` and `I-` ids. |

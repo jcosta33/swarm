@@ -583,7 +583,7 @@ Each diagnostic is a SARIF-shaped finding (§8 owns the taxonomy; §12 owns its 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
 | `code` | string | MUST | A unified lint code `SOL-<LAYER>NNN` where `<LAYER>` ∈ {`S`,`P`,`M`,`V`,`O`} (§8). |
-| `level` | string | MUST | SARIF level: `error`, `warning`, or `note`. Maps to the §8 BLOCKING/ADVISORY split (BLOCKING ⇒ `error`; ADVISORY ⇒ `warning`); `note` carries informational findings and an advisory that a waiver has explicitly downgraded below `warning` (§8.6). `off` is **not** a level: a waiver that demotes a code to `off` (§8.6) suppresses the diagnostic — it is omitted from `diagnostics[]` entirely, not emitted with an `off` level. |
+| `level` | string | MUST | SARIF level: `error`, `warning`, or `note`. Maps to the §8 BLOCKING/ADVISORY split (BLOCKING ⇒ `error`; ADVISORY ⇒ `warning`); `note` carries the advisory codes' informational findings (§8.6). `off` is **not** a level: a waiver that demotes a code to `off` (§8.6) suppresses the diagnostic — it is omitted from `diagnostics[]` entirely, not emitted with an `off` level or downgraded into a `note`. |
 | `node` | string\|null | one of `node`/`source` MUST be present | The node id the finding attaches to, if node-scoped. |
 | `source` | object\|null | one of `node`/`source` MUST be present | A source span (same shape as §12.4.5 minus `content_hash`), for findings with no resolved node (e.g. a parse error). |
 | `message` | string | MUST | Human-readable finding text. The §8 `suggest` field MAY also appear. |

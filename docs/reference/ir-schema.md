@@ -271,6 +271,7 @@ These three values drift independently and MUST remain three fields.
           "owner":  { "type": ["string", "null"], "description": "Lowering of OWNED BY" },
           "risk":   { "enum": ["low", "medium", "high", "critical", null] },
           "reads":  { "type": "array", "items": { "type": "string" }, "default": [] },
+          "touches":{ "type": "array", "items": { "type": "string" }, "default": [], "description": "Lowering of TOUCHES — surfaces the obligation touches but does not own/write" },
           "writes": { "type": "array", "items": { "type": "string", "description": "Write surface path/glob or named SURFACE member" }, "default": [] },
           "affects":{ "type": "array", "items": { "type": "string" }, "default": [] },
           "verify_by": {

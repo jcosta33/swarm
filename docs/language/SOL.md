@@ -233,7 +233,7 @@ constraint_body = [ "WHERE", ws, cond, nl ]
                   { metadata_clause };
 ```
 
-There is **no separate `POLICY` block**: authority/enforcement attributes are metadata (`OWNED BY` on the surface, `authority` in the IR), not a block type. A CONSTRAINT MUST carry a `VERIFY BY` (a static check, a contract, or `manual:` review); its absence is `SOL-V001`.
+There is **no separate `POLICY` block**: a constraint's authority is recorded in the IR (`authority`), not as a distinct block type and not as a surface clause (`OWNED BY` is an INTERFACE-only clause, never CONSTRAINT metadata). A CONSTRAINT MUST carry a `VERIFY BY` (a static check, a contract, or `manual:` review); its absence is `SOL-V001`.
 
 ```sol
 CONSTRAINT C-001:

@@ -133,14 +133,15 @@ A `WAIVED` verdict is treated as gate-passing **only while its waiver is live**.
 A `VERDICT` is a **SOL language block**, not a file (§4). The kernel ships **no** `verdict.md` template. The container for verdicts is the **`review.md`** artifact (§21), which when filled *is* the verdict record. A conformant `review.md` MUST contain, at minimum:
 
 ```text
-- Claimed coverage (which TRACE claims which obligations, with evidence refs)
 - Per-obligation VERDICT blocks (one per required binding)
-- An obligation-verdict matrix (id × core × lifecycle)
-- Constraint / invariant / interface verdicts
+- An obligation-verdict matrix (id × core × lifecycle × evidence checked)
+- Constraint and invariant verdicts
 - An unauthorized-change list (diff entries not authorized by any obligation)
-- A final merge-gate verdict (PASS / FAIL / BLOCKED at the change-set level)
+- A final merge-gate verdict (the change-set-level gate result)
 - The promotion queue
 ```
+
+(This restates the canonical `review.md` artifact contract — see §21.5.1, which is authoritative for the full section list and frontmatter.)
 
 A repo that records verdicts in a standalone `verdict.md` is **non-conformant** (§20). The reference page `docs/.../verdict` (if present) documents the `VERDICT` block and the taxonomy; it is *documentation*, not a copyable template.
 
@@ -655,7 +656,7 @@ The promotion path (§24.2, with silent composition forbidden by §24.4) lets an
 
 Normative rule: a conformant repo MUST flag any agent-read source whose provenance lies **outside the repo trust boundary** as **approval-required and never auto-promotable**.
 
-- An externally-authored `audit.md` / `research.md` / `bug-report.md` MUST NOT auto-promote along its §24.2 route. Its promotion is an explicit **human-approval-required change** (§22.6), routed to the source-authority owner of the target artifact's domain (§22). An external source carries the *lowest* applicable source authority pending that approval and MUST NOT silently amend an approved `spec.swarm.md` (a lower-ranked actor amending a higher-ranked artifact is `SOL-M002`, §22.1.1).
+- An externally-authored `audit.md` / `research.md` / `bug-report.md` MUST NOT auto-promote along its §24.2 route. Its promotion is an explicit **human-approval-required change** (§22.6), routed to the source-authority owner of the target artifact's domain (§22). An external source carries the *lowest* applicable source authority pending that approval and MUST NOT silently amend an approved `spec.swarm.md` (a lower-ranked actor amending a higher-ranked artifact is `SOL-M004` authority-conflict, §22.1.1).
 - Provenance MUST be recorded on the source-doc (the `content_hash` + origin provenance fields of §23.3 already exist for this). A source whose provenance cannot be established as in-boundary is treated as external by default — the safer assumption under `[OWASP-LLM01]`.
 - This is a SOFT/governance control (a promotion-gate discipline), distinct from the HARD lexical check of §17.5.1. The two compose: `SOL-S013` cleans the *bytes*, the source-authority rule governs the *trust* of the source those bytes came from.
 

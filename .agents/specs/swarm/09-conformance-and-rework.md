@@ -142,9 +142,8 @@ This subsection fixes the boundary between that Swarm toolchain and the **agent 
 | `lint` | PARSE, NORMALIZE | emit `diagnostics[]` of `SOL-<LAYER>NNN` records against a `*.swarm.md` source |
 | `format` | NORMALIZE | apply the canonical surface form (§4.10) without changing intent (§28 pure-normalization class) |
 | `improve` | NORMALIZE | apply intent-preserving edits (the `improve` pass predicate, §10.1 R-IMPROVE; output rubric §33.6) |
-| `build-ir` | PARSE → NORMALIZE | emit `*.swarm.ir.json` (the §12 envelope) |
-| `lower` / `plan` | LOWER | emit `*.swarm.plan.json` (the §13 plan): the schedulable projection of the IR |
-| `decompose` | LOWER | partition the plan into work packets, one per disjoint write surface (§18) |
+| `lower` | LOWER | emit `*.swarm.ir.json` (the §12 envelope) |
+| `decompose` / `plan` | LOWER | emit `*.swarm.plan.json` (the §13 plan): the schedulable projection of the IR, partitioned into work packets, one per disjoint write surface (§18) |
 | `verify` | VERIFY | run resolved `cmd*` adapters, record core verdicts + lifecycle decorators |
 | `review` | REVIEW | prepare the review packet from trace + obligation set; record the §14 verdict |
 | `promote` | PROMOTE | apply the §23 promotion protocol to findings; update `memory/INDEX.md` |
@@ -156,9 +155,8 @@ swarm init                                 -> install/refresh .swarm/kernel/ + A
 swarm lint      <spec>.swarm.md            -> diagnostics[] (SOL-<LAYER>NNN)
 swarm format    <spec>.swarm.md            -> canonical surface form (intent-preserving)
 swarm improve   <spec>.swarm.md            -> intent-preserving edits
-swarm build-ir  <spec>.swarm.md            -> <spec>.swarm.ir.json
-swarm lower     <spec>.swarm.ir.json       -> <spec>.swarm.plan.json
-swarm decompose <spec>.swarm.plan.json     -> work packets (1 per disjoint write surface)
+swarm lower     <spec>.swarm.md            -> <spec>.swarm.ir.json
+swarm decompose <spec>.swarm.ir.json       -> <spec>.swarm.plan.json (work packets, 1 per disjoint write surface)
 swarm verify    <task>.md                  -> verdicts (core + lifecycle)
 swarm review    <task>.md                  -> review packet + §14 verdict
 swarm promote   <finding>.md               -> memory/INDEX.md update
@@ -175,8 +173,8 @@ init                  install/refresh the kernel payload into .swarm/kernel/
 lint                  emit SOL-<LAYER>NNN diagnostics against a .swarm.md source
 format                apply the canonical surface form without changing intent
 improve               apply intent-preserving spec edits
-lower                 project the IR into a schedulable plan
-decompose             partition the plan into disjoint-surface work packets
+lower                 emit the IR (the §12 envelope) from an approved source
+decompose             project the IR into a schedulable plan, partitioned into disjoint-surface work packets
 task generation       emit generated task frames under .swarm/generated/tasks/
 worktree creation     create the per-task worktree (one worktree ↔ one task)
 branch naming         derive the branch name from spec/task context
@@ -397,7 +395,7 @@ Beyond the domain defects, the corpus MUST include the ADR 0026 task-file classe
 
 | Class | Fixture | Rule broken | Expected |
 |---|---|---|---|
-| empty paste | a `task.md` whose `Verification outputs` slots are bare | `content_rules.non-empty-paste` | FAIL |
+| empty paste | a `task.md` whose `Verification matrix` slots are bare | `content_rules.non-empty-paste` | FAIL |
 | missing required verification slot | a `refactor` task with no `behaviour-preservation` evidence | `required_suite.refactor` | FAIL |
 | illegal placeholder | a template introducing `{{cmdFrobnicate}}` without an ADR | `placeholders.rule` | FAIL |
 | missing `Commands` row | an `AGENTS.md` omitting `cmdFormat` | `agents_md.required_command_rows` | FAIL |

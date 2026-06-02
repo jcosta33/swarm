@@ -165,13 +165,15 @@ Six reference documents. These are *prose-and-table reference pages*, not copyab
 
 #### 20.3.3 Tier 3 — stdlib source-doc templates (shipped, conditional)
 
-Three source-document templates the stdlib ships so common authoring entry points exist. They are *conditional*: a repo need not have instantiated any of them to be conformant, but a conformant kernel payload MUST ship the templates.
+Five source-document templates the stdlib ships so common authoring entry points exist: **three are required** (`audit.md`, `research.md`, `bug-report.md`) and **two are SHOULD-ship** (`prd.md`, `rfc.md`, per §20.3.4). All five are *conditional*: a repo need not have instantiated any of them to be conformant, but a conformant kernel payload MUST ship the three required templates and SHOULD ship the two additional ones.
 
-| # | Template | Epistemic stance | Promotes to |
-| --- | --- | --- | --- |
-| 1 | `audit.md` | Observation-only (records what *is*, never prescribes). | a `spec.swarm.md` (via author pass). |
-| 2 | `research.md` | Investigation (open questions + findings). | a `spec.swarm.md` (via author pass). |
-| 3 | `bug-report.md` | Diagnosis-only (root cause, never fix). | a fix `task.md` (`task_kind: fix`). |
+| # | Template | Ship requirement | Epistemic stance | Promotes to |
+| --- | --- | --- | --- | --- |
+| 1 | `audit.md` | required | Observation-only (records what *is*, never prescribes). | a `spec.swarm.md` (via author pass). |
+| 2 | `research.md` | required | Investigation (open questions + findings). | a `spec.swarm.md` (via author pass). |
+| 3 | `bug-report.md` | required | Diagnosis-only (root cause, never fix). | a fix `task.md` (`task_kind: fix`). |
+| 4 | `prd.md` | SHOULD | Intent (user outcomes, goals, non-goals, success metrics). | specs, RFCs (via author pass). |
+| 5 | `rfc.md` | SHOULD | Proposal (candidate technical approach, alternatives, migration plan). | ADRs, specs (via author pass). |
 
 #### 20.3.4 Supported parents of a spec
 
@@ -535,7 +537,7 @@ Paste all constraints and invariants this task must preserve.
 
 | Obligation / C / I | Required proof | Actual proof | Status |
 | ------------------ | -------------- | ------------ | ------ |
-|                    |                |              | PASS / FAIL / BLOCKED / UNVERIFIED |
+|                    |                |              | <core: PASS / FAIL / BLOCKED / UNVERIFIED> [optional: WAIVED / STALE / CONTRADICTED] |
 
 ## Promotion queue
 
@@ -603,7 +605,7 @@ PROOF <verification output reference>
 
 | ID     | Required proof | Actual proof | Status |
 | ------ | -------------- | ------------ | ------ |
-| AC-001 |                |              | PASS / FAIL / BLOCKED / UNVERIFIED |
+| AC-001 |                |              | <core: PASS / FAIL / BLOCKED / UNVERIFIED> [optional: WAIVED / STALE / CONTRADICTED] |
 
 ## Unassigned changes
 

@@ -207,7 +207,7 @@ SOL blocks and APS prose coexist in one `*.swarm.md`. Prose is **commentary**; a
 
 SOL v0.1 defines exactly **seven block types**. Three carry **binding force** (they are *obligation blocks*): `REQ`, `CONSTRAINT`, `INVARIANT`. The remaining four declare boundaries (`INTERFACE`), mark ambiguity (`QUESTION`), claim implementation (`TRACE`), or judge an obligation (`VERDICT`). `TASK-MAP`, `FINDING`, and `ADR` are **not** SOL block types — they are downstream artifacts (§21).
 
-This section gives, per block: purpose; whether it binds; the clause grammar in canonical order; semantics; and at least one worked example. Clause keywords are uppercase and case-sensitive (§5.5). The trailing **metadata clauses** `DEPENDS ON`, `TOUCHES`, `WRITES`, `READS`, `AFFECTS`, and `RISK <low|medium|high|critical>` are available on obligation blocks (REQ/CONSTRAINT/INVARIANT) and feed orchestration (§18); they are space-separated uppercase at the surface and lower to snake_case edges/scalars in the IR (§12).
+This section gives, per block: purpose; whether it binds; the clause grammar in canonical order; semantics; and at least one worked example. Clause keywords are uppercase and case-sensitive (§5.5). The trailing **metadata clauses** `DEPENDS ON`, `TOUCHES`, `WRITES`, `READS`, `AFFECTS`, `RISK <low|medium|high|critical>`, and `DOMAIN` are available on obligation blocks (REQ/CONSTRAINT/INVARIANT) and feed orchestration (§18); they are space-separated uppercase at the surface and lower to snake_case edges/scalars in the IR (§12).
 
 ### 6.1 REQ — required behavior
 
@@ -273,7 +273,7 @@ VERIFY BY test:cmdTest:payment-timeout
 
 **Purpose.** A `CONSTRAINT` restricts *how* obligations may be satisfied — it bounds the solution space rather than requesting a behavior. **Binding: yes** (obligation block).
 
-There is no separate `POLICY` block type. Authority and enforcement attributes of a constraint are **metadata** (e.g. `OWNED BY` on the surface, `authority` in the IR), not a distinct block type.
+There is no separate `POLICY` block type. A constraint's authority is recorded in the IR `authority` field (§12), not as a distinct block type and not via a surface `OWNED BY` clause (`OWNED BY` is INTERFACE-only, §6.4).
 
 **Clause grammar (canonical order).**
 
@@ -470,6 +470,7 @@ The following clauses MAY trail any obligation block (REQ/CONSTRAINT/INVARIANT).
 | `READS <surface-list>` | Read set. | `reads` set |
 | `AFFECTS <surface-or-id-list>` | Impact set (downstream effect). | `affects` edges |
 | `RISK <low\|medium\|high\|critical>` | Risk tier. | `risk` scalar |
+| `DOMAIN <one of the eight governance domains>` | Per-obligation Axis-B domain; overrides the frontmatter `domain` default (§22.1.2). | `domain` scalar |
 
 ```sol
 REQ AC-005:

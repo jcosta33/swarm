@@ -42,6 +42,7 @@ AND THE auth client MUST replay the original request with the new session
 VERIFY BY test:cmdTest:web/tests/auth-refresh-401.spec.ts#replays-after-refresh
 DEPENDS ON IF-001
 WRITES web/src/http/client.ts
+AFFECTS I-001
 RISK high
 
 REQ AC-002:

@@ -122,7 +122,7 @@ Because the graph — not prose, and not any agent's recollection — is the sou
 Swarm's organizing slogan is **"unitary at rest, modular in execution."**
 
 - **Unitary at rest** — Swarm installs as one coherent framework. The language, artifact contracts, passes, templates, pass guides, and memory model arrive together and are internally consistent. There is no menu of disconnected features to assemble.
-- **Modular in execution** — at run time, only the pass, profile, and context a single task needs are loaded. A task names the pass guide and profile it requires; nothing else is in context. This protects instruction-adherence and token cost (§2.10) without fragmenting the framework.
+- **Modular in execution** — at run time, only the pass, profile, and context a single task needs are loaded. A task names the pass guide and profile it requires; nothing else is in context. This protects instruction-adherence and token cost (§2.6) without fragmenting the framework.
 
 ### 1.4 What this supersedes: the buffet framing is retired
 
@@ -136,7 +136,7 @@ Earlier Swarm framing presented the system as a **buffet** — a pick-your-own l
 | 4 core docs + extended types | One **unified artifact set** centered on the obligation graph | §29 |
 | "Recommended routing" prose | Deterministic **lowering** + a **plan** the launcher executes | §11, §13 |
 
-Adoption may still be incremental at the *repository* level (a team may vendor a subset), but the *conceptual model* is unitary: every piece is a component of one compiler, not an independent gadget. A skill never owns language semantics (§26.2); a persona is never a character (§27); a task type is never an open-ended prompt log (§28).
+Adoption may still be incremental at the *repository* level (a team may vendor a subset), but the *conceptual model* is unitary: every piece is a component of one compiler, not an independent gadget. A skill never owns language semantics (§26.1); a persona is never a character (§27); a task type is never an open-ended prompt log (§28).
 
 ### 1.5 What Swarm is not
 
@@ -164,7 +164,7 @@ Swarm is **markdown-only**. Everything that "runs" — parser, normalizer, plann
 
 Prose, SOL, APS, skills, profiles, and `AGENTS.md` are **SOFT control** (context and guidance). They MUST NOT be presented as enforcement. Anything that must hold *regardless of the model* requires a **deterministic check OUTSIDE the model** (a hook, CI step, permission rule, or schema validator) — the **HARD control** lane.
 
-- *Rationale:* model adherence is probabilistic (prompt-format sensitivity, multi-turn decay, context-rot; §2.10); only an external deterministic check can guarantee a property.
+- *Rationale:* model adherence is probabilistic (prompt-format sensitivity, multi-turn decay, context-rot; §2.6); only an external deterministic check can guarantee a property.
 - *Consequence:* the spec maps each `CONSTRAINT`, `INVARIANT`, stop-rule, and secret-redaction need to its eventual deterministic home (§17), and states plainly that **today the hard lane is aspirational/manual** (no runtime). No file MAY claim Swarm enforces behavior through code.
 
 #### 2.1.3 Invariant 3 — Surface-vs-IR layering
@@ -393,6 +393,7 @@ Uppercase only. **Deprecated aliases** (recognized on input, flagged advisory `S
 | Block | Ordered clause keywords |
 |-------|-------------------------|
 | `REQ` | `WHERE` → `WHILE` → `WHEN` → `IF [THEN]` → `THE <actor> <MODAL> <response>` → `[AND THE <actor> <MODAL> <response>]*` → `[BECAUSE]` → `[EXCEPT]` → `VERIFY BY` → trailing metadata `DEPENDS ON / TOUCHES / WRITES / READS / AFFECTS / RISK <low\|medium\|high\|critical> / DOMAIN <domain>` |
+| `CONSTRAINT` | `[WHERE <cond>]` → `THE <actor> <MODAL> <response>` → `[AND THE <actor> <MODAL> <response>]*` → `[BECAUSE]` → `[EXCEPT]` → `VERIFY BY` → trailing metadata `DEPENDS ON / TOUCHES / WRITES / READS / AFFECTS / RISK <low\|medium\|high\|critical> / DOMAIN <domain>` |
 | `INVARIANT` | `<property> MUST\|MUST NOT <hold>` (no `ALWAYS`/`NEVER`) |
 | `INTERFACE` | `RETURNS`, `ACCEPTS`, `ERRORS`, `OWNED BY` |
 | `QUESTION` | `[blocking\|non-blocking]` tag, `AFFECTS` |

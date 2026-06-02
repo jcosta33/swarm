@@ -89,7 +89,7 @@ task.md frontmatter:
   task_kind: fix
   pass: implement
   pass_guides: [write-fix, fix-flaky-test]
-  profiles: [skeptic]
+  profile: skeptic
 ```
 
 The agent loads `write-fix`, `fix-flaky-test`, and the Skeptic profile for this `implement` pass, and nothing else.

@@ -38,7 +38,7 @@ Every obligation block (REQ, CONSTRAINT, INVARIANT — see §6) MAY carry the fo
 | `DEPENDS ON <id-list>` | `depends_on[]` | Hard ordering: this obligation MUST be satisfied after the listed obligations. | Dependency DAG (§18.4). |
 | `AFFECTS <id-list-or-surface>` | `affects[]` | The impact set: obligations or surfaces that may be perturbed but are not directly written. | Soft conflict edge (`affects`, §18.6). |
 
-`AFFECTS` MUST be lowered to an `affects` edge in the IR, never folded into `writes` or `depends_on`. `DEPENDS_ON` (underscore) is **not** a surface keyword; it is a transcription of the IR edge type, and any source author writing `DEPENDS_ON` in `.swarm.md` MUST be flagged `SOL-S005`-adjacent (keyword-form error). The surface keyword is exactly `DEPENDS ON` (two words).
+`AFFECTS` MUST be lowered to an `affects` edge in the IR, never folded into `writes` or `depends_on`. `DEPENDS_ON` (underscore) is **not** a surface keyword; it is a transcription of the IR edge type, and any source author writing `DEPENDS_ON` in `.swarm.md` MUST be flagged as a syntax (S-layer) keyword-form error (`SOL-S002`, malformed clause keyword). The surface keyword is exactly `DEPENDS ON` (two words).
 
 Worked example (surface):
 
@@ -61,9 +61,7 @@ Lowered IR fragment (snake_case, §12):
   "id": "REQ.auth-refresh.AC-014",
   "kind": "REQ",
   "writes": ["auth.client.code"],
-  "reads": ["auth.config"],
-  "depends_on": ["AC-010"],
-  "affects": ["AC-022"]
+  "reads": ["auth.config"]
 }
 ```
 

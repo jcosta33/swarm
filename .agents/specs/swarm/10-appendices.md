@@ -322,7 +322,7 @@ P-layer rules are single-obligation-local. `001`–`049` are BLOCKING; `050`–`
 
 | Code | Severity | Short name | Definition | Resolves by |
 |---|---|---|---|---|
-| `SOL-P001` | BLOCKING | dangling-condition | A trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | `CLARIFY` / `ATOMIZE`: supply the consequence. |
+| `SOL-P001` | BLOCKING | dangling-condition | A trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | `NORMALIZE`: supply the consequence. |
 | `SOL-P002` | BLOCKING | missing-actor | The obligation has no responsible actor. | `CONCRETIZE`: name the actor. |
 | `SOL-P003` | BLOCKING | missing/informal-modality | No modal, or lowercase `should`/`must`/`may` used where binding force is intended. | `NORMALIZE`: uppercase to the correct modal (was `APS-M001`). |
 | `SOL-P004` | BLOCKING / ADVISORY | bundled/overloaded-obligation | One clause bundling multiple separable obligations is BLOCKING; the permitted `AND THE` chain beyond two is an ADVISORY warning (G3). | `ATOMIZE`: split into one obligation per block (was `APS-O001`; >2 chained `AND THE` warns, never a hard error, G3). |
@@ -337,7 +337,7 @@ The **high-risk-word list** (the union of the subjective/promotional list + Femm
 
 | Code | Severity | Short name | Definition | Resolves by |
 |---|---|---|---|---|
-| `SOL-P050` | ADVISORY | pronoun | Vague pronoun with non-unique antecedent. | `CLARIFY` (was `APS-A002` / `SOL-L103`). |
+| `SOL-P050` | ADVISORY | pronoun | Vague pronoun with non-unique antecedent. | `CONCRETIZE` (was `APS-A002` / `SOL-L103`). |
 | `SOL-P051` | ADVISORY | passive-voice | Passive voice in an obligation sentence. | `NORMALIZE` (was `SOL-L105`). |
 | `SOL-P052` | ADVISORY | sentence-length | Obligation sentence exceeds ~20 words. | `COMPRESS` / `ATOMIZE`. |
 | `SOL-P053` | ADVISORY | non-present-non-active | Non-present-tense or non-active phrasing. | `NORMALIZE`. |
@@ -399,13 +399,13 @@ The closed 10-op improve set (§10) is wired to the codes above; this is the can
 
 | Improve op | Resolves codes |
 |---|---|
-| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
+| `NORMALIZE` | `SOL-P001`, `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
 | `ATOMIZE` | `SOL-P004` (and `SOL-P052` by splitting) |
-| `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-M001` |
+| `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-P050`, `SOL-M001` |
 | `QUANTIFY` | `SOL-P005`, `SOL-P056` |
 | `BIND` | `SOL-V001`, `SOL-V002`, `SOL-V003`, `SOL-V006`, `SOL-V008`, `SOL-M003`, `SOL-P006` |
 | `SCOPE` | `SOL-O001`, `SOL-O002`, `SOL-O004`, `SOL-O005`, `SOL-O007`, `SOL-O008` |
-| `CLARIFY` | `SOL-P008`, `SOL-P001`, `SOL-P007`, `SOL-P050`, `SOL-O003` |
+| `CLARIFY` | `SOL-P008`, `SOL-P007`, `SOL-O003` |
 | `DECONFLICT` | `SOL-M002`, `SOL-M004`, `SOL-O006` |
 | `COMPRESS` | `SOL-P054`, `SOL-P055`, `SOL-O006` |
 | `PROMOTE` | (no lint code — routes through the promotion protocol, §23/§30) |
@@ -575,6 +575,7 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
           "risk":   { "enum": ["low", "medium", "high", "critical", null] },
           "reads":  { "type": "array", "items": { "type": "string" }, "default": [] },
           "writes": { "type": "array", "items": { "type": "string", "description": "Write surface path/glob or named SURFACE member" }, "default": [] },
+          "touches":{ "type": "array", "items": { "type": "string", "description": "Lowering of TOUCHES; surface path/glob or named SURFACE member" }, "default": [] },
           "affects":{ "type": "array", "items": { "type": "string" }, "default": [] },
           "verify_by": {
             "type": "array",
@@ -721,8 +722,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
     }
   ],
   "edges": [
-    { "from": "REQ.auth-refresh.AC-001", "to": "INTERFACE.auth-refresh.IF-001", "type": "depends_on", "hard": true },
-    { "from": "INTERFACE.auth-refresh.IF-001", "to": "REQ.auth-refresh.AC-001", "type": "verified_by", "hard": false }
+    { "from": "REQ.auth-refresh.AC-001", "to": "INTERFACE.auth-refresh.IF-001", "type": "depends_on", "hard": true }
   ],
   "diagnostics": [
     { "code": "SOL-V003", "level": "warning", "node": "REQ.auth-refresh.AC-001", "source": null,
@@ -857,6 +857,7 @@ AND THE auth client MUST replay the original request with the new session
 VERIFY BY test:cmdTest:web/tests/auth-refresh-401.spec.ts#replays-after-refresh
 DEPENDS ON IF-001
 WRITES web/src/http/client.ts
+AFFECTS I-001
 RISK high
 
 REQ AC-002:
@@ -1169,12 +1170,12 @@ This appendix enumerates twelve residual gaps requiring an author's judgment. Th
 
 | Gap | The question | v0.1 disposition (normative) | Owner | Revisit in v0.2? |
 | --- | --- | --- | --- | --- |
-| **G1** | Is there a config schema to promote advisories→errors (strict mode) or demote a blocker with a recorded waiver? | A `swarm.config` file MAY carry a `severity_overrides` map (`code → BLOCKING\|ADVISORY\|OFF`) and a `waivers[]` list; each waiver MUST record `{code, span_or_obligation, authority, reason, expires_on, source_hash}`. A demotion-to-OFF without a waiver record is itself a lint error. Absent the file, the default severities (§8) hold. | §8, §17 | Yes — add inheritance/profile layering. |
+| **G1** | Is there a config schema to promote advisories→errors (strict mode) or demote a blocker with a recorded waiver? | A `swarm.config` file MAY carry a `severity_overrides` map (`code → BLOCKING\|ADVISORY\|OFF`) and a `waivers[]` list; each waiver MUST record `{code, scope, to, authority, reason, expiry, recorded_at}` (the §8.6 schema). A demotion (including `to: off`, which suppresses the diagnostic) without a waiver record is itself a lint error. Absent the file, the default severities (§8) hold. | §8, §17 | Yes — add inheritance/profile layering. |
 | **G2** | Where is the binding-clause vs commentary boundary that gates many `SOL-P` codes? | A span is **binding iff it lies inside a typed obligation block** (`REQ`, `CONSTRAINT`, `INVARIANT`); every other span is **commentary**. Comparatives, loopholes, and high-risk words are BLOCKING in binding spans and ADVISORY in commentary. This is normative, not heuristic. | §7, §8 | No. |
 | **G3** | Does `AND THE` chaining violate single-obligation discipline? | `AND THE <actor> <MODAL> <response>` chaining is **permitted**; the `lower` pass MUST split each conjunct into a distinct IR obligation. More than two chained obligations in one block emits a non-blocking `SOL-P004`-adjacent **warning** suggesting `ATOMIZE`; it is never a hard error. | §6, §10, §11 | No. |
 | **G4** | What is the enforcement-lane artifact mapping each CONSTRAINT/INVARIANT/stop-rule to its deterministic home? | The kernel defines a first-class **enforcement-lane artifact** (one table) mapping each `CONSTRAINT`/`INVARIANT`/stop-rule/secret-redaction obligation to its eventual deterministic home (`PreToolUse` hook, CI step, permission deny, schema validator). It is **aspirational/manual today** (Invariant 1/2) and MUST be labeled as such; it claims no live enforcement. | §17 | Yes — bind each row to a shipped hook/CI contract. |
 | **G5** | Who holds waiver authority, and does WAIVED auto-expire? | Waiver authority is **human or spec-owner only** (never a tool, never an agent profile acting alone). A `WAIVED` decorator **auto-expires on the next source-hash change** of the waived obligation (preventing zombie waivers); an expired waiver reverts the obligation to its undecorated core verdict and re-closes the merge gate. | §14 | No. |
-| **G6** | What is the action on `CONTRADICTED` at the merge gate, beyond the proof-strength ordering? | On `CONTRADICTED`, the merge gate **blocks and routes to review**; the obligation's core verdict is taken from the **stronger oracle** per the proof-strength order (`model > property/contract > test > static > manual/monitor`), and the weaker proof is recorded as superseded evidence. A tie at equal strength escalates to `manual`. | §14, §15 | Yes — formal weighting for LLM-judge proofs. |
+| **G6** | What is the action on `CONTRADICTED` at the merge gate, beyond the proof-strength ordering? | On `CONTRADICTED`, the merge gate **blocks and routes to review**; the obligation's core verdict is taken from the **stronger oracle** per the proof-strength order (`model > property/contract > test > static > manual/monitor`), and the weaker proof is recorded as superseded evidence. A tie at **equal strength takes no working assumption** — the obligation **stays open and routes to an independent reviewer / higher-ranked authority** (§17.4). | §14, §15 | Yes — formal weighting for LLM-judge proofs. |
 | **G7** | What is the READS conflict rule, and how are shared/global surfaces handled? | read/read is **always parallel-safe**; read/write on the same surface is a **conflict edge** (conflict-serializability). A `SURFACE` MAY carry an attribute — `SURFACE <name> = … [append-only\|integration\|shared]` — so shared/global/append-only surfaces (lockfiles, CI config, manifests) are not treated as ordinary write conflicts and do not trigger blanket staleness. A new lint code **`SOL-O005`** ("owned path outside declared write surface") enforces the two-tier lowering check. | §8, §16, §18 | No. |
 | **G8** | What is the full `*.swarm.plan.json` schema, given the unreconciled source field sets? | The plan schema follows the **same method as the IR**: a **graph envelope** plus a **rich packet payload**, formalized in **Appendix C.3**. Each work packet carries the §13.5 fields `{id, pass, profile, inputs[], outputs[], writes[], reads[], depends_on[], lane, batch, merge_safe}` (the authoritative shape) — `inputs[]` subsumes the earlier `derived_from[]`, and proof bindings (`verify_by`) live on the obligations a packet's `inputs` reference, not on the packet. There is **no `locks` field** — a lock group is a named `SURFACE`. The plan is **documented-as-contract only**; no tool emits it (Invariant 1). | §13 | Yes — batching/lane fields once a launcher exists. |
 | **G9** | What does a "universal workflow rule" promotion actually become, given the ≤200-line AGENTS.md cap? | A workflow-rule promotion becomes a **pass-guide edit plus a one-line AGENTS.md pointer**, never inline procedure in the bootloader. Only persistent *facts* (ADR 0017) live in `AGENTS.md`; the procedure lives in the named pass guide the pointer references. | §23, §26, §31 | No. |
