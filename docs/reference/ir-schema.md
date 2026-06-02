@@ -129,7 +129,7 @@ Each surface `VERIFY BY <type>:<adapter>:<artifact>[#selector]` clause normalize
 | `file` | string | MUST | Relative path to the originating `*.swarm.md`. |
 | `line_start` | integer (≥1) | MUST | First line of the block (1-based). |
 | `line_end` | integer (≥1) | MUST | Last line of the block. |
-| `content_hash` | string \| null | MAY | Content hash of the block's source text (e.g. `sha256:…`); drives `STALE` drift detection. |
+| `content_hash` | string | MUST | Content hash of the block's source text (e.g. `sha256:…`); the obligation-source hash the drift model joins against (drives `STALE` detection). |
 
 #### 1.2.4 `status` — the verdict model, carried as two fields
 
@@ -294,12 +294,12 @@ These three values drift independently and MUST remain three fields.
           "source": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["file", "line_start", "line_end"],
+            "required": ["file", "line_start", "line_end", "content_hash"],
             "properties": {
               "file":         { "type": "string" },
               "line_start":   { "type": "integer", "minimum": 1 },
               "line_end":     { "type": "integer", "minimum": 1 },
-              "content_hash": { "type": ["string", "null"], "description": "Hash of the obligation source span; drives STALE drift" }
+              "content_hash": { "type": "string", "description": "Hash of the obligation source span; the drift model joins against it (drives STALE)" }
             }
           },
           "provenance": { "type": "array", "items": { "type": "object" }, "default": [], "description": "Per-node trace/finding provenance objects; minimal pinned shape = the trace-provenance schema" }
@@ -418,8 +418,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
     }
   ],
   "edges": [
-    { "from": "REQ.auth-refresh.AC-001", "to": "INTERFACE.auth-refresh.IF-001", "type": "depends_on", "hard": true },
-    { "from": "INTERFACE.auth-refresh.IF-001", "to": "REQ.auth-refresh.AC-001", "type": "verified_by", "hard": false }
+    { "from": "REQ.auth-refresh.AC-001", "to": "INTERFACE.auth-refresh.IF-001", "type": "depends_on", "hard": true }
   ],
   "diagnostics": [
     { "code": "SOL-V003", "level": "warning", "node": "REQ.auth-refresh.AC-001", "source": null,

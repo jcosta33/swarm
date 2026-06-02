@@ -29,6 +29,8 @@ for this directory: the per-stage files reproduce the full `intent → promotion
 | 7 | review | `review.md` | per-obligation `VERDICT`s; merge-gate outcome |
 | 8 | promote | `finding.md` | the durable finding promoted with full provenance |
 
+> The `task.md` here shows the **pipeline-relevant work-packet frame** (scope + the verification matrix the trace consumes), not a full task-file. The task-file-schema `required_sections` rule (§32.3) is exercised by the dedicated schema fixtures [`../conformant-task.md`](../conformant-task.md) (positive) and [`../violations.md`](../violations.md) (negatives).
+
 ## Expected lint diagnostics (stage 2, on the authored `spec.swarm.md`)
 
 Three BLOCKING diagnostics fire, each in the unified `SOL-<LAYER><NNN>` namespace (§8). Each

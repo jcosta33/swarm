@@ -21,9 +21,9 @@ checker passes any of these, the checker (or the manifest) is wrong.
 
 ## V2 — missing required section (`task_file.required_sections`)
 
-A task file with `## Metadata`, `## Plan`, and `## Self-review` but **no `## Objective`** and **no `## Linked docs`**.
+A task file presenting `## Parent contract`, `## Scope`, `## Assigned obligations`, `## Constraints and invariants`, `## Implementation or pass trace`, `## Promotion queue`, and `## Self-review` — but **no `## Verification matrix`**.
 
-**Expected:** FAIL — `Objective` and `Linked docs` are required; the task is ungrounded.
+**Expected:** FAIL — `Verification matrix` is a member of the manifest's closed `required_sections` set; a task missing it cannot carry the proof side of any obligation.
 
 ---
 
@@ -43,17 +43,17 @@ A template introducing `{{cmdFrobnicate}}` — a new `cmd*` slot absent from the
 
 ---
 
-## V5 — unresolved `[CRITICAL]` at close (`content_rules: no-open-critical`)
+## V5 — unresolved blocking `QUESTION` at close (`content_rules: no-open-critical`)
 
-```markdown
-## Open questions
-
-- [ ] **[CRITICAL]** Which auth scheme — resolve before implementing.
+```sol
+QUESTION Q-001 [blocking]:
+Which auth scheme — resolve before implementing?
+AFFECTS AC-001
 ```
 
-…in a task file whose `## Metadata` says `Status: done`.
+…in a task file whose frontmatter `status` is the terminal value `done`.
 
-**Expected:** FAIL — a `[CRITICAL]` open question is unresolved while the task claims completion.
+**Expected:** FAIL — an unresolved `[blocking]` `QUESTION` remains in a task whose `status` is `done`; `done` is terminal and MUST NOT carry an open blocking decision.
 
 ---
 

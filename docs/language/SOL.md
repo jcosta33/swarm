@@ -225,7 +225,8 @@ This lowers to two IR obligations (one per `THE` / `AND THE`), both carrying the
 Bounds *how* obligations may be satisfied rather than requesting a behavior; it persists across tasks as a guard.
 
 ```ebnf
-constraint_body = actor_clause, { and_actor_clause }
+constraint_body = [ "WHERE", ws, cond, nl ]
+                  actor_clause, { and_actor_clause }
                   [ "BECAUSE", ws, prose, nl ]
                   [ "EXCEPT",  ws, prose, nl ]
                   verify_line

@@ -92,7 +92,7 @@ It is **closed for v0.1**: these families are the lint-checked set. A project MA
 
 | Family | Examples (non-exhaustive within family) | Default lint |
 |---|---|---|
-| Subjective / promotional | `robust`, `clean`, `simple`, `intuitive`, `user-friendly`, `modern`, `seamless`, `flexible`, `elegant`, `polished`, `correct`, `appropriate`, `proper`, `reasonable` | `SOL-P005` |
+| Subjective / promotional | `robust`, `clean`, `simple`, `intuitive`, `user-friendly`, `easy to use`, `modern`, `seamless`, `flexible`, `elegant`, `beautiful`, `polished`, `nice`, `flamboyant`, `innovative`, `world-class`, `correct`, `appropriate`, `proper`, `reasonable` | `SOL-P005` |
 | Non-verifiable quality | `fast`, `performant`, `scalable`, `secure`, `safe`, `reliable`, `consistent`, `graceful`, `sufficient`, `adequate` | `SOL-P005` |
 | Vague action verbs | `handle`, `support`, `manage`, `improve`, `optimize`, `enhance`, `streamline`, `modernize`, `clean up`, `make robust` | `SOL-P005` |
 | Loopholes | `as far as possible`, `if practical`, `where feasible`, `if possible`, `to the extent practicable` | `SOL-P005` |

@@ -152,7 +152,7 @@ P-layer rules are single-obligation-local; each maps to a closed [improve op](..
 
 | Code | Severity | Layer | Message (short name + defect) | Resolves by |
 |---|---|---|---|---|
-| `SOL-P001` | BLOCKING | P | dangling-condition: a trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | `CLARIFY` / `ATOMIZE`: supply the consequence. |
+| `SOL-P001` | BLOCKING | P | dangling-condition: a trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | author rewrite / `NORMALIZE`: supply the missing consequence. |
 | `SOL-P002` | BLOCKING | P | missing-actor: the obligation has no responsible actor. | `CONCRETIZE`: name the actor. |
 | `SOL-P003` | BLOCKING | P | missing/informal-modality: no modal, or lowercase `should`/`must`/`may` used where binding force is intended. | `NORMALIZE`: uppercase to the correct modal. |
 | `SOL-P004` | BLOCKING / ADVISORY | P | bundled/overloaded-obligation: one clause bundling multiple separable obligations is BLOCKING; a permitted `AND THE` chain beyond two is an ADVISORY warning. | `ATOMIZE`: split into one obligation per block. |
@@ -232,13 +232,13 @@ The closed **10-op [improve set](../passes/improve.md)** is the canonical detect
 
 | Improve op | Resolves codes |
 |---|---|
-| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
+| `NORMALIZE` | `SOL-P001`, `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
 | `ATOMIZE` | `SOL-P004` (and `SOL-P052` by splitting) |
 | `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-M001` |
 | `QUANTIFY` | `SOL-P005`, `SOL-P056` |
 | `BIND` | `SOL-V001`, `SOL-V002`, `SOL-V003`, `SOL-V006`, `SOL-V008`, `SOL-M003`, `SOL-P006` |
 | `SCOPE` | `SOL-O001`, `SOL-O002`, `SOL-O004`, `SOL-O005`, `SOL-O007`, `SOL-O008` |
-| `CLARIFY` | `SOL-P008`, `SOL-P001`, `SOL-P007`, `SOL-P050`, `SOL-O003` |
+| `CLARIFY` | `SOL-P008`, `SOL-P007`, `SOL-P050`, `SOL-O003` |
 | `DECONFLICT` | `SOL-M002`, `SOL-M004`, `SOL-O006` |
 | `COMPRESS` | `SOL-P054`, `SOL-P055`, `SOL-O006` |
 | `PROMOTE` | (no lint code — routes through the [promotion protocol](../reference/promotion-protocol.md)) |
@@ -337,7 +337,7 @@ A handful of legacy codes change *layer* in v0.1 because their concern moved to 
 | `SOL-M008` | `SOL-V004` | proof-staleness → V |
 | `SOL-M009` | `SOL-O001` | planner parallelism → O |
 
-**Splits by phase.** Where one legacy code maps to two v0.1 codes — e.g. `SOL101 → SOL-S001`/`SOL-P001`, `SOL201 → SOL-S004`/`SOL-M001` — the syntactic facet fires at `PARSE` (S) and the semantic/prose facet at `NORMALIZE` (P/M); a migration tool MUST emit both where both facets are present and MUST NOT collapse them. **Tombstoned** legacy codes (`SOL004` `:::END` removed; `SOL104` `ALWAYS`/`NEVER` removed from INVARIANT) have no successor. New-in-v0.1 codes `SOL-O005` and `SOL-S013` have no legacy alias.
+**Splits by phase.** Where one legacy code maps to two v0.1 codes — e.g. `SOL101 → SOL-S001`/`SOL-P001`, `SOL201 → SOL-S004`/`SOL-M001` — the syntactic facet fires at `PARSE` (S) and the semantic/prose facet at `NORMALIZE` (P/M); a migration tool MUST emit both where both facets are present and MUST NOT collapse them. **Tombstoned** legacy codes (`SOL004` `:::END` removed; `SOL104` `ALWAYS`/`NEVER` removed from INVARIANT) have no successor. New-in-v0.1 codes `SOL-O005` and `SOL-S013` have no legacy alias. The retired `SOL-S009` (legacy trace-ref-resolution check) **re-layers** to `SOL-M003` — an orphan `TRACE`/`VERDICT` target resolving to no obligation is a semantic (M-layer) defect, not a syntax one; per the tombstone discipline its `S`-slot number is reserved and MUST NOT be reissued.
 
 ---
 

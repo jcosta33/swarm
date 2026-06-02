@@ -112,7 +112,8 @@ because_clause    = "BECAUSE", ws, prose_text, nl;          (* mandatory compani
 except_clause     = "EXCEPT", ws, prose_text, nl;          (* alternative companion to SHOULD/SHOULD NOT *)
 
 (* ===== CONSTRAINT ===== *)
-constraint_body   = actor_clause
+constraint_body   = [ where_clause ]
+                    actor_clause
                     { and_actor_clause }
                     [ because_clause ]
                     [ except_clause ]
@@ -121,6 +122,7 @@ constraint_body   = actor_clause
 
 (* ===== INVARIANT: <property> MUST|MUST NOT <hold> (no ALWAYS/NEVER) ===== *)
 invariant_body    = property, ws, inv_modal, ws, hold_text, nl,
+                    [ because_clause ],
                     verify_line,
                     { metadata_clause };
 property          = ? noun phrase naming the invariant property/state ?;

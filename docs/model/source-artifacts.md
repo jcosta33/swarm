@@ -108,6 +108,8 @@ These are *source documents* that promote into the pipeline. They are **conditio
 
 The spec extends this minimum: per §20.3.4, a conformant repository SHOULD also ship `prd.md` (stance: **intent**) and `rfc.md` (stance: **proposal**) templates alongside the three above — extending the Tier-3 set to five — and MAY additionally ship a `use-case.md` or `nfr.md` template. None of these is ever conformance-required.
 
+Beyond these, the stdlib SHOULD make available a **conditional `threat-model.md`** source-doc for changes whose domain is `security` or that touch an attack surface (mapped to OWASP-LLM01). It sits **outside** the five-template Tier-3 inventory the conformance definition counts — it is never conformance-required, so a kernel MAY ship it as an optional security extension and a conformant repo MAY have zero instances. Like the other source-docs it is plain `.md` with `type` + `id` frontmatter, holds **no obligation blocks** (stance: *threat observation*, not intent), and promotes forward only through an `author` pass that re-states each modelled threat as a `CONSTRAINT`/`INVARIANT` with its own id, modality, and a (typically `security`) `VERIFY BY` — subject, as an externally-informed observation, to the source-authority rule for untrusted sources before any obligation it implies becomes binding. Its contract is [`docs/artifacts/threat-model.md`](../artifacts/threat-model.md).
+
 ### 4.4 The recognized parents of a spec (§20.3.4)
 
 A spec is not born only from research. Swarm normalizes many requirements-practice artefacts into one obligation-bearing `spec.swarm.md` rather than pretending every intent begins as research. The canonical **parents** of a spec are catalogued in §20.3.4; the distinction this projection carries forward is:

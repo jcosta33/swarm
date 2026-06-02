@@ -31,6 +31,8 @@ this manifest records the verdict a correct run must produce at each gate.
 | 6 | verify | `trace.md` | `TRACE T-001` + the 7-field provenance table; `monitor` FAIL recorded |
 | 7 | review | `review.md` | per-obligation `VERDICT`s; the `CONTRADICTED` → `BLOCKED` → `PASS` gate arc |
 
+> The `task.md` here shows the **pipeline-relevant work-packet frame**, not a full task-file. The task-file-schema `required_sections` rule (§32.3) is exercised by [`../conformant-task.md`](../conformant-task.md) (positive) and [`../violations.md`](../violations.md) (negatives).
+
 ## Expected lint diagnostics (stage 2, on the authored `spec.swarm.md`)
 
 Two BLOCKING diagnostics fire, each in the unified `SOL-<LAYER><NNN>` namespace (§8). Each is
