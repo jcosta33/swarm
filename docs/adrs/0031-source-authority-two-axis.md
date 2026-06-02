@@ -18,7 +18,7 @@ A single precedence ladder is also insufficient. Two genuinely independent quest
 
 ## Decision
 
-Authority is resolved on **two orthogonal axes, applied lexicographically — domain first, then artifact** — as fully specified in §22 of `.agents/specs/swarm/07-governance-memory.md`.
+Authority is resolved on **two orthogonal axes, applied lexicographically — domain first, then artifact** — as detailed in the source-authority reference ([`docs/model/source-authority.md`](../model/source-authority.md)).
 
 - **Axis A — artifact authority (backward trace):** ranks an obligation by the kind and lifecycle status of the artifact containing it (accepted `adr.md` highest, down through approved spec, accepted finding, reviewed audit/research, task notes, to chat lowest) (§22.1.1).
 - **Axis B — domain authority (forward governing force):** ranks an obligation by its governance domain (`enforced-policy` highest, down through compliance, security, architecture, product, team, task-map, to `memory` lowest), discoverable deterministically from a `DOMAIN` clause, the spec's frontmatter `domain`, or the default `product` (§22.1.2).

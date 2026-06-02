@@ -1,10 +1,10 @@
 # Source artifacts and the `.swarm.` infix partition
 
-> Authoritative source: `.agents/specs/swarm/06-artifacts.md` §20 (the artifact set and conformance definition), §20.1 (the `.swarm.` infix rule), §20.2 (canonical filenames by class), and §20.3 (the tiered required-artifact set). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for source artifacts: which files a Swarm repository may contain, the `.swarm.` infix that partitions them into two classes, the canonical filenames per class, and the tiers on which conformance is defined.
 
 This page is the reader's first map of *which files a Swarm repository may contain* and *how the framework tells them apart*. Swarm is markdown-only and provider-neutral, with **no runtime**: every actor named below ("compiler", "parser", "linter", "planner", "checker") is a CONTRACT a future tool would build against, never shipped code (Invariant 1, NO RUNTIME — §2). Nothing on this page executes; every artifact is inert reference data, a copyable template, or a file a human or agent populates by hand.
 
-The long-form rules — repository layout (§20.0), the adopted-project `.swarm/` workspace (§20.5), the per-artifact contracts and copyable templates (§21), and the mechanically-checkable conformance procedure (§32) — live in the spec. This projection covers only the artifact *set*, its two-class partition, and the *tiers* on which conformance is defined.
+This page covers the artifact *set*, its two-class partition, and the *tiers* on which conformance is defined. Adjacent material lives on sibling pages: repository layout and the adopted-project `.swarm/` workspace, the per-artifact contracts and copyable templates under [docs/artifacts/](../artifacts/), and the mechanically-checkable conformance procedure in [docs/model/conformance.md](conformance.md).
 
 ## 1. Two classes, one discriminator: the `.swarm.` infix
 
@@ -17,13 +17,13 @@ Swarm partitions every repository file that participates in the pipeline into **
 
 A conformant Swarm tool MUST treat the `.swarm.` infix as the **sole, sufficient discriminator** for "do I parse/emit this": it MUST NOT parse a plain `.md` working artifact as SOL source, and MUST NOT emit a compiler output to a path lacking the infix (§20.1).
 
-*Design rationale (from §20.1):* the double-extension convention (`.test.ts`, `.d.ts`) lets tooling select files by a stable, greppable suffix without inspecting their content.
+*Design rationale:* the double-extension convention (familiar from `.test.ts`, `.d.ts`) lets tooling select files by a stable, greppable suffix without inspecting their content.
 
 The only **human-authored** `.swarm.` artifact is `*.swarm.md` (the source spec); the `.swarm.*.json` / `.swarm.trace.md` variants are *emitted* artifacts (see §3.1 below).
 
 ## 2. The artifact set is built from 7 block types and 7 verdicts
 
-The working artifacts on this page are containers for the language defined elsewhere in the kernel. Two counts are load-bearing here and are stated so this projection stays consistent with the spec:
+The working artifacts on this page are containers for the language defined elsewhere in the kernel. Two counts are load-bearing here:
 
 - **7 block types** — the SOL surface-language blocks (`REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT`; §5–§6) are what a `*.swarm.md` source carries and what working artifacts embed as quoted data.
 - **7 verdicts** (4 core + 3 lifecycle; §14) — core ∈ {`PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED`}; lifecycle ∈ {`WAIVED`, `STALE`, `CONTRADICTED`}. A `VERDICT` is a SOL *block*, never a file (see §3.3 below).
@@ -63,7 +63,7 @@ The two `.json` variants are **documented-as-contract names only**: the kernel p
 
 A repository MUST NOT contain a standalone `verdict.md`, and no tool MAY emit one (§20.2.3). `VERDICT` is a SOL *language block* (§6), not a file; `review.md` is its canonical *container* (§21.5).
 
-*Rationale (from §20.2.3):* a verdict is the output of the review pass, exactly as a SARIF `result` lives inside a `run` and never as a free-standing file. The kernel ships documentation of the `VERDICT` block and the verdict taxonomy (§14) as a reference page, not as a copyable artifact template.
+*Rationale:* a verdict is the output of the review pass, and like a SARIF `result` that lives inside a `run` rather than as a free-standing file, it belongs inside its container record, not on its own. The kernel ships documentation of the `VERDICT` block and the verdict taxonomy (§14) as a reference page, not as a copyable artifact template.
 
 ## 4. The tiered required-artifact set
 
@@ -121,24 +121,8 @@ A spec is not born only from research. Swarm normalizes many requirements-practi
 
 Per §20.4, a repository is **Swarm-conformant** iff *all four* hold: (1) self-contained copies of all six Tier-2 docs; (2) a copyable template for each of the seven Tier-1 artifacts, each satisfying its §21 contract; (3) a populated `AGENTS.md` bootloader within the ≤200-line / ≤25 KB density cap (§2, §31.1); (4) the version file (`scaffold/.agents/.swarm-version` in the framework repo, `.swarm/VERSION` in an adopted project; §25). Conditional Tier-3 artifacts and the reserved `.swarm.*.json` contract files are **not** required for conformance. The full mechanically-checkable contract is §32; the golden corpus that exercises it is §33. This projection states the artifact set those checks range over; it does not restate the checks themselves.
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-### Preserved
-
-- The normative **`.swarm.` infix rule** and its two classes (compiler-visible vs working artifact), including the sole-discriminator requirement and the double-extension rationale (§20.1).
-- Both canonical-filename tables: the four compiler-visible patterns with their reserved-contract status (§20.2.1) and the working-artifact list with tiers (§20.2.2).
-- The **NO `verdict.md`** rule and its SARIF-`result` rationale (§20.2.3).
-- The full **three-tier** structure: 7 Tier-1 core artifacts, 6 Tier-2 reference docs, 3 (extensible to 5) Tier-3 source-doc templates, and the recognized-parents distinction including `research.md` as the detached evidence store (§20.3.1–§20.3.4).
-- The NO-RUNTIME framing applied to every "tool" actor named (§2, carried throughout §20).
-
-### Dropped (left to the spec)
-
-- **§20.0 repository layout** and **§20.5 adopted-project `.swarm/` workspace** — the full directory trees, the eight `.swarm/` directory contracts, the `.agents/` compatibility model, the governing placement rule, and the commit policy. These are out of the named source scope for this page; `docs/model/source-authority.md` and `docs/model/conformance.md` are the projection's homes for adjacent material.
-- **Per-artifact contracts and copyable templates** (§21) — every required-section table and template skeleton. Those belong to the per-artifact pages under `docs/artifacts/`.
-- The **full conformance procedure** (§32) and the **golden corpus** (§33); only the §20.4 four-part definition is summarized here as a pointer.
-- The complete §20.3.4 parents table (intent/evidence/proposal/decision/observation/defect/discovery/scenario/interface/quality-attribute rows with their "May feed" columns) — distilled here to the template-vs-normalized-input distinction.
-
-### Still-uncertain (open in the spec)
-
-- The proposed **v0.2 rename** `scaffold/` → `kernel/` (with a one-cycle `scaffold/` alias) is flagged in §20.0 as a possible future ADR; if adopted it changes a payload directory name only, never the artifact filenames, the `.agents/` interior, or the conformance definition — so this page's filename and tier facts are unaffected.
-- Whether the Tier-3 set settles at five (`audit`/`research`/`bug-report`/`prd`/`rfc`) or grows to include shipped `use-case.md` / `nfr.md` templates is left SHOULD/MAY in §20.3.4 and not fixed here.
+- [docs/model/source-authority.md](source-authority.md) — the two-axis authority model + tie-break that governs which artifact wins when sources disagree.
+- [docs/model/conformance.md](conformance.md) — the full mechanically-checkable conformance procedure and golden corpus that range over the artifact set defined here.
+- [docs/artifacts/](../artifacts/) — the per-artifact contracts and copyable template skeletons for the Tier-1 core artifacts and the Tier-3 source-doc templates.

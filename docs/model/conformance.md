@@ -1,6 +1,6 @@
 # Conformance
 
-> Authoritative source: `.agents/specs/swarm/06-artifacts.md` §20.4 (the conformance definition) and `.agents/specs/swarm/09-conformance-and-rework.md` §32 (the conformance contract / manifest) and §32.8 (the maturity ladder). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for conformance: what makes a repository Swarm-conformant (the four-clause definition), the inert conformance manifest that encodes it, and the five-tier maturity ladder for adoption progress.
 
 Swarm is markdown-only and has **no runtime**. Nothing in this page executes. The "checker" that would consume a conformance manifest is a *contract* a future Swarm toolchain would build against — it is never shipped here. Until such a launcher exists, the same contract still serves: a human validates a repository against it by hand, and the golden corpus pins the expected verdicts independently of any tool.
 
@@ -31,7 +31,7 @@ The conformance directory contains exactly three things:
 | `scaffold/.agents/conformance/README.md` | prose | states inertness, provenance, and the "checker is deferred" framing |
 | `scaffold/.agents/conformance/fixtures/` | fixture suite | the golden corpus |
 
-*Design rationale.* That a contract is publishable and useful without a shipped tool follows the SARIF precedent — an OASIS JSON-schema interchange contract that is independent of any analyzer that consumes it `[SARIF]`. The conformance contract is, by the same logic, a framework artifact in its own right.
+*Design rationale.* A contract is publishable and useful without a shipped tool: a static-analysis result format, for instance, is a versioned interchange schema that stands on its own, independent of whichever analyzer produces or consumes it. The conformance contract is, by the same logic, a framework artifact in its own right.
 
 The manifest declares the `language` discriminator it targets (e.g. `SOL/0.1`) so a checker and the corpus reference one versioned definition. Its load-bearing sections are below.
 
@@ -110,10 +110,11 @@ The definition above is a single *binary* predicate — the terminal judgement. 
 
 A repository MAY sit at any tier. Because adoption is incremental, tiers 3–5 are optional adoption *depth*, not a defect when unmet. When reporting a repository's standing, a tool or human SHOULD report the **highest fully-satisfied tier**, and MUST NOT report a higher tier than is fully satisfied — a partially satisfied tier is, within that tier, non-conformant. Per the no-runtime invariant, tier 5 certifies the *contract*, not a live scheduler; the scheduler is a deferred launcher concern.
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-**Preserved (this projection keeps):** the four-clause if-and-only-if conformance definition; the exact three-file conformance directory; the manifest's task-file schema (required sections + the two named content rules), the three command-row tiers with their exact slots, the five placeholder namespaces, the five-letter lint scheme (S/P/M/V/O) and the five named gate tokens; and the full five-tier maturity ladder with each tier's binding and the tier-4 = conformance identity.
-
-**Dropped (left to the spec):** the verbatim `conformance.yaml` YAML excerpts (this is prose); the full §32.7 deferred CLI verb set and the toolchain↔agent-CLI ownership boundary (the adapter contract, the OWNS/does-NOT-own lists) — adjacent in §32 but outside the named conformance-definition / manifest / ladder scope; the golden corpus contents (§33); the per-task-kind full required-suite matrix beyond illustrative rows; the §34.7 reporting rule's exact cross-references; and the design-rationale grounding for the orchestrator/worker split.
-
-**Still-uncertain (the spec governs):** the spec marks the future checker, the CLI surface, and the scheduler as deferred (a contract, never shipped); this page reflects that deferral but does not resolve it. Section numbers cited here (e.g. §18/§19, §21, §23, §33, §34.7, §35.1) are the spec's own forward references and are authoritative there, not re-derived here.
+- [SOL](../language/SOL.md) — the obligation language whose `VERIFY BY` bindings and `SURFACE`/`QUESTION` constructs the ladder tiers gate.
+- [Errors](../language/errors.md) — the full `SOL-<LAYER>NNN` lint/error catalogue the manifest references.
+- [APS](../language/APS.md) — the prose standard whose violations surface as `SOL-P*` codes.
+- [Flow graph](../reference/flow-graph.md) — the human-readable required-verification-suite matrix the manifest shadows.
+- [Source artifacts](source-artifacts.md) — the seven Tier-1 core artifacts and their `§21` template contracts.
+- [Compiler pipeline](compiler-pipeline.md) — the `lower`/`decompose` lowering preconditions that tier 3 (Swarm-compilable) binds to.

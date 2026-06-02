@@ -1,6 +1,6 @@
 # Proof Types and the `VERIFY BY` Binding
 
-> Authoritative source: `.agents/specs/swarm/04-verification.md` §15.1 (the nine closed proof types) and §15.2 (the `VERIFY BY` binding grammar). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for proof types and the `VERIFY BY` binding: the nine closed proof types and the binding grammar that attaches a proof to an obligation.
 
 Swarm is markdown-only, provider-neutral, and has **no runtime**. Nothing here is shipped code: the linter, the `VERIFY BY` resolver, and the proof runner are all **contracts** a future tool builds against. A proof can *falsify* an obligation but may never silently amend its intent, and **schema-valid output is not a proof** — shape is not truth (the `CODE IS REALITY` invariant, §2).
 
@@ -92,16 +92,16 @@ A migration importing legacy specs MAY carry bare refs; `improve`/`NORMALIZE` up
 
 ## Why the boundary matters (design rationale)
 
-The taxonomy is deliberately *closed* so that a future linter can reason about it: the `<type>` is analyzable, while `<adapter>` and `<artifact>` stay free strings (kept in `AGENTS.md`) so the same spec ports across repos. (Cross-reference: the two-layer obligation/adapter model is §15.3, outside this projection's scope.)
+The taxonomy is deliberately *closed* so that a future linter can reason about it: the `<type>` is analyzable, while `<adapter>` and `<artifact>` stay free strings (kept in `AGENTS.md`) so the same spec ports across repos. (Cross-reference: the two-layer obligation/adapter model is §15.3.)
 
-The closed set tracks the **test-oracle problem**: when a precise oracle is unavailable, a single concrete example cannot stand in for an obligation's predicate, and property-based / metamorphic pseudo-oracles are the principled response [ORACLE]. This is why `property` and `model` are first-class types rather than scope notes under `test`, and why `manual` is named honestly rather than disguised as a passing test. A binding that resolves only to "schema-valid output" or a bare "tests passed" is not a proof and yields `UNVERIFIED`, not `PASS` (the *what is NOT a proof* floor, §15.9; oracle-adequacy motivation [SWEBENCH-ADQ], [UTBOOST]).
+The closed set tracks the **test-oracle problem**: when a precise oracle is unavailable, a single concrete example cannot stand in for an obligation's predicate, so generative property-based and metamorphic checks are the principled response — they assert a quantified property rather than a single hand-picked case. This is why `property` and `model` are first-class types rather than scope notes under `test`, and why `manual` is named honestly rather than disguised as a passing test. A binding that resolves only to "schema-valid output" or a bare "tests passed" is not a proof and yields `UNVERIFIED`, not `PASS` (the *what is NOT a proof* floor, §15.9): a passing or schema-valid signal that does not actually exercise the obligation's predicate is an inadequate oracle, and inadequate oracles must not be allowed to manufacture a `PASS`.
 
-A bound proof produces exactly one CORE verdict — `PASS`, `FAIL`, `BLOCKED`, or `UNVERIFIED` (§14.1) — and the lifecycle decorators (`WAIVED`/`STALE`/`CONTRADICTED`) annotate that result; the full seven-value verdict model and the merge gate live in §14, outside this projection.
+A bound proof produces exactly one CORE verdict — `PASS`, `FAIL`, `BLOCKED`, or `UNVERIFIED` (§14.1) — and the lifecycle decorators (`WAIVED`/`STALE`/`CONTRADICTED`) annotate that result; the full seven-value verdict model and the merge gate live in §14.
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-**Preserved (this projection's job).** The full closed list of nine proof types with their one-line definitions; the two normative notes (`test`-scope qualifiers; `runtime` → `monitor`); the complete `VERIFY BY` EBNF grammar; the segment semantics (`<type>`/`<adapter>`/`<artifact>`/`<selector>`); all three worked examples verbatim; the bare-reference rule and its four type-driven triggers; the `verify_by[]` IR normalization; the `SOL-V009` closed-set enforcement.
-
-**Dropped / left to the spec.** The two-layer obligation/adapter resolution and the default proof-type → `cmd*` slot mapping (§15.3); type-selection rules per block type (§15.4); the meaning of `model` "not a theorem per obligation" in depth (§15.5); the proof-strength order (§15.6); one-VERDICT-per-binding (§15.7); per-task-type default suites (§15.8); the full *what is NOT a proof* list and oracle-adequacy record / `SOL-V011` (§15.9–§15.10); the seven-value verdict model, verdict-line grammar, and merge gate (§14). These are referenced only as cross-links, not restated.
-
-**Still-uncertain.** Nothing in §15.1/§15.2 is marked open here. Forward-looking directions that *touch* this clause — e.g. FRETish-style temporal-logic binding to proofs and the future `monitor`/temporal direction — are deferrals tracked by the spec (sources.md, deferral D1), not commitments of this reference.
+- [SOL — The Swarm Obligation Language](../language/SOL.md) — the surface syntax that hosts the `VERIFY BY` clause.
+- [Errors and lint codes](../language/errors.md) — the `SOL-V` family, including `SOL-V009` (unknown-proof-type) and `SOL-V006` (`INTERFACE` must be `contract`).
+- [The IR and Plan JSON Schemas](ir-schema.md) — the `verify_by[]` IR field and its `{type, adapter, ref, selector, gate}` normalization.
+- [Drift and staleness](drift-and-staleness.md) — the `WAIVED`/`STALE`/`CONTRADICTED` lifecycle decorators that annotate a verdict.
+- [Glossary](glossary.md) — the CORE verdict vocabulary (`PASS`/`FAIL`/`BLOCKED`/`UNVERIFIED`) and proof terms used here.

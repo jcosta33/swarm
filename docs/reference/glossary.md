@@ -1,8 +1,8 @@
 # Swarm Glossary
 
-> Authoritative source: `.agents/specs/swarm/10-appendices.md` Appendix F (the glossary). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for canonical vocabulary: one crisp definition per term, alphabetized, with cross-references to the owning concept.
 
-One crisp definition per term, one term per meaning. Each entry cross-references the owning spec section (the `§` numbers point into the kernel spec). Terms are alphabetized, exactly as in Appendix F.
+One crisp definition per term, one term per meaning. Each entry cross-references the owning section (the `§` numbers point into the framework's reference material). Terms are alphabetized.
 
 | Term | Definition |
 | --- | --- |
@@ -47,8 +47,17 @@ One crisp definition per term, one term per meaning. Each entry cross-references
 | **VERIFY BY** | The surface clause binding an obligation to its proof: `VERIFY BY <type>:<adapter>:<artifact>[#selector]`; the IR field name is `verify_by` (§15). |
 | **write surface** | A file or glob an obligation declares it may modify via `WRITES`; the unit of write-conflict and parallel-safety analysis, and the projection an owned path must be a subset of (§18). |
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-- **Preserved.** Every Appendix F entry, verbatim in wording and ordering — one term, one meaning — with its `§` cross-references intact. The closed enumerations the definitions name are reproduced exactly as the spec fixes them: 7 block types, 5 modals, 7 verdicts (4 core + 3 lifecycle), 9 proof types, 7 phases / 9 passes, 5 lint layers (S/P/M/V/O).
-- **Dropped.** The surrounding Appendix-F-adjacent material (Appendix G's rework brief and the other appendices) is not projected here; this view is glossary-only. The full clause grammar, IR schema, lint catalog, and pass/phase mechanics each live in their owning spec section, not in these one-line definitions.
-- **Still-uncertain.** Nothing is resolved or extended beyond the spec here. The 10 improve ops are not a glossary term in Appendix F and so do not appear as an entry; for their enumeration consult the improve-pass section of the spec. Any term whose meaning seems underspecified by its one-liner is, by design, deferred to its referenced `§` section, which governs.
+The full mechanics behind these one-line definitions live in their owning framework pages:
+
+- [SOL](../language/SOL.md) — the obligation language, its block types and clause grammar.
+- [APS](../language/APS.md) — the controlled-prose standard around SOL blocks.
+- [grammar](../language/grammar.md) — the complete clause grammar.
+- [IR schema](ir-schema.md) — the typed intermediate representation contract.
+- [proof types](proof-types.md) — the nine closed verification kinds.
+- [compiler pipeline](../model/compiler-pipeline.md) — the seven phases and nine passes.
+- [source authority](../model/source-authority.md) — the two-axis ordering that resolves conflicts.
+- [drift and staleness](drift-and-staleness.md) — the `STALE` decorator and 3-way reconcile.
+- [promotion protocol](promotion-protocol.md) — moving durable discoveries into findings, ADRs, audits, or memory.
+- [distillation loss budget](distillation-loss-budget.md) — the Preserved / Dropped / Still-uncertain discipline.

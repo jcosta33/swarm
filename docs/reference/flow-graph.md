@@ -1,29 +1,29 @@
 # The Flow Graph: Canonical Counts and the Default-Suite Matrix
 
-> Authoritative source: `.agents/specs/swarm/03-compiler-pipeline.md` §9 (the 7 phases / 9 passes) and §10 (the 10 improve operations), `.agents/specs/swarm/04-verification.md` §14.1 (the 7 verdicts) and §15.1 / §15.8 (the 9 proof types and the per-task-type default suites), `.agents/specs/swarm/09-conformance-and-rework.md` §32.6 (the required-suite matrix and the 5 lint layers), and `.agents/specs/swarm/01-sol-language.md` §5.6 / §6 (the 5 modals and 7 block types). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for the flow graph: the canonical cardinalities of every closed set (block types, modals, verdicts, proof types, phases, passes, improve operations, lint layers) and the per-task-kind default-suite matrix that ties them together.
 
 Swarm is markdown-only, provider-neutral, and has **no runtime**. Nothing on this page is shipped code: the parser, linter, IR builder, scheduler, proof runner, and the `swarm` CLI are all **contracts** a future tool would build against, never code this repo ships (Invariant 1, NO RUNTIME). A "pass" is a transformation a human or agent performs by hand today, following a pass guide; a "gate" is a check a reviewer applies by reading evidence.
 
-This is the **count-reconciliation hub**. Every closed set in Swarm has exactly one cardinality, and that number MUST be identical wherever it appears — in the SOL language reference, the IR schema, the lint catalogue, the pass guides, and the conformance manifest. The spec pins these as acceptance checks A10–A16 (`09-conformance-and-rework.md` §34.4): a count that differs between any two documents is a failing check. This page is where the numbers are gathered, cross-linked, and laid against each other.
+This is the **count-reconciliation hub**. Every closed set in Swarm has exactly one cardinality, and that number MUST be identical wherever it appears — in the SOL language reference, the IR schema, the lint catalogue, the pass guides, and the conformance manifest. Conformance pins these as acceptance checks A10–A16: a count that differs between any two documents is a failing check. This page is where the numbers are gathered, cross-linked, and laid against each other.
 
 ## Canonical counts
 
-Each row is a **closed set**: the conformance contract forbids adding, removing, or reordering its members in v0.1. The "Acceptance check" column is the spec's own reconciliation anchor.
+Each row is a **closed set**: the conformance contract forbids adding, removing, or reordering its members in v0.1. The "Acceptance check" column is the reconciliation anchor a conformance review cites. The "Reference" column links the sibling framework page that defines that set's members in full.
 
-| Closed set | Count | Members (in canonical order) | Acceptance check | Spec source |
+| Closed set | Count | Members (in canonical order) | Acceptance check | Reference |
 | --- | --- | --- | --- | --- |
-| Block types | **7** | `REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT` | A10 | `01-sol-language.md` §6 |
-| Modals | **5** | `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY` | A11 | `01-sol-language.md` §5.6 |
-| Verdicts | **7** (4 core + 3 lifecycle) | core: `PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED` · lifecycle: `WAIVED`, `STALE`, `CONTRADICTED` | A12 | `04-verification.md` §14.1 |
-| Proof types | **9** | `static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor` | A13 | `04-verification.md` §15.1 |
-| Phases | **7** | `PARSE`, `NORMALIZE`, `LOWER`, `EXECUTE`, `VERIFY`, `REVIEW`, `PROMOTE` | A14 | `03-compiler-pipeline.md` §9.1 |
-| Passes | **9** | `author`, `lint`, `improve`, `lower`, `decompose`, `implement`, `verify`, `review`, `promote` | A14 | `03-compiler-pipeline.md` §9.2 |
-| Improve operations | **10** | `NORMALIZE`, `ATOMIZE`, `CONCRETIZE`, `QUANTIFY`, `BIND`, `SCOPE`, `CLARIFY`, `DECONFLICT`, `COMPRESS`, `PROMOTE` | A15 | `03-compiler-pipeline.md` §10.2 |
-| Lint layers | **5** (S/P/M/V/O) | `S` SYNTAX, `P` PROSE, `M` SEMANTIC, `V` VERIFICATION, `O` ORCHESTRATION | A16 | `09-conformance-and-rework.md` §32.6 |
+| Block types | **7** | `REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT` | A10 | [SOL](../language/SOL.md) |
+| Modals | **5** | `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY` | A11 | [SOL](../language/SOL.md) |
+| Verdicts | **7** (4 core + 3 lifecycle) | core: `PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED` · lifecycle: `WAIVED`, `STALE`, `CONTRADICTED` | A12 | [proof types](proof-types.md) |
+| Proof types | **9** | `static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor` | A13 | [proof types](proof-types.md) |
+| Phases | **7** | `PARSE`, `NORMALIZE`, `LOWER`, `EXECUTE`, `VERIFY`, `REVIEW`, `PROMOTE` | A14 | (this page, §Phases and passes) |
+| Passes | **9** | `author`, `lint`, `improve`, `lower`, `decompose`, `implement`, `verify`, `review`, `promote` | A14 | (this page, §Phases and passes) |
+| Improve operations | **10** | `NORMALIZE`, `ATOMIZE`, `CONCRETIZE`, `QUANTIFY`, `BIND`, `SCOPE`, `CLARIFY`, `DECONFLICT`, `COMPRESS`, `PROMOTE` | A15 | (this page) |
+| Lint layers | **5** (S/P/M/V/O) | `S` SYNTAX, `P` PROSE, `M` SEMANTIC, `V` VERIFICATION, `O` ORCHESTRATION | A16 | [errors](../language/errors.md) |
 
 Notes that prevent miscounting:
 
-- **Block types: 7, not 10.** `TASK-MAP`, `FINDING`, and `ADR` are downstream artifacts (`21`), not SOL block types. Three block types carry binding force (the *obligation blocks* `REQ`, `CONSTRAINT`, `INVARIANT`); the other four declare a boundary (`INTERFACE`), mark ambiguity (`QUESTION`), claim implementation (`TRACE`), or judge an obligation (`VERDICT`).
+- **Block types: 7, not 10.** `TASK-MAP`, `FINDING`, and `ADR` are downstream artifacts, not SOL block types. Three block types carry binding force (the *obligation blocks* `REQ`, `CONSTRAINT`, `INVARIANT`); the other four declare a boundary (`INTERFACE`), mark ambiguity (`QUESTION`), claim implementation (`TRACE`), or judge an obligation (`VERDICT`).
 - **Modals: 5, not 7.** `SHALL`/`SHALL NOT` are *removed* (deprecated migration aliases of `MUST`/`MUST NOT`, flagged `SOL-P058`); `CAN`/`WILL` are *non-modal* and forbidden in binding clauses (`SOL-P003`). Only the five uppercase modals bind.
 - **Proof types: 9, not 11 and not 7.** The closed set resolves the earlier 11-type and 7-type proposals. `unit`/`integration`/`e2e` are scope *qualifiers* under `test` (written `test:unit:`, etc.), not types; `runtime` is not a type and maps to `monitor`. An unknown `<type>` is `SOL-V009`.
 - **Phases vs passes: 7 vs 9 — do not conflate.** A *phase* is a conceptual compiler stage (a fixed-order taxonomy of *where* work sits); a *pass* is a schedulable transformation (the unit a human/agent/tool actually runs). Several passes may map to one phase.
@@ -50,7 +50,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 | --- | --- | --- | --- |
 | `author` | entry (pre-`PARSE`) | — | First compiler-visible artifact (`spec.swarm.md`); not itself analyzable. |
 | `lint` | `PARSE` + `NORMALIZE` | S, P, M, V, O | Non-mutating; the only pass that straddles two phases (well-formedness + smell detection). |
-| `improve` | `NORMALIZE` | answers the codes mapped in §10 | Runs only after `lint`; strictly semantics-preserving (R-IMPROVE). |
+| `improve` | `NORMALIZE` | answers the codes mapped to the 10 improve operations | Runs only after `lint`; strictly semantics-preserving (R-IMPROVE). |
 | `lower` | `LOWER` | O | Emits the IR obligation graph and the two derived graphs; needs a lint-clean, approved spec. |
 | `decompose` | `LOWER` | O | Partitions the IR into write-disjoint work packets; consumes the IR, not the surface prose. |
 | `implement` | `EXECUTE` | — | Produces the change for assigned obligations only; records TRACE claims. |
@@ -62,7 +62,7 @@ Of the nine passes, exactly **five** ship a stdlib pass guide in v0.1 (`lint`, `
 
 ## The proof-type × phase default-suite matrix
 
-Each task kind (the `task_kind:` enum) carries a **default suite**: a set of `(proof-type @ phase)` requirements recommending which proofs SHOULD be bound and at which phase they run. The suites are **recommendations**, not a closed law — an author MAY override per obligation, and a binding-completeness check (the `SOL-V` layer) verifies coverage or an explicit justification for any omission (`04-verification.md` §15.8).
+Each task kind (the `task_kind:` enum) carries a **default suite**: a set of `(proof-type @ phase)` requirements recommending which proofs SHOULD be bound and at which phase they run. The suites are **recommendations**, not a closed law — an author MAY override per obligation, and a binding-completeness check (the `SOL-V` layer) verifies coverage or an explicit justification for any omission. See [proof types](proof-types.md) for the binding grammar.
 
 | `task_kind` | Default suite — `(proof-type @ phase)` |
 | --- | --- |
@@ -87,19 +87,19 @@ Each task kind (the `task_kind:` enum) carries a **default suite**: a set of `(p
 How to read the matrix:
 
 - The **phase** in each cell is where the proof runs. Code-producing kinds run their executable proofs at `VERIFY`; the document-producing kinds (`*-writing`, `deepen-audit`) have no executable suite and only lint at `NORMALIZE`; `orchestration` checks write-surface disjointness at `LOWER`.
-- A `manual @ REVIEW` entry is the honest escape hatch where no executable oracle exists (`manual` MUST still carry a `REASON` and an `EVIDENCE` ref — `04-verification.md` §15.9).
+- A `manual @ REVIEW` entry is the honest escape hatch where no executable oracle exists (`manual` MUST still carry a `REASON` and an `EVIDENCE` ref — see [proof types](proof-types.md)).
 - `property\|contract` means *either* type satisfies the row.
 
 ### The conformance-manifest shadow (`cmd*` slots and gates)
 
-`09-conformance-and-rework.md` §32.6 encodes the same matrix as the machine-readable `required_suite` in `conformance.yaml`, resolving each `(proof-type @ phase)` recommendation to concrete `cmd*` adapter slots (looked up through `AGENTS.md > Commands`) plus named equivalence/coverage gates. The proof-type matrix above is the human-readable canonical view; the YAML is its shadow. The five gate tokens are defined in the spec and restated here so the matrix is self-contained:
+The conformance manifest encodes the same matrix as the machine-readable `required_suite` in `conformance.yaml`, resolving each `(proof-type @ phase)` recommendation to concrete `cmd*` adapter slots (looked up through `AGENTS.md > Commands`) plus named equivalence/coverage gates. The proof-type matrix above is the human-readable canonical view; the YAML is its shadow. The five gate tokens are defined here so the matrix is self-contained:
 
 | Gate token | Check |
 | --- | --- |
 | `acceptance-criteria-coverage` | Every acceptance criterion of the obligation maps to a passing proof. |
 | `regression-test` | A test that failed before the change and passes after. |
 | `behaviour-preservation` | A property/differential/metamorphic check that the change preserves prior behaviour. |
-| `scope-disjointness` | The merged workers' `OWNED` paths are pairwise disjoint (`18`). |
+| `scope-disjointness` | The merged workers' `OWNED` paths are pairwise disjoint. |
 | `merge-intent` | Each merge-conflict resolution preserves both obligations' intent. |
 
 A `merged:` prefix on a slot means it runs on the post-integration merged result. Illustrative manifest rows (the full set mirrors this page row-for-row):
@@ -114,7 +114,7 @@ required_suite:
 
 ## The verdict model (7 = 4 core + 3 lifecycle)
 
-A verdict carries **exactly one** core value and **zero or more** lifecycle decorators (`04-verification.md` §14.1). The four core values are mutually exclusive; a single bound proof on a single run lands in exactly one.
+A verdict carries **exactly one** core value and **zero or more** lifecycle decorators. The four core values are mutually exclusive; a single bound proof on a single run lands in exactly one.
 
 | Role | Value | Meaning |
 | --- | --- | --- |
@@ -123,35 +123,23 @@ A verdict carries **exactly one** core value and **zero or more** lifecycle deco
 | Core | `BLOCKED` | A bound proof could not run (missing prerequisite/tool/adapter/env/fixture); truth unknown, not false. |
 | Core | `UNVERIFIED` | No acceptable proof was bound, or a binding exists but no run was attempted. |
 | Lifecycle | `WAIVED` | Decorates `FAIL` or `UNVERIFIED`: explicitly accepted as an exception (authority, reason, expiry). |
-| Lifecycle | `STALE` | Decorates a prior `PASS`: its evidence no longer matches current source/surface hashes (drift, §16). |
+| Lifecycle | `STALE` | Decorates a prior `PASS`: its evidence no longer matches current source/surface hashes (drift — see [drift and staleness](drift-and-staleness.md)). |
 | Lifecycle | `CONTRADICTED` | Decorates any core: two proofs disagree, or a `TRACE`/code disagrees with the obligation. |
 
 `BLOCKED` and `UNVERIFIED` MUST NOT be conflated (they route differently — an environment fix vs. a binding/execution gap). The merge gate expects **one verdict per required `VERIFY BY` binding**, and all required bindings must be `PASS`/`WAIVED` to merge.
 
-When two proofs disagree (`CONTRADICTED`), the tie-break uses a fixed proof-strength order over the nine types (`04-verification.md` §15.6):
+When two proofs disagree (`CONTRADICTED`), the tie-break uses a fixed proof-strength order over the nine types:
 
 ```text
 model  >  property | contract  >  test  >  static  >  manual | monitor
 ```
 
-## Preserved / Dropped / Still-uncertain
+A reconciliation caveat, so this hub does not overstate: only the **counts** are frozen, not every row of the default-suite matrix. The suites are recommendations — an author MAY override per obligation, and a kind's suite may evolve without a language-version change. Likewise the `cmd*` slot names in the manifest shadow (`cmdValidate`, `cmdValidateDeps`, etc.) are project-resolved through `AGENTS.md > Commands`; their exact spelling is a manifest convention, while the proof-type matrix above is the canonical layer.
 
-**Preserved** (faithful projections of the spec, sufficient for a first-read reference):
+## Related
 
-- All eight canonical counts with their members, canonical order, and acceptance-check anchors (A10–A16) — the reconciliation purpose of this page.
-- The phase order, the pass order, and the pass → phase mapping, including the dual-phase `lint` and the dual-pass `LOWER` phase.
-- The full `(proof-type @ phase)` default-suite matrix for all 17 task kinds, plus the five gate-token definitions and a few `cmd*` manifest rows.
-- The 7-value verdict model and the proof-strength tie-break order.
-
-**Dropped** (deliberately left to the spec; out of scope for a counts hub):
-
-- The per-pass input/output artifact columns, profile assignments, and the five stdlib-pass-guide rationale table (`03-compiler-pipeline.md` §9.3–§9.4) — summarized, not reproduced.
-- The full `VERIFY BY` binding grammar, two-layer adapter resolution, and proof-type → `cmd*` default mapping — these live in `docs/reference/proof-types.md` and `04-verification.md` §15.2–§15.4.
-- The improve-operation trigger/precondition/postcondition table and worked before/after examples (`03-compiler-pipeline.md` §10.2–§10.3).
-- The block-type and modal *semantics* (only their identities and counts appear here); see `01-sol-language.md` §5–§6.
-- Oracle adequacy, drift/staleness mechanics, and the full conformance maturity ladder.
-
-**Still-uncertain** (governed by the spec, flagged so this projection does not overstate):
-
-- The default suites are **recommendations**, not a closed law; an author MAY override per obligation, and a kind's suite may evolve without a language-version change. Only the *counts* are frozen, not every row of the matrix.
-- The `cmd*` slot names in the manifest shadow (`cmdValidate`, `cmdValidateDeps`, etc.) are project-resolved through `AGENTS.md > Commands`; their exact spelling is a manifest convention, while the proof-type matrix above is the canonical layer.
+- [SOL](../language/SOL.md) — the block-type and modal semantics behind their counts here.
+- [proof types](proof-types.md) — the `VERIFY BY` binding grammar, adapter resolution, proof-type → `cmd*` mapping, and verdict mechanics.
+- [errors](../language/errors.md) — the five lint layers and the `SOL-<LAYER>NNN` code catalogue.
+- [drift and staleness](drift-and-staleness.md) — how a prior `PASS` becomes `STALE` and the maturity ladder.
+- [IR schema](ir-schema.md) — where the obligation graph and the two derived graphs emitted by `lower` are defined.

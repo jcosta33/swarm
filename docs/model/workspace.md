@@ -1,6 +1,6 @@
 # Workspace Model
 
-> Authoritative source: `.agents/specs/swarm/06-artifacts.md` §20.5 (the adopted-project workspace, the eight `.swarm/` directory contracts, the `.agents/` compatibility model, the governing rule, and the commit policy) and `.agents/specs/swarm/04-verification.md` §16.6 (the five source-code surface policies). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for the workspace model: the adopted-project directory shape — the eight `.swarm/` directory contracts, the `.agents/` compatibility model, the one governing placement rule, the five source-code surface policies, and the commit policy.
 
 This page fixes the **adopted-project workspace** — the directory shape that appears inside a *consuming* project after it adopts Swarm. It is distinct from the framework-dev repository layout (the `docs/`, `examples/`, `evals/`, and `kernel/` siblings that explain, demonstrate, self-test, and package the kernel, §20.0). The framework repo is the **producer**; an adopted project is the **product**. The two MUST NOT be conflated.
 
@@ -16,7 +16,7 @@ If it exists only so an agent CLI can load instructions → .agents/
 If it starts an agent correctly                        → AGENTS.md
 ```
 
-This is **design rationale** — a layout and naming decision, not an empirical claim — and needs no citation. The only grounded claim in the workspace model is the NO-RUNTIME framing above (Invariant 1).
+This is **design rationale** — a layout and naming decision, not an empirical claim. The only grounded constraint in the workspace model is the NO-RUNTIME framing above (Invariant 1).
 
 ## `.swarm/` is the canonical workspace
 
@@ -92,7 +92,7 @@ Surfaces are declared as a `surfaces:` map in `.swarm/config.yaml`, each path �
 
 `.agents/` exists **only** so a third-party agent CLI that looks for `.agents/skills/` or `.agents/profiles/` can find loadable instructions. It is never the canonical home of project intent. Every file in `.agents/` MUST either point back to its canonical `.swarm/kernel/` (or `.swarm/generated/`) original, or be a verbatim compatibility copy of kernel material. The mirror is **one-directional** — `.agents/` derives from `.swarm/`, never the reverse — so there is exactly one source of truth and the compatibility surface can be regenerated or deleted without losing intent.
 
-A canonical artifact that exists *only* under `.agents/` is a layout defect, not a valid adoption. In particular, the following are canonical in `.swarm/` and MUST NOT live in `.agents/` as their primary home: primary specs (`.swarm/sources/specs/`), source-authority docs (PRDs, RFCs, research, ADRs, audits, findings, NFRs, interfaces), durable memory, the ledger, and status reports. (`.agents/specs/`, `.agents/tasks/`, and `.agents/memory/` as *canonical* roots are exactly the anti-pattern this rule forbids; any such path is permissible only as an explicitly-marked compatibility pointer or migration step.)
+A canonical artifact that exists *only* under `.agents/` is a layout defect, not a valid adoption. In particular, the following are canonical in `.swarm/` and MUST NOT live in `.agents/` as their primary home: primary specs (`.swarm/sources/specs/`), source-authority docs (PRDs, RFCs, research, ADRs, audits, findings, NFRs, interfaces), durable memory, the ledger, and status reports. (A spec root, a task root, or a memory root living *canonically* under `.agents/` is exactly the anti-pattern this rule forbids; any such path is permissible only as an explicitly-marked compatibility pointer or migration step.)
 
 ## The CLI / agent boundary
 
@@ -113,8 +113,9 @@ An adopted project SHOULD gitignore execution-local and scratch state while comm
 
 A project MUST NOT gitignore `.swarm/sources/`, `.swarm/status/`, `.swarm/memory/`, `.swarm/ledger/`, `.swarm/kernel/`, or `.swarm/archive/` unless it intentionally splits durable knowledge into a separate repository. `generated/` and `tmp/` are reconstructible from `sources/`; the rest are the durable record the reconciliation model depends on.
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-- **Preserved.** The one governing rule; the statement that `.swarm/` is the canonical workspace and its eight-directory partition with the committed?/populated-by contracts; the source/status/generated split; the ledger contract; the five surface policies (closed set) with the rejected "code is disposable" doctrine and the `surfaces:` map shape; the `.agents/` one-directional compatibility model and what it may not hold; the CLI/agent boundary and the no-runtime framing; and the commit policy — because AW1–AW9 require a canonical page to state each of these.
-- **Dropped (left to the spec).** The framework-repo→adopted-project install mapping in full (§20.5.1 path-by-path), the `governed`+`allowed_with_trace` drift mechanics and their tie to `per_surface_hash[]`/§16.5 participation (§16.6.4), the "passing test does not discharge the obligation" argument (§16.6.5), and the §16.6.6 cross-reference table. These remain the spec's long-form responsibility.
-- **Still-uncertain (governed by the spec).** Who runs the future launcher and what it automates is unspecified by the kernel and bound by the adopting repo; the surface-policy enforcement and ledger reconciliation are manual-today and aspirational until tooling exists. This projection records that boundary rather than resolving it.
+- [Source artifacts](source-artifacts.md) — what lives in `.swarm/sources/` and the durable source-artifact types.
+- [Source authority](source-authority.md) — how `sources/` intent governs implementation reality.
+- [Compiler pipeline](compiler-pipeline.md) — the passes that populate `status/`, `generated/`, `memory/`, and `ledger/`.
+- [Conformance](conformance.md) — how an adopted workspace is checked against the kernel contracts.

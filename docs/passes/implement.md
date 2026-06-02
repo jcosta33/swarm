@@ -1,8 +1,8 @@
 # The `implement` pass
 
-> Authoritative source: 03-compiler-pipeline.md §9 (the `implement` pass row, §9.3 / §9.3.1 / §9.4, with the pre-`implement` COVERAGE gate §11.6.2 and the owned-path rule §11.3) + 06-artifacts.md §21.3 (the `task.md` pass-frame contract, with the `trace.md` claim contract §21.4 the pass emits). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for the `implement` pass: the pass that produces the change for assigned obligations, records TRACE claims, and gathers proof evidence — its pass frame (`task.md`), its claim output (`trace.md`), the COVERAGE gate that guards its entry, and the owned-path containment rule.
 
-`implement` is the sixth of the **nine passes** of the Swarm compiler pipeline (`author -> lint -> improve -> lower -> decompose -> implement -> verify -> review -> promote`). This page is the short reference view for that single pass; the long-form contract is the spec.
+`implement` is the sixth of the **nine passes** of the Swarm compiler pipeline (`author -> lint -> improve -> lower -> decompose -> implement -> verify -> review -> promote`). This page is the reference for that single pass.
 
 Like every Swarm pass, `implement` has **no runtime**: it is a contract a human, an agent following a pass guide, or a future tool performs. Nothing here is shipped code (Invariant 1).
 
@@ -118,26 +118,9 @@ The pass frame and the trace contract together fence the change:
 - **No weakening of intent.** Constraints, invariants, and non-goals are preserved, not relaxed — changing obligation intent is an amendment decision (§10 R-IMPROVE), never an `implement` action.
 - **No fabricated evidence.** A `PROOF` line references real verification output; schema-valid shape is not a proof (§15).
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-**Preserved** (projected faithfully from the two named sections):
-
-- The `implement`-pass row of §9.3 in full: `EXECUTE` phase, `task.md` input, code/docs/tests + `trace.md` output, by-task-kind carrier profiles, no lint layer.
-- The §9.3.1 contract notes bearing on `implement`: it works from the `task.md`; `verify` (not `implement`) is the profile-independent pass that decides PASS.
-- `implement`'s membership in the **five** v0.1 stdlib pass guides (§9.4) and the "most-run pass" rationale.
-- The COVERAGE gate (§11.6.2 / §11.6.3) that guards entry into `implement`, its two conditions, and the `SOL-O007` / `SOL-O008` / `SOL-M003` codes — with the gate framed as a review-checkable, not-yet-tooled contract.
-- The owned-path containment rule (G7 / `SOL-O005`, §11.3).
-- The complete `task.md` pass-frame contract (§21.3): frontmatter field set, `task_kind` enum, the eight body sections, the `write_surfaces ⊆ WRITES` rule.
-- The complete `trace.md` claim contract (§21.4): sections, the per-binding provenance fields, the TRACE block structure, the `proof_result -> core verdict` 1:1 mapping, and the mandatory-`PROOF` (`SOL-S014`) rule.
-
-**Dropped** (out of scope for this single-pass projection; lives in the spec):
-
-- The full nine-pass / seven-phase model and the pass→phase mapping for the other eight passes (§9); the CLARIFY gate that brackets the *other* side of `LOWER` (§11.6.1).
-- The `improve` operation set (§10), the IR shape and edge model in detail (§12), lowering and decomposition mechanics (§11), and the full verification model — the nine proof types, binding/resolution, the merge gate (§14, §15).
-- The `*.swarm.md` artifact-name rules and the rest of the artifact catalogue beyond `task.md`/`trace.md` (`review.md`, `finding.md`, `adr.md`, `memory`) — §20, §21.5+.
-- The drift / staleness recomputation semantics behind the provenance fields (§16) — referenced here only as the reason the fields exist.
-
-**Still-uncertain** (the spec governs; not pinned here):
-
-- The exact per-task-kind procedure each of the six `implement` carriers (Janitor, Migrator, Performance-Surgeon, Builder, Test-Author, Documentarian) follows — §28 fixes the *kinds* and §9.4 names `implement` as a tooled pass guide, but the step-by-step recipe per kind is the pass guide's content, not fixed here.
-- Whether any of the other passes gain stdlib pass guides in a later framework release (§9.4) — orthogonal to `implement`, which already has one.
+- [`decompose` pass](decompose.md) — partitions the IR into write-disjoint `task.md` packets; the upstream pass that hands `implement` its work and proves the COVERAGE gate.
+- [`verify` pass](verify.md) — the profile-independent pass that turns `implement`'s TRACE evidence into a core verdict.
+- [`review` pass](review.md) — judges `## Unassigned changes`, resolves promotion items, and applies the lifecycle verdict decorators.
+- [SOL language reference](../language/SOL.md) — the TRACE block grammar, `IMPLEMENTS`/`PRESERVES`/`CHANGED`/`PROOF`, and the lint codes referenced here.

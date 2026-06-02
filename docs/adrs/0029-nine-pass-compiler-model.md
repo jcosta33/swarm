@@ -40,8 +40,8 @@ durable discoveries into provenance-anchored artifacts. There is NO runtime — 
 **contract** a future conformant tool MUST honour, performed today by a human or agent following a
 pass guide. For a single obligation the partial order MUST be respected (no `verify` before
 `implement`, no `implement` before `lower`). The full per-pass input/output contract, the
-pass-to-phase mapping, and the contract notes are specified in **§9** of
-`.agents/specs/swarm/03-compiler-pipeline.md`.
+pass-to-phase mapping, and the contract notes are detailed in the compiler-pipeline
+reference ([`docs/model/compiler-pipeline.md`](../model/compiler-pipeline.md)) and the per-pass pages under [`docs/passes/`](../passes/).
 
 ## Alternatives considered
 

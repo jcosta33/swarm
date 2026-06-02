@@ -1,6 +1,6 @@
 # Distillation Loss Budget
 
-> Authoritative source: `.agents/specs/swarm/07-governance-memory.md` §24 (the distillation loss budget — the MAY-drop / MUST-survive lists, the per-boundary loss matrix, the discipline-not-gatekeeper rule, and forbidden compositions). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for the distillation loss budget: the MAY-drop / MUST-survive lists, the per-boundary loss matrix, the discipline-not-gatekeeper rule, and the forbidden-composition treatment.
 
 ## What distillation is
 
@@ -84,22 +84,10 @@ An `audit.md` notes "the refresh endpoint currently accepts rotated tokens." Thi
 
 A conformant repo's distillation-loss-budget reference (this document, per §20) MUST state both lists (the MAY-drop list and the MUST-survive list), the per-boundary matrix, the discipline-not-gatekeeper rule, and the forbidden-composition treatment.
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-This section is the projection's own loss declaration — applying the discipline it documents to itself.
-
-**Preserved (the binding content this projection carries intact from §24):**
-- Both canonical lists verbatim in substance — the MAY-drop table (with the "where it survives instead" column) and the MUST-survive table (with its rationale column).
-- The full eight-row per-boundary loss matrix, unaltered.
-- The discipline-not-gatekeeper rule and its two enforcement paths (lint `SOL-V001` / `SOL-M…` structurally; source authority `SOL-M004` semantically).
-- The forbidden-compositions definition, the three example mixings, the loss-budget-plus-source-authority prevention, and the worked `audit.md → CONSTRAINT C-014` example.
-- The bright-line rationale ("changed what gets built", not compression).
-
-**Dropped (left to the spec, linked not copied):**
-- The cross-machinery derivation of §23.7 (the ledger, trace-provenance schema, promotion queue, Nygard append-only discipline) — context surrounding §24, not part of it.
-- The full definitions of the referenced machinery this section points at: lint layers and codes (§8), source authority axes and the three-step conflict rule (§22), block/modal vocabulary (§4–§6), verdicts and `VERIFY BY` semantics (§14–§15), the spec's `Preserved / Dropped / Still uncertain` template section (§21), and `WRITES` / `READS` / `AFFECTS` scope (§18). Section numbers are kept as pointers; their content is not reproduced.
-- Versioning (§25) and all neighboring sections — out of scope for this boundary doc.
-
-**Still-uncertain (deferred to the spec as the source of truth):**
-- The exact diagnostic-code membership of the "`SOL-M…` family" beyond the explicitly named `SOL-M004`; §24 names the family, and the precise per-code mapping lives in §8 / §22, not here.
-- How the design-rationale lines (the gatekeeper-is-soft-control and changed-what-gets-built arguments) are classified relative to the empirical sources in `sources.md` — §24 carries them as in-line rationale and cites no `[KEY]`; this projection labels them design rationale and does not import any authority beyond what §24 states.
+- [Promotion protocol](../reference/promotion-protocol.md) — the promotion boundary this budget governs.
+- [SOL](../language/SOL.md) — the lint family (`SOL-V001`, `SOL-M…`) that enforces the budget structurally and the `SOL-M004` authority-conflict that catches it semantically.
+- [Drift and staleness](../reference/drift-and-staleness.md) — how distilled artifacts are kept faithful to their sources over time.
+- [Proof types](../reference/proof-types.md) — the `VERIFY BY` proof paths that MUST survive every distillation.
+- [Glossary](../reference/glossary.md) — canonical definitions of obligation, modality, authority, and the artifact stances.

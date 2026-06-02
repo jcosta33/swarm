@@ -1,8 +1,8 @@
 # The `author` pass
 
-> Authoritative source: 03-compiler-pipeline.md §9 (the `author` pass row, §9.3 / §9.3.1 / §9.4) + 08-recast.md §29 (epistemic stances of source parents). This is a reference projection; where it and the spec disagree, the spec governs.
+> Swarm's reference for the `author` pass: how human intent enters the compiler pipeline as `spec.swarm.md`, and how the epistemic stance of each source parent is preserved when it is authored in.
 
-`author` is the first of the **nine passes** of the Swarm compiler pipeline (`author -> lint -> improve -> lower -> decompose -> implement -> verify -> review -> promote`). This page is the short reference view for that single pass; the long-form contract is the spec.
+`author` is the first of the **nine passes** of the Swarm compiler pipeline (`author -> lint -> improve -> lower -> decompose -> implement -> verify -> review -> promote`). This page is the reference for that single pass.
 
 Like every Swarm pass, `author` has **no runtime**: it is a contract a human, an agent following a pass guide, or a future tool performs. Nothing here is shipped code.
 
@@ -29,7 +29,7 @@ Two contract notes follow from this position (§9.3.1):
 
 ## `author` is NOT a stdlib pass guide
 
-Of the nine passes, exactly **five** ship with a stdlib pass guide in v0.1: `lint`, `decompose`, `implement`, `review[profile: skeptic]`, and `promote` (§9.4). `author` is one of the **four** passes (`author`, `improve`, `lower`, `verify`) that are *fully specified by the spec and the language references* and ship no stdlib pass guide in v0.1. They MAY gain one in a later framework release without any language-version change (§25). A pass guide, when it exists, is SOFT control (Invariant 2): it MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning.
+Of the nine passes, exactly **five** ship with a stdlib pass guide in v0.1: `lint`, `decompose`, `implement`, `review[profile: skeptic]`, and `promote` (§9.4). `author` is one of the **four** passes (`author`, `improve`, `lower`, `verify`) that are *fully specified by their pass contract and the language references* and ship no stdlib pass guide in v0.1. They MAY gain one in a later framework release without any language-version change (§25). A pass guide, when it exists, is SOFT control (Invariant 2): it MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning.
 
 ## Authoring is parent-normalization: epistemic stances are preserved
 
@@ -63,23 +63,10 @@ Authoring writes the one human-authored compiler-visible artifact, `spec.swarm.m
 
 `author` itself emits no lint codes and runs no gate; it produces the draft that the rest of the pipeline analyzes. The disciplines that *guard* the content `author` produces live downstream and are referenced here only for orientation: forbidden compositions (e.g. a file that is both a spec and an audit) are enforced not by `author` and not by a gatekeeper skill, but by the **distillation loss budget** (§24) and **source authority** (§22) (§29.5). Re-introducing a composition-policing skill is forbidden, because such a skill would be a semantic owner (§26.1) and soft control presented as enforcement (§17).
 
-## Preserved / Dropped / Still-uncertain
+## Related
 
-**Preserved** (projected faithfully from the two named sections):
-
-- The `author`-pass row of §9.3 in full: entry phase (pre-`PARSE`), input parents, `spec.swarm.md` output, carrier profiles, no lint layer.
-- The two `author` contract notes of §9.3.1: not itself analyzable; entry pass feeding `lint`.
-- `author`'s membership in the four passes with no v0.1 stdlib pass guide (§9.4) — i.e. it is **not** one of the five tooled-first passes.
-- The complete §29.1 epistemic-stance table and the normative stance invariants (audit observation-only, bug-report diagnosis-only, intent enters only via authoring), plus the `spec.swarm.md` infix rule (§29.2) and the gatekeeper retirement (§29.5).
-
-**Dropped** (out of scope for this single-pass projection; lives in the spec):
-
-- The full nine-pass / seven-phase model, the pass→phase mapping for the other eight passes, and the gate machinery (CLARIFY / COVERAGE gates) — §9, §11.
-- The `improve` operation set, the IR shape, lowering and decomposition, verification — §10, §11, §12, §14, §15.
-- §29.3 (the four added artifacts: trace, VERDICT, finding, memory) and §29.4 (extended-type specializations), which concern the artifact catalogue rather than the act of authoring.
-- The empirical citations behind clarification/handoff costs (they bear on the gates and `improve`, not on `author`).
-
-**Still-uncertain** (the spec governs; not pinned here):
-
-- Whether `author` gains a stdlib pass guide in a future framework release — explicitly left open by §9.4 ("MAY gain stdlib pass guides in a later framework release without any language-version change").
-- The exact authoring procedure per parent kind (how an `audit.md` finding becomes a specific `REQ`, how an OpenAPI source becomes `INTERFACE` blocks) — §29 fixes the *stance* and *target block kind* but not a step-by-step authoring recipe; a future pass guide or the language references would supply that.
+- [`lint`](lint.md) — the next pass; the `PARSE` + `NORMALIZE` pass that `author` feeds, where analysis begins.
+- [`improve`](improve.md) — the only pass permitted to rewrite the spec, and only semantics-preservingly.
+- [`lower`](lower.md) and [`decompose`](decompose.md) — how the authored spec lowers to IR and then to tasks.
+- [`verify`](verify.md) — like `author`, a pass with no v0.1 stdlib pass guide.
+- [SOL](../language/SOL.md) — the obligation language `author` writes into `spec.swarm.md`.
