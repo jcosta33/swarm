@@ -469,7 +469,7 @@ Swarm has **two independent version axes**. Conflating them is a category error:
 | Axis | What it versions | Where it lives | Cadence |
 | ---- | ---------------- | -------------- | ------- |
 | **Language version** | The SOL + APS feature set: grammar, the 7 block types, the 5 modals, the clause keywords, the `SOL-<LAYER>NNN` lint codes (§4–§8) | Per-file frontmatter: `swarm_language` + `aps_version` | Small, slow-moving: `0.1`, `0.2`, `1.0` |
-| **Framework / package version** | The scaffold, templates, skills/pass guides, personas/profiles, flow-graph (§20, §21, §26–§29) | `scaffold/.agents/.swarm-version` → `.swarm/VERSION` (semver) | Ordinary semver; may move many times between language bumps |
+| **Framework / package version** | The kernel payload, templates, skills/pass guides, personas/profiles, flow-graph (§20, §21, §26–§29) | `kernel/.agents/.swarm-version` → `.swarm/VERSION` (semver) | Ordinary semver; may move many times between language bumps |
 
 Rationale: this mirrors how a language version is a distinct axis from the package/toolchain version — e.g. C# `LangVersion` (overridable from its target-framework default but bounded by the installed compiler `[CSLANG]`) and Rust editions vs `rust-version` vs cargo/rustc `[RUSTED]` — so the *language API* (grammar + lint codes) and the *package API* (template sections + skills + flow-graph) are versioned as separately-named public APIs, and SemVer is only meaningful when each public API is named explicitly.
 
@@ -482,7 +482,7 @@ The language version answers "**which grammar, blocks, modals, and lint codes do
 
 #### 25.1.2 Framework / package version
 
-The framework version answers "**which scaffold, templates, and pass guides shipped this repo?**" It is a single semver string in `scaffold/.agents/.swarm-version` (an adopted project mirrors it as `.swarm/VERSION`, §20.5.1). This **extends ADR 0015** (which established `.agents/.swarm-version`); ADR 0015 is *extended, not replaced* (§30) — it is scoped to the package axis and the language axis is added alongside it.
+The framework version answers "**which kernel payload, templates, and pass guides shipped this repo?**" It is a single semver string in `kernel/.agents/.swarm-version` (an adopted project mirrors it as `.swarm/VERSION`, §20.5.1). This **extends ADR 0015** (which established `.agents/.swarm-version`); ADR 0015 is *extended, not replaced* (§30) — it is scoped to the package axis and the language axis is added alongside it.
 
 ### 25.2 The one-way trigger
 
@@ -542,7 +542,7 @@ spec_version: 0.1.0 # spec content version (= meta.version in the IR)
 | `aps_version: 0.1` | (not echoed in IR; governs prose lint layer `SOL-P…`) | Language |
 | `spec_version: 0.1.0` | `meta.version` | Spec content |
 
-Conformance note: earlier draft templates currently write `swarm_language: 0.1` (a bare number). The normalized form is `swarm_language: SOL/0.1` (with the `SOL/` discriminator) and a separate `spec_version`. A conformant repo MUST use the normalized form; a bare `swarm_language: 0.1` is a `SOL-S…`-class frontmatter diagnostic. The framework version is **never** written in per-file frontmatter — it lives only in the framework version file (`scaffold/.agents/.swarm-version`; `.swarm/VERSION` in an adopted project, §20.5.1).
+Conformance note: earlier draft templates currently write `swarm_language: 0.1` (a bare number). The normalized form is `swarm_language: SOL/0.1` (with the `SOL/` discriminator) and a separate `spec_version`. A conformant repo MUST use the normalized form; a bare `swarm_language: 0.1` is a `SOL-S…`-class frontmatter diagnostic. The framework version is **never** written in per-file frontmatter — it lives only in the framework version file (`kernel/.agents/.swarm-version`; `.swarm/VERSION` in an adopted project, §20.5.1).
 
 Key resolutions encoded, all marked NORMATIVE per this specification:
 - **§22**: two orthogonal axes applied lexicographically (domain first via Axis B, then artifact via Axis A), the three-step conflict rule terminating in `SOL-M002`, the worked security-audit-beats-product-spec tie-break, the three cross-axis invariants, and the backward-trace/forward-governing-force framing.

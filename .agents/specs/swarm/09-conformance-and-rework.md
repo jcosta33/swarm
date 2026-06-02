@@ -6,15 +6,15 @@
 
 ### 32.1 Purpose and placement
 
-This section specifies the machine-readable conformance encoding that a Swarm repository MUST ship under `scaffold/.agents/conformance/`. The encoding is **inert versioned DATA**: it is the precise, testable definition that a future checker would honour, and the artifact a human uses to validate a repository by hand today. Per Invariant 1 (NO RUNTIME, see §2), nothing under `scaffold/.agents/conformance/` executes; Swarm ships the contract, never the checker (§32.7).
+This section specifies the machine-readable conformance encoding that a Swarm repository MUST ship under `kernel/.agents/conformance/`. The encoding is **inert versioned DATA**: it is the precise, testable definition that a future checker would honour, and the artifact a human uses to validate a repository by hand today. Per Invariant 1 (NO RUNTIME, see §2), nothing under `kernel/.agents/conformance/` executes; Swarm ships the contract, never the checker (§32.7).
 
 The conformance directory MUST contain exactly:
 
 | Path | Kind | Role |
 |---|---|---|
-| `scaffold/.agents/conformance/conformance.yaml` | manifest (data) | the task-file schema, command rows, placeholder set, lint scheme, required-suite matrix |
-| `scaffold/.agents/conformance/README.md` | prose | states inertness, provenance, and the "checker is deferred" framing |
-| `scaffold/.agents/conformance/fixtures/` | fixture suite | the golden corpus (§33) |
+| `kernel/.agents/conformance/conformance.yaml` | manifest (data) | the task-file schema, command rows, placeholder set, lint scheme, required-suite matrix |
+| `kernel/.agents/conformance/README.md` | prose | states inertness, provenance, and the "checker is deferred" framing |
+| `kernel/.agents/conformance/fixtures/` | fixture suite | the golden corpus (§33) |
 
 Rationale: ADR 0026 makes the conformance contract a framework artifact; SARIF precedent (an OASIS JSON-schema contract independent of any analyzer) establishes that a contract is publishable and useful without a shipped tool.
 
@@ -27,7 +27,7 @@ A repository is **Swarm-conformant** if and only if it satisfies all four clause
 | (a) | **Language references present** | the kernel-required language/reference docs exist: SOL ref, APS ref, the lint/error taxonomy (`SOL-<LAYER>NNN`), source-authority, promotion-protocol, distillation-loss-budget |
 | (b) | **The 7 core templates exist** | `spec.swarm.md`, `task.md`, `trace.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md` are present as copyable templates |
 | (c) | **Populated `AGENTS.md` bootloader** | `AGENTS.md` exists, is ≤200 lines / ≤25 KB, and its `Commands` table binds at least the required command rows (§32.4) |
-| (d) | **version file present** | the framework/package version file exists with a valid semver — `scaffold/.agents/.swarm-version` (framework-dev) or `.swarm/VERSION` (adopted project, §20.5.1) (ADR 0015) |
+| (d) | **version file present** | the framework/package version file exists with a valid semver — `kernel/.agents/.swarm-version` (framework-dev) or `.swarm/VERSION` (adopted project, §20.5.1) (ADR 0015) |
 
 A repo that fails any clause is **non-conformant**. The checker (§32.7) consumes this definition; the `conformance.yaml` manifest encodes the mechanically-checkable parts of (b)–(d).
 
@@ -138,7 +138,7 @@ This subsection fixes the boundary between that Swarm toolchain and the **agent 
 
 | Verb | Phase(s) it would drive | Documented contract |
 |---|---|---|
-| `init` | (adoption) | install/refresh the kernel payload into a project's `.swarm/kernel/` and adopt `AGENTS.md` (the framework ships the payload under `scaffold/`; see §20.0) |
+| `init` | (adoption) | install/refresh the kernel payload into a project's `.swarm/kernel/` and adopt `AGENTS.md` (the framework ships the payload under `kernel/`; see §20.0) |
 | `lint` | PARSE, NORMALIZE | emit `diagnostics[]` of `SOL-<LAYER>NNN` records against a `*.swarm.md` source |
 | `format` | NORMALIZE | apply the canonical surface form (§4.10) without changing intent (§28 pure-normalization class) |
 | `improve` | NORMALIZE | apply intent-preserving edits (the `improve` pass predicate, §10.1 R-IMPROVE; output rubric §33.6) |
@@ -266,7 +266,7 @@ The golden corpus is the conformance suite that pins expected verdicts **indepen
 
 | Location | Holds | Audience |
 |---|---|---|
-| `scaffold/.agents/conformance/fixtures/` | positive + negative fixtures with expected verdicts | the checker's regression suite (§32) |
+| `kernel/.agents/conformance/fixtures/` | positive + negative fixtures with expected verdicts | the checker's regression suite (§32) |
 | `docs/examples/` | the three pipeline-complete positive walkthroughs | human readers / authors learning the pipeline |
 
 The corpus is built on the three recurring domains — **auth-refresh**, **checkout**, **payment-5xx** — each with positive (must-compile) and negative (must-be-rejected) fixtures.
@@ -463,7 +463,7 @@ Drift-detection is defined without a runtime: drift is found by the `review` and
 
 ### 33.7 Evaluation hygiene: contamination and held-out fixtures
 
-A golden corpus that ships only the canonical fixtures of §33.1–§33.6 has a latent failure mode of its own: once the fixtures and their expected verdicts are public (they live in `scaffold/.agents/conformance/fixtures/` and are read by every adopter), an agent-as-compiler can be tuned — by training, by an over-stuffed instruction file, or simply by an author copying the corpus — to reproduce the *labels* without performing the *passes*. This is benchmark data contamination: training on (or memorizing) the evaluation data yields "inaccurate or unreliable performance" rather than a measurement of capability [BDCSURVEY]. The risk is not hypothetical for this corpus specifically — benchmark-building rigor is broadly deficient: the HOW2BENCH survey finds that roughly 70% of code benchmarks took no data-quality-assurance measures, and applies a 55-item lifecycle checklist precisely because contamination, duplicated samples, and unreproducible provenance are the norm, not the exception [HOW2BENCH]. The corpus must therefore be designed so that a passing verdict evidences a correctly executed pass, not a recognized string.
+A golden corpus that ships only the canonical fixtures of §33.1–§33.6 has a latent failure mode of its own: once the fixtures and their expected verdicts are public (they live in `kernel/.agents/conformance/fixtures/` and are read by every adopter), an agent-as-compiler can be tuned — by training, by an over-stuffed instruction file, or simply by an author copying the corpus — to reproduce the *labels* without performing the *passes*. This is benchmark data contamination: training on (or memorizing) the evaluation data yields "inaccurate or unreliable performance" rather than a measurement of capability [BDCSURVEY]. The risk is not hypothetical for this corpus specifically — benchmark-building rigor is broadly deficient: the HOW2BENCH survey finds that roughly 70% of code benchmarks took no data-quality-assurance measures, and applies a 55-item lifecycle checklist precisely because contamination, duplicated samples, and unreproducible provenance are the norm, not the exception [HOW2BENCH]. The corpus must therefore be designed so that a passing verdict evidences a correctly executed pass, not a recognized string.
 
 Two further design pressures sharpen this. First, the §33.6 pass-output rubrics grade *compiler behaviour*, and the cheapest way to fake that behaviour is to memorize the expected-obligation lists and `VERDICT` blocks the fixtures pin verbatim. Second, the corpus must test the kernel's own "curate, don't dump" stance, not just happy-path lowering: over-specified context and instruction files have been shown to *reduce* task success versus no context at all and to raise inference cost by more than 20% [AGENTSMD-HARM] (corroborated by the preliminary, not-yet-peer-reviewed [SKILLSBENCH], [CONTEXTCOV], and [AGENTREADMES]). A corpus that only rewards completeness would push authors toward exactly the bloated specs that harm agents; the hygiene fixtures below make the harm measurable.
 
@@ -477,7 +477,7 @@ The golden corpus MUST ship, alongside each canonical domain fixture (§33.2–�
 
 #### 33.7.2 Benchmark-hygiene practice (recommended)
 
-The corpus SHOULD follow established benchmark-building hygiene so its measurements are reproducible and auditable [HOW2BENCH]: each fixture SHOULD record **documented provenance** (which domain, defect class, and §-anchor it exercises, and whether it is canonical or mutated); the corpus SHOULD carry an explicit **data-QA** note per fixture (the expected verdict was confirmed by a human against the spec, not assumed); and the fixtures SHOULD remain **open** for human inspection in `scaffold/.agents/conformance/fixtures/` while the mutated-variant gate keeps openness from becoming a contamination vector. These are SHOULDs, not MUSTs, because Swarm is NO-RUNTIME: the hygiene practice is a contract a future eval harness builds against, and until that harness exists the provenance and data-QA notes are documentation that a manual reviewer reads.
+The corpus SHOULD follow established benchmark-building hygiene so its measurements are reproducible and auditable [HOW2BENCH]: each fixture SHOULD record **documented provenance** (which domain, defect class, and §-anchor it exercises, and whether it is canonical or mutated); the corpus SHOULD carry an explicit **data-QA** note per fixture (the expected verdict was confirmed by a human against the spec, not assumed); and the fixtures SHOULD remain **open** for human inspection in `kernel/.agents/conformance/fixtures/` while the mutated-variant gate keeps openness from becoming a contamination vector. These are SHOULDs, not MUSTs, because Swarm is NO-RUNTIME: the hygiene practice is a contract a future eval harness builds against, and until that harness exists the provenance and data-QA notes are documentation that a manual reviewer reads.
 
 #### 33.7.3 The missing `research-fanout` fixture (normative addition)
 
@@ -505,11 +505,11 @@ The rework proceeds as seven ordered waves. Each wave has a single goal and a fi
 | Wave | Goal | Mandatory outputs |
 |---|---|---|
 | 1 | **Freeze the canonical kernel** — pin the language, artifacts, passes, and reference docs so every later wave reads a stable target | `docs/language/` (SOL surface grammar, modals, the 7 block types, the `SOL-<LAYER>NNN` catalogue), `docs/artifacts/` (the `.swarm.` infix rule and per-class filenames, §20), `docs/passes/` (the 7-phase / 9-pass model and 10 improve ops, §9), `docs/reference/` (flow-graph + reconciled counts, §34.4) |
-| 2 | **Install the payload** — lay down the copyable kernel under `scaffold/.agents/` (the installable payload; a v0.2 ADR MAY rename `scaffold/` → `kernel/`) | `scaffold/AGENTS.md` (the bootloader, §31), `scaffold/.agents/language/` (language reference copies), `scaffold/.agents/templates/` (the 7 core templates, §20.3.1), and pass-guide + profile skeletons under `scaffold/.agents/` |
+| 2 | **Install the payload** — lay down the copyable kernel under `kernel/.agents/` (the installable payload; the framework-dev payload dir is `kernel/` — renamed from `kernel payload/` in v0.1 per the kernel-payload-directory ADR, pulled forward from its original v0.2 deferral) | `kernel/AGENTS.md` (the bootloader, §31), `kernel/.agents/language/` (language reference copies), `kernel/.agents/templates/` (the 7 core templates, §20.3.1), and pass-guide + profile skeletons under `kernel/.agents/` |
 | 3 | **Reframe top-level docs** — recast the repo's front matter onto the kernel framing | root `README`, the principles doc (the invariants of §2), and the non-goals doc (§35) restated in kernel vocabulary, with no surviving "CLI required" / "tests passed" framing (§26) |
 | 4 | **Recast legacy skills and personas** — map the legacy subsystems onto the kernel without letting them own semantics | skills → pass-guide mappings (one per pass, §26), personas → heuristic-profile mappings (§27), any overlay mappings, and the bootloader simplification that moves every procedure out of `AGENTS.md` into a lazily-loaded guide (§31.2) |
 | 5 | **Migrate live sources** — convert the repository's own working material to the kernel artifact set | every live spec converted to `*.swarm.md` (bare-header SOL, §6), research detached into plain `research.md` source artifacts that promote rather than govern (§20.2.2, §29), and review artifacts added as `review.md` with VERDICT blocks (§14, §21.5) |
-| 6 | **Add examples and evals** — ship the conformance evidence | the golden corpus and fixtures under `scaffold/.agents/conformance/fixtures/` (§33), the three pipeline-complete walkthroughs under `docs/examples/` (§34.3), and the review/profile rubrics |
+| 6 | **Add examples and evals** — ship the conformance evidence | the golden corpus and fixtures under `kernel/.agents/conformance/fixtures/` (§33), the three pipeline-complete walkthroughs under `docs/examples/` (§34.3), and the review/profile rubrics |
 | 7 | **Remove deprecated aliases** — drive the surviving-construct count to zero | no canonical `SHALL`, `VERIFY_BY` (underscore), `TASK-MAP`, or fenced `:::`-delimited SOL anywhere in shipped files; each removal is one of the §34.6 regression greps (A19–A28) returning no matches |
 
 ### 34.1 Source-file reconciliation
@@ -523,16 +523,16 @@ The rework proceeds as seven ordered waves. Each wave has a single goal and a fi
 
 | # | Check | How to verify |
 |---|---|---|
-| A3 | The 7 core templates exist in `scaffold/.agents/templates/` | `spec.swarm.md`, `task.md`, `trace.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md` are each present and copyable |
-| A4 | No `verdict.md` template exists anywhere in the scaffold | a search for `verdict.md` returns no scaffold template; VERDICT lives as a block inside `review.md` |
+| A3 | The 7 core templates exist in `kernel/.agents/templates/` | `spec.swarm.md`, `task.md`, `trace.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md` are each present and copyable |
+| A4 | No `verdict.md` template exists anywhere in the kernel payload | a search for `verdict.md` returns no kernel payload template; VERDICT lives as a block inside `review.md` |
 | A5 | The lint catalogue is published | `docs/language/errors.md` lists every `SOL-<LAYER>NNN` code with `{code, severity, layer, span, message, suggest}` and the legacy translation table (Appendix B) |
 
 ### 34.3 Conformance and corpus shipping
 
 | # | Check | How to verify |
 |---|---|---|
-| A6 | The conformance manifest ships | `scaffold/.agents/conformance/conformance.yaml` encodes the task-file schema, command rows, placeholder set, lint scheme, and required-suite matrix (§32) |
-| A7 | The golden corpus ships | `scaffold/.agents/conformance/fixtures/` holds positive + negative fixtures for auth-refresh, checkout, payment-5xx, plus the task-file classes (§33) |
+| A6 | The conformance manifest ships | `kernel/.agents/conformance/conformance.yaml` encodes the task-file schema, command rows, placeholder set, lint scheme, and required-suite matrix (§32) |
+| A7 | The golden corpus ships | `kernel/.agents/conformance/fixtures/` holds positive + negative fixtures for auth-refresh, checkout, payment-5xx, plus the task-file classes (§33) |
 | A8 | The three pipeline-complete positives ship | `docs/examples/` holds the full `spec → obligations → task → trace → verdict → promotion` chain for each of the three domains |
 | A9 | The labeled prose corpus ships with stated targets | a good/bad `SOL-P` fixture set exists with the 0.90 precision / 0.85 recall baseline recorded (§33.5, G12) |
 

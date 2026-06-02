@@ -10,7 +10,7 @@ This section defines the complete set of files a Swarm repository may contain, p
 
 This subsection is the single canonical map of every path this specification names. It precedes the artifact partition (§20.1) and the conformance definition (§20.4) so a reader can locate any artifact, template, or reference doc by its directory before reading the rules that govern it. The tree below is normative for path *shape* (which directory an artifact lives in); the conformance definition (§20.4) — not this tree — fixes which paths a conformant repository MUST contain.
 
-A repository has four top-level concerns, each a sibling directory: `docs/` (prose that *explains* Swarm), `examples/` (worked good/bad specs that *demonstrate* it), `evals/` (framework self-tests that *measure the framework itself*), and `scaffold/.agents/` (the installable payload — the kernel — that a consuming repo *adopts*).
+A repository has four top-level concerns, each a sibling directory: `docs/` (prose that *explains* Swarm), `examples/` (worked good/bad specs that *demonstrate* it), `evals/` (framework self-tests that *measure the framework itself*), and `kernel/.agents/` (the installable payload — the kernel — that a consuming repo *adopts*).
 
 ```text
 docs/                              # explains Swarm (prose + tables; not installed)
@@ -51,7 +51,7 @@ evals/                             # framework SELF-TESTS (tests the spec itself
   fixtures/                        # inputs the framework's own checks run against
   rubrics/                         # the §33.6 per-pass quality rubrics (author … promote)
 
-scaffold/                         # the installable payload root (see note below)
+kernel/                         # the installable payload root (see note below)
   AGENTS.md                        # the populated bootloader a consumer adopts (§31)
   .agents/                       # everything copied into a consuming repo's .agents/
     language/                      # self-contained copies of the Tier-2 references (§20.3.2)
@@ -82,9 +82,9 @@ scaffold/                         # the installable payload root (see note below
     .swarm-version                 # framework/package version, semver (§25, §20.4) — adopted project mirrors this as .swarm/VERSION
 ```
 
-**Note — the installable payload directory.** The installable payload directory is `scaffold/.agents/`; it is conceptually "the kernel" — the unitary framework a consuming repository adopts wholesale (§2). A consumer copies the contents of `scaffold/.agents/` to its own `.agents/` and adopts `scaffold/AGENTS.md` as `AGENTS.md`. The framework-dev repo's `scaffold/` is therefore the **shipping location of the installable payload** (the kernel) — *this* repository's authoring-side directory — and is a different artifact from the **adopted-project workspace** the payload installs *into*: in a consuming repo the kernel installs to `.swarm/kernel/`, under which `.swarm/` is the canonical Swarm workspace and `.agents/` is only an agent-tool compatibility surface (the workspace model is specified in §20.5; the framework-dev vs adopted-project distinction is design rationale, not an empirical claim). A v0.2 ADR MAY rename `scaffold/` → `kernel/` to make the conceptual name literal; if it does, `scaffold/` MUST be kept as a one-cycle compatibility alias so in-flight adopters do not break, and the alias MUST be removed no later than the following MINOR release. The rename is cosmetic: it changes the payload's directory name, never the `.agents/` interior, the artifact filenames (§20.2), or the conformance definition (§20.4).
+**Note — the installable payload directory.** The installable payload directory is `kernel/.agents/`; it is conceptually "the kernel" — the unitary framework a consuming repository adopts wholesale (§2). A consumer copies the contents of `kernel/.agents/` to its own `.agents/` and adopts `kernel/AGENTS.md` as `AGENTS.md`. The framework-dev repo's `kernel/` is therefore the **shipping location of the installable payload** (the kernel) — *this* repository's authoring-side directory — and is a different artifact from the **adopted-project workspace** the payload installs *into*: in a consuming repo the kernel installs to `.swarm/kernel/`, under which `.swarm/` is the canonical Swarm workspace and `.agents/` is only an agent-tool compatibility surface (the workspace model is specified in §20.5; the framework-dev vs adopted-project distinction is design rationale, not an empirical claim). A v0.2 ADR MAY rename `kernel/` → `kernel/` to make the conceptual name literal; if it does, `kernel/` MUST be kept as a one-cycle compatibility alias so in-flight adopters do not break, and the alias MUST be removed no later than the following MINOR release. The rename is cosmetic: it changes the payload's directory name, never the `.agents/` interior, the artifact filenames (§20.2), or the conformance definition (§20.4).
 
-**Note — `evals/` is not the conformance suite.** `evals/` and `scaffold/.agents/conformance/fixtures/` are distinct and MUST NOT be conflated. `evals/` holds the *framework's self-tests* — the `evals/fixtures/` inputs and the `evals/rubrics/` per-pass quality rubrics (§33.6) that measure whether *this specification and its scaffold* hold together; it is authoring-side and is not part of the installable payload. `scaffold/.agents/conformance/fixtures/` holds the *shipped conformance suite* — the golden corpus (§33) that a consuming repository carries to validate *its own* adoption against the conformance contract (§32). The first tests the kernel; the second is tested *by* every kernel adopter. Neither directory executes anything (Invariant 1, NO RUNTIME — §2): both are inert data a future tool would consume.
+**Note — `evals/` is not the conformance suite.** `evals/` and `kernel/.agents/conformance/fixtures/` are distinct and MUST NOT be conflated. `evals/` holds the *framework's self-tests* — the `evals/fixtures/` inputs and the `evals/rubrics/` per-pass quality rubrics (§33.6) that measure whether *this specification and its kernel payload* hold together; it is authoring-side and is not part of the installable payload. `kernel/.agents/conformance/fixtures/` holds the *shipped conformance suite* — the golden corpus (§33) that a consuming repository carries to validate *its own* adoption against the conformance contract (§32). The first tests the kernel; the second is tested *by* every kernel adopter. Neither directory executes anything (Invariant 1, NO RUNTIME — §2): both are inert data a future tool would consume.
 
 ### 20.1 The `.swarm.` infix rule (normative)
 
@@ -165,7 +165,7 @@ Six reference documents. These are *prose-and-table reference pages*, not copyab
 
 #### 20.3.3 Tier 3 — stdlib source-doc templates (shipped, conditional)
 
-Three source-document templates the stdlib ships so common authoring entry points exist. They are *conditional*: a repo need not have instantiated any of them to be conformant, but a conformant scaffold MUST ship the templates.
+Three source-document templates the stdlib ships so common authoring entry points exist. They are *conditional*: a repo need not have instantiated any of them to be conformant, but a conformant kernel payload MUST ship the templates.
 
 | # | Template | Epistemic stance | Promotes to |
 | --- | --- | --- | --- |
@@ -192,7 +192,7 @@ A spec is not born only from research. *Design rationale:* requirements practice
 
 `research.md` holds a special role as the kernel's **detached first-class evidence store**: it is not bound to one downstream artefact, and one research artefact MAY feed many PRDs, specs, ADRs, findings, or audits at once. Keeping evidence detached minimizes copying, preserves provenance, and reduces distillation loss (§24) when upstream facts evolve.
 
-Of these parents, `prd.md` (stance: **intent**) and `rfc.md` (stance: **proposal**) join `audit.md`, `research.md`, and `bug-report.md` as Tier-3 **stdlib source-doc templates** — shipped in the scaffold, CONDITIONAL, and never conformance-required (§20.4): a conformant repo need not have instantiated any of them, but a conformant scaffold MUST ship each template. By contrast, `use-case.md`/examples, `nfr.md`/SLOs, and interface sources are **recognized inputs that normalize INTO `spec.swarm.md`** during the `author` pass (§9) — they emit `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` blocks plus verification-matrix rows directly — and are not necessarily shipped as separate templates. A conformant scaffold therefore SHOULD ship `prd.md` and `rfc.md` templates alongside the existing three (extending the Tier-3 table of §20.3.3 to five), and MAY additionally ship a `use-case.md` or `nfr.md` template, but MUST NOT treat any Tier-3 source-doc as required for conformance.
+Of these parents, `prd.md` (stance: **intent**) and `rfc.md` (stance: **proposal**) join `audit.md`, `research.md`, and `bug-report.md` as Tier-3 **stdlib source-doc templates** — shipped in the kernel payload, CONDITIONAL, and never conformance-required (§20.4): a conformant repo need not have instantiated any of them, but a conformant kernel payload MUST ship each template. By contrast, `use-case.md`/examples, `nfr.md`/SLOs, and interface sources are **recognized inputs that normalize INTO `spec.swarm.md`** during the `author` pass (§9) — they emit `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` blocks plus verification-matrix rows directly — and are not necessarily shipped as separate templates. A conformant kernel payload therefore SHOULD ship `prd.md` and `rfc.md` templates alongside the existing three (extending the Tier-3 table of §20.3.3 to five), and MAY additionally ship a `use-case.md` or `nfr.md` template, but MUST NOT treat any Tier-3 source-doc as required for conformance.
 
 These additional parents — PRD (intent), RFC (proposal), use-case/example (scenario), NFR/SLO (quality attribute), and interface sources (OpenAPI/GraphQL/DB schema) — are first-class parents of a spec; their epistemic stances are catalogued in the §29.1 stance table and preserved on promotion (intent and proposal remain non-authoritative until an `author` pass turns them into spec obligations, exactly as observation and inquiry do).
 
@@ -203,7 +203,7 @@ A repository is **Swarm-conformant** if and only if all of the following hold:
 1. It contains a self-contained copy of all six **Tier-2 language/reference docs** (§20.3.2).
 2. It contains a copyable template for each of the seven **Tier-1 core artifacts** (§20.3.1), and each template satisfies its §21 contract.
 3. It contains a **populated `AGENTS.md` bootloader** (§31) — not an empty placeholder — within the ≤200-line / ≤25 KB density cap (§2, §31.1).
-4. It contains the framework/package version file — `scaffold/.agents/.swarm-version` in the framework-dev repo, or `.swarm/VERSION` in an adopted project (§20.5.1, §25) — carrying a valid semver.
+4. It contains the framework/package version file — `kernel/.agents/.swarm-version` in the framework-dev repo, or `.swarm/VERSION` in an adopted project (§20.5.1, §25) — carrying a valid semver.
 
 A repository that omits any of the four MUST NOT be described as Swarm-conformant. Conditional artifacts (Tier 3) and the reserved `.swarm.*.json` contract files are **not** required for conformance. The full mechanically-checkable conformance contract — the exact checks, their inputs, and the deferral of an automated checker to a future CLI — is given in §32; the golden corpus that exercises it is given in §33.
 
@@ -212,9 +212,9 @@ A repository that omits any of the four MUST NOT be described as Swarm-conforman
 
 ### 20.5 The adopted-project workspace (`.swarm/`)
 
-§20.0 maps the **framework-dev repository** — the repo in which Swarm *itself* is authored: the `docs/`, `examples/`, `evals/`, and `scaffold/` siblings that explain, demonstrate, self-test, and package the kernel. This subsection maps a different artifact: the **adopted-project workspace** — the directory shape that appears inside a *consuming* project after it adopts Swarm. The two are distinct artifacts and MUST NOT be conflated: `docs/`+`examples/`+`evals/`+`scaffold/` describe how Swarm is built and shipped; `.swarm/`+`.agents/`+`AGENTS.md` describe how an adopted project is laid out. A reader holding the framework repo open is looking at the producer; a reader holding a consuming project open is looking at the product.
+§20.0 maps the **framework-dev repository** — the repo in which Swarm *itself* is authored: the `docs/`, `examples/`, `evals/`, and `kernel/` siblings that explain, demonstrate, self-test, and package the kernel. This subsection maps a different artifact: the **adopted-project workspace** — the directory shape that appears inside a *consuming* project after it adopts Swarm. The two are distinct artifacts and MUST NOT be conflated: `docs/`+`examples/`+`evals/`+`kernel/` describe how Swarm is built and shipped; `.swarm/`+`.agents/`+`AGENTS.md` describe how an adopted project is laid out. A reader holding the framework repo open is looking at the producer; a reader holding a consuming project open is looking at the product.
 
-The bridge between the two is **installation**. The installable payload — the kernel — ships in the framework repo under `scaffold/` (the `scaffold/.agents/` interior of §20.0, with the v0.2 rename note thereof). On adoption, that payload INSTALLS to **`.swarm/kernel/`** in the consuming project, and `scaffold/AGENTS.md` is adopted as the project's `AGENTS.md`. Nothing executes during or after this copy (Invariant 1, NO RUNTIME — §2): the kernel is inert reference data and copyable templates, and every "workspace" path below is a directory a human or an agent populates, or that a future Swarm toolchain (§12, §32.7) would populate as a CONTRACT it builds against — never a runtime Swarm ships.
+The bridge between the two is **installation**. The installable payload — the kernel — ships in the framework repo under `kernel/` (the `kernel/.agents/` interior of §20.0, with the v0.2 rename note thereof). On adoption, that payload INSTALLS to **`.swarm/kernel/`** in the consuming project, and `kernel/AGENTS.md` is adopted as the project's `AGENTS.md`. Nothing executes during or after this copy (Invariant 1, NO RUNTIME — §2): the kernel is inert reference data and copyable templates, and every "workspace" path below is a directory a human or an agent populates, or that a future Swarm toolchain (§12, §32.7) would populate as a CONTRACT it builds against — never a runtime Swarm ships.
 
 #### 20.5.1 The canonical adopted-project tree
 
@@ -228,7 +228,7 @@ project/
     VERSION                          # adopted kernel version, semver (§25); the workspace mirror of .agents/.swarm-version
     config.yaml                      # project-level config: surface policies (§16.6), agent adapters (§32.7.4), and (under a `lint:` key) the §8.6 lint-severity overrides
 
-    kernel/                          # the INSTALLED framework payload (copied from the framework repo's scaffold/)
+    kernel/                          # the INSTALLED framework payload (copied from the framework repo's kernel/)
       language/                      # self-contained Tier-2 references (§20.3.2): SOL.md APS.md errors.md versioning.md
       templates/                     # copyable Tier-1 + Tier-3 skeletons (§21); NO verdict.md (§20.2.3)
       passes/                        # one page per pass (§26); the 9 passes
@@ -267,7 +267,7 @@ project/
     profiles/                        # mirrored/pointer profiles → .swarm/kernel/profiles/
 ```
 
-The mapping from the framework repo to the adopted project is fixed and load-bearing: `scaffold/.agents/{language,templates,passes,skills,profiles,overlays}` (§20.0) becomes `.swarm/kernel/{language,templates,passes,skills,profiles,overlays}`, and `scaffold/.agents/.swarm-version` (§25) becomes `.swarm/VERSION`. The framework-shipped `scaffold/.agents/conformance/` (golden corpus + `conformance.yaml`, §32/§33) installs to `.swarm/kernel/conformance/`, and `scaffold/.agents/memory/` seeds the project-owned `.swarm/memory/` (§23). The framework-dev repo's `docs/`, `examples/`, and `evals/` are authoring-side and are **not** installed into a consuming project. *Design rationale (layout/naming):* placing the kernel under `.swarm/kernel/` (rather than at `.agents/` as in §20.0's payload) keeps the canonical workspace self-describing — a project carries its own language, templates, and passes — while the bare `.agents/` directory is reserved for the compatibility role of §20.5.4.
+The mapping from the framework repo to the adopted project is fixed and load-bearing: `kernel/.agents/{language,templates,passes,skills,profiles,overlays}` (§20.0) becomes `.swarm/kernel/{language,templates,passes,skills,profiles,overlays}`, and `kernel/.agents/.swarm-version` (§25) becomes `.swarm/VERSION`. The framework-shipped `kernel/.agents/conformance/` (golden corpus + `conformance.yaml`, §32/§33) installs to `.swarm/kernel/conformance/`, and `kernel/.agents/memory/` seeds the project-owned `.swarm/memory/` (§23). The framework-dev repo's `docs/`, `examples/`, and `evals/` are authoring-side and are **not** installed into a consuming project. *Design rationale (layout/naming):* placing the kernel under `.swarm/kernel/` (rather than at `.agents/` as in §20.0's payload) keeps the canonical workspace self-describing — a project carries its own language, templates, and passes — while the bare `.agents/` directory is reserved for the compatibility role of §20.5.4.
 
 #### 20.5.2 The eight `.swarm/` directory contracts
 
@@ -275,7 +275,7 @@ The workspace separates **desired** state (`sources/`), **observed** state (`sta
 
 | Directory | Purpose | Committed? | Populated by |
 | --- | --- | --- | --- |
-| `kernel/` | Installed framework payload (language, templates, passes, skills, profiles, overlays). Framework-owned; updated by kernel migrations; project edits belong in `overlays/`. | Yes | Installation from the framework repo's `scaffold/`; kernel migrations |
+| `kernel/` | Installed framework payload (language, templates, passes, skills, profiles, overlays). Framework-owned; updated by kernel migrations; project edits belong in `overlays/`. | Yes | Installation from the framework repo's `kernel/`; kernel migrations |
 | `sources/` | Desired truth + durable source artifacts: specs (primary behavioral intent), PRDs, RFCs, research, audits, bugs, findings, ADRs, interfaces, NFRs (§20.3.4). | Yes | Humans + the `author`/`improve` passes |
 | `status/` | Observed satisfaction + drift state: spec satisfaction reports, task/worktree state, drift reports. Records whether code satisfies the spec; never redefines intent. | Yes | The `verify`/`review` passes; drift detection (future toolchain) |
 | `generated/` | Generated/derived execution packets: task frames, traces, reviews, generated tests/docs. Recreatable from sources; compacted into `ledger/` on completion. | Mostly gitignored (task frames + active traces/reviews; see §20.5.5) | The `lower`/`decompose`/`implement`/`verify`/`review` passes (or a future toolchain) |
@@ -903,7 +903,7 @@ The stdlib ships three source-document templates (§20.3.3). Each is plain `.md`
 
 ### 21.10 PRD and RFC source-doc templates (stdlib, conditional)
 
-These two stdlib source-doc templates extend the Tier-3 set of §21.9. Like `audit.md`, `research.md`, and `bug-report.md`, each is plain `.md`, carries `type` + `id` frontmatter, and preserves a fixed *epistemic stance* enforced by the distillation-loss and source-authority discipline (§22, §24), not by any gatekeeper tool. They are **conditional**: a conformant repo MUST ship the templates in `scaffold/.agents/` but MAY have zero instances — a `prd.md` is required only when a change introduces or reshapes intended product behaviour, and an `rfc.md` is required only when a technical approach needs a decision before it is committed to an approved `spec.swarm.md` or an `adr.md`. Both promote forward through the author pass; neither carries obligation blocks itself (§21.10.3).
+These two stdlib source-doc templates extend the Tier-3 set of §21.9. Like `audit.md`, `research.md`, and `bug-report.md`, each is plain `.md`, carries `type` + `id` frontmatter, and preserves a fixed *epistemic stance* enforced by the distillation-loss and source-authority discipline (§22, §24), not by any gatekeeper tool. They are **conditional**: a conformant repo MUST ship the templates in `kernel/.agents/` but MAY have zero instances — a `prd.md` is required only when a change introduces or reshapes intended product behaviour, and an `rfc.md` is required only when a technical approach needs a decision before it is committed to an approved `spec.swarm.md` or an `adr.md`. Both promote forward through the author pass; neither carries obligation blocks itself (§21.10.3).
 
 #### 21.10.1 `prd.md` — product intent
 

@@ -15,7 +15,7 @@
 | Supersedes | All prior Swarm working material described in §0.2 |
 | Resolution log | this specification |
 
-This document is **Accepted** as the v0.1 kernel. Once accepted, every Swarm document, template, scaffold artifact, pass guide, profile, and ADR MUST be consistent with this specification; where any existing repository file disagrees, this specification governs and that file MUST be reworked to conform (§34).
+This document is **Accepted** as the v0.1 kernel. Once accepted, every Swarm document, template, kernel payload artifact, pass guide, profile, and ADR MUST be consistent with this specification; where any existing repository file disagrees, this specification governs and that file MUST be reworked to conform (§34).
 
 ### 0.2 Provenance and consolidation
 
@@ -50,7 +50,7 @@ A newcomer who reads only §1–§4 should be able to hold the whole framework i
 Swarm carries **two independent version numbers**, and this document is versioned on the first of them. This convention is normative throughout and specified in full in §25.
 
 - **Language version** — the SOL+APS grammar, block set, modal set, clause keywords, and lint codes. Slow-moving: `0.1` (this document), then `0.2`, `1.0`. Carried in `*.swarm.md` frontmatter as the discriminator `swarm_language: SOL/0.1` and in the IR as `meta.language`.
-- **Framework / package version** — the scaffold, templates, pass guides, and profiles, versioned as semver in `scaffold/.agents/.swarm-version` (an adopted project mirrors it as `.swarm/VERSION`, §20.5.1). Fast-moving and independent.
+- **Framework / package version** — the kernel payload, templates, pass guides, and profiles, versioned as semver in `kernel/.agents/.swarm-version` (an adopted project mirrors it as `.swarm/VERSION`, §20.5.1). Fast-moving and independent.
 
 This document is **language v0.1**. The framework package that delivers it carries its own semver. The one-way trigger (§25): any language change forces at least a framework MINOR release; the framework MAY release many versions without changing the language version.
 
@@ -157,7 +157,7 @@ Five invariants hold in **every** section of this document; no later section may
 
 Swarm is **markdown-only**. Everything that "runs" — parser, normalizer, planner, scheduler, differ, checker, CLI — is documented as a **contract a future tool builds against**, and is never shipped by this repository.
 
-- *Rationale:* the repository is documentation and scaffold; shipping a runtime would couple Swarm to one environment and contradict provider-neutrality.
+- *Rationale:* the repository is documentation and kernel payload; shipping a runtime would couple Swarm to one environment and contradict provider-neutrality.
 - *Consequence:* any section describing tool behavior MUST frame it as "the contract a future tool builds against," never as "a tool Swarm provides." No file MAY claim a CLI is required or that automation already exists.
 
 #### 2.1.2 Invariant 2 — SOFT vs HARD control
@@ -195,12 +195,12 @@ Swarm makes **no assumption about which model or agent** executes it (not Claude
 - *Rationale:* the contracts must outlive any single vendor and any single capability ceiling.
 - *Consequence:* no section MAY hard-code provider-specific behavior, and capability claims MUST be dated and treated as evidence, not as load-bearing assumptions.
 
-### 2.3 Markdown-only with a self-contained scaffold
+### 2.3 Markdown-only with a self-contained kernel payload
 
-Swarm is delivered as markdown, and the scaffold MUST be **self-contained**: the scaffold's SOL and APS references MUST NOT depend on the repository's `docs/` tree.
+Swarm is delivered as markdown, and the kernel payload MUST be **self-contained**: the kernel payload's SOL and APS references MUST NOT depend on the repository's `docs/` tree.
 
-- *Rationale:* a vendored scaffold travels into a foreign repository where `docs/` will not exist.
-- *Consequence:* the language references are duplicated into the scaffold (§20, §21), and the duplication is kept consistent by the conformance contract (§32).
+- *Rationale:* a vendored kernel payload travels into a foreign repository where `docs/` will not exist.
+- *Consequence:* the language references are duplicated into the kernel payload (§20, §21), and the duplication is kept consistent by the conformance contract (§32).
 
 ### 2.4 Edges are the single source of relationship truth
 
@@ -226,7 +226,7 @@ Meaning MUST be **preserved across every lowering**. Each downstream transformat
 
 ### 2.7 `.swarm/` is the canonical workspace
 
-In an adopted project, Swarm's artifacts live under `.swarm/` by default; `.agents/` is an agent-tool **compatibility surface**, not the Swarm root. (This is a design/layout choice, not an empirical claim. It governs the *adopted-project* workspace, distinct from the *framework-dev* repository layout of §20.0; the installable payload ships in the framework repo under `scaffold/` and installs to `.swarm/kernel/`.)
+In an adopted project, Swarm's artifacts live under `.swarm/` by default; `.agents/` is an agent-tool **compatibility surface**, not the Swarm root. (This is a design/layout choice, not an empirical claim. It governs the *adopted-project* workspace, distinct from the *framework-dev* repository layout of §20.0; the installable payload ships in the framework repo under `kernel/` and installs to `.swarm/kernel/`.)
 
 - *Rationale:* burying primary specs, memory, status, and ledger under a generic `.agents/` namespace conflates Swarm's source-of-truth workspace with the load surface a specific agent tool happens to read.
 - *Consequence:* canonical Swarm specs, memory, status, and ledger MUST live under `.swarm/` and MUST NOT live under `.agents/` as canonical; any pass guide, skill, or profile mirrored into `.agents/` for tool compatibility MUST point back to (or be copied from) `.swarm/kernel/`, and MUST be marked compatibility/migration material (§20).
@@ -500,7 +500,7 @@ Surface = English-shaped UPPERCASE space-separated keywords. IR = snake_case. Lo
 | Axis | What it versions | Where it lives | Cadence |
 |------|------------------|----------------|---------|
 | **Language** | SOL+APS grammar, blocks, modals, lint codes | frontmatter `swarm_language: SOL/0.1` (+ `aps_version`); IR `meta.language` | Slow: `0.1`, `0.2`, `1.0` |
-| **Framework / package** | scaffold, templates, pass guides, profiles | `scaffold/.agents/.swarm-version` → `.swarm/VERSION` (semver) | Fast |
+| **Framework / package** | kernel payload, templates, pass guides, profiles | `kernel/.agents/.swarm-version` → `.swarm/VERSION` (semver) | Fast |
 
 **One-way trigger:** any language change forces at least a framework MINOR release; the framework MAY release many versions without touching the language version. *See §25.*
 

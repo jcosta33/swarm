@@ -126,13 +126,13 @@ A pass guide MAY depend on shared language, artifact, and pass contracts. A pass
 
 The §26.5 dependency chain terminates in an undefined "project overlays" node. This subsection defines that node and closes the chain. An **overlay** is the project-scoped guidance layer that sits *downstream* of every kernel object: it consumes language, artifact, pass, pass-guide, and profile contracts, and is consumed by nothing.
 
-An **overlay** is an OPTIONAL, project-scoped bundle of **non-kernel rules** — architecture conventions, testing policy, and domain or house rules specific to one repository — that lives at `scaffold/.agents/overlays/<name>/`. An overlay carries project guidance the kernel deliberately does not ship: where a pass guide documents *how* to perform a pass (§26.5) and a profile documents *what to look for and refuse* (§27.1), an overlay documents *what this project additionally expects* on top of both. A conformant repo MAY ship zero overlays; the kernel is complete without any.
+An **overlay** is an OPTIONAL, project-scoped bundle of **non-kernel rules** — architecture conventions, testing policy, and domain or house rules specific to one repository — that lives at `kernel/.agents/overlays/<name>/`. An overlay carries project guidance the kernel deliberately does not ship: where a pass guide documents *how* to perform a pass (§26.5) and a profile documents *what to look for and refuse* (§27.1), an overlay documents *what this project additionally expects* on top of both. A conformant repo MAY ship zero overlays; the kernel is complete without any.
 
 Overlays are the canonical re-home for legacy architecture and testing-policy "skills." Those skills were never pass guides (they document no pass) and never profiles (they carry no cognitive stance); they encode project-local convention. Re-homing them as overlays keeps that convention out of the pass-guide set, where it would otherwise contaminate the standard-library guides with one repo's house rules.
 
 #### Overlay contract
 
-Every overlay MUST be a `*.md` file (or a directory of them) under `scaffold/.agents/overlays/<name>/`, declaring the following frontmatter and sections:
+Every overlay MUST be a `*.md` file (or a directory of them) under `kernel/.agents/overlays/<name>/`, declaring the following frontmatter and sections:
 
 ```markdown
 ---
@@ -194,7 +194,7 @@ Normatively:
 
 - A profile MUST NOT define language or artifact semantics (the §26.1 prohibition applies identically: a profile is a skill-shaped file).
 - A profile is **optional**: a pass is well-defined without any profile loaded. A profile sharpens a pass; it is never required for the pass to be valid.
-- A profile's **carrier is an implementation detail.** A profile MAY ship as a standalone file (e.g. `scaffold/.agents/skills/persona-skeptic/`) OR be inlined into a pass guide. Conformance checks the *contract* (§27.2), not the carrier. Rationale: the mindset is the kernel object; the file is incidental.
+- A profile's **carrier is an implementation detail.** A profile MAY ship as a standalone file (e.g. `kernel/.agents/skills/persona-skeptic/`) OR be inlined into a pass guide. Conformance checks the *contract* (§27.2), not the carrier. Rationale: the mindset is the kernel object; the file is incidental.
 
 ### 27.2 The canonical profile contract
 
