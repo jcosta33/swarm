@@ -309,7 +309,7 @@ These fire at `PARSE`; all are BLOCKING (a malformed block cannot be parsed into
 | `SOL-S006` | BLOCKING | should-without-because | `SHOULD`/`SHOULD NOT` used without an accompanying `BECAUSE` or `EXCEPT` clause in the same block (§5.6). | Edit: add a `BECAUSE` or `EXCEPT` clause, or strengthen to `MUST`/`MUST NOT`. |
 | `SOL-S007` | BLOCKING | malformed-header | Block header is missing the mandatory trailing colon, or the id is malformed (spaces, illegal characters). | Edit: write `TYPE PREFIX-NNN:`. |
 | `SOL-S008` | BLOCKING | non-control-first-line | A trailing metadata clause (`DEPENDS ON`/`WRITES`/…) or free prose appears **before** the block's control content — i.e. before its leading EARS condition clause (`WHERE`/`WHILE`/`WHEN`/`IF`) or its `THE <actor> <MODAL>` actor-clause. A leading condition clause **is** control content and does NOT trip this. | Edit: lead with the condition/actor clause; move metadata to the trailing block. |
-| `SOL-S010` | BLOCKING | unknown-metadata-field | A trailing metadata field is not one of the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`DOMAIN`/`OWNED BY`). | Edit: use a valid field (§5) or move the text to commentary. |
+| `SOL-S010` | BLOCKING | unknown-metadata-field | A trailing metadata field is not one of the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`DOMAIN`). | Edit: use a valid field (§5) or move the text to commentary. |
 | `SOL-S014` | BLOCKING | missing-required-clause | A block omits a clause its grammar makes mandatory — e.g. a `TRACE` with `IMPLEMENTS` but no `PROOF` line (§6.6; Appendix A `trace_body` requires one-or-more `PROOF`). | Edit: add the required clause (for `TRACE`, at least one `PROOF` line). |
 
 Note: legacy `SOL-S007`/`SOL-S010` (verification / verdict-value checks) and legacy `SOL-S008` (planner parallelism) do **not** keep these S-numbers — they re-layer to V and O respectively (see B.6). The S007/S008 rows above are the *re-allocated* v0.1 syntax meanings; `SOL-S010` is re-allocated from the legacy verdict-value check (now `SOL-V005`) to `unknown-metadata-field`.
@@ -322,7 +322,7 @@ P-layer rules are single-obligation-local. `001`–`049` are BLOCKING; `050`–`
 
 | Code | Severity | Short name | Definition | Resolves by |
 |---|---|---|---|---|
-| `SOL-P001` | BLOCKING | dangling-condition | A trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | `NORMALIZE`: supply the consequence. |
+| `SOL-P001` | BLOCKING | dangling-condition | A trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | author rewrite: supply the consequence. |
 | `SOL-P002` | BLOCKING | missing-actor | The obligation has no responsible actor. | `CONCRETIZE`: name the actor. |
 | `SOL-P003` | BLOCKING | missing/informal-modality | No modal, or lowercase `should`/`must`/`may` used where binding force is intended. | `NORMALIZE`: uppercase to the correct modal (was `APS-M001`). |
 | `SOL-P004` | BLOCKING / ADVISORY | bundled/overloaded-obligation | One clause bundling multiple separable obligations is BLOCKING; the permitted `AND THE` chain beyond two is an ADVISORY warning (G3). | `ATOMIZE`: split into one obligation per block (was `APS-O001`; >2 chained `AND THE` warns, never a hard error, G3). |
@@ -399,7 +399,7 @@ The closed 10-op improve set (§10) is wired to the codes above; this is the can
 
 | Improve op | Resolves codes |
 |---|---|
-| `NORMALIZE` | `SOL-P001`, `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
+| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
 | `ATOMIZE` | `SOL-P004` (and `SOL-P052` by splitting) |
 | `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-P050`, `SOL-M001` |
 | `QUANTIFY` | `SOL-P005`, `SOL-P056` |
@@ -576,7 +576,6 @@ This appendix is the normative, contract-only data definition of the `*.swarm.ir
           "reads":  { "type": "array", "items": { "type": "string" }, "default": [] },
           "writes": { "type": "array", "items": { "type": "string", "description": "Write surface path/glob or named SURFACE member" }, "default": [] },
           "touches":{ "type": "array", "items": { "type": "string", "description": "Lowering of TOUCHES; surface path/glob or named SURFACE member" }, "default": [] },
-          "affects":{ "type": "array", "items": { "type": "string" }, "default": [] },
           "verify_by": {
             "type": "array",
             "default": [],
@@ -699,7 +698,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
       },
       "owner": "@web-platform",
       "risk": "medium",
-      "reads": [], "writes": ["web/src/http/client.ts"], "affects": [],
+      "reads": [], "writes": ["web/src/http/client.ts"],
       "verify_by": [
         { "type": "test",     "adapter": "cmdTest", "ref": "web/tests/auth-refresh-401.spec.ts", "selector": null, "gate": "required" },
         { "type": "property", "adapter": "cmdTest", "ref": "web/tests/auth-refresh.properties.ts", "selector": "no_unbounded_retry", "gate": "required" }

@@ -135,7 +135,7 @@ Every APS rule family resolves to **exactly one** prose-layer lint code in the u
 
 | APS rule family | `SOL-P` code | Severity | Repair op |
 |---|---|---|---|
-| Dangling condition (trigger, no modal consequence) | `SOL-P001` | BLOCKING | author rewrite / `NORMALIZE` |
+| Dangling condition (trigger, no modal consequence) | `SOL-P001` | BLOCKING | author rewrite |
 | Missing actor | `SOL-P002` | BLOCKING | `CONCRETIZE` |
 | Missing / informal modality (`should`→`SHOULD`) | `SOL-P003` | BLOCKING | `NORMALIZE` |
 | Bundled / overloaded obligation (connectives) | `SOL-P004` | BLOCKING | `ATOMIZE` |

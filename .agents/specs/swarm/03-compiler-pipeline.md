@@ -435,6 +435,7 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 | `reads` | array of string | MUST (MAY be empty) | The **read scope set** (§12.6). Surface `READS`. |
 | `writes` | array of string | MUST (MAY be empty) | The **write scope set** (§12.6). Surface `WRITES`; surface names are SURFACE ids, never `locks`. |
 | `affects` | array of string | MUST (MAY be empty) | The **impact scope set** (§12.6). Surface `AFFECTS`. |
+| `touches` | array of string | MAY | Surfaces this obligation incidentally touches but does not own or write — advisory documentation only, weaker than `writes`. **Not consumed by the safe-parallelism predicate** (§18) and never a conflict or staleness signal. Surface `TOUCHES` (§6.8). |
 | `verify_by` | array of object | MUST (MAY be empty) | Normalized proof bindings (§12.4.3). Surface `VERIFY BY`. |
 | `status` | string | MUST | The node's **core** verdict: one of `PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED` (§12.4.4). Closed over the four core values only. |
 | `lifecycle` | array of string | MUST (MAY be empty) | Lifecycle decorators in effect on the core verdict — a subset of `{WAIVED, STALE, CONTRADICTED}` (§12.4.4, §14). Empty for a plain core verdict. |
@@ -583,7 +584,7 @@ Each diagnostic is a SARIF-shaped finding (§8 owns the taxonomy; §12 owns its 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
 | `code` | string | MUST | A unified lint code `SOL-<LAYER>NNN` where `<LAYER>` ∈ {`S`,`P`,`M`,`V`,`O`} (§8). |
-| `level` | string | MUST | SARIF level: `error`, `warning`, or `note`. Maps to the §8 BLOCKING/ADVISORY split (BLOCKING ⇒ `error`; ADVISORY ⇒ `warning`); `note` carries the advisory codes' informational findings (§8.6). `off` is **not** a level: a waiver that demotes a code to `off` (§8.6) suppresses the diagnostic — it is omitted from `diagnostics[]` entirely, not emitted with an `off` level or downgraded into a `note`. |
+| `level` | string | MUST | SARIF level: `error`, `warning`, or `note`. Maps to the §8 BLOCKING/ADVISORY split (BLOCKING ⇒ `error`; ADVISORY ⇒ `warning`); `note` has no surface producer in v0.1 — it is reserved for informational annotations a future emitter MAY attach and MUST NOT be produced by a conformant v0.1 checker (§8.2). `off` is **not** a level: a waiver that demotes a code to `off` (§8.6) suppresses the diagnostic — it is omitted from `diagnostics[]` entirely, not emitted with an `off` level or downgraded into a `note`. |
 | `node` | string\|null | one of `node`/`source` MUST be present | The node id the finding attaches to, if node-scoped. |
 | `source` | object\|null | one of `node`/`source` MUST be present | A source span (same shape as §12.4.5 minus `content_hash`), for findings with no resolved node (e.g. a parse error). |
 | `message` | string | MUST | Human-readable finding text. The §8 `suggest` field MAY also appear. |

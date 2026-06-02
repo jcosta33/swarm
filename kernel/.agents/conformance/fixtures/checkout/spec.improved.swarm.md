@@ -56,6 +56,7 @@ WHEN the cart is submitted
 THE checkout service MUST charge the card
 VERIFY BY test:cmdTest:api/tests/checkout.spec.ts#charges-card
 DEPENDS ON IF-010
+AFFECTS I-010
 WRITES api/src/checkout/submit.ts
 RISK high
 

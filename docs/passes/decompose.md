@@ -46,7 +46,7 @@ Every obligation block (REQ, CONSTRAINT, INVARIANT) MAY carry scope-declaration 
 | `AFFECTS <id-list-or-surface>` | `affects` | The impact set: obligations or surfaces that may be perturbed but are not directly written. | Soft `affects` conflict edge. |
 | `OWNED BY <worker>` | `owner` | The execution-tier projection: the worker/packet that owns this obligation's write surfaces. Produced by `decompose`, not authored on the source obligation. | Subject to OWNED ⊆ WRITES (lint `SOL-O005`). |
 
-`AFFECTS` MUST lower to an `affects` edge in the IR, never folded into `writes` or `depends_on`. `DEPENDS_ON` (underscore) is **not** a surface keyword — it is only the IR edge-type transcription; a source author writing `DEPENDS_ON` in `.swarm.md` is a keyword-form error (`SOL-S005`-adjacent). The surface keyword is exactly `DEPENDS ON` (two words). Relationships are emitted **once**, as IR `edges[]`, never duplicated as node scalars in the conflict analysis.
+`AFFECTS` MUST lower to an `affects` edge in the IR, never folded into `writes` or `depends_on`. `DEPENDS_ON` (underscore) is **not** a surface keyword — it is only the IR edge-type transcription; a source author writing `DEPENDS_ON` in `.swarm.md` is a keyword-form error (`SOL-S002`-adjacent). The surface keyword is exactly `DEPENDS ON` (two words). Relationships are emitted **once**, as IR `edges[]`, never duplicated as node scalars in the conflict analysis.
 
 A worked obligation and its lowered IR fragment:
 

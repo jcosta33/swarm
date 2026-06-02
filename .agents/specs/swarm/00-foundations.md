@@ -488,7 +488,7 @@ The three version fields are distinct and MUST NOT be merged. *See §12, Appendi
 |---------------------------|---------------------------|
 | `VERIFY BY` | `verify_by` |
 | `DEPENDS ON` | `depends_on` |
-| `OWNED BY` | `owned_by` |
+| `OWNED BY` | `owner` |
 | `WRITES` | `writes` |
 | `READS` | `reads` |
 | `AFFECTS` | `affects` |

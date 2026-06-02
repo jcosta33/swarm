@@ -470,7 +470,7 @@ The following clauses MAY trail any obligation block (REQ/CONSTRAINT/INVARIANT).
 | `READS <surface-list>` | Read set. | `reads` set |
 | `AFFECTS <surface-or-id-list>` | Impact set (downstream effect). | `affects` edges |
 | `RISK <low\|medium\|high\|critical>` | Risk tier. | `risk` scalar |
-| `DOMAIN <one of the eight governance domains>` | Per-obligation Axis-B domain; overrides the frontmatter `domain` default (§22.1.2). | `domain` scalar |
+| `DOMAIN <one of the eight governance domains>` | Per-obligation Axis-B domain; overrides the frontmatter `domain` default (§22.1.2). | `authority` scalar (the resolved domain-authority) |
 
 ```sol
 REQ AC-005:

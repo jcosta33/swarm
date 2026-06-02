@@ -19,10 +19,12 @@ The `improve` pass applied the closed, intent-preserving ops (§10):
   - CONCRETIZE replaced AC-021's "handle failures gracefully" with an observable criterion
                (return HTTP 502 with a structured error body inside the 30s budget). Clears
                SOL-P005.
-  - BIND       attached a `test` proof to AC-020 and AC-021, a `contract` proof to IF-001,
-               and a `monitor` proof to I-001 — a no-double-charge property whose only honest
-               oracle is a production-ledger observation (a unit test cannot witness a real
-               duplicate capture). Clears the bindings the seeded defects left open.
+  - BIND       attached a `test` proof to AC-020 and a `monitor` proof to I-001 — a
+               no-double-charge property whose only honest oracle is a production-ledger
+               observation (a unit test cannot witness a real duplicate capture). IF-001
+               (its `contract` proof) and AC-021 (its `test` proof) already carried their
+               bindings in the authored source; CONCRETIZE only reworded AC-021's selector
+               (surfaces-error → surfaces-502). Clears the bindings the seeded defects left open.
 Q-001 was resolved out-of-band by the spec owner (decision: retry automatically up to the
 bound, then surface a 502 to the user); the resolution is recorded and Q-001 is removed,
 unblocking AC-020 before lowering. After improve the contradiction and the vague clause clear
@@ -51,6 +53,7 @@ WHEN the processor returns a 5xx
 THE payments service MUST retry the charge at most 3 times under the same idempotency key
 VERIFY BY test:cmdTest:server/tests/payment-5xx.spec.ts#retries-bounded
 DEPENDS ON IF-001
+AFFECTS I-001
 WRITES server/src/payments/charge.ts
 RISK high
 

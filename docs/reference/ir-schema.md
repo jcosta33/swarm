@@ -75,7 +75,6 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 | `risk` | string \| null | MAY | One of `low`, `medium`, `high`, `critical` — lowering of `RISK`. |
 | `reads` | array of string | MUST (MAY be empty) | The **read** scope set — lowering of `READS`. |
 | `writes` | array of string | MUST (MAY be empty) | The **write** scope set — lowering of `WRITES`. Surface names are `SURFACE` ids; there is no `locks` field. |
-| `affects` | array of string | MUST (MAY be empty) | The **impact** scope set — lowering of `AFFECTS`. |
 | `verify_by` | array of object | MUST (MAY be empty) | Normalized proof bindings (§1.2.2) — lowering of `VERIFY BY`. |
 | `status` | string | MUST | The node's **core** verdict: one of `PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED`. Closed over the four core values only; defaults to `UNVERIFIED` before a verdict exists. |
 | `lifecycle` | array of string | MUST (MAY be empty) | Lifecycle decorators in effect — a subset of `{WAIVED, STALE, CONTRADICTED}`. Carried as a separate field, never fused into `status`. |
@@ -160,9 +159,9 @@ Every relationship between two nodes is one typed directed edge.
 | `type` | string | MUST | One of the 7 closed edge types: `depends_on`, `blocks`, `conflicts_with`, `verified_by`, `affects`, `implements`, `preserves`. |
 | `hard` | boolean | MUST (defaults `true`) | `true` = a hard relationship (mandatory ordering, hard conflict, required proof); `false` = soft/advisory. |
 
-> **Edges are the single source of relationship truth.** A relationship between two nodes MUST be represented exactly once, as an edge, and MUST NOT also be duplicated as a node scalar — there is no `depends_on`, `blocks`, `conflicts_with`, `verified_by`, `implements`, or `preserves` field on a node. A consumer computing dependency order, conflict, or traceability MUST read `edges[]` and MUST NOT reconstruct relationships from node fields. Design rationale: a relationship stored twice can disagree; one representation cannot.
+> **Edges are the single source of relationship truth.** A relationship between two nodes MUST be represented exactly once, as an edge, and MUST NOT also be duplicated as a node scalar — there is no `depends_on`, `blocks`, `conflicts_with`, `verified_by`, `affects`, `implements`, or `preserves` field on a node. A consumer computing dependency order, conflict, or traceability MUST read `edges[]` and MUST NOT reconstruct relationships from node fields. Design rationale: a relationship stored twice can disagree; one representation cannot.
 
-This is distinct from the three **scope sets** on a node (`reads`, `writes`, `affects`): a scope set answers "what region of the world does this single obligation touch?" — intrinsic node data — while an edge answers "how do two nodes relate?" The lowering pass *derives* `conflicts_with` and `affects` edges *from* scope sets (e.g. two nodes sharing a write surface yield a `conflicts_with` edge), keeping the raw declaration on the node and the computed relationship in the graph so the derivation is auditable and the two never silently disagree. Note the special case: `affects` exists both as a node scope set (the declared impact region) and as an edge type (a resolved node→node impact link); they are not duplicates — the set is the declaration, the edge is one resolved consequence.
+This is distinct from the **scope sets** on a node (`reads`, `writes`): a scope set answers "what region of the world does this single obligation touch?" — intrinsic node data — while an edge answers "how do two nodes relate?" The lowering pass *derives* `conflicts_with` and `affects` edges *from* scope sets (e.g. two nodes sharing a write surface yield a `conflicts_with` edge), keeping the raw declaration on the node and the computed relationship in the graph so the derivation is auditable and the two never silently disagree. `affects` is purely an edge type (a resolved node→node impact link); it is not also a node scope set.
 
 ### 1.4 `diagnostics[]`
 
@@ -273,7 +272,6 @@ These three values drift independently and MUST remain three fields.
           "reads":  { "type": "array", "items": { "type": "string" }, "default": [] },
           "touches":{ "type": "array", "items": { "type": "string" }, "default": [], "description": "Lowering of TOUCHES — surfaces the obligation touches but does not own/write" },
           "writes": { "type": "array", "items": { "type": "string", "description": "Write surface path/glob or named SURFACE member" }, "default": [] },
-          "affects":{ "type": "array", "items": { "type": "string" }, "default": [] },
           "verify_by": {
             "type": "array",
             "default": [],
@@ -396,7 +394,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
       },
       "owner": "@web-platform",
       "risk": "medium",
-      "reads": [], "writes": ["web/src/http/client.ts"], "affects": [],
+      "reads": [], "writes": ["web/src/http/client.ts"],
       "verify_by": [
         { "type": "test",     "adapter": "cmdTest", "ref": "web/tests/auth-refresh-401.spec.ts", "selector": null, "gate": "required" },
         { "type": "property", "adapter": "cmdTest", "ref": "web/tests/auth-refresh.properties.ts", "selector": "no_unbounded_retry", "gate": "required" }

@@ -51,6 +51,7 @@ The two `.json` variants are **documented-as-contract names only**: the kernel p
 | `bug-report.md` | Diagnosis-only source document; promotes into a fix *task*. | Source-doc (conditional) |
 | `prd.md` | Product-intent source document; promotes to a spec. | Source-doc (conditional) |
 | `rfc.md` | Technical-proposal source document; promotes to a spec or an ADR. | Source-doc (conditional) |
+| `threat-model.md` | Security-domain threat-observation source document; promotes to a spec. | Source-doc (conditional; outside the counted Tier-3 inventory) |
 
 ### 2.3 There is NO `verdict.md` (normative)
 
@@ -128,6 +129,7 @@ The copyable templates themselves install under `.swarm/kernel/templates/`.
 | [rfc.md](./rfc.md) | `rfc.md` | proposal | a spec or an ADR |
 | [audit.md](./audit.md) | `audit.md` | observation-only | a spec |
 | [bug-report.md](./bug-report.md) | `bug-report.md` | diagnosis-only | a fix task |
+| [threat-model.md](./threat-model.md) | `threat-model.md` | threat-observation | a spec |
 
 ## Related
 

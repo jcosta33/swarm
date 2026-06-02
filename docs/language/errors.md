@@ -140,7 +140,7 @@ A malformed block cannot be parsed into a node, so every S code is BLOCKING and 
 | `SOL-S006` | BLOCKING | S | should-without-because: `SHOULD`/`SHOULD NOT` used without an accompanying `BECAUSE` or `EXCEPT` in the same block. | Edit: add a `BECAUSE`/`EXCEPT`, or strengthen to `MUST`/`MUST NOT`. |
 | `SOL-S007` | BLOCKING | S | malformed-header: header is missing the mandatory trailing colon, or the id is malformed (spaces, illegal characters). | Edit: write `TYPE PREFIX-NNN:`. |
 | `SOL-S008` | BLOCKING | S | non-control-first-line: a trailing metadata clause (`DEPENDS ON`/`WRITES`/…) or free prose appears before the block's control content (leading EARS condition or `THE <actor> <MODAL>` clause). A leading condition clause is control content and does not trip this. | Edit: lead with the condition/actor clause; move metadata to the trailing block. |
-| `SOL-S010` | BLOCKING | S | unknown-metadata-field: a trailing metadata field is outside the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`DOMAIN`/`OWNED BY`). | Edit: use a valid field or move the text to commentary. |
+| `SOL-S010` | BLOCKING | S | unknown-metadata-field: a trailing metadata field is outside the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`DOMAIN`). | Edit: use a valid field or move the text to commentary. |
 | `SOL-S011` | BLOCKING | S | missing-obligation-id: a header is present but carries no `*_id` after the block type (type recognized, id absent). | Edit: add a valid `PREFIX-NNN` id after the block type. |
 | `SOL-S012` | BLOCKING | S | required-section-missing: a `spec.swarm.md` is missing a required top-level section from its ordered set (e.g. `## Intent`, `## Non-goals`, `## Obligations`), or carries them out of order. Document-level companion of the per-obligation `SOL-O004`. | Edit: add the missing `## ` section heading (or reorder) per the [spec layout](../artifacts/spec.md). |
 | `SOL-S013` | BLOCKING | S | untrusted-source-character: an agent-read artifact contains a zero-width, bidirectional-control, other non-printing, or homoglyph-suspect codepoint in obligation/instruction bytes — a hidden-instruction injection vector. | Edit: strip the offending codepoints or re-author in printable characters. |
@@ -152,7 +152,7 @@ P-layer rules are single-obligation-local; each maps to a closed [improve op](..
 
 | Code | Severity | Layer | Message (short name + defect) | Resolves by |
 |---|---|---|---|---|
-| `SOL-P001` | BLOCKING | P | dangling-condition: a trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | author rewrite / `NORMALIZE`: supply the missing consequence. |
+| `SOL-P001` | BLOCKING | P | dangling-condition: a trigger with no modal *consequence* at the prose level (semantically empty even if syntactically a sentence). | author rewrite: supply the consequence. |
 | `SOL-P002` | BLOCKING | P | missing-actor: the obligation has no responsible actor. | `CONCRETIZE`: name the actor. |
 | `SOL-P003` | BLOCKING | P | missing/informal-modality: no modal, or lowercase `should`/`must`/`may` used where binding force is intended. | `NORMALIZE`: uppercase to the correct modal. |
 | `SOL-P004` | BLOCKING / ADVISORY | P | bundled/overloaded-obligation: one clause bundling multiple separable obligations is BLOCKING; a permitted `AND THE` chain beyond two is an ADVISORY warning. | `ATOMIZE`: split into one obligation per block. |
@@ -232,7 +232,7 @@ The closed **10-op [improve set](../passes/improve.md)** is the canonical detect
 
 | Improve op | Resolves codes |
 |---|---|
-| `NORMALIZE` | `SOL-P001`, `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
+| `NORMALIZE` | `SOL-P003`, `SOL-P051`, `SOL-P053`, `SOL-P057`, `SOL-P058` |
 | `ATOMIZE` | `SOL-P004` (and `SOL-P052` by splitting) |
 | `CONCRETIZE` | `SOL-P005`, `SOL-P002`, `SOL-P050`, `SOL-M001` |
 | `QUANTIFY` | `SOL-P005`, `SOL-P056` |

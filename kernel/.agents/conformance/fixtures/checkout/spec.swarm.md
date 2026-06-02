@@ -45,6 +45,7 @@ WHEN the cart is submitted
 THE checkout service MUST validate the cart AND charge the card AND email the receipt
 VERIFY BY test:cmdTest:api/tests/checkout.spec.ts#submit
 DEPENDS ON IF-010
+AFFECTS I-010
 WRITES api/src/checkout/submit.ts
 RISK high
 

@@ -9,7 +9,7 @@ checker passes any of these, the checker (or the manifest) is wrong.
 ## V1 — empty paste slot (`content_rules: non-empty-paste`)
 
 ```markdown
-### Verification outputs (paste actual command output — do not paraphrase)
+## Verification matrix
 
 - `{{cmdValidate}}` (last 2 lines):
 - `{{cmdTest}}` (last 2 lines):

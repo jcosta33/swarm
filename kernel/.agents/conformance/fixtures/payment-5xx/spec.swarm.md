@@ -43,6 +43,7 @@ REQ AC-020:
 WHEN the processor returns a 5xx
 THE payments service MUST retry the charge
 AND THE payments service MUST NOT retry the charge
+AFFECTS I-001
 
 REQ AC-021:
 WHEN a payment attempt fails

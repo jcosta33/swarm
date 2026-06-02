@@ -34,4 +34,4 @@ PROOF monitor:cmdMonitor:dashboards/payments/duplicate-captures#zero_double_capt
 | ------- | ---------------- | ------------------------------------------ | ---------- | ------- | ------- | ------------------ | ------------- |
 | AC-020  | sha256:4f6a…e2   | {charge.ts, sha256:6b22…9f, exercised}     | cmdTest    | PASS    | test    | [AC-020]           | [T-001]       |
 | AC-021  | sha256:9a01…7c   | {charge.ts, sha256:6b22…9f, exercised}     | cmdTest    | PASS    | test    | [AC-021]           | [T-001]       |
-| I-001   | sha256:b730…5d   | {charge.ts, sha256:6b22…9f, observed}      | cmdMonitor | FAIL    | monitor | [I-001]            | [T-001]       |
+| I-001   | sha256:b730…5d   | {charge.ts, sha256:6b22…9f, exercised}     | cmdMonitor | FAIL    | monitor | [I-001]            | [T-001]       |
