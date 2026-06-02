@@ -1,0 +1,59 @@
+<!--
+payment-5xx golden-corpus POSITIVE fixture — Stage 7 (review + merge gate, pass: review,
+run under the `skeptic` profile, §27). The `review` pass consumes the trace and emits
+per-obligation VERDICT lines carrying a core value optionally decorated with a lifecycle
+value (§14). AC-021 is a clean PASS. AC-020 (`test` PASS) and I-001 (`monitor` FAIL) disagree
+about the same no-double-charge property, so both carry the CONTRADICTED decorator with the
+two conflicting evidence refs (§14.3, §17.4). Per the proof-strength preorder
+(model > property|contract > test > static > manual|monitor) the `test` PASS is the *working
+assumption* over the `monitor` FAIL — but a working assumption does NOT close the contradiction:
+a CONTRADICTED on any required obligation BLOCKS the merge gate until reconciled (§17.4). The
+reconcile note records the resolution — the production double-captures came from concurrent
+requests racing before the idempotency key persisted (a real defect the harness test never
+exercised), the code is fixed with a single-flight guard, and both proofs are re-run and now
+agree — after which the CONTRADICTED decorator drops and the gate opens. Inert oracle data.
+-->
+
+---
+type: review
+id: payment-5xx-charge-review
+source_trace: .swarm/generated/traces/payment-5xx-charge-trace.md
+source_spec: .swarm/sources/specs/payment-5xx.swarm.md
+---
+
+# Review: payment-5xx charge
+
+## Per-obligation verdicts
+
+VERDICT AC-020: PASS (CONTRADICTED by review: test:payment-5xx.spec.ts#retries-bounded=PASS vs monitor:duplicate-captures#zero_double_captures=FAIL)
+REASON Bounded-retry harness test PASSes, but the production monitor observes duplicate captures on the same key; the two proofs disagree about the no-double-charge property.
+EVIDENCE payment-5xx.spec.ts output + duplicate-captures dashboard window in review log
+
+VERDICT AC-021: PASS
+REASON Budget-exhaustion test asserts a 502 with the structured `processor-unavailable` body returned inside the 30s budget.
+EVIDENCE payment-fail.spec.ts output in review log
+
+VERDICT I-001: FAIL (CONTRADICTED by review: monitor:duplicate-captures#zero_double_captures=FAIL vs test:payment-5xx.spec.ts#retries-bounded=PASS)
+REASON Production duplicate-captures count is non-zero over the window, contradicting the harness test that exercises a single-flight retry path.
+EVIDENCE duplicate-captures dashboard window + payment-5xx.spec.ts output in review log
+
+## Final verdict
+Gate: every required obligation is PASS or WAIVED; none STALE/CONTRADICTED/FAIL/BLOCKED/UNVERIFIED.
+Result: BLOCKED — AC-020 and I-001 are CONTRADICTED (and I-001's core is FAIL). The `test`
+PASS outranks the `monitor` FAIL in the proof-strength preorder and is the working assumption,
+but a CONTRADICTED required obligation blocks the gate until the disagreement is reconciled
+(§17.4) — contradiction is never resolved by picking the more convenient result.
+
+## Reconcile note
+Reconcile applied (the §17.4 not-silent discipline). The disagreeing proofs were re-examined,
+not picked between: the harness test exercised retries on a *single* in-flight request, so it
+never witnessed the real defect — two concurrent requests for the same idempotency key both
+passed the not-yet-persisted-key check and each captured a charge. The code was fixed with a
+single-flight guard that persists the idempotency key before any capture, server/src/payments/charge.ts
+was edited, and both proofs were re-run against the new surface: the bound `test`
+`payment-5xx.spec.ts#retries-bounded` (extended with a concurrent-request case) PASSed and the
+`monitor` `duplicate-captures#zero_double_captures` window now reports zero double captures.
+The two proofs now agree, so the CONTRADICTED decorator drops from AC-020 and I-001, I-001
+resolves to a clean PASS, and with every required obligation PASS the merge gate opens: final
+outcome PASS. Note (§17.4): the contradiction was closed only when both proofs agreed — never
+by silently trusting the stronger oracle's working assumption.
