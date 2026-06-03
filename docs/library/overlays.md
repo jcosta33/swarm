@@ -91,6 +91,16 @@ The reason the boundary is restated this sharply is that the overlay is the laye
 
 The clean way to read the boundary: if a rule changes *what this project additionally expects*, it is an overlay rule; if it changes *what the words mean or what counts as done*, it belongs to the kernel and an amendment, not an overlay.
 
+### Where does a rule belong — overlay, pass guide, or AGENTS.md bootloader?
+
+Before a rule lands as an overlay rule, one gating question decides whether the overlay is even its right home: **is this rule vendorable across a different language, a different CI provider, and a different agent?** The answer routes the rule to one of three places.
+
+- **Portable → a pass guide.** If the rule would still produce its intended behaviour for a team on another language, CI, and agent — with nothing else loaded — it is universal *how-to-work* guidance, not project convention. It belongs to a pass guide in the standard library, not an overlay. An overlay that carries portable guidance is misfiled; it should be lifted into the pass guide so every adopter inherits it.
+- **Project-local → an overlay.** If the rule is true *here* but would be wrong (or merely irrelevant) to bake into the shared kernel — a stack-specific convention, a local command binding, a house refusal — it is exactly what an overlay is for. This is the rule that fails the vendorability test because it is coupled to *this* repository.
+- **A persistent project fact → the AGENTS.md bootloader.** If the rule is not a multi-step discipline an agent loads for a pass but a standing fact the agent should treat as always-true context — what this repo's architecture *is*, which command *is* the integration suite, what the domain *means* — it is persistent context, and persistent context lives in [the AGENTS.md bootloader](../model/conformance.md), not in a lazily-loaded overlay. Encoding a standing fact as an overlay forces the task to name it before the agent can see it, which is the wrong lifecycle for something that is always true.
+
+The split matters because each layer has a different lifecycle: a pass guide is portable and inherited by every adopter, an overlay is project-local and loaded only when a task names it, and the bootloader is project-local but always resident. Misfiling a rule — a portable one trapped in an overlay, a standing fact buried behind lazy activation — costs adopters either reuse or visibility. For the evidence behind this three-way test and the failure modes of getting it wrong, see [the scope evidence](../research/scope.md).
+
 ## Where overlays live
 
 | Path | Holds |

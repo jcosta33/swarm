@@ -127,6 +127,39 @@ Guide bodies are **self-contained**: a reader following one guide should not hav
 - **MUST NOT override an approved obligation.** A guide is procedure; it cannot weaken, waive, strengthen, or reinterpret an obligation the spec already approved. Waiver authority is a human or the spec owner — never a guide.
 - **MUST NOT be always-loaded.** It is lazily loaded by name, per the doctrine above.
 
+## Authoring a pass guide
+
+The contract above says *which sections* a guide declares. This section is the authoring heuristic: how to write the `description` line and shape the body so the guide both loads when the task names it and fires once loaded.
+
+### The directive `description` (for the fallback path)
+
+Recall the loading doctrine: the primary path is **load what the task names**, and description-matching is the launcher-less fallback. When the task does the naming, the `description` is never consulted — but a guide can be dropped into an arbitrary agent CLI with no router, and in that degraded mode the `description` is the only thing the agent scans to decide whether to load the guide. So author it well: write it in the **directive four-clause form**, in order.
+
+```text
+<WHAT verb> <object>.
+ALWAYS apply when <trigger 1>, <trigger 2>, or <trigger 3> — even if <implicit signal>.
+Do not <forbidden default behaviour> directly.
+Skip for <out-of-scope task_kind 1> or <out-of-scope task_kind 2>.
+```
+
+- **WHAT verb + object** — name the action concretely so the agent can pattern-match the task against it.
+- **ALWAYS apply when …** — force unconditional activation; the *"even if …"* qualifier catches implicit triggers the task didn't state literally.
+- **Do not … directly** — block the bypass: the path the agent takes when it decides *not* to load the guide.
+- **Skip for …** — name the *task kinds* this guide is not for, never a sibling guide's name. Naming task kinds keeps the fallback working even when a consumer vendored only this guide and not its neighbour, and it prevents directive saturation when several guides overlap on a trigger.
+
+The directive form is an authoring heuristic for this fallback path, not an obligation: when the task names the guide, naming wins and the `description` is bypassed. The rule's evidence — directive descriptions activating far more reliably than passive *"Use when …"* phrasings — is in [the evidence](../research/activation.md).
+
+### The body skeleton
+
+A guide body satisfies the contract sections, and within them follows a stable shape so the rules actually fire once the guide loads:
+
+- **Numbered rules, each with a one-line rationale** — `1. <Rule>` … `N. <Rule>`, every rule paired with one or two sentences of *why*. The rationale is the "explain-the-why" discipline: a bare imperative works only for the cases the author imagined, while the rationale lets the agent extend the rule to a case the author never anticipated.
+- **An `## Anti-patterns` section** — concrete failure modes with their corrections, not just rules. Without negative examples the agent has no prior for the edge cases that miss the happy path, and it tends to invent a fix that is often wrong.
+- **References exactly one hop away** — material the guide cites sits one level deep; a referenced file does not itself link to another referenced file. Chained references get partial-read and silently dropped, so the hop limit is structural, not stylistic.
+- **A target length aligned to the density cap** — keep the body well under the length the AGENTS.md bootloader's density cap allows, so that nothing load-bearing sits in the low-attention middle of a long context. When a body grows past the practical target, the question is "what moves one hop out to a referenced file?", not "can the body be longer?".
+
+The directional evidence behind the body shape — attention degrading across long contexts, rationale-bearing rules outperforming bare imperatives, and the reference-depth failure mode — is in [the evidence](../research/body-anatomy.md).
+
 ## The installed guides
 
 The stdlib pass guides and the two fragments ship under `kernel/.agents/skills/`. Each is a self-contained `GUIDE.md` carrying the contract above, plus a self-activating `description` for the launcher-less fallback:

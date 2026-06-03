@@ -61,6 +61,18 @@ A specialization MAY set `type: benchmark` or `type: cleanup`, but parses exactl
 
 Promotion target: an audit promotes to a `spec.swarm.md` via the author pass (its `## Recommended obligations` seed the spec's `REQ`/`CONSTRAINT`/`INVARIANT` blocks). It may also feed a `finding.md` (a single durable fact extracted from an observation) or a refactor task, but it never becomes code directly.
 
+## Severity calibration
+
+Each observation and risk carries a **severity** so that a downstream author or fix task can triage. The scale has three rungs:
+
+| Severity | Meaning |
+| --- | --- |
+| **BLOCKER** | Safe downstream work cannot proceed until this is handled — a security hole, a correctness cliff, or an unsafe pattern that will produce wrong results. |
+| **MAJOR** | Materially costs velocity or reliability; it must be scheduled explicitly rather than batched away. |
+| **MINOR** | Cosmetic or isolated; acceptable to defer or batch with adjacent work. |
+
+The calibration heuristic is **severity by blast radius, not by discovery order**: a finding's rung reflects *what breaks if the observation is wrong* — how far the damage spreads and how unsafe it leaves downstream work — not how hard the finding was to surface or how clever the search that found it was. A subtle defect that took an exhaustive grep to locate is still MINOR if its blast radius is one cosmetic edge case; an obvious gap is a BLOCKER if it lets unsafe work proceed unchecked. When a severity is promoted or demoted and the call is contestable, record the reasoning in the observation so a reviewer can re-derive it. Calibrating by blast radius is what keeps severity falsifiable instead of a vibe — for why grounded, falsifiable observations are the load-bearing part of an audit, see [the evidence behind source artifacts](../research/sources.md).
+
 ## Copyable template
 
 The copyable skeleton ships at:

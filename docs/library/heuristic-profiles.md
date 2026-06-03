@@ -95,6 +95,17 @@ This single axis replaces two legacy lookup tables — persona-by-task-type and 
 
 The six stdlib profiles ship in the kernel payload at **`kernel/.agents/profiles/`** — one file per profile (`skeptic.md`, `builder.md`, `architect.md`, `researcher.md`, `reviewer.md`, `janitor.md`). In an adopted project the same files are installed at `.swarm/kernel/profiles/`. A profile a project authors itself lives alongside them. Because a profile's carrier is incidental, a project that prefers to inline a stance into its pass guide is equally conformant, so long as the seven-section contract is satisfied.
 
+## Authoring a profile
+
+When you write a new profile, the first decision is the one that keeps the file conformant: a profile is a **cognitive stance that parameterizes a pass**, not an org role or a named character. Swarm deliberately rejects the "named persona" model some frameworks use — *Mary the Analyst*, *Devon the Dev*, and the like. A profile is named after the stance the pass needs (`skeptic`, `builder`, `architect`), never after a person; it implies a frame of mind, not a personality; and it earns its keep by enumerating constraints, not by encouraging roleplay. The test is concrete: if the name evokes a character to inhabit, it is a costume; if it names *what the agent looks for and refuses* while running a pass, it is a profile. Switching profiles should feel like changing tools, not changing actors — which is also why the stance set stays small and memorable rather than sprawling into a cast. For why this stance-not-character framing makes the discipline durable under attention pressure, see [the evidence](../research/body-anatomy.md).
+
+In practice, two parts of the seven-section contract carry the weight of the stance and are worth drafting first:
+
+- **The Stance.** State, in one line, the failure class this profile exists to catch and the frame of mind it imposes — the substance that fills `## Prevents` and tilts the rest of the sections. The Skeptic's stance is refute-by-default; the Builder's is constructive build under the assigned scope; the Janitor's is behavior-preserving minimal-footprint change. Everything else in the profile follows from that one sentence.
+- **The `## Refuses` red-flag table.** This is where the stance becomes auditable. Shape it as a two-column table — each row a red flag the stance recognizes on sight, paired with the disposition it takes (`reject`, mark `UNVERIFIED`, require an independent reviewer, …). Enumerate the *specific* traps this profile's pass invites rather than stating one sweeping rule; the row's disposition cites vocabulary owned by the language reference and the pass guides, it never mints new meaning. A reader should be able to scan the table and know exactly what the stance will and will not let through.
+
+Keep the profile short. The other five sections (`## Default questions`, `## Required evidence`, `## Self-review delta`, `## Applies when`, `## Does not apply when`) sharpen the stance and guard against misapplication, but they are downstream of the one-line stance and the refusal set. If those two are crisp, the profile does its job.
+
 ## Related
 
 - [Pass guides](pass-guides.md) — the skill/pass-guide model: *how* a pass runs, the layer a profile sits over.

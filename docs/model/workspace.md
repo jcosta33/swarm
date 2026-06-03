@@ -70,6 +70,12 @@ This split is the workspace-wide form of the per-path surface policy below: each
 
 `.swarm/ledger/` is the **compact reconciled history**: a durable, low-volume summary that survives after `generated/` execution packets are compacted away. Each ledger entry preserves what a future audit needs — **obligation coverage, changed surfaces, the proof run, the verdicts, and the promotion results** — so a completed unit of work leaves a permanent reconciled record rather than an ever-growing pile of task scratchpads. It is committed (`changes/ merges/ promotions/`); `generated/tasks/` and `tmp/` are not. The ledger is what lets `generated/` be safely gitignored: the durable facts have already been lifted out of it.
 
+## The resumption record
+
+Because every durable artifact lives in `.swarm/` rather than in a model's context window, a task that spans more than one session does not have to be re-derived when a fresh session picks it up. The workspace *is* the resumption record. A new session reconstructs where the work stands by reading the same three durable surfaces that govern the work in the first place: the `sources/` artifact that fixes desired truth, the `status/` entry that records observed satisfaction and the task's current state, and — once a unit completes — the `ledger/` entry that compacts what the reconciliation produced. Decisions, findings, and the next concrete starting points are written into that durable state as the work proceeds, so the file content is full even when the context window is empty.
+
+This is the same file-state-externalization discipline as the rest of the workspace, applied to continuity in time: the kernel deliberately does not try to solve long-context coherence at the model layer. Sessions time out and workers swap mid-task; the response is to externalize state so the next session lands in the same epistemic position the last one left, loading what the task names rather than re-investigating it. For how a task's own file carries this resumption state across sessions, see [the evidence](../research/task-files.md).
+
 ## Source-code surface policies
 
 The workspace separation has a per-path projection over the codebase itself. A code region declares **exactly one** policy from a closed set of five (§16.6.2). This follows from **Invariant 4 — code is reality**: specs are primary for intent, code is primary for implementation reality, and the trace/review/status layer reconciles the two. A surface policy records which side of that reconciliation a region sits on.

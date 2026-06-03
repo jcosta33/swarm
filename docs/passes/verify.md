@@ -255,6 +255,18 @@ Each task kind (the `task_kind` enum carried on a task frame) has a **default su
 
 The phase tag (`@ VERIFY`, `@ NORMALIZE`, `@ REVIEW`, `@ LOWER`) names the pass at which the proof is expected to run: source-only task kinds bind their `static` proof at `NORMALIZE` because there is no code to execute, while code-changing kinds bind their executable proofs at `VERIFY`. A `task_kind` with no executable suite still has an obligation — its `static` lint/APS pass — and a `PASS` there is a genuine verdict, not an exemption from judgment.
 
+### 5.7.1 The verification side of the task-kind contracts
+
+A default suite says *which* proof types a task kind expects; this note records *what those proofs must establish* for the three task kinds whose verification shape is non-obvious. Each is a design rationale, not a new lint rule — for the evidence behind the discipline, see [the evidence](../research/execution.md), and for the authoring side these contracts gate, cross-ref [`docs/passes/implement.md`](./implement.md).
+
+- **`refactor` — the equivalence/characterization oracle.** A refactor preserves behaviour end to end, so its `test`-at-`VERIFY` proof is not "does the new code pass a suite" but "would this oracle *fail if behaviour changed*". An adequate refactor oracle is a characterization or equivalence check — golden-output, differential, or property — that pins the existing behaviour before the change and would break the instant any of it moved. A green suite that never asserted the preserved behaviour is necessary but not sufficient; its `oracle_adequacy` should record what surface it actually exercised (§6.1), and a high-risk refactor escalates per §6.2.
+
+- **`rewrite` — the delta-plus-behaviour two-proof.** A rewrite is the one task kind where behaviour is *permitted* to change, so its verification splits along the recorded delta. The intended change carries an acceptance-criteria proof: each changed behaviour is an `AC` bound to a `test`/`manual` oracle that is shown valid (fails when the criterion is violated, passes when satisfied). Everything *outside* the delta carries a behaviour-preservation proof — an equivalence check that would fail if the unchanged surface moved. Both are required: the first shows the intended change was built; the second shows nothing else silently shifted, which is precisely the rewrite failure mode (an emergent change hiding under the licence to change).
+
+- **`performance` — the same-protocol baseline-and-target proof (`perf`).** A `perf` proof is meaningless without a baseline measured under the *same* protocol — identical warmup, sample count, statistical aggregate, hardware, environment, input shape, and cache state — as the target measurement. The verdict binds two readings taken the same way, not a single after-the-fact number; the recorded conditions are part of the evidence because the speedup only holds under them. A `perf` `PASS` does not waive the correctness suite: a faster wrong answer is still wrong, so `performance` also binds `test @ VERIFY`.
+
+The unifying discipline across all three (and every other suite) is **forced visible output**: a verdict's `EVIDENCE` must be inspectable. A "tests passed" claim with no command, exit code, run output, or selector resolution is not a proof — the verification step that produces no visible marker is the one that gets silently skipped, and an asserted-but-uninspectable result is recorded `UNVERIFIED`, never `PASS` (§5.8).
+
 ### 5.8 What is NOT a proof
 
 These MUST be rejected and MUST NOT yield `PASS`:
