@@ -63,7 +63,7 @@ obligations (for `rewrite`: changing behaviour outside the recorded delta).
 
 ## Does not apply when
 
-- pass ≠ `implement`, or `task_kind` is a different `implement` kind — `refactor`/`cleanup` is the
+- pass ≠ `implement`, or `task_kind` is a different `implement` kind — `refactor` is the
   Janitor's behaviour-preserving stance, `migration`/`upgrade` the Migrator's, `performance` the
   Performance Surgeon's, `testing` the Test Author's, `documentation` the Documentarian's (§27.3).
 - The pass is `author`, `lint`, `improve`, `lower`, `decompose`, `verify`, `review`, or `promote`

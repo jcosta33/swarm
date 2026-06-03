@@ -162,13 +162,14 @@ The directional evidence behind the body shape — attention degrading across lo
 
 ## The installed guides
 
-The stdlib pass guides and the two fragments ship under `kernel/.agents/skills/`. Each is a self-contained `GUIDE.md` carrying the contract above, plus a self-activating `description` for the launcher-less fallback:
+The stdlib pass guides, the narrow `fix-flaky-test` guide, and the two cross-cutting fragments ship under `kernel/.agents/skills/`. Each is a self-contained `GUIDE.md` carrying the contract above, plus a self-activating `description` for the launcher-less fallback:
 
 | Installed module | Role | Pass |
 |---|---|---|
 | `kernel/.agents/skills/pass-lint-spec/` | stdlib pass guide | `lint` |
 | `kernel/.agents/skills/pass-decompose-spec/` | stdlib pass guide | `decompose` |
 | `kernel/.agents/skills/pass-implement-obligations/` | stdlib pass guide (branches by `task_kind`) | `implement` |
+| `kernel/.agents/skills/fix-flaky-test/` | narrow `implement` guide (loaded under `task_kind: fix`) | `implement` |
 | `kernel/.agents/skills/pass-review-trace/` | stdlib pass guide (carries the Skeptic profile) | `review` |
 | `kernel/.agents/skills/pass-promote-findings/` | stdlib pass guide | `promote` |
 | `kernel/.agents/skills/empirical-proof/` | cross-cutting fragment | `verify`, `review` |

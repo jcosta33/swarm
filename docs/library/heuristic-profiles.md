@@ -59,7 +59,7 @@ The kernel models **thirteen** heuristic stances (the full set is mapped below).
 | `architect.md` | intent-not-implementation — keep specs verifiable and free of smuggled implementation; survey before reinventing. | `author` (spec-writing) |
 | `researcher.md` | inquiry against external evidence — investigate a question in depth against primary sources. | `author` (research-writing) |
 | `reviewer.md` | the Skeptic stance narrowed to the `review` pass (a convenience alias, **not** a fourteenth stance). | `review` |
-| `janitor.md` | tidy-as-you-go, minimal-footprint, behavior-preserving change. | `implement` (`refactor`, `cleanup`) |
+| `janitor.md` | tidy-as-you-go, minimal-footprint, behavior-preserving change. | `implement` (`refactor`) |
 
 `reviewer.md` is a named alias: it carries the Skeptic stance focused on the single pass it most often parameterizes, so that a task naming `profile: reviewer` resolves to a present, conformant carrier for the `review` pass without minting a new mindset. The substance lives in `skeptic.md`; load that directly whenever the pass is `verify` (or the `fix` task kind for root-causing), which the alias does not cover.
 
@@ -75,7 +75,7 @@ The thirteen stances map onto the nine passes as follows. This is the routing th
 | Surveyor | `author` (research — breadth / inventory survey) |
 | Researcher | `author` (research — depth / external evidence) |
 | Bug Hunter | `author` (bug-report-writing) |
-| Janitor | `implement` (`refactor` / `cleanup`) |
+| Janitor | `implement` (`refactor`) |
 | Migrator | `implement` (`migration` / `upgrade`) |
 | Performance Surgeon | `implement` (`performance`) |
 | Builder | `implement` (`feature` / `rewrite`) |
@@ -87,7 +87,7 @@ All thirteen are uniformly heuristic profiles: there is no two-tier "persona vs 
 
 ## Profile × pass: the routing model
 
-Routing in Swarm is **profile × pass**. A task names exactly one pass — the transformation it frames over its assigned obligations — and MAY name the profile that sharpens it. The `task_kind` frontmatter value is what selects the profile inside the two passes that vary by kind: the nine implementation kinds all route to `implement` and differ only in which profile and pass guide apply (`feature`/`rewrite` → Builder, `refactor`/`cleanup` → Janitor, `migration`/`upgrade` → Migrator, `performance` → Performance Surgeon, `testing` → Test Author, `documentation` → Documentarian); the authoring kinds all route to `author` and select Architect, Researcher/Surveyor, Auditor, or Bug Hunter. The `review` kind selects the `review` pass under the Skeptic stance; `orchestration` and `integration` route to `decompose` plus a merge-gate `review` under the Lead Engineer stance.
+Routing in Swarm is **profile × pass**. A task names exactly one pass — the transformation it frames over its assigned obligations — and MAY name the profile that sharpens it. The `task_kind` frontmatter value is what selects the profile inside the two passes that vary by kind: the nine implementation kinds all route to `implement` and differ only in which profile and pass guide apply (`feature`/`rewrite` → Builder, `fix` → Skeptic, `refactor` → Janitor, `migration`/`upgrade` → Migrator, `performance` → Performance Surgeon, `testing` → Test Author, `documentation` → Documentarian); the authoring kinds all route to `author` and select Architect, Researcher/Surveyor, Auditor, or Bug Hunter. The `review` kind selects the `review` pass under the Skeptic stance; `orchestration` and `integration` route to `decompose` plus a merge-gate `review` under the Lead Engineer stance.
 
 This single axis replaces two legacy lookup tables — persona-by-task-type and persona-by-document-type. A conformant repo MUST express routing as profile × pass and MUST NOT reintroduce a persona-per-task-type or persona-per-document-type matrix. The rationale is concrete: the old matrices duplicated the same mindset across many cells; collapsing every stance onto the pass axis removes that duplication and makes the question "which stance applies here?" answerable from the pass and the `task_kind` alone.
 

@@ -432,7 +432,7 @@ proof_type = "static" | "test" | "contract" | "property" | "model"
 test_scope = "unit" | "integration" | "e2e";               (* only when proof_type = "test" *)
 ```
 
-There are **exactly nine proof types** (`static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor`); any other type is `SOL-V009`. A `bare_ref` (no `proof_type` segment) is valid but raises an advisory untyped-binding smell. The `adapter` resolves through `AGENTS.md > Commands` (the `cmd*` slot); the `artifact` is the file/target it runs; the optional `#selector` is a sub-target (e.g. a test name). Test scope is spelled in the position after `test`: `test:unit:…`, `test:integration:…`, `test:e2e:…`. The full proof taxonomy and its strength ordering (`model > property/contract > test > static > manual/monitor`) live on the verification framework page — out of scope here.
+There are **exactly nine proof types** (`static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor`); any other type is `SOL-V009`. A `bare_ref` (no `proof_type` segment) is valid but raises an advisory untyped-binding smell. The `adapter` resolves through `AGENTS.md > Commands` (the `cmd*` slot); the `artifact` is the file/target it runs; the optional `#selector` is a sub-target (e.g. a test name). Test scope is spelled in the position after `test`: `test:unit:…`, `test:integration:…`, `test:e2e:…`. The full proof taxonomy and its strength ordering (`model > property | contract > test > static > manual | monitor`) live on the verification framework page — out of scope here.
 
 ---
 

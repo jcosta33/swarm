@@ -143,8 +143,8 @@ Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST
       "clauses": { "returns": "Session | AuthExpired" },
       "owner": "auth-client",
       "verify_by": [
-        { "type": "contract", "adapter": "cmdValidate",
-          "ref": "openapi/auth-refresh.yaml", "selector": null, "gate": "required" }
+        { "type": "contract", "adapter": "cmdContract",
+          "ref": "refresh-session-contract", "selector": null, "gate": "required" }
       ],
       "status": "UNVERIFIED",
       "source": { "file": "auth-refresh.swarm.md", "line_start": 9, "line_end": 15,

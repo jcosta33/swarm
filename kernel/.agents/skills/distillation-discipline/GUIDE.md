@@ -2,7 +2,7 @@
 
 > Cross-cutting **fragment** (§26.3), not a standalone pass guide: it has the pass-guide shape (§26.5) but is named by another guide rather than by a task `task_kind`. It is composed behind the three passes that cross an artifact boundary — `lower`, `decompose`, and `promote`.
 >
-> This guide is **procedure only**. The loss budget it applies — what MAY be dropped, what MUST survive, the per-boundary matrix, the discipline-not-gatekeeper rule, the forbidden-composition treatment — is defined authoritatively in **07-governance-memory.md §24** and the conformant repo's reference `docs/reference/distillation-loss-budget.md`. This fragment does not define modality, authority order, verification semantics, the droppable/must-survive lists, or any lint code; those live only in SOL and the reference layer (§26.1). Where this guide and §24 disagree, §24 governs.
+> This guide is **procedure only**. The loss budget it applies — what MAY be dropped, what MUST survive, the per-boundary matrix, the discipline-not-gatekeeper rule, the forbidden-composition treatment — is defined authoritatively in the conformant repo's reference `docs/reference/distillation-loss-budget.md` (§24). This fragment does not define modality, authority order, verification semantics, the droppable/must-survive lists, or any lint code; those live only in SOL and the reference layer (§26.1). Where this guide and that reference disagree, the reference governs.
 
 ## Purpose
 

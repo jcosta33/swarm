@@ -229,7 +229,7 @@ The stronger proof is **authoritative pending reconciliation** at the merge gate
 
 Each required `VERIFY BY` binding produces **exactly one** `VERDICT`. If an obligation declares three required bindings, the gate expects three verdicts and *all* must be `PASS`/`WAIVED`. A missing verdict for a required binding is `SOL-V008` and counts as `UNVERIFIED` at the gate.
 
-### 5.7 Per-task-type default suites
+### 5.7 Per-task-kind default suites
 
 Each task kind (the `task_kind` enum carried on a task frame) has a **default suite**: a set of `(proof-type @ phase)` recommendations for which proofs SHOULD be bound and at which phase they run. A suite says *"a task of this shape usually needs at least these proofs"* — a refactor must preserve behaviour, so it leans on a `test`; a performance task is meaningless without a `perf` measurement; a spec-writing task has no code yet, so its only proof is the `static` lint/APS check at `NORMALIZE`. The suites are **recommendations, not a closed law** — an author MAY override per obligation, and a binding-completeness check (the `SOL-V` layer) verifies that an obligation's bound proofs cover its task kind's default suite, or that any omission is explicitly justified.
 

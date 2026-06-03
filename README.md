@@ -70,7 +70,7 @@ In an adopted project, `.swarm/` is the canonical Swarm workspace, separating **
 Swarm holds five invariants in every part of the framework; the governing one is **NO RUNTIME**. The repository is documentation and kernel payload. Every "runs" verb resolves to a future-tool contract:
 
 1. **No runtime** — markdown-only; everything that "runs" is a contract a future tool builds against, never shipped.
-2. **Soft vs hard control** — prose, SOL, APS, skills, and `AGENTS.md` are soft guidance; anything that must hold regardless of the model needs a deterministic check *outside* the model (today that hard lane is aspirational/manual).
+2. **Soft vs hard control** — prose, SOL, APS, pass guides, profiles, and `AGENTS.md` are soft guidance; anything that must hold regardless of the model needs a deterministic check *outside* the model (today that hard lane is aspirational/manual).
 3. **Surface-vs-IR layering** — the human surface is UPPERCASE space-separated keywords; the IR is snake_case fields.
 4. **Code is reality** — code and tests can falsify an obligation but never silently amend intent.
 5. **Schema-valid is not verified** — shape is not truth; a `PASS` verdict requires a bound proof that actually ran and produced inspectable evidence, not merely a structurally valid trace.

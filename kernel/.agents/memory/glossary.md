@@ -1,4 +1,4 @@
-# Memory glossary — Tier-2 term store (seed)
+# Memory glossary — Tier-1 term store (seed)
 
 This is the **Tier-2 one-word-one-meaning term store** (§23.1.2): the project-level lexicon that
 enforces **one word, one meaning**. Each entry binds exactly one term to exactly one canonical

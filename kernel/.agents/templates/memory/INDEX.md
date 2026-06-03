@@ -8,7 +8,7 @@ updated: {{createdAt}}
 # Memory index
 
 > Tier-1 of the memory model — the compact recall **MAP** an agent reads *first* and *cheaply*: links, not
-> explanations. It links into the Tier-2 evidence store (`finding.md`, `patterns/*.md`, ADRs, `glossary.md`) and
+> explanations. It links into the Tier-2 evidence store (`finding.md`, `patterns/*.md`, ADRs) and
 > MUST NOT duplicate their bodies. Markdown-only, no runtime — this file is the contract a future recall tool
 > builds against, not a retrieval engine.
 >

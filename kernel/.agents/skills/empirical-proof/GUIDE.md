@@ -20,7 +20,7 @@ description: >
 >
 > **This fragment owns no semantics (§26.1, §17.1).** It does not define the nine proof types, the
 > seven-value verdict model, the proof-strength order, the merge gate, or "what is NOT a proof" —
-> those live in the language reference (`language/SOL.md` projecting 04-verification.md §14, §15,
+> those live in the language and verification references (`language/SOL.md`, `passes/verify.md`; §14, §15,
 > §15.9, §15.10, §17) and the typed IR (§12). Every load-bearing term below is cited, not
 > redefined: the citation is non-authoritative delivery, and where this fragment and the language
 > reference disagree, the reference governs. This fragment is the *procedure* for applying the

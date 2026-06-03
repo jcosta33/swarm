@@ -147,7 +147,7 @@ REQ AC-021:
   VERIFY BY test:cmdTest:payment.fail.test
 ```
 
-The `SOL-<LAYER>NNN` codes span four of the five lint layers across the three domains — `SOL-S` (syntax), `SOL-P` (prose), `SOL-M` (semantic), `SOL-V` (verification), and `SOL-O` (orchestration) — so a tool that silently drops one layer fails some negative fixture and is caught.
+The `SOL-<LAYER>NNN` codes span all five lint layers across the three domains — `SOL-S` (syntax), `SOL-P` (prose), `SOL-M` (semantic), `SOL-V` (verification), and `SOL-O` (orchestration) — so a tool that silently drops one layer fails some negative fixture and is caught.
 
 ## Task-file violation classes
 

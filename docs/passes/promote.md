@@ -102,7 +102,7 @@ A universal-workflow-rule promotion collides with the ≤200-line bootloader cap
 
 | Where it goes | What goes there |
 |---|---|
-| Pass guide (`docs/skills/…`) | The actual procedure / steps |
+| Pass guide (`docs/library/pass-guides.md`) | The actual procedure / steps |
 | `AGENTS.md` | One line: the pointer + its load-when, nothing procedural |
 
 > Example — promoting "always run the migration dry-run before applying": the dry-run procedure is added to the `implement` pass guide; `AGENTS.md` gains only `- Before applying a migration, load the implement pass guide (migration section).`

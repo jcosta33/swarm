@@ -287,7 +287,7 @@ The stronger proof is treated as **authoritative pending reconciliation** at the
 
 Each required `VERIFY BY` binding produces **exactly one** `VERDICT`. The hard gate (§14.4) is "one `VERDICT` per required `VERIFY BY` binding": if an obligation declares three required bindings, the merge gate expects three verdicts, and *all* must be `PASS`/`WAIVED`. A missing verdict for a required binding is `SOL-V008` (and counts as `UNVERIFIED` at the gate).
 
-### 15.8 Per-task-type default suites
+### 15.8 Per-task-kind default suites
 
 Each task kind (the `task_kind:` enum — §28) carries a **default suite**: a set of `(proof-type, phase)` requirements that recommend which proofs SHOULD be bound and at which phase they run. This reframes the legacy per-task verification matrix as default suites that bind to `cmd*` slots; the suites are **recommendations**, not a closed law — an author MAY override per obligation.
 

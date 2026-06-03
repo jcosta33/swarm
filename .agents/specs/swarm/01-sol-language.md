@@ -325,7 +325,7 @@ A user MUST NOT have more than one active refresh token family
 VERIFY BY property:cmdTest:token-family-invariant
 ```
 
-> Rationale: proof strength `model > property/contract > test > static > manual/monitor` (§15) is why an INVARIANT prefers the upper end; a bare unit test understates the obligation.
+> Rationale: proof strength `model > property | contract > test > static > manual | monitor` (§15) is why an INVARIANT prefers the upper end; a bare unit test understates the obligation.
 
 ### 6.4 INTERFACE — declared boundary
 

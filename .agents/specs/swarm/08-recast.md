@@ -273,7 +273,7 @@ The 13 personas map to passes as follows. This table is normative; it is the rou
 | Surveyor | `author` (research — breadth / inventory survey) |
 | Researcher | `author` (research — depth / external evidence) |
 | Bug Hunter | `author` (bug-report) |
-| Janitor | `implement` (by kind: refactor/cleanup) |
+| Janitor | `implement` (by kind: refactor) |
 | Migrator | `implement` (by kind: migration/upgrade) |
 | Performance Surgeon | `implement` (by kind: performance) |
 | Builder | `implement` (by kind: feature/rewrite) |

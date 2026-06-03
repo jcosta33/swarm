@@ -434,8 +434,7 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 | `risk` | string\|null | MAY | One of `low`, `medium`, `high`, `critical` (surface `RISK`). |
 | `reads` | array of string | MUST (MAY be empty) | The **read scope set** (§12.6). Surface `READS`. |
 | `writes` | array of string | MUST (MAY be empty) | The **write scope set** (§12.6). Surface `WRITES`; surface names are SURFACE ids, never `locks`. |
-| `affects` | array of string | MUST (MAY be empty) | The **impact scope set** (§12.6). Surface `AFFECTS`. |
-| `touches` | array of string | MAY | Surfaces this obligation incidentally touches but does not own or write — advisory documentation only, weaker than `writes`. **Not consumed by the safe-parallelism predicate** (§18) and never a conflict or staleness signal. Surface `TOUCHES` (§6.8). |
+| `touches` | array of string | MUST (MAY be empty) | The **incidental scope set** (§12.6): surfaces this obligation incidentally touches but does not own or write — advisory documentation only, weaker than `writes`. **Not consumed by the safe-parallelism predicate** (§18) and never a conflict or staleness signal. Surface `TOUCHES` (§6.8). (`AFFECTS` is **not** a node field — it lowers to `affects` edges, §12.5.) |
 | `verify_by` | array of object | MUST (MAY be empty) | Normalized proof bindings (§12.4.3). Surface `VERIFY BY`. |
 | `status` | string | MUST | The node's **core** verdict: one of `PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED` (§12.4.4). Closed over the four core values only. |
 | `lifecycle` | array of string | MUST (MAY be empty) | Lifecycle decorators in effect on the core verdict — a subset of `{WAIVED, STALE, CONTRADICTED}` (§12.4.4, §14). Empty for a plain core verdict. |
@@ -534,14 +533,14 @@ The closed edge-type set:
 
 #### 12.5.1 Relationship truth vs scope sets (normative)
 
-> **Edges are the single source of relationship truth.** A relationship between two nodes MUST be represented exactly once, as an edge. A relationship MUST NOT also be duplicated as a node scalar. There is no `depends_on`, `blocks`, `conflicts_with`, `verified_by`, `implements`, or `preserves` field on a node. A consumer computing dependency order, conflict, or traceability MUST read `edges[]` and MUST NOT reconstruct relationships from node fields. *Rationale: a relationship stored twice can disagree; one representation cannot.*
+> **Edges are the single source of relationship truth.** A relationship between two nodes MUST be represented exactly once, as an edge. A relationship MUST NOT also be duplicated as a node scalar. There is no `depends_on`, `blocks`, `conflicts_with`, `verified_by`, `affects`, `implements`, or `preserves` field on a node. A consumer computing dependency order, conflict, or traceability MUST read `edges[]` and MUST NOT reconstruct relationships from node fields. *Rationale: a relationship stored twice can disagree; one representation cannot.*
 
-This is distinct from the three **scope sets** on a node — `reads`, `writes`, `affects`:
+This is distinct from the three **scope sets** on a node — `reads`, `writes`, `touches`:
 
 - A **scope set** answers "what region of the world does this single obligation touch?" It is a property *of one node*, an unordered set of opaque SURFACE identifiers. It is intrinsic node data and correctly lives on the node.
 - A **relationship edge** answers "how do two nodes relate?" It connects *two* node ids and correctly lives in `edges[]`.
 
-The two are connected but not redundant. The lowering pass *derives* `conflicts_with` and `affects` edges *from* scope sets — e.g. if node A and node B both list write surface `web.http.client`, the lowering pass MUST emit a `conflicts_with` edge between them; if A's `affects` set names a surface that B `writes`, an edge MAY be derived per the read/write conflict rule (§18, G7). The scope set is the raw declaration; the edge is the computed relationship. Keeping the raw set on the node and the computed relationship in the graph means the derivation is auditable and re-runnable, and the two never silently disagree. Note the special case: `affects` exists *both* as a node scope set (the declared impact region) *and* as an edge type (a concrete node→node impact link). They are not duplicates: the set is the declaration, the edge is one resolved consequence of it.
+The two are connected but not redundant. The lowering pass *derives* `conflicts_with` and `affects` edges *from* the scope sets and the `AFFECTS` clause — e.g. if node A and node B both list write surface `web.http.client`, the lowering pass MUST emit a `conflicts_with` edge between them; if node A's `AFFECTS` clause names a surface that B `writes`, an `affects` edge (and, per §18 G7, a `conflicts_with` edge) MAY be derived. The declaration is the raw input; the edge is the computed relationship. Keeping the raw declaration and the computed relationship apart means the derivation is auditable and re-runnable, and the two never silently disagree. Note: `affects` is **purely an edge type** — the `AFFECTS` surface clause lowers directly to `affects` edges (a concrete node→node impact link), *not* to a node field; it is never also a node scope set. (The node's third scope set is `touches`, the advisory incidental-surface set of §12.6, which the safe-parallelism predicate ignores.)
 
 ### 12.6 Scope sets in detail
 
@@ -551,7 +550,9 @@ The three scope sets carry the coordination contract that §18 lowers into the d
 |---|---|---|
 | `reads` | `READS` | Surfaces this obligation reads but does not modify. read/read is always parallel-safe; read/write on the same surface is a conflict (§18, G7). |
 | `writes` | `WRITES` | Surfaces this obligation modifies. Shared write surface ⇒ `conflicts_with` ⇒ not parallel-safe (§18). Surface names are SURFACE ids (`SURFACE <name> = …`); there is no `locks` field (§4, §18). |
-| `affects` | `AFFECTS` | Surfaces impacted indirectly (blast radius). Contributes conflict edges; does not by itself imply a write. |
+| `touches` | `TOUCHES` | Surfaces incidentally affected, weaker than `WRITES`. Advisory/documentation only: **not** consumed by the safe-parallelism predicate (§18) and never a conflict or staleness signal. |
+
+The `AFFECTS` clause is **not** a node scope set: it lowers to `affects` edges (the impact relationship of §12.5), which contribute conflict edges but do not by themselves imply a write.
 
 Surface identifiers in scope sets are the SURFACE names declared in the spec (a lock group is a named coarse write surface, never a `locks` primitive). They are opaque strings to the IR; their resolution to files/globs is an orchestration concern (§18).
 

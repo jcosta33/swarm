@@ -84,6 +84,20 @@ The manifest carries the unified lint scheme as inert data so the checker and th
 
 `APS` is the prose-standard's *name*, not a code prefix — the `APS-` prefix is retired, and APS violations surface as `SOL-P*` codes. The full catalogue is the source of truth; the manifest only references it.
 
+### Count acceptance checks (A10–A16)
+
+The manifest's closed-set cardinalities are pinned as the **count acceptance checks A10–A16**: every closed set has exactly one cardinality, and a count that differs between any two documents (the SOL reference, the IR schema, the lint catalogue, the pass guides, and this manifest) is a failing check. The canonical members of each set are enumerated in the [flow graph](../reference/flow-graph.md) — the count-reconciliation hub — which this manifest shadows:
+
+| Check | Closed set | Count |
+|---|---|---|
+| A10 | block types | 7 |
+| A11 | modals | 5 |
+| A12 | verdicts | 7 (4 core + 3 lifecycle) |
+| A13 | proof types | 9 |
+| A14 | phases / passes | 7 / 9 |
+| A15 | improve operations | 10 |
+| A16 | lint layers | 5 (S/P/M/V/O) |
+
 ## The required verification-suite matrix
 
 The manifest also encodes the per-task-kind **required verification suite**: the proof-type/phase defaults that resolve to `cmd*` slots, so the question *"for a task of this kind, what proof MUST exist before it may merge?"* has one machine-readable answer. The canonical, human-readable matrix is the [flow graph](../reference/flow-graph.md) (the `(proof-type @ phase)` view); the manifest's `required_suite` is its shadow, with one row per task kind, resolving each recommendation to concrete adapter slots and named gates. The two MUST agree row-for-row.

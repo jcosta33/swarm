@@ -41,6 +41,8 @@ The two `.json` variants are **documented-as-contract names only**: the kernel p
 | `task.md` | Lowered work packet / pass frame for one pass. | Core (required) |
 | `trace.md` | Implementation / preservation claims + evidence against obligations. | Core (required) |
 | `review.md` | The verdict record: per-obligation `VERDICT` blocks + matrix + final verdict. | Core (required) |
+| `status.md` | Observed-state read-model: per-obligation latest verdict + drift, for one spec. | Execution (derived) |
+| `task-orchestration.md` | Coordination record for one parallel decomposition: owned surfaces, hand-offs, liveness, merge log. | Execution (orchestration) |
 | `finding.md` | One durable, provenance-anchored project fact. | Core (required) |
 | `adr.md` | An immutable architecture decision record (Nygard form). | Core (required) |
 | `memory/INDEX.md` | Compact recall map (links + a "Load when" per entry). | Core (required) |
@@ -130,6 +132,13 @@ The copyable templates themselves install under `.swarm/kernel/templates/`.
 | [audit.md](./audit.md) | `audit.md` | observation-only | a spec |
 | [bug-report.md](./bug-report.md) | `bug-report.md` | diagnosis-only | a fix task |
 | [threat-model.md](./threat-model.md) | `threat-model.md` | threat-observation | a spec |
+
+### Execution-tier working artifacts (no copyable template; populated during the run)
+
+| Page | Artifact | Class | Role |
+| --- | --- | --- | --- |
+| [status.md](./status.md) | `status.md` | working (derived) | Observed-state read-model: latest verdict + drift per obligation. |
+| [task-orchestration.md](./task-orchestration.md) | `task-orchestration.md` | working (orchestration) | Coordination record for one parallel decomposition. |
 
 ## Related
 

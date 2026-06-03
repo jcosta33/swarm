@@ -6,7 +6,7 @@ Machine-readable conformance data for Swarm-adopting repos. A checker (the Swarm
 
 ## What's here
 
-- **`conformance.yaml`** — the manifest: the sections a well-formed task file must have, the required `AGENTS.md > Commands` rows, the legal placeholder namespaces, and the per-task-type required verification suite.
+- **`conformance.yaml`** — the manifest: the sections a well-formed task file must have, the required `AGENTS.md > Commands` rows, the legal placeholder namespaces, and the per-task-kind required verification suite.
 - **`fixtures/conformant-task.md`** — a task file that passes every rule.
 - **`fixtures/violations.md`** — one minimal example per violation class, each with the rule it breaks and the expected verdict. This is the checker's regression suite and the guard against the manifest drifting from the prose rules.
 

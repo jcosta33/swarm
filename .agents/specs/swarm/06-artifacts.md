@@ -73,7 +73,7 @@ kernel/                         # the installable payload root (see note below)
       README.md
     memory/                        # the recall layer (§23)
       INDEX.md                     # Tier-1 recall map
-      glossary.md                  # Tier-2 term store
+      glossary.md                  # Tier-1 term store
       patterns/                    # Tier-2 recurring knowledge
     conformance/                   # inert conformance contract (§32)
       conformance.yaml             # the manifest (data); checker is deferred (§32.7)
@@ -254,7 +254,7 @@ project/
 
     memory/                          # DURABLE recall (§23)
       INDEX.md                       # Tier-1 recall map (a map, not a dump)
-      glossary.md                    # Tier-2 one-word-one-meaning term store
+      glossary.md                    # Tier-1 one-word-one-meaning term store
       patterns/                      # Tier-2 recurring multi-finding knowledge
       stale/                         # superseded/contradicted memory, linked to replacements
 

@@ -70,7 +70,7 @@ lint:
   catalogue_ref: docs/language/errors.md      # the full catalogue is the source of truth (Appendix B)
   retired_prefixes: [APS-]                     # APS- is no longer a code prefix
 
-# --- 32.6 The per-task-type required verification suite ----------------------
+# --- 32.6 The per-task-kind required verification suite ----------------------
 # The (proof-type, phase) defaults of §15, resolving to cmd* slots. The canonical
 # matrix lives in docs/reference/flow-graph.md; this is its machine-readable shadow.
 #   - bare entries     = cmd* adapter slots (§31), resolved through AGENTS.md > Commands

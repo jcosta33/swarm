@@ -2,7 +2,7 @@
 
 This is the **Tier-1 recall map** (§23.1): the compact index an agent reads *first* and
 *cheaply*. It is a **load-*when* map, not the territory** — it says *when* to load each durable
-entry, and it links into the Tier-2 evidence store (findings, patterns, glossary); it MUST NOT
+entry, and it links into the Tier-2 evidence store (findings, patterns); it MUST NOT
 inline their bodies. The always-loaded bootloader (AGENTS.md) *points here* but never inlines
 this map; this map in turn points at Tier-2 but never copies it. Markdown-only, no runtime: this
 is the contract a future recall tool reads, not a retrieval engine.

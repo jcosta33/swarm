@@ -13,7 +13,7 @@ This gives the spec a unique position in the obligation graph. It is the **autho
 What a spec MUST NOT do:
 
 - It MUST NOT carry prose that smuggles obligation force outside a block. Behavioral requirements live in `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` blocks; the surrounding APS prose frames and explains, but is not itself a contract. A requirement stated only in prose is a defect, not an obligation.
-- It MUST NOT leave an obligation unverifiable. Every `REQ`, `CONSTRAINT`, `INVARIANT`, and `INTERFACE` block MUST bind a proof via `VERIFY BY <type>:<adapter>:<artifact>` — drawn from the 9 proof types (test, static, property, model, contract, perf, fuzz, snapshot, manual). An `INTERFACE` block MUST bind a `contract:` proof specifically.
+- It MUST NOT leave an obligation unverifiable. Every `REQ`, `CONSTRAINT`, `INVARIANT`, and `INTERFACE` block MUST bind a proof via `VERIFY BY <type>:<adapter>:<artifact>` — drawn from the 9 proof types (`static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor`). An `INTERFACE` block MUST bind a `contract:` proof specifically.
 - It MUST NOT ship a `blocking` `QUESTION` into lowering. Captured ambiguity belongs in `QUESTION` blocks; a `[blocking]` question MUST be resolved before the spec is lowered to tasks.
 - It MUST NOT silently drop intent. Anything narrowed, deferred, or left open when content was distilled into the spec is accounted for in the closing **Distillation loss statement**.
 

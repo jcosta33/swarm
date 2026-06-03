@@ -65,7 +65,7 @@ Routing a *universal workflow rule* toward `AGENTS.md` collides with the ≤200-
 
 | Where it goes | What goes there |
 | ------------- | --------------- |
-| Pass guide (`docs/skills/…`) | The actual procedure / steps. |
+| Pass guide (`docs/library/pass-guides.md`) | The actual procedure / steps. |
 | `AGENTS.md` | One line: the pointer + its load-when, nothing procedural. |
 
 Example: promoting "always run the migration dry-run before applying" adds the dry-run procedure to the `implement` pass guide; `AGENTS.md` gains only `- Before applying a migration, load the implement pass guide (migration section).` This keeps the bootloader a map and the procedure lazily loaded.

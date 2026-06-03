@@ -284,7 +284,7 @@ A "universal workflow rule" promotion MUST become **a pass-guide edit (the proce
 
 | Where it goes | What goes there |
 | ------------- | --------------- |
-| Pass guide (`docs/skills/…`, §26) | The actual procedure / steps. |
+| Pass guide (`docs/library/pass-guides.md`, §26) | The actual procedure / steps. |
 | `AGENTS.md` | One line: the pointer + its load-when, nothing procedural. |
 
 > Example — promoting "always run the migration dry-run before applying": the dry-run procedure is added to the `implement` pass guide; `AGENTS.md` gains only `- Before applying a migration, load the implement pass guide (migration section).`

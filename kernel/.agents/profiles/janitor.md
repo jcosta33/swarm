@@ -3,7 +3,7 @@
 > Design rationale (not a cited external claim): this profile recasts the legacy
 > `persona-janitor` and `write-refactor` skill disciplines into a single **mindset** for the
 > `implement` pass, per §27.1–§27.3. It is the tidy-as-you-go, minimal-footprint stance applied
-> when `task_kind ∈ {refactor, cleanup}` — the behaviour-preserving counterpart to the Builder's
+> when `task_kind ∈ {refactor}` — the behaviour-preserving counterpart to the Builder's
 > constructive stance (§27.3). It is SOFT control (a skill-shaped file, §26.1): it MUST NOT define
 > modality, authority order, verification semantics, the proof taxonomy, the verdict model, lint
 > codes, or any other load-bearing meaning — those live only in SOL (§6) and the typed IR (§12),
@@ -109,7 +109,7 @@ What the agent additionally checks in its own self-review when this profile is a
 
 ## Applies when
 
-- pass = `implement`; `task_kind ∈ {refactor, cleanup}` (§27.3, §28) — structural restructuring or
+- pass = `implement`; `task_kind ∈ {refactor}` (§27.3, §28) — structural restructuring or
   methodical removal of orphan / dead code where behaviour is preserved end-to-end.
 
 ## Does not apply when

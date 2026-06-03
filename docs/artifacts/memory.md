@@ -8,7 +8,7 @@ The index asserts one kind of knowledge and one only: **a map of where durable k
 
 What it MUST do:
 
-- Link into the Tier-2 evidence store — `finding.md`, `adr.md`, `memory/patterns/*.md`, `memory/glossary.md` — and let an agent decide, cheaply, which of those to open.
+- Link into the Tier-2 evidence store — `finding.md`, `adr.md`, `memory/patterns/*.md` — and let an agent decide, cheaply, which of those to open.
 - Carry, on **every** entry, a `Load when` condition: the trigger that tells a future agent the entry is relevant to its current task. This is the load-when discipline, and it is normative.
 - Stay small enough to remain in the always-loaded recall budget. The index is read first on tasks that may depend on prior work; the verbose bodies are read lazily, only when a `Load when` matches.
 
