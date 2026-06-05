@@ -110,7 +110,8 @@ matches a different `task_kind` or a different `fix`:
 - **Only the assigned obligations and owned paths.** Any change not traceable to
   an assigned obligation is an `## Unassigned changes` row, not a silent edit.
   Touching a file outside the union of the assigned obligations' write surfaces
-  is the owned-path violation (§11.3, lint code `SOL-O005`) — stop and surface it.
+  is the owned-path violation (the write-surface rule in
+  `../../passes/decompose.md`, lint code `SOL-O005`) — stop and surface it.
 
 ## Rejects
 

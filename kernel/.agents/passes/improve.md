@@ -154,8 +154,8 @@ A few selections inside `improve` are deliberately left to the author rather tha
 - `../passes/decompose.md` — the separate pass that splits a spec into task-sized work packets (the boundary R-DECOMPOSE-NOT-IMPROVE protects), distinct from the `ATOMIZE` improve operation.
 - `../passes/review.md` — the pass that also classifies edits with the twelve-category semantic diff before promotion.
 - `../passes/promote.md` — the pass that discharges amendments and source-authority decisions that `DECONFLICT` and `PROMOTE` defer to.
-- `./SOL.md` — the Spec Obligation Language whose modals, clause order, and obligation blocks `improve` normalizes toward.
-- `./APS.md` — the structural rules `improve` brings a spec into conformance with.
-- `./errors.md` — the lint-code catalog the trigger codes in this file reference.
+- `../language/SOL.md` — the Spec Obligation Language whose modals, clause order, and obligation blocks `improve` normalizes toward.
+- `../language/APS.md` — the structural rules `improve` brings a spec into conformance with.
+- `../language/errors.md` — the lint-code catalog the trigger codes in this file reference.
 - `../templates/spec.swarm.md` — the spec artifact `improve` normalizes.
 - `../skills/persona-architect/SKILL.md` — the carrier profile for this pass (`improve` is normalization, carried by the Architect; the Skeptic lists `improve` under "does not apply").

@@ -44,8 +44,9 @@ authored TRACE blocks. -->
 
 ## Open questions
 
-<!-- Each unresolved point is a QUESTION (Q-NNN) candidate until resolved (§11);
-an RFC with a blocking open question MUST NOT be promoted. -->
+<!-- Each unresolved point is a QUESTION (Q-NNN) candidate until resolved (see
+[../language/SOL.md](../language/SOL.md)); an RFC with a blocking open question
+MUST NOT be promoted. -->
 
 - {{unresolved point that gates the decision}}
 

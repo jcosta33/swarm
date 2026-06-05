@@ -14,7 +14,7 @@ description: >-
 
 # Pass guide: promote
 
-> **Scope of this file.** A *pass guide* (§26.5): a procedural how-to for running the `promote` pass well. SOFT control — it conditions *how* an agent runs the pass; it constrains nothing and defines no kernel semantics (§17.1, §26.1). The seven-value promotion-status enum, discovery-to-target routing, mandatory provenance fields, authority floor, loss budget, validation/rollback, and ledger shape are canonical Swarm rules; this guide *applies* them and restates their load-bearing meaning inline so the pass runs from this file alone — never redefining them.
+> **Scope of this file.** A *pass guide*: a procedural how-to for running the `promote` pass well. SOFT control — it conditions *how* an agent runs the pass; it constrains nothing and defines no kernel semantics. The seven-value promotion-status enum, discovery-to-target routing, mandatory provenance fields, authority floor, loss budget, validation/rollback, and ledger shape are canonical Swarm rules; this guide *applies* them and restates their load-bearing meaning inline so the pass runs from this file alone — never redefining them.
 
 ## Purpose
 

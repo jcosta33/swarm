@@ -1,6 +1,6 @@
 # Reference: the coordination record (`task-orchestration.md`)
 
-Deep field detail for step 8 of the `decompose` pass guide. The `SKILL.md` body carries the load-bearing discipline; this file is the field-by-field contract and a worked fan-out. The contract is fixed by §18 (orchestration); this reference applies it, never redefines it.
+Deep field detail for step 8 of the `decompose` pass guide. The `SKILL.md` body carries the load-bearing discipline; this file is the field-by-field contract and a worked fan-out. The contract is fixed by the [`decompose` pass](../../../passes/decompose.md) (orchestration); this reference applies it, never redefines it.
 
 A `task-orchestration.md` is **generated execution material** — emitted by the lead during `decompose` and updated as the parallel run proceeds. It is a plain `.md` working artifact: it MUST NOT carry the `.swarm.` infix (the infix is the sole discriminator for compiler-parsed/emitted files; a coordination record is neither a source spec nor a compiler output). It lives under `.swarm/generated/` (recreatable), never `.swarm/sources/` (durable intent). It is disposable: on reconciliation the durable record is the compacted ledger entry, the updated status, and any promoted findings.
 

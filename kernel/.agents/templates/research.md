@@ -13,11 +13,11 @@ updated: {{createdAt}}
   commits to NO decision. It records what the inquiry has found and what remains
   open; it does NOT author REQ / CONSTRAINT / INVARIANT / INTERFACE obligation
   blocks. Those are produced only when this research promotes to a `spec.swarm.md`
-  via the author pass (§9). As a detached first-class evidence store, one research
-  artifact MAY feed many PRDs, specs, ADRs, findings, or audits at once (§20.3.4).
+  via the author pass (see `../passes/author.md`). As a detached first-class evidence
+  store, one research artifact MAY feed many PRDs, specs, ADRs, findings, or audits at once.
 
-  REQUIRED sections (in order, §21.9): Question · Findings · Open questions · Recommendation.
-  Inert reference data: nothing here executes (NO RUNTIME, §2).
+  REQUIRED sections (in order): Question · Findings · Open questions · Recommendation.
+  Inert reference data: nothing here executes (NO RUNTIME).
 -->
 
 ## Question
@@ -31,8 +31,8 @@ updated: {{createdAt}}
 
 <!-- The surveyed evidence. Each finding is a citable span with a stable local id of
      the form R-NNN, so a downstream artifact can reference it as `<this-id>#R-NNN`
-     (the §20.3.4 cross-file ref convention, e.g. password-recovery-survey#R-002).
-     Each finding promotes to a standalone `finding.md` (§21.6) when accepted.
+     (the cross-file ref convention, e.g. password-recovery-survey#R-002).
+     Each finding promotes to a standalone `finding.md` (see `./finding.md`) when accepted.
      Survey the options/evidence; draw no conclusion here. -->
 
 ### R-001 — {{finding title}}
@@ -52,7 +52,7 @@ updated: {{createdAt}}
 ## Open questions
 
 <!-- Unresolved points the inquiry surfaced but did not settle. Each is a QUESTION
-     candidate (Q-NNN) and MUST remain open until resolved (§11); it carries forward
+     candidate (Q-NNN) and MUST remain open until resolved (see `../passes/lint.md`); it carries forward
      to the promoted spec rather than being silently dropped. Do not resolve a
      question here by asserting a decision — that would break the inquiry stance. -->
 
@@ -70,8 +70,8 @@ updated: {{createdAt}}
 {{recommendation}}
 
 <!--
-  PROMOTION: this research promotes to a `spec.swarm.md` via the author pass (§9).
+  PROMOTION: this research promotes to a `spec.swarm.md` via the author pass (see `../passes/author.md`).
   Accepted findings (R-NNN) become `finding.md` artifacts; open questions (Q-NNN)
   carry forward as the spec's QUESTION blocks; the recommendation seeds the spec's
-  obligations. Until then this document is non-authoritative evidence (§22).
+  obligations. Until then this document is non-authoritative evidence (see `../passes/promote.md`).
 -->

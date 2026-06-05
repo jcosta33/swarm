@@ -20,8 +20,8 @@ description: >-
 > research artifact; it never defines what a `research.md` *is*, what obligation force evidence
 > carries, the source-authority order, or the distillation-loss budget — those live in the language
 > references and the `research` contract, which govern where they disagree with this guide. Every
-> load-bearing term below (the inquiry stance, the `R-NNN`/`Q-NNN` local ids, the §22 source-authority
-> order, the §24 loss budget) is *delivered* by the kernel, not redefined here. The `author` pass
+> load-bearing term below (the inquiry stance, the `R-NNN`/`Q-NNN` local ids, the source-authority
+> order, the loss budget) is *delivered* by the kernel, not redefined here. The `author` pass
 > ships no stdlib guide in the base language version; this is the later-release SOFT guide the pass
 > contract permits — it adds discipline, grants no new authority. It carries the **Surveyor /
 > Researcher** stance: map the decision space well, leave it open, and let every claim that cannot
@@ -86,11 +86,12 @@ a command; a guessed command produces a false proof.
 - **Durability of `R-NNN` and `Q-NNN`.** Each finding is a citable span a downstream artifact
   references as `<research-id>#R-NNN`; on acceptance it promotes to a standalone `finding.md`. Each
   open question carries forward as a `QUESTION` block in the promoted spec — *not* dropped, *not*
-  silently settled here. Letting a finding or open question vanish on promotion is the loss the §24
-  loss budget forbids.
+  silently settled here. Letting a finding or open question vanish on promotion is the loss the
+  loss budget forbids (see [`../../passes/lower.md`](../../passes/lower.md)).
 - **Source authority.** A lower-authority inquiry MUST NOT silently override a higher-authority
   artifact (an accepted finding, an ADR); where it appears to contradict one, record the tension as
-  an open `Q-NNN`, do not overwrite the higher-authority fact (§22).
+  an open `Q-NNN`, do not overwrite the higher-authority fact (the authority order is approved
+  spec / ADR > task > chat).
 
 ## Rejects
 
@@ -198,8 +199,9 @@ identical to technical mode.
 ### 12. State the distillation loss when distilling from a longer investigation
 
 If the artifact distils a long-running investigation (a transcript, a scratch task file), append a
-short statement of what was **dropped** and **why the next stage does not need it**. *Why:* the §24
-loss budget governs what may be dropped across the boundary; an undeclared drop is silent loss, and
+short statement of what was **dropped** and **why the next stage does not need it**. *Why:* the
+loss budget ([`../../passes/lower.md`](../../passes/lower.md)) governs what may be dropped across the
+boundary; an undeclared drop is silent loss, and
 the next author cannot tell a deliberate omission from a forgotten finding.
 
 ### 13. Pre-deliver visibility gate (forced visible output) — HARD GATE

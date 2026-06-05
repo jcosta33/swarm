@@ -8,12 +8,12 @@ updated: {{createdAt}}
 
 # Audit: {{title}}
 
-> Stance: **observation-only** (§20.3.3, §21.9). An audit records what *is* —
+> Stance: **observation-only**. An audit records what *is* —
 > present-state risk, debt, drift, duplication, unsafe patterns. It MUST NOT
 > prescribe a fix inline and MUST NOT author `REQ`/`CONSTRAINT`/`INVARIANT`/
 > `INTERFACE` obligation blocks. Obligations come into existence only when this
-> audit promotes to a `spec.swarm.md` via the author pass (§9). Until then this
-> is non-authoritative evidence (§22).
+> audit promotes to a `spec.swarm.md` via the [author pass](../passes/author.md). Until then this
+> is non-authoritative evidence.
 
 ## Scope
 

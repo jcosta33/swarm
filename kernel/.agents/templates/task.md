@@ -13,7 +13,7 @@ verification_bindings: # <obligation ID -> proof binding (adapter / command refe
 parallel_group: # <coordination group this pass runs in, for disjointness proof; or none>
 blocked_by: # <task / obligation IDs this pass waits on; [] if unblocked>
 produces: # <artifact paths this pass emits under generated/ (e.g. the trace.md / review.md it writes); [] when no durable artifact>
-pass: # optional: <the named pass this task activates (§26.4)>
+pass: # optional: <the named pass this task activates>
 pass_guides: # optional: <the pass-guide refs this task activates>
 profile: # optional: <the profile this task activates (e.g. skeptic)>
 created: {{createdAt}}
@@ -73,7 +73,7 @@ Paste all constraints and invariants this task must preserve.
 
 ## Promotion queue
 
-<Discoveries with target + promotion status (§23); all MUST be resolved before task close.>
+<Discoveries with target + promotion status (see [the promotion pass](../passes/promote.md)); all MUST be resolved before task close.>
 
 | Item | Target | Status |
 | ---- | ------ | ------ |

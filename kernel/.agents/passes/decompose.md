@@ -36,7 +36,7 @@ The partition `decompose` produces is computed entirely from **declared access s
 
 ### The scope declarations (the five clauses)
 
-Every obligation block (REQ, CONSTRAINT, INVARIANT) MAY carry scope-declaration metadata in the trailing-metadata position of the SOL surface syntax (`./SOL.md`). Surface keywords are UPPERCASE and space-separated; each lowers to a `snake_case` IR field. Five clauses are load-bearing for decomposition — four declared on the obligation, plus the worker-level `OWNED BY` projection the partition produces:
+Every obligation block (REQ, CONSTRAINT, INVARIANT) MAY carry scope-declaration metadata in the trailing-metadata position of the SOL surface syntax (`../language/SOL.md`). Surface keywords are UPPERCASE and space-separated; each lowers to a `snake_case` IR field. Five clauses are load-bearing for decomposition — four declared on the obligation, plus the worker-level `OWNED BY` projection the partition produces:
 
 | Surface clause | IR field | Declares | Graph contribution |
 |---|---|---|---|
@@ -299,7 +299,7 @@ What is **not** fixed here:
 
 - The decomposition *heuristic* — how a Lead Engineer partitions a given obligation graph into the smallest set of write-disjoint packets — is a pass-guide / profile concern (`../templates/task.md`), not a kernel rule; the kernel fixes only the predicate the partition must satisfy.
 - How a launcher chooses `lane`, `batch`, and `max_parallel` values, and any live scheduling/replanning over the plan — explicitly a launcher concern, outside the kernel.
-- The IR construction `decompose` consumes (node ids, typed edges, `verify_by` normalization, `AND THE` chaining, the two derived graphs as emitted) belongs to `` `./lower.md` ``; the per-obligation scope clauses and the SURFACE grammar belong to the SOL language (`./SOL.md`). This file consumes both and partitions over them.
+- The IR construction `decompose` consumes (node ids, typed edges, `verify_by` normalization, `AND THE` chaining, the two derived graphs as emitted) belongs to `` `./lower.md` ``; the per-obligation scope clauses and the SURFACE grammar belong to the SOL language (`../language/SOL.md`). This file consumes both and partitions over them.
 
 ## Related
 
@@ -307,7 +307,7 @@ What is **not** fixed here:
 - `./implement.md` — consumes each `task.md` work packet; the COVERAGE gate here is its precondition.
 - `./lint.md` — the orchestration lint codes (`SOL-O001`, `SOL-O005`, `SOL-O007`, `SOL-O008`) and the semantic `SOL-M003` surfaced at `review`.
 - `./review.md` — where `SOL-M003` unbound-cross-reference orphans surface.
-- `./SOL.md` — the surface syntax for the scope clauses (`WRITES`/`READS`/`DEPENDS ON`/`AFFECTS`/`OWNED BY`) and the `SURFACE` declaration grammar.
+- `../language/SOL.md` — the surface syntax for the scope clauses (`WRITES`/`READS`/`DEPENDS ON`/`AFFECTS`/`OWNED BY`) and the `SURFACE` declaration grammar.
 - `../skills/pass-decompose-spec/SKILL.md` — the dedicated stdlib pass guide for `decompose`.
 - `../skills/persona-lead-engineer/SKILL.md` — the carrier-profile stance for the `decompose` pass; the decomposition *heuristic* (how to partition an obligation graph into the smallest set of write-disjoint packets) is a profile concern, while the kernel fixes only the predicate the partition must satisfy.
 - `../skills/distillation-discipline/SKILL.md` — the distillation-loss discipline the two `LOWER` passes are bound by.

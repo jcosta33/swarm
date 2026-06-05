@@ -16,14 +16,16 @@ updated: {{createdAt}}
 # Spec: {{title}}
 
 <!--
-COPYABLE SKELETON — spec.swarm.md (the source spec; §21.2).
+COPYABLE SKELETON — spec.swarm.md (the source spec).
 Fill every {{placeholder}} and replace each "<what goes here>" guide.
 Keep the sections below in this exact order — omitting or reordering a required
 section is a SOL-S012 document-level defect. Obligation content lives in SOL
-blocks (bare header `TYPE PREFIX-NNN:`), never in the surrounding prose (§5.9).
+blocks (bare header `TYPE PREFIX-NNN:`), never in the surrounding prose (see
+../language/SOL.md).
 
-Frontmatter required set (§5.8): type, id, swarm_language, aps_version,
-spec_version, status. Optional: title, owners, imports, domain, created, updated.
+Frontmatter required set (see ../language/SOL.md): type, id, swarm_language,
+aps_version, spec_version, status. Optional: title, owners, imports, domain,
+created, updated.
 -->
 
 ## Intent
@@ -40,7 +42,7 @@ spec_version, status. Optional: title, owners, imports, domain, created, updated
 
 ## Interfaces
 
-<INTERFACE blocks; each MUST bind `VERIFY BY contract:<adapter>:<artifact>` (§6.4)>
+<INTERFACE blocks; each MUST bind `VERIFY BY contract:<adapter>:<artifact>` (see ../passes/verify.md)>
 
 INTERFACE IF-001:
 `<fn-or-boundary>` RETURNS `<return-type>`
@@ -80,7 +82,7 @@ VERIFY BY property:<adapter>:<artifact>
 
 ## Questions
 
-<QUESTION blocks: captured ambiguity; a [blocking] question MUST be resolved before lowering (§11)>
+<QUESTION blocks: captured ambiguity; a [blocking] question MUST be resolved before lowering (see ../passes/lower.md)>
 
 QUESTION Q-001 [blocking]:
 <question>

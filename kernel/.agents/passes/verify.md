@@ -311,7 +311,7 @@ A surface participates in a proof's freshness only if it lies on the proof's `ev
 - `../templates/trace.md` — the `TRACE` artifact whose trace-provenance schema carries `oracle_adequacy`, `per_surface_hash[]`, and the `evidence_path` that binds adequacy to staleness.
 - `../templates/spec.swarm.md` — where `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` obligations and their `VERIFY BY` bindings are authored.
 
-<!-- Rendered from the canonical docs/passes/verify.md per ADR-0044 derivation transform.
+<!-- Derived per the ADR-0044 derivation transform.
      TABLE-1 subset (per-task-kind default suites): {feature, fix, refactor, migration, performance, spec-writing, review} of the 17 canonical task_kind rows.
      STRUCTURE-1 pruned sections (carried by other shipped files, not by this pass): the per-task-kind verification-contract rationale (see ./implement.md and the execution research), the soft/hard control boundary, and the enforcement-lane artifact (both the SOFT-vs-HARD control principle and its operational ledger live in PRINCIPLES and the decompose pass). -->
 

@@ -17,7 +17,7 @@ description: >-
 
 # Pass guide: write-audit (`author` · audit deliverable)
 
-> **This guide is SOFT control (§17).** It tells you *how* to author an audit; it never defines
+> **This guide is SOFT control.** It tells you *how* to author an audit; it never defines
 > the artifact's stance, obligation-block semantics, severity meaning, source-authority order, or
 > what gates the spec boundary — the language and the artifact and pass contracts fix those, and
 > this guide only *applies* them. Where guide and contract or spec disagree, they govern. It carries
@@ -34,8 +34,8 @@ which a downstream author cannot act). This guide pins the audit to its **observ
 specific, severity-calibrated, evidence-anchored.
 
 `author` is the entry pass of the nine (`author → lint → improve → lower → decompose → implement →
-verify → review → promote`) — the boundary where unstructured intent becomes a compiler-visible spec
-(§9). An audit is *not* that spec: it is one of `author`'s recognized **parents**, a working `.md`
+verify → review → promote`) — the boundary where unstructured intent becomes a compiler-visible
+spec. An audit is *not* that spec: it is one of `author`'s recognized **parents**, a working `.md`
 artifact whose observed risk acquires obligation force only when a later `author` pass promotes its
 recommendations *into* a `spec.swarm.md`. This guide produces that parent.
 
@@ -176,15 +176,16 @@ The artifact contract and the language fix the audit's stance and section shape;
 redefine them. Two facts bound what this pass records:
 
 - An `audit.md` carries **no obligations of its own**. It is non-authoritative evidence under the
-  source-authority order (§22): an observation MUST NOT silently override a higher-authority
+  source-authority order (an approved spec or ADR outranks the task, which outranks chat): an
+  observation MUST NOT silently override a higher-authority
   artifact such as an approved spec or ADR; a lower-authority block that weakens a higher-authority
   obligation is the authority-conflict defect `SOL-M004`. The audit promotes *into* a `spec.swarm.md`
   via a later `author` pass, where its recommendations become SOL obligations; it never becomes code
   or an obligation directly.
 - The boundary forbidding a file from being both spec and audit is **not** policed by this guide or
-  any gatekeeper skill — the distillation-loss budget (§24) and source authority (§22) hold it.
-  Re-introducing a composition-policing skill is forbidden: such a skill would be a semantic owner
-  (§26.1) and soft control presented as enforcement (§17). Your job is to hold the stance, not
+  any gatekeeper skill — the [distillation-loss budget](../../passes/lower.md) and source authority
+  hold it. Re-introducing a composition-policing skill is forbidden: such a skill would be a semantic
+  owner and soft control presented as enforcement. Your job is to hold the stance, not
   enforce it on others.
 
 ## What does not belong
