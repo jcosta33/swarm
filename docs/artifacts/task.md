@@ -65,6 +65,8 @@ The frontmatter MUST carry the full field set below — including the orchestrat
 | `write_surfaces` | The paths this pass may write; MUST be a subset of the assigned obligations' `WRITES` surfaces (a path outside is `SOL-O005`). |
 | `verification_bindings` | Per assigned obligation: obligation id → proof binding (adapter / command reference). |
 | `parallel_group` | The coordination group this task runs in, for the disjointness proof; or `none`. |
+| `isolation` | `worktree+branch \| branch-only \| in-place` — where this task's work happens, **orthogonal to `parallel_group`** ([ADR-0046](../adrs/0046-isolation-axis-model.md); the decision rule is in [the `implement` pass](../passes/implement.md)). MAY be omitted to let the rule decide: a code task with a `source` spec/audit defaults to `worktree+branch`; a bare ad-hoc edit, `in-place`. |
+| `base` | The branch this task's worktree/branch forks from and merges back to (default `main`; the dev's current HEAD when handed off mid-branch). |
 | `blocked_by` | Task / obligation ids this pass waits on; `[]` if unblocked. |
 | `produces` | Artifact paths this pass emits under `generated/` (e.g. the `trace.md` / `review.md` it writes); `[]` when the pass emits no durable artifact. |
 | `pass` *(optional)* | The named pass this task activates. |

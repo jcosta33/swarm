@@ -23,9 +23,10 @@
 2. The Swarm workspace is `.swarm/` (canonical intent, status, memory, and the installed kernel).
 3. Treat `.swarm.md` blocks as authoritative over prose summaries.
 4. Use assigned obligation IDs as scope.
-5. Load only the pass / profile / context files the task names.
-6. Map every completion claim to evidence.
-7. Promote durable discoveries before closing.
+5. Decide isolation before editing (see the `implement` pass): a code task with a source spec/audit runs in a `worktree+branch` named for the spec, off the base — never on it; a bare ad-hoc edit stays `in-place`.
+6. Load only the pass / profile / context files the task names.
+7. Map every completion claim to evidence.
+8. Promote durable discoveries before closing.
 
 ## Universal rules
 <!-- The universal "do not" invariants. Conditional / task-kind-specific rules go in

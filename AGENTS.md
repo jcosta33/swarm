@@ -73,7 +73,10 @@ contract a future tool builds against, never code this repo runs.
 | — | (none shipped) | markdown-only repo; coherence checked by hand against the gates above |
 
 ## Workflow
-- Work from `main`: commit and push directly to `main` (no branches/PRs).
+- Work from `main`: commit and push directly to `main` (no branches/PRs). **This is the producer-repo
+  dogfooding workflow only** — it is *not* the adopted-project default. A project that adopts the kernel
+  follows the isolation policy (ADR-0046): a spec/audit is implemented in a `worktree+branch` off the base,
+  not on `main`. Do not read this repo's main-only convention as the shipped default.
 - Commit messages end: `Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>`.
 
 ## Compatibility

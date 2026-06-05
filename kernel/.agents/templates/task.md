@@ -11,6 +11,8 @@ interfaces: # <list of IF- IDs in this pass's contract>
 write_surfaces: # <paths this pass may write; MUST be a subset of the assigned obligations' WRITES surfaces (SOL-O005 if an owned path falls outside)>
 verification_bindings: # <obligation ID -> proof binding (adapter / command reference) per assigned obligation>
 parallel_group: # <coordination group this pass runs in, for disjointness proof; or none>
+isolation: # worktree+branch | branch-only | in-place — where this task's work happens (orthogonal to parallel_group; see the implement pass "Isolation"). Omit to let the rule decide: a code task with a source spec/audit defaults to worktree+branch; a bare ad-hoc edit, in-place.
+base: # branch this task forks from and merges back to (default main; the dev's current HEAD when handed off mid-branch)
 blocked_by: # <task / obligation IDs this pass waits on; [] if unblocked>
 produces: # <artifact paths this pass emits under generated/ (e.g. the trace.md / review.md it writes); [] when no durable artifact>
 pass: # optional: <the named pass this task activates>
