@@ -36,7 +36,7 @@ It MAY embed SOL surface keywords (the `WRITES`-projected OWNED paths, preserved
 | `OWNED paths` | The worker's owned write surfaces; a subset of its obligations' declared `WRITES` (else `SOL-O005`). |
 | `FORBIDDEN paths` | The union of every other worker's OWNED paths. |
 | `Hand-off (deliverable / acceptance bar)` | One-line summary of the hand-off contract (full form below). |
-| `Branch` | The worker's branch (one worktree per task; conventionally `swarm/<spec-slug>/<task-slug>`). |
+| `Branch` | The worker's branch (one worktree per task; conventionally `swarm/<spec-slug>/<task-slug>`). A single task implementing a whole spec collapses this to `swarm/<spec-slug>`; the two-level form is for one obligation or a fan-out worker — one grammar reconciles both (the per-task isolation rule + `base:` is the `implement` pass "Isolation" section, `../../../passes/implement.md`). |
 | `Status` | One of `not-started`, `in-progress`, `stalled`, `awaiting-review`, `kicked-back`, `merged`, `abandoned`. |
 | `Last progress` | The liveness marker — updated each time the lead checks the worker. |
 | `Last verdict` | The latest review verdict for the worker, or `—`. |
