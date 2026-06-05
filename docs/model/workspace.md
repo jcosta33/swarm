@@ -42,7 +42,7 @@ project/
 
   .swarm/                   # THE CANONICAL SWARM WORKSPACE
     VERSION                 # adopted kernel version, semver (§25)
-    config.yaml             # surface policies (§16.6), agent adapters, lint-severity overrides
+    config.yaml             # surface policies, agent adapters, lint overrides — project-owned, seeded from kernel/config.yaml
     kernel/                 # the INSTALLED payload (language templates passes skills conformance memory) — framework-owned, replaced on upgrade
     overlays/               # PROJECT rule bundles → layered onto kernel/; project-owned, survives upgrade (ADR-0045)
     sources/                # DESIRED truth      → specs/ prds/ rfcs/ research/ audits/ bugs/ findings/ adrs/ interfaces/ nfrs/
