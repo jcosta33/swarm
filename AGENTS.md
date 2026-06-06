@@ -30,9 +30,11 @@ contract a future tool builds against, never code this repo runs.
 - **Do NOT edit `.agents/specs/swarm/`.** It is the frozen build source — historical reference
   only. The shipped framework (`docs/` + `kernel/`) is the product and the source of truth; all
   changes go there (+ an ADR under `docs/adrs/`).
-- **Keep the docs↔kernel twins in sync.** `docs/language/` ↔ `kernel/.agents/language/` and
-  `docs/passes/` ↔ `kernel/.agents/passes/` are duplicate copies — a fix to one MUST be
-  propagated to the other (the recurring "fix one, miss the twin" defect).
+- **`docs/` is canonical; the kernel twins are derived (ADR-0044).** `docs/language/` and
+  `docs/passes/` are the source of truth; their `kernel/.agents/` copies are the derived,
+  self-contained payload. A fix lands in `docs/` first, then the kernel twin is brought into
+  line (eyeball-diff the two on any edit) — the kernel additionally drops citations/§-refs and
+  rewrites links to resolve offline. Don't edit the kernel twin as if it were authoritative.
 - **Evidence discipline (§0.7 — real science, not astrology).** Every load-bearing empirical
   claim cites a **verified** entry in `docs/research/sources.md`; non-peer-reviewed (caveated)
   sources never carry a `MUST`-level claim; a fabricated or misattributed source is never

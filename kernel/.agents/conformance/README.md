@@ -12,6 +12,6 @@ Machine-readable conformance data for Swarm-adopting repos. A checker (the Swarm
 
 ## Provenance
 
-The manifest mirrors the framework's prose rules (the directory-layout, AGENTS.md, template-placeholder, flow-graph, and verification-gate references in the framework's `/docs/reference/`). The prose is the source of truth; this manifest is its machine-readable shadow, and the fixtures fail if the two disagree.
+The manifest is the machine-readable shadow of the framework's directory-layout, `AGENTS.md`, template-placeholder, flow-graph, and verification-gate rules. The framework definition is canonical; this manifest restates it as testable data, and the fixtures fail if the two disagree.
 
 > A future checker is what makes this enforceable. Until one runs, the contract still serves: it is the precise, testable definition a runtime must honour, and a human can validate a repo against it by hand.

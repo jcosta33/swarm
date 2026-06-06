@@ -1,9 +1,9 @@
 ---
 type: adr
 id: 0043-checkable-documents
-status: accepted
+status: proposed
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-06
 supersedes:
 superseded_by:
 ---
@@ -68,11 +68,14 @@ This record **refines, and does not supersede,** ADRs [0027](./0027-sol-is-the-o
 
 ## Status
 
-Accepted (v0.1).
+**Proposed / parked (not yet in force).** This records the *direction* for a checkable-document layer;
+**no document-integrity lint rule has been built** — `lint.md` still scopes the `SOL-P` layer to
+spec prose only. Nothing here modifies the live lint pass yet. The design note + backlog live in
+`.agents/lintable-docs-improvement-plan.md`; promote this to `accepted` only when (and if) the rules land.
 
 ## Affected obligations / constraints
 
-- Adds (as a gating decision): the lintable-document partition; the *subtractive-not-additive* doctrine for non-spec artifacts; the *deterministic-not-judge* enforcement rule; the *frame-structured / reasoning-free + reason-then-emit* rule.
-- Modifies: the `SOL-P` advisory layer's **scope** (spec-prose-only → the artifact set) and its **severity rule** (a document-integrity check blocks only when backed by a deterministic resolving check).
+- Proposes (not yet applied): the lintable-document partition; the *subtractive-not-additive* doctrine for non-spec artifacts; the *deterministic-not-judge* enforcement rule; the *frame-structured / reasoning-free + reason-then-emit* rule.
+- Would modify (when implemented, not yet): the `SOL-P` advisory layer's **scope** (spec-prose-only → the artifact set) and its **severity rule** (a document-integrity check blocks only when backed by a deterministic resolving check).
 - Refines: [0027](./0027-sol-is-the-obligation-language.md), [0028](./0028-aps-is-the-prose-standard.md), [0030](./0030-unified-artifact-set.md), [0032](./0032-memory-model.md), [0034](./0034-unified-lint-namespace.md), [0035](./0035-seven-value-verdict-model.md), [0037](./0037-load-what-the-task-names.md). Relates to §8, §9, §11.6, §20.3 / §29.1, §23, §26.
 - Does NOT change: the obligation grammar, the blocking obligation-lint gate (spec-only), the five lint layers, the seven block types, the verdict set, or any canonical count.
