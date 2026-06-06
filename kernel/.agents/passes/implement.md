@@ -32,20 +32,14 @@ Two contract notes bear on `implement`'s position:
 - **`implement` consumes a `task.md`, not the surface spec or the IR.** `decompose` already computed the work-packet boundaries from the typed IR graph; `implement` works against the packet it was handed.
 - **`verify` is the only profile-independent pass.** Whatever heuristic profile `implement` runs under (selected by task kind), it does **not** decide whether an obligation passes. `implement` *gathers* evidence (the `PROOF` lines in its TRACE claims); the deterministic `verify` pass turns evidence into a core verdict. A profile may influence which proofs are *demanded*, never whether a run `PASS`-es.
 
-## Isolation: worktree, branch, or in-place
+## Isolation: worktree+branch, or in-place
 
-Before doing the work, decide *where* it happens. Isolation is a three-rung axis — `worktree+branch`, `branch-only`, `in-place` — **orthogonal to `parallel_group`** (a single non-parallel task can still need a worktree). An agent resolves it deterministically by reading the task frame and the request, **first match wins**:
+Decide *where* the work happens before touching code. It is a binary (a frame `isolation:` field overrides it; it is orthogonal to `parallel_group`):
 
-0. **Ad-hoc escape hatch (checked first).** `isolation: in-place` on the frame, OR the dev said "quick"/"ad-hoc"/"in place"/"on my branch", OR **there is no task frame and no `*.swarm.md`/audit source named** → **in-place**, on the current branch. A bare quick edit pays no ceremony; the absence of a source artifact *is* the signal.
-1. **Explicit `isolation:`** on the frame → used verbatim (a recorded lead/dev override).
-2. **Doc/source-only authoring** (`spec-writing`/`research-writing`/`audit-writing`/`bug-report-writing`/`deepen-audit`, or every write surface under `.swarm/sources/`) → **in-place** — a lone doc writer conflicts with nothing.
-3. **`review` / `orchestration`** → **branch-only**. `orchestration` *mints* the per-worker worktrees; it does not itself isolate.
-4. **Tracked code work** (`feature`/`fix`/`refactor`/`rewrite`/`migration`/`upgrade`/`performance`/`testing`/`integration`) **with a `source:` spec or audit-derived spec** → **worktree+branch**. *A spec or audit-remediation is implemented off the base, never on it.*
-5. **Otherwise** (code, no source, no ad-hoc flag) → dev-choice, defaulting to in-place; record the chosen `isolation:` on the frame.
+- **A code task implementing a spec or audit-remediation** (it has a `source:` `*.swarm.md` or audit-derived spec) → a **worktree + branch off the base**, named for what it implements: `swarm/<spec-slug>` for a whole spec, `swarm/<spec-slug>/<task-slug>` for one obligation or a fan-out worker (one grammar; `base:` records the merge target, default `main` — or the dev's HEAD when handed off mid-branch). *A spec is implemented off the base, never on it.*
+- **Anything else** — a quick ad-hoc edit with no spec, a doc/source-only authoring task, a read-only review → **in-place** on the current branch. No ceremony; the absence of a source artifact is the signal.
 
-**Branch naming** ties the branch to what it implements: `swarm/<spec-slug>` for a whole-spec task, `swarm/<spec-slug>/<task-slug>` for one obligation or a fan-out worker — one grammar, so single-task and parallel reconcile. `base:` (default `main`; the dev's current HEAD when handed off mid-branch) records the merge target.
-
-**Merge + cleanup** reuse the orchestration lifecycle at worker-count 1: a lone `worktree+branch` task clears the same merge gate (the cross-worker write-disjointness condition is vacuously satisfied for one writer), then merges to `base`, the worktree is removed, and the trace/review compact into `.swarm/ledger/`. By hand today — the closing session and the `persona-janitor` stance own cleanup, and an in-flight solo worktree is recorded under `.swarm/status/worktrees/` for resumption. There is no runtime: nothing *creates* the worktree for you, and nothing *enforces* that a spec stays off the base — this is a decision an agent (or a future launcher) applies, not a gate the kernel runs.
+Merge + cleanup reuse the orchestration lifecycle at worker-count 1: a lone worktree clears the same merge gate (the cross-worker disjointness condition is vacuous for one writer), merges to `base`, and the worktree is removed (by hand today — the closing session + the `persona-janitor` stance; an in-flight worktree is recorded under `.swarm/status/worktrees/`). NO RUNTIME: nothing creates the worktree or enforces the rule — it is a decision an agent (or a future launcher) applies.
 
 ## The COVERAGE gate guards entry into `implement`
 

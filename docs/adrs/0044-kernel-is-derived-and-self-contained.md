@@ -14,9 +14,8 @@ superseded_by:
 
 `docs/language/` ↔ `kernel/.agents/language/` and `docs/passes/` ↔ `kernel/.agents/passes/` are
 maintained as **duplicate copies** (the rule recorded in this repo's `AGENTS.md`). In practice they
-are *divergent re-renderings*: a 13-file-pair analysis (recorded in
-[`.agents/installable-kernel-plan.md`](../../.agents/installable-kernel-plan.md) and its discovery
-pass) found that neither side is uniformly more current — the kernel is ahead on some pairs
+are *divergent re-renderings*: a 13-file-pair analysis found that neither side is uniformly more
+current — the kernel is ahead on some pairs
 (`errors.md` carries a ~95-line legacy-code translation table absent from `docs/`; `lint.md` carries
 the `APS-`-prefix-retirement facts; `promote.md`/`improve.md` carry the self-standing clause and an
 author-judgment section) while `docs/` is ahead on others (`decompose.md` is the only fully
@@ -58,90 +57,22 @@ under this decision.)
    `SOL.md` already carries its own inline EBNF. (The docs-internal EBNF triplication — `grammar.md`
    vs `SOL.md` fragments — is a separate docs-layer item, not part of this twin decision.)
 
-4. **The derivation transform (§A) and the equality-modulo-render check (§B) are recorded verbatim
-   below** and are **NO-RUNTIME**: the "build" is an agent (or future tool) copying the canonical
-   `docs/` file and applying fixed rewrite rules; the "check" is a diff. Neither is shipped code.
+4. **The kernel is derived, NO-RUNTIME.** An agent (or a future tool) copies the canonical `docs/` file and
+   applies fixed, mechanical rewrites: strip the `[[KEY]]` research citations; rewrite cross-document
+   `§N`/`Appendix` refs and docs-only-tree links to the kernel file that owns the content (or inline the
+   small fact); drop docs-only depth. The "check" is an **eyeball-diff** of the two on any twin edit — every
+   surviving difference must map to one of those rewrites. Neither build nor check is shipped code.
 
-5. **The §-resolution policy (§C)** eliminates cross-document `§N`/`Appendix-X` from **both** twins:
-   rewrite each to a relative link to the shipping file that owns the content, or inline the small fact;
-   the only legitimate surviving §-numbering is `versioning.md`'s own local `§1`–`§4` headings (anchors
-   defined where referenced).
-
-6. **A coherence gate is added** (alongside the existing closed-set count reconciliation against
-   `docs/reference/flow-graph.md`): a build FAILs if any shipped file contains a `§N`/`Appendix-X` token
-   not defined as a heading within its own shipped tree, and FAILs if a twin diff carries a difference
-   unattributable to a recorded transform rule.
+5. **Self-containment + the coherence gate.** The kernel cites no `§N`/`Appendix` from a document it does
+   not ship (the only legitimate §-numbering is `versioning.md`'s own local `§1`–`§4` headings), and
+   `conformance.yaml`/`kernel/AGENTS.md` reference no `docs/` paths. The gate is a grep: fail if any shipped
+   file carries a `§N`/`Appendix` token not defined as a heading in its own tree, or a `docs/` path.
 
 7. **Execution discipline:** the merge runs **pair-by-pair** (the merge direction differs per pair —
    `decompose.md` regenerates the kernel *from* docs; `errors.md`/`lint.md`/`promote.md` merge kernel→docs),
    running the equality check **after each pair**. Never a single bulk copy — that would destroy the
    more-current side. `conformance.yaml` and `kernel/AGENTS.md` (always-loaded entry points) are fixed
    **first**.
-
-### §A — The derivation transform (canonical `docs/` → kernel rendering)
-
-- **LINK-1 (research citations):** strip every inline `[[KEY]](../research/sources.md#KEY)` suffix; keep
-  the prose claim verbatim. The kernel ships no `research/` corner.
-- **LINK-2 (same-dir language links):** docs `[SOL](SOL.md)` → kernel backtick `` `./SOL.md` `` (drop the
-  label, `./` prefix), and likewise `APS.md`/`errors.md`/`versioning.md`.
-- **LINK-3 (cross-dir sibling links):** docs `[lint](../passes/lint.md)` (or `[lint](lint.md)` within
-  `passes/`) → kernel backtick `` `../passes/lint.md` ``.
-- **LINK-4 (docs-only-tree links — the one non-mechanical rule; a FIXED lookup table):** links into
-  `model/`, `reference/`, `artifacts/`, `PRINCIPLES.md`, `library/`, `research/`, `grammar.md` have no
-  kernel twin and are re-homed, never emitted dangling:
-  `../reference/proof-types.md` → fold into `../passes/verify.md` (the nine proof types);
-  `../reference/promotion-protocol.md` → `../passes/promote.md`;
-  `../model/source-authority.md` → inline the gloss "approved spec/ADR > task > chat";
-  `../model/compiler-pipeline.md`, `../model/conformance.md` → drop (prose survives);
-  `../artifacts/spec.md` → `../templates/spec.swarm.md`; `../artifacts/review.md` → `../templates/review.md`;
-  `../artifacts/trace.md` → `../templates/trace.md`; `../artifacts/task.md` → `../templates/task.md`;
-  `../language/grammar.md` → fold into the `./SOL.md` Related bullet.
-- **LINK-5 (kernel-only payload links):** the kernel gains links docs cannot carry (docs has no
-  `skills/`/`templates/` tree): `../skills/<name>/SKILL.md` (pass guides, `persona-*` carriers, the
-  `empirical-proof`/`distillation-discipline` fragments) and `../templates/*`. The canonical `docs/`
-  MUST *name* these referents in prose (e.g. "served by the empirical-proof fragment") so the renderer
-  attaches the path from a fixed name→path map.
-- **PROSE-1 (audience noun):** docs "This page" → kernel "This file"; docs "the reference" → kernel "the
-  working contract".
-- **PROSE-2 (leading abstract):** the canonical carries a `>` blockquote abstract under the H1; the
-  kernel rendering emits it as a plain lead paragraph (fixed per-surface rule).
-- **PROSE-3 (self-standing clause):** the kernel lead appends "self-standing — the authority for this
-  pass lives here".
-- **SECTION-1 (§-refs):** because the canonical `docs/` is de-sectioned first (§C), the derivation is
-  identity on §-refs. `versioning.md`'s local `§1`–`§4` are preserved on both sides.
-- **TABLE-1 (closed-set subset render):** where the kernel shows a curated subset of a canonical
-  closed-set table (e.g. `verify.md` shows 7 of the 17 `task_kind` rows), it is a **fixed, named subset**
-  drawn from the canonical full table — never a hand-maintained second table. The subset row-keys are
-  recorded in the renderer note.
-- **STRUCTURE-1 (depth pruning):** where the kernel legitimately omits whole docs-only-depth sections
-  (e.g. `verify.md`'s design-rationale / soft-vs-hard / enforcement-lane sections, carried by other
-  kernel passes/`PRINCIPLES`), the renderer drops a **fixed, named** set of headings — never an ad-hoc
-  omission. The pruned-section list per file is recorded.
-
-### §B — The equality-modulo-render check (manual runbook; NO shipped code)
-
-Run at K2 and on every twin edit thereafter. (1) From the canonical `docs/` file, mechanically apply
-§A to produce an EXPECTED kernel rendering in a scratch buffer. (2) Diff the EXPECTED rendering against
-the actual kernel twin. (3) PASS iff every residual difference maps to a recorded §A rule.
-**COMPARES (must match after transform):** every normative sentence; every table cell (taxonomy,
-present `task_kind` subset rows, op/verdict tables); every code name (the closed sets); every EBNF
-production; the prose adjacent to any stripped citation. **IGNORES (the "modulo"):** citation suffixes;
-link rendering and the LINK-4 re-homes; the PROSE-1 audience nouns; the PROSE-2 carrier; the named
-STRUCTURE-1 pruned sections and TABLE-1 non-subset rows; `versioning.md`'s local §-numbering.
-**GUARD:** `diff` produced a *false* "identical" on `APS.md`/`versioning.md` under the local proxy, so
-the check MUST corroborate with `cmp -s` + an md5/sha comparison of the rendered-vs-actual buffers —
-never trust a single `diff` "identical".
-
-### §C — §-resolution policy
-
-The kernel is the product and MUST NOT cite `§N`/`Appendix-X` from a document it does not ship. Rewrite
-each cross-document reference, in leverage order: (1) fix `conformance.yaml` and `kernel/AGENTS.md`
-first; (2) repoint to the shipping twin that owns the content (`§8`/Appendix B → `../language/errors.md`;
-proof types → `../passes/verify.md`; the IR schema → `../passes/lower.md`, and **ship the cited-as-normative
-IR JSON Schema into the kernel or demote it from "governing" to descriptive**); (3) for a heading's own
-back-reference label like "## The COVERAGE gate (§11.6.2)", drop the trailing `(§N)`; (4) inline small
-load-bearing facts (the pattern already used for the 5 modals / 9 proof types / 7 verdicts). Preserve
-`versioning.md`'s legitimate local §-headings verbatim.
 
 ## Alternatives considered
 
@@ -184,15 +115,14 @@ load-bearing facts (the pattern already used for the 5 modals / 9 proof types / 
 
 ## Status
 
-Accepted (v0.1). Execution is the K2 work item (the one-time reconciling merge + §-rewrite), run under
-§§A–C and the execution discipline above.
+Accepted (v0.1). The one-time reconciling merge + §-rewrite (the K2 work) is done: the twins are
+single-sourced and the kernel resolves offline.
 
 ## Affected obligations / constraints
 
 - Adds: the canonical-direction rule (`docs/` canonical, kernel derived); the kernel self-containment
   invariant (no unshipped `§N`/`Appendix-X`, no docs-only-tree links, no `docs/` paths in
-  `conformance.yaml`/`AGENTS.md`); the derivation transform (§A); the equality-modulo-render check (§B);
-  the §-resolution policy (§C); the new coherence gate.
+  `conformance.yaml`/`AGENTS.md`); the derive-from-`docs/` rule + the eyeball-diff check; the coherence gate.
 - Modifies: the `AGENTS.md` "docs↔kernel are duplicate copies, propagate by hand" rule → "`docs/` is
   canonical; the kernel is derived and checked".
 - Refines: [0040](./0040-kernel-payload-directory.md). Relates to [0042](./0042-skill-carrier-and-standalone-conditioning.md), [0016](./0016-skills-are-self-contained.md), [0041](./0041-two-axis-versioning.md), [0034](./0034-unified-lint-namespace.md).

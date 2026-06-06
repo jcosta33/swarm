@@ -1,14 +1,17 @@
 ---
 type: audit
 id: claims-and-evidence-audit
-status: draft
+status: open-backlog
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-06
 scope: docs/ + kernel/ (the shipped framework); the claims, approaches, and sources behind them
 method: 6-cluster adversarial audit with live web verification of every cited source + prior-art analogy
 ---
 
 # Audit — claims, approaches, and evidence
+
+> **Update (2026-06-06):** O-1 actioned — `[SCRATCHPAD]` relabeled "ICLR 2022 Workshop (DL4C)" in
+> `sources.md` + `task-files.md`. The remaining O-2..O-15 (attribution-hygiene) stay an open backlog.
 
 > **Observation-only.** This audit records what *is* — which claims the framework makes, what
 > grounds each, and whether the source verifies — and recommends where to reinforce, alter, or
