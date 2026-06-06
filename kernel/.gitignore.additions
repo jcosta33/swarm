@@ -15,4 +15,4 @@
 .worktrees/
 
 # NOTE: do NOT gitignore .swarm/sources/, .swarm/status/, .swarm/memory/,
-# .swarm/ledger/, .swarm/kernel/, or .swarm/archive/ — those are the durable record.
+# .swarm/ledger/, .swarm/kernel/, .swarm/overlays/, or .swarm/archive/ — those are the durable record.

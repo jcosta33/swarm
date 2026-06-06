@@ -1,6 +1,6 @@
 # Workspace Model
 
-> Swarm's reference for the workspace model: the adopted-project directory shape — the eight `.swarm/` directory contracts, the `.agents/` compatibility model, the one governing placement rule, the five source-code surface policies, and the commit policy.
+> Swarm's reference for the workspace model: the adopted-project directory shape — the nine `.swarm/` directory contracts, the `.agents/` compatibility model, the one governing placement rule, the five source-code surface policies, and the commit policy.
 
 This page fixes the **adopted-project workspace** — the directory shape that appears inside a *consuming* project after it adopts Swarm. It is distinct from the framework-dev repository layout (the `docs/`, `examples/`, `evals/`, and `kernel/` siblings that explain, demonstrate, self-test, and package the kernel, §20.0). The framework repo is the **producer**; an adopted project is the **product**. The two MUST NOT be conflated.
 

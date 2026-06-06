@@ -59,7 +59,8 @@ The installable payload — the **kernel** — lives in this repo under [`kernel
 
 In an adopted project, `.swarm/` is the canonical Swarm workspace, separating **desired** state from **observed** state from **generated** material:
 
-- `.swarm/kernel/` — the installed payload (`language/`, `templates/`, `passes/`, `skills/`, `overlays/`).
+- `.swarm/kernel/` — the installed payload (`language/`, `templates/`, `passes/`, `skills/`, `conformance/`, `memory/`); **framework-owned, replaced wholesale on a kernel upgrade**.
+- `.swarm/overlays/` — project-local rule bundles layered onto the kernel; **project-owned, lives *outside* `kernel/` so it survives an upgrade** (ADR-0045).
 - `.swarm/sources/` — desired truth: `*.swarm.md` specs plus PRDs, RFCs, research, audits, bugs, findings, ADRs, interfaces, NFRs.
 - `.swarm/status/` — observed satisfaction and drift; records whether code satisfies the spec, never redefines intent.
 - `.swarm/generated/` — execution packets (task frames, traces, reviews, generated tests/docs); recreatable from sources.
