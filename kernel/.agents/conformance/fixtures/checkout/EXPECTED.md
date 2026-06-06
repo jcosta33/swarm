@@ -73,8 +73,8 @@ per child leaves the obligation content intent-preserving.
 
 ## Expected merge-gate outcome (stage 7) → final
 
-Six required obligations — the five REQs (`AC-010`, `AC-013`, `AC-014`, `AC-011`, `AC-012`)
-and the invariant `I-010` — are clean `PASS`. The unauthorized-change check confirms each packet wrote
+Seven required obligations — the `IF-010` interface contract, the five REQs (`AC-010`, `AC-013`,
+`AC-014`, `AC-011`, `AC-012`), and the invariant `I-010` — are clean `PASS`. The unauthorized-change check confirms each packet wrote
 only inside its declared `WRITES`, and the two packets' write surfaces (`api/src/checkout/submit.ts`
 + `db/orders`, and `db/inventory`) are pairwise disjoint with `AC-012` ordered behind `AC-011`.
 

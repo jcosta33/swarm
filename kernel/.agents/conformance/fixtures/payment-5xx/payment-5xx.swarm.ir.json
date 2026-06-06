@@ -14,7 +14,7 @@
       "owner": "payments-service",
       "verify_by": [
         { "type": "contract", "adapter": "cmdContract",
-          "ref": "contracts/charge-card.pact", "selector": "chargeCard", "gate": "required" }
+          "ref": "charge-card-contract", "selector": null, "gate": "required" }
       ],
       "status": "UNVERIFIED",
       "source": { "file": "payment-5xx.swarm.md", "line_start": 32, "line_end": 39,

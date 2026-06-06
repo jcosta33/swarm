@@ -19,8 +19,10 @@ The `improve` pass applied the closed, intent-preserving ops ([improve](../../..
   - BIND       attached a `test` proof to AC-002 and a `property` proof to I-001
                (an INVARIANT prefers property|model|static, see [verify](../../../passes/verify.md)) — clears SOL-V001.
 Q-001 was resolved out-of-band by the spec owner (decision: redirect to `/login`);
-the resolution is recorded and Q-001 is removed, unblocking AC-002. After improve all
-three lint diagnostics clear and no blocking QUESTION remains. Still inert oracle data.
+the resolution is recorded and Q-001 is removed, unblocking AC-002. All other clauses carry
+through unchanged (improve is semantics-preserving) — including AC-001's `AFFECTS I-001`, which
+lowers to the two affects edges in the IR. After improve all three lint diagnostics clear and no
+blocking QUESTION remains. Still inert oracle data.
 -->
 
 ## Intent
@@ -46,6 +48,7 @@ AND THE auth client MUST replay the original request with the new session
 VERIFY BY test:cmdTest:web/tests/auth-refresh-401.spec.ts#replays-after-refresh
 DEPENDS ON IF-001
 WRITES web/src/http/client.ts
+AFFECTS I-001
 RISK high
 
 REQ AC-002:
