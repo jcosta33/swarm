@@ -10,10 +10,10 @@ superseded_by:
 
 # ADR-0044: The kernel is a derived, self-contained payload — `docs/` is canonical for the language/passes twins
 
-> **Refined by [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md).** `docs/` stays
-> canonical and the derived files are still eyeball-diffed against it — that discipline is unchanged. What
-> changes is only the destination: the derived files install **in place** beside the project's own skills,
-> not into a `.swarm/kernel/` mount.
+> **Retired by [ADR-0051](./0051-complete-the-spec-repo-pivot.md).** The twin mechanism this ADR established
+> is **gone**: the starter kit ships no `language/`/`passes/`, so the derived twins served no purpose and were
+> **deleted**. `docs/language/` and `docs/passes/` are now the **sole** canonical home — no second copy to
+> eyeball-diff. (Earlier, ADR-0049 had only relocated the twins; 0051 removes them.)
 
 ## Context
 

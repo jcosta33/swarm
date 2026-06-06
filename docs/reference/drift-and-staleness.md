@@ -124,7 +124,7 @@ surfaces:
 
   src/auth/client.ts:
     policy: governed
-    source: .agents/specs/auth/auth-refresh.swarm.md
+    source: specs/auth/auth-refresh.swarm.md
     manual_edits: allowed_with_trace
 
   src/legacy:

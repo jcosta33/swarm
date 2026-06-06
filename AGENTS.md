@@ -14,12 +14,13 @@ contract a future tool builds against, never code this repo runs.
   `artifacts/`, `library/`, `reference/`, `research/`, `adrs/`, `examples/` + `PRINCIPLES.md`,
   `NON-GOALS.md`, `positioning.md`. The references here are complete; nothing defers to an
   external doc.
-- `starter-kit/` — the installable starter kit a consuming repo adopts (under `.agents/`, per ADR-0050):
-  `starter-kit/.agents/{language,templates,passes,skills,reference,conformance,memory}` + `starter-kit/AGENTS.md`.
-- `evals/` — rubrics.
-- `.agents/` — this repo's agent-tool surface: `skills/` (a **curated subset** of the starter-kit skills —
-  only the ones useful for developing *this* repo, not a full mirror; the complete payload is
-  `starter-kit/.agents/skills/`), `specs/swarm/` (the **frozen** build source), `audits/` (dev audits).
+- `starter-kit/` — the **spec-repo authoring kit** a consuming repo adopts (ADR-0050/0051):
+  `starter-kit/.agents/{skills,reference,templates,memory}` + `starter-kit/AGENTS.md`. The code-implementation
+  skills are **not** in the kit — they're reference at `docs/library/code-skills/`; the SOL/passes manuals are
+  `docs/` only; the golden corpus is top-level `conformance/`.
+- `evals/` — rubrics. `conformance/` — the golden corpus (producer test data for a future checker).
+- `.agents/` — this repo's agent-tool surface: `skills/` (a **curated subset** for developing *this* repo —
+  this repo is itself a docs/spec repo), `specs/swarm/` (the **frozen** build source), `audits/` (dev audits).
 
 ## Startup
 1. Read the current task / request first.
@@ -31,11 +32,10 @@ contract a future tool builds against, never code this repo runs.
 - **Do NOT edit `.agents/specs/swarm/`.** It is the frozen build source — historical reference
   only. The shipped framework (`docs/` + `starter-kit/`) is the product and the source of truth; all
   changes go there (+ an ADR under `docs/adrs/`).
-- **`docs/` is canonical; the starter-kit twins are derived (ADR-0044).** `docs/language/` and
-  `docs/passes/` are the source of truth; their `starter-kit/.agents/` copies are the derived,
-  self-contained payload. A fix lands in `docs/` first, then the starter-kit twin is brought into
-  line (eyeball-diff the two on any edit) — the starter-kit copy additionally drops citations/§-refs and
-  rewrites links to resolve offline. Don't edit the starter-kit twin as if it were authoritative.
+- **`docs/` is the sole canonical home (ADR-0051 retired the `language`/`passes` twins).** The kit no longer
+  ships copies of the manuals, so there is no file-pair to eyeball-diff. The shipped **skills + `reference/`
+  cards** are still *derived* from `docs/` (single-sourced, ADR-0047): a rule lands in `docs/` first, then the
+  skill/card is brought into line — never treat a skill or card as the authority over `docs/`.
 - **Evidence discipline (§0.7 — real science, not astrology).** Every load-bearing empirical
   claim cites a **verified** entry in `docs/research/sources.md`; non-peer-reviewed (caveated)
   sources never carry a `MUST`-level claim; a fabricated or misattributed source is never
@@ -57,7 +57,7 @@ contract a future tool builds against, never code this repo runs.
   9 passes · 10 improve operations · 5 lint layers (S/P/M/V/O) · 7 edge types · 17 `task_kind` values.
 
 ## Pointers
-- Skills — the full catalogue (pass guides, per-kind implement, author, fragments, 13 personas) is the starter-kit payload `starter-kit/.agents/skills/`; `.agents/skills/` holds only the curated subset imported for developing this repo
+- Skills — the **authoring** catalogue (author guides, analysis pass guides, fragments, 6 authoring personas) ships at `starter-kit/.agents/skills/`; the **code-implementation** skills (per-kind implement guides, 7 code personas, `implement-and-verify`) are reference at `docs/library/code-skills/`; `.agents/skills/` is the curated dev subset
 - Language reference (SOL / APS / errors / versioning): `docs/language/`
 - The pipeline, artifacts, conformance: `docs/model/`, `docs/artifacts/`
 - The evidence base (verified / caveated / rejected sources): `docs/research/sources.md`
@@ -70,7 +70,7 @@ contract a future tool builds against, never code this repo runs.
      not code. Coherence is verified by deterministic checks an agent runs by hand —
      counts reconcile across docs, `[[KEY]]` citations resolve, internal links resolve,
      fences balanced, fixture JSON valid, no `GUIDE.md` / stale-structure refs — and by the
-     conformance golden corpus under `starter-kit/.agents/conformance/fixtures/`. No runtime
+     conformance golden corpus under `conformance/fixtures/`. No runtime
      executes any of this (Invariant 1, NO RUNTIME). -->
 | Slot | Command | Resolves |
 | --- | --- | --- |

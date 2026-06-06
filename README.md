@@ -30,7 +30,7 @@ The surface is exactly **7 block types** (`REQ`, `CONSTRAINT`, `INVARIANT`, `INT
 
 Swarm lives in a **spec / documentation repo** — that's where intent is authored and reviewed. **Code repos stay pristine.** ([ADR-0050](docs/adrs/0050-swarm-is-a-spec-repo-discipline.md))
 
-- A **spec repo** takes the **authoring kit** — the `author`/`lint`/`improve`/`review` skills, the rule cards, the templates — and holds the specs (`.agents/specs/`) and durable memory (`.agents/memory/`). Desired truth lives here, and one spec can govern **many** code repos (obligation ids are namespaced; `spec-id#AC-001` cross-references them).
+- A **spec repo** takes the **authoring kit** — the `author`/`lint`/`improve`/`review` skills, the rule cards, the templates — and holds the specs (`specs/`) and durable memory (`.agents/memory/`). Desired truth lives here, and one spec can govern **many** code repos (obligation ids are namespaced; `spec-id#AC-001` cross-references them).
 - A **code repo** takes **almost nothing**: a good SOL spec is self-legible, so no reference cards and no specs go here. At most the one optional `implement-and-verify` skill, plus a `.gitignore` line so Swarm scratch never lands. The **PR** (naming the obligation ids it satisfies, with CI + review) is the trace and verdict; durable outcomes flow back to the spec repo as linked PRs.
 - **Co-located** (solo / single repo) does both in one repo.
 

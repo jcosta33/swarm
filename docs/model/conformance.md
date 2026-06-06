@@ -13,7 +13,7 @@ A repository is **Swarm-conformant if and only if** all four clauses hold. Omit 
 | # | Clause | Checkable evidence |
 |---|---|---|
 | (a) | **Language references present** | A self-contained copy of all six Tier-2 language/reference docs exists: the SOL reference, the APS reference, the lint/error taxonomy (the `SOL-<LAYER>NNN` catalogue), source-authority, the promotion protocol, and the distillation-loss-budget. |
-| (b) | **The seven core templates exist** | A copyable template is present for each of the seven Tier-1 core artifacts — `spec.swarm.md`, `task.md`, `trace.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md` — and each template satisfies its [source-artifact contract](source-artifacts.md). |
+| (b) | **The core templates exist (per role)** | A spec repo ships copyable templates for its authoring artifacts — `spec.swarm.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md`, plus the source-doc types — each satisfying its [source-artifact contract](source-artifacts.md). The `task.md`/`trace.md` skeletons are **code-side** ([`../library/code-skills/templates/`](../library/code-skills/)); a pristine code repo needs none. The seven core artifact *types* are unchanged — only where each template ships ([ADR-0051](../adrs/0051-complete-the-spec-repo-pivot.md)). |
 | (c) | **Populated `AGENTS.md` bootloader** | `AGENTS.md` exists (not an empty placeholder), stays within the density cap of ≤200 lines / ≤25 KB, and its `Commands` table binds at least the required command rows. |
 
 (There is **no version-file clause** — per [ADR-0050](../adrs/0050-swarm-is-a-spec-repo-discipline.md) an adopted project keeps no per-repo version marker; the only load-bearing version is the per-spec `swarm_language` in frontmatter.) **Conformance is graded per role.** The clauses above describe a **spec / authoring repo** (where Swarm lives); a **code repo** that only *consumes* specs has a near-zero footprint — at most one opt-in skill, with Swarm scratch gitignored — and is not measured against (a)/(b).
@@ -22,15 +22,15 @@ A spec repo that fails a clause is **non-conformant**. Conditional artifacts (Ti
 
 ## The conformance contract (the manifest)
 
-A Swarm repository ships a machine-readable conformance encoding under `starter-kit/.agents/conformance/`. It is **inert versioned data**: the precise, testable definition a future checker would honour, and the artifact a human uses to validate a repository by hand today. Per the no-runtime invariant, nothing under this directory executes — Swarm ships the contract, never the checker.
+A Swarm repository ships a machine-readable conformance encoding under `conformance/`. It is **inert versioned data**: the precise, testable definition a future checker would honour, and the artifact a human uses to validate a repository by hand today. Per the no-runtime invariant, nothing under this directory executes — Swarm ships the contract, never the checker.
 
 The conformance directory contains exactly three things:
 
 | Path | Kind | Role |
 |---|---|---|
-| `starter-kit/.agents/conformance/conformance.yaml` | manifest (data) | the task-file schema, command rows, placeholder set, lint scheme, and required-suite matrix |
-| `starter-kit/.agents/conformance/README.md` | prose | states inertness, provenance, and the "checker is deferred" framing |
-| `starter-kit/.agents/conformance/fixtures/` | fixture suite | the golden corpus |
+| `conformance/conformance.yaml` | manifest (data) | the task-file schema, command rows, placeholder set, lint scheme, and required-suite matrix |
+| `conformance/README.md` | prose | states inertness, provenance, and the "checker is deferred" framing |
+| `conformance/fixtures/` | fixture suite | the golden corpus |
 
 *Design rationale.* A contract is publishable and useful without a shipped tool: a static-analysis result format, for instance, is a versioned interchange schema that stands on its own, independent of whichever analyzer produces or consumes it. The conformance contract is, by the same logic, a framework artifact in its own right.
 

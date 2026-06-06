@@ -23,27 +23,27 @@ durably writes; anything that would serve only a future tool is created lazily, 
 install. The goal is the goldilocks middle: enough structure to be intuitive out of the box, no filing
 cabinet for a clerk who doesn't exist yet.
 
-## The spec repo — a small folder set under `.agents/`
+## The spec repo — specs are content, `.agents/` is tooling
 
-A spec repo holds Swarm under `.agents/` — the cross-tool agent directory — prescribing only the folders
-the authoring flow uses:
+Specs and intent artifacts live **top-level, as content** — they are the product. `.agents/` holds **only**
+the agent tooling the authoring flow loads ([ADR-0051](../adrs/0051-complete-the-spec-repo-pivot.md)):
 
 ```text
+specs/         # the *.swarm.md sources (the `author` pass writes here) — desired truth, top-level
+adrs/  audits/  findings/  …   # other intent artifacts, top-level (type:-tagged docs, kept how you like)
 .agents/
-  skills/      # install — the authoring kit (author/lint/improve/lower/decompose/review/promote + personas)
-  reference/   # install — the rule cards (sol.md, proofs.md, ir.md) the authoring skills name
-  templates/   # install — artifact skeletons (spec, prd, rfc, audit, finding, adr, …)
-  specs/       # the *.swarm.md sources (the `author` pass writes here) — desired truth
+  skills/      # the authoring kit (author/lint/improve/lower/decompose/review/promote + 6 authoring personas)
+  reference/   # the rule cards (sol.md, proofs.md, ir.md) the authoring skills name
+  templates/   # source-doc skeletons (spec, prd, rfc, audit, finding, adr, review, …)
   memory/      # durable recall the `promote` pass writes — INDEX.md + findings/patterns
 AGENTS.md      # repo root — the bootloader; fill its Commands table + project facts
 ```
 
-The three *install* folders are re-copied on upgrade (`pass-*`/`persona-*`/`write-*` names can't collide
-with your own; that naming is the whole upgrade story). If your CLI scans a fixed skills dir (Claude Code →
-`.claude/skills/`), skills go there instead — no separate home, no symlink bridge. Other intent artifacts —
-PRDs, RFCs, audits, findings, ADRs — are normal `type:`-tagged docs kept under `.agents/` however suits you;
-Swarm reads the **frontmatter**, not a mandated path. There is **no version file** (the framework version is
-a producer release tag) and **no `.swarm/` mount**.
+The `.agents/` install folders are re-copied on upgrade (`pass-*`/`persona-*`/`write-*` names can't collide
+with your own — that naming is the whole upgrade story). If your CLI scans a fixed skills dir (Claude Code →
+`.claude/skills/`), skills go there instead — no separate home, no symlink bridge. Swarm reads each
+artifact's **frontmatter**, not a mandated path, so where you keep `specs/`/`adrs/`/etc. is your call. There
+is **no version file** (the framework version is a producer release tag) and **no `.swarm/` mount**.
 
 ## The code repo — pristine
 

@@ -10,6 +10,12 @@ superseded_by:
 
 # ADR-0042: Skills carry as `SKILL.md`, and conditioning ships as many standalone, surgically-activated skills
 
+> **Refined by [ADR-0051](./0051-complete-the-spec-repo-pivot.md).** The `SKILL.md` carrier + surgical
+> activation are unchanged, but the catalogue **splits by role**: the starter kit ships the **20 authoring
+> skills**; the **17 code-implementation skills** (per-kind implement guides, code personas,
+> `implement-and-verify`) are `docs/library/code-skills/` reference, not bundled. The 13-persona closed set is
+> intact (6 authoring + 7 code).
+
 ## Context
 
 The kernel's procedural conditioning layer shipped as eight files named `GUIDE.md` under `starter-kit/.agents/skills/`. Four problems compounded:

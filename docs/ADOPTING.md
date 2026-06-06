@@ -27,7 +27,7 @@ Point your agent at a checkout of this repo and say:
 >   agent CLI scans — `.claude/skills/` for Claude Code, else `.agents/skills/` — beside my own).
 > - Adopt `starter-kit/AGENTS.md` as my root `AGENTS.md` (+ `CLAUDE.md`/`GEMINI.md` `@AGENTS.md` aliases);
 >   **merge** if one exists. Fill `## Commands` and `## Project facts`.
-> - Specs (`*.swarm.md`) live in `.agents/specs/`; other intent docs (PRDs, RFCs, ADRs, audits, findings)
+> - Specs (`*.swarm.md`) live in `specs/`; other intent docs (PRDs, RFCs, ADRs, audits, findings)
 >   are `type:`-tagged docs under `.agents/`; `.agents/memory/` holds durable recall. Reuse my existing
 >   layout where I have one. Report what you placed and merged.
 
@@ -40,11 +40,13 @@ hand to agents in worktrees.
 A code repo needs **nothing required**. Don't add SOL reference cards or specs — the spec (delivered, or
 referenced by id from the spec repo) is the whole interface. The most you adopt:
 
-> Adopt **Swarm (implementing)** — minimally. From `<swarm-repo>/starter-kit/`:
-> - Optionally copy the one skill `.agents/skills/implement-and-verify/` into my skills dir (the trust
->   backbone for running agents in parallel worktrees). Optionally a `persona-*` I like.
-> - Append `starter-kit/.gitignore.additions` to my `.gitignore` so Swarm scratch (task frames) never lands.
-> - Nothing else: no specs, no reference cards, no version file, no `.swarm/`.
+> Adopt **Swarm (implementing)** — minimally:
+> - Optionally copy the one skill `<swarm-repo>/docs/library/code-skills/implement-and-verify/` into my
+>   skills dir (the trust backbone for running agents in parallel worktrees). Optionally a code `persona-*`
+>   from `docs/library/code-skills/` if I like one.
+> - Append `<swarm-repo>/starter-kit/.gitignore.additions` to my `.gitignore` so Swarm scratch (task frames)
+>   never lands.
+> - Nothing else: no specs, no reference cards, no version file, no `.swarm/`. The spec is the interface.
 
 When implementing: the agent reads the obligation, implements only it, proves each with its `VERIFY BY`, and
 opens a **PR that names the obligation ids** — the PR + CI + review *are* the trace and verdict. Anything

@@ -1,67 +1,50 @@
-# Swarm — the starter kit
+# Swarm — the starter kit (a spec/docs repo)
 
-This directory is what an agent integrates into your repo to adopt Swarm. It is inert markdown
-(**NO RUNTIME** — every artifact is a contract a future tool builds against). Hand this folder to your
-coding agent and point it at [`../docs/ADOPTING.md`](../docs/ADOPTING.md); it adapts the relevant subset into
-your repo under `.agents/`.
+This is the **authoring kit**: what you copy into a **spec / documentation repo** to author and review
+high-quality Swarm specs. It is inert markdown (**NO RUNTIME**). Hand this folder to your coding agent and
+point it at [`../docs/ADOPTING.md`](../docs/ADOPTING.md); it integrates the files into your repo.
 
-**What you take depends on the repo's role** (see [ADR-0050](../docs/adrs/0050-swarm-is-a-spec-repo-discipline.md)):
+It is **one kit, one purpose.** A code repo is not set up from here — see *Code repos* below.
 
-- A **spec / documentation repo** — where intent is authored and reviewed — takes the **authoring kit**.
-- A **code repo** — where developers implement — stays *pristine* and takes at most the tiny **implementing
-  kit** (optional). Co-located (one repo plays both roles) takes both.
-
-## Authoring kit (→ a spec repo's `.agents/`)
-
-The full set, for writing and reviewing high-quality specs:
+## What's in it (→ your repo)
 
 ```text
-starter-kit/.agents/skills/      →  <skills dir>        # author + lint/improve/lower/decompose/review/promote + personas
-starter-kit/.agents/reference/   →  .agents/reference/  # the rule cards: sol.md, proofs.md, ir.md (used while authoring)
-starter-kit/.agents/templates/   →  .agents/templates/  # artifact skeletons (spec, prd, rfc, audit, finding, adr, …)
+starter-kit/.agents/skills/      →  <skills dir>        # the 20 authoring skills (author + lint/improve/
+                                                        #   lower/decompose/review/promote + authoring personas)
+starter-kit/.agents/reference/   →  .agents/reference/  # the rule cards: sol.md, proofs.md, ir.md
+starter-kit/.agents/templates/   →  .agents/templates/  # source-doc skeletons (spec, prd, rfc, audit,
+                                                        #   finding, adr, research, bug-report, review, …)
+starter-kit/.agents/memory/      →  .agents/memory/     # the recall seed (INDEX.md, glossary.md)
 starter-kit/AGENTS.md            →  AGENTS.md           # repo-root bootloader (fill Commands + project facts)
 ```
 
-Specs live in `.agents/specs/` (`*.swarm.md`); other intent artifacts (PRDs, RFCs, ADRs, audits, findings)
-are normal `type:`-tagged docs under `.agents/`. `.agents/memory/` holds durable recall the `promote` pass
-writes. No `.swarm/` mount, no symlink bridge, no version file.
+Skills go in whatever dir your agent CLI scans (`.claude/skills/` for Claude Code, else `.agents/skills/`),
+beside your own — the `pass-*`/`persona-*`/`write-*` names don't collide. `.agents/` holds **only** this
+tooling. Your **specs and intent artifacts live top-level**, as content: `specs/*.swarm.md`, plus `adrs/`,
+`audits/`, `findings/`, PRDs, RFCs wherever you keep docs. No `.swarm/` mount, no symlink bridge, no version
+file. ([ADR-0051](../docs/adrs/0051-complete-the-spec-repo-pivot.md))
 
-## Implementing kit (→ a code repo, optional)
+## Code repos (not set up from this kit)
 
-A code repo needs **nothing required**. A good SOL spec is self-legible — a capable agent reads its
-obligations without a grammar manual, so **no SOL reference cards and no specs** belong in the code repo.
-The one thing worth taking (the trust backbone for parallel agents) is a single skill:
+A code repo that *implements* a spec stays **pristine** — a good SOL spec is self-legible, so no reference
+cards and no specs belong there. Its only optional Swarm skill is **`implement-and-verify`**, which lives in
+the framework reference at [`../docs/library/code-skills/implement-and-verify/`](../docs/library/code-skills/) —
+a code repo may copy that one skill and append [`.gitignore.additions`](./.gitignore.additions) for scratch.
+The **PR** (naming obligation ids, with CI + review) is its trace and verdict; durable outcomes flow back to
+the spec repo as a linked PR.
 
-```text
-starter-kit/.agents/skills/implement-and-verify/  →  <skills dir>   # implement an obligation + prove it; optional
-```
+## What this kit deliberately does NOT contain
 
-Optionally a `persona-*` stance the developer likes. Everything an agent generates while implementing
-(task frames, scratch) is **gitignored**; the **PR** (referencing obligation ids, with CI + review) is the
-trace and verdict; durable outcomes go **back to the spec repo as a linked PR** — nothing litters the code
-repo. Append [`.gitignore.additions`](./.gitignore.additions) to keep the scratch out.
-
-## What does NOT install (reference, kept here)
-
-`starter-kit/.agents/{passes,language,conformance}` are **not** copied into any adopter. The skills carry
-their procedure inline and the `reference/` cards carry the shared rules, so an adopter needs none of the
-full manuals or the golden corpus; project conventions go in `AGENTS.md` (there is no overlays directory).
-These stay here as the framework's human reference / derived twins / corpus.
-
-## Folder contents
-
-| Path | Goes to | What it is |
-| --- | --- | --- |
-| `.agents/skills/` | spec repo (full) / code repo (`implement-and-verify` only) | Pass guides, per-kind implement & author guides, cross-cutting fragments, `persona-*` stances — lazily loaded. |
-| `.agents/reference/` | spec repo | The rule cards the authoring skills name: `sol.md`, `proofs.md`, `ir.md`. |
-| `.agents/templates/` | spec repo | Skeletons — `spec.swarm.md`, `prd.md`, `rfc.md`, `audit.md`, `finding.md`, `adr.md`, `review.md`, `memory/INDEX.md`, … No `verdict.md` (a `VERDICT` is a block inside `review.md`). |
-| `.agents/language/`, `.agents/passes/` | not installed | Full SOL/APS references + the nine pass contracts — human reference; the skills + cards are derived from them. |
-| `.agents/conformance/` | not installed | The inert conformance contract + golden-corpus `fixtures/` — test data for a future checker. |
-| `.agents/memory/` | spec repo (seed) | The recall seed (`INDEX.md`, `glossary.md`) a spec repo grows. |
+- **The SOL/APS/passes manuals** — the skills carry their procedure inline and the `reference/` cards carry
+  the shared rules, so an adopter needs neither. The full manuals live in the `swarm` repo's `docs/`.
+- **The code-implementation skills** — the per-kind implement guides and the code personas
+  (`persona-bug-hunter`, `persona-builder`, …) are framework reference in
+  [`../docs/library/code-skills/`](../docs/library/code-skills/), not kit content (a docs repo never runs them).
+- **The conformance corpus** — the golden corpus is producer test data at the `swarm` repo's top-level
+  `conformance/`.
 
 ## Adopting
 
 **The full guide (with a copy-paste agent prompt, per role) is [`../docs/ADOPTING.md`](../docs/ADOPTING.md).**
-Conformance is graded **per role** — a spec repo's bar (the authoring kit + a populated `AGENTS.md`) differs
-from a code repo's near-zero footprint. Nothing is enforced at runtime (there is none); the contract in
-[`.agents/conformance/conformance.yaml`](./.agents/conformance/conformance.yaml) is what a future launcher honours.
+Nothing is enforced at runtime (there is none); conformance is graded per role — a spec repo's bar is this
+kit + a populated `AGENTS.md`, a code repo's footprint is near-zero.

@@ -25,7 +25,7 @@ surfaces: {}
   # Example (delete or adapt):
   # "src/api/generated/**":
   #   policy: generated
-  #   source: .agents/specs/interfaces/openapi.yaml
+  #   source: specs/interfaces/openapi.yaml
   #   manual_edits: forbidden
 
 # --- agents: the worker adapters a future toolchain would drive -------------

@@ -55,11 +55,11 @@ Three rows are normative and worth calling out:
 
 - **`adversarial-review` is the Skeptic profile over `review`.** It is **not** a standalone procedural module. Its adversarial method is the **Skeptic profile** applied to the `review` (and `verify`) passes, because skepticism is a *parameter to a pass*, not a separate pass of its own.
 - **`fix-flaky-test` is a narrow `implement` guide.** Its procedure is specific enough (de-flaking a non-deterministic test) to stand as its own guide rather than collapse into the general fix guide.
-- **The thirteen `persona-*` modules are profiles.** A profile is a heuristic stance — what an agent looks for and refuses — not a procedure module. All thirteen ship as standalone `persona-*/SKILL.md` files; they are catalogued on their own page, and this page covers the procedure layer.
+- **The thirteen `persona-*` modules are profiles.** A profile is a heuristic stance — what an agent looks for and refuses — not a procedure module. They split by role: six authoring stances ship in the starter kit, seven code-work stances are `docs/library/code-skills/` reference (catalogued on their own page); this page covers the procedure layer.
 
-### Guide-less passes are not a gap
+### A guide is an aid, not a gate
 
-`improve` and `lower` ship **no guide** — they are fully specified by the language and verification references. A guide-less pass is **not** a conformance gap: the pass contract is the binding artifact, and a guide is an optional aid to performing it. (The full installed set — four pass guides, nine per-kind `implement` guides, six author guides, two cross-cutting fragments — is tabulated under [The installed guides](#the-installed-guides) below; the thirteen `persona-*` profiles are catalogued on [heuristic profiles](heuristic-profiles.md).)
+Every one of the nine passes now has a guide, but a guide is an **optional aid**, not a conformance requirement: the pass contract is the binding artifact, and a guide only helps perform it. (The installed authoring set — six pass guides, six author guides, two cross-cutting fragments, six authoring profiles — is tabulated under [The installed guides](#the-installed-guides) below; the nine per-kind `implement` guides + seven code-work profiles + `implement-and-verify` are [`docs/library/code-skills/`](code-skills/) reference, not shipped in the kit.)
 
 ## The two cross-cutting fragments
 
@@ -160,33 +160,33 @@ A guide body satisfies the contract sections, and within them follows a stable s
 
 ## The installed guides
 
-The four pass guides, the nine per-kind `implement` guides, the six author guides, and the two cross-cutting fragments ship under `starter-kit/.agents/skills/`. Each is a self-contained `SKILL.md` carrying the contract above, plus a self-activating `description` for the launcher-less fallback. (The thirteen `persona-*/SKILL.md` profiles ship under the same path; they are catalogued on [heuristic profiles](heuristic-profiles.md).)
+Guides **split by role** ([ADR-0051](../adrs/0051-complete-the-spec-repo-pivot.md)). The **starter kit** (a spec/docs repo) ships the **authoring** guides under `starter-kit/.agents/skills/`: the six analysis pass guides, the six author guides, the two cross-cutting fragments, and the six authoring `persona-*` profiles. The **code-implementation** guides — the nine per-kind `implement` guides, the seven code `persona-*` profiles, and the optional `implement-and-verify` skill — are **framework reference in `docs/library/code-skills/`**, since a docs repo never runs `implement`. Each is a self-contained `SKILL.md` carrying the contract above, plus a self-activating `description`.
 
-| Installed module | Role | Pass |
+**Ships in the starter kit (`starter-kit/.agents/skills/`) — the authoring kit:**
+
+| Module | Role | Pass |
 |---|---|---|
-| `starter-kit/.agents/skills/pass-lint-spec/` | pass guide | `lint` |
-| `starter-kit/.agents/skills/pass-decompose-spec/` | pass guide | `decompose` |
-| `starter-kit/.agents/skills/pass-review-trace/` | pass guide (carries the Skeptic profile) | `review` |
-| `starter-kit/.agents/skills/pass-promote-findings/` | pass guide | `promote` |
-| `starter-kit/.agents/skills/write-feature/` | per-kind `implement` guide | `implement` |
-| `starter-kit/.agents/skills/write-fix/` | per-kind `implement` guide | `implement` |
-| `starter-kit/.agents/skills/write-refactor/` | per-kind `implement` guide | `implement` |
-| `starter-kit/.agents/skills/write-rewrite/` | per-kind `implement` guide | `implement` |
-| `starter-kit/.agents/skills/write-migration/` | per-kind `implement` guide (covers migration + upgrade) | `implement` |
-| `starter-kit/.agents/skills/write-performance/` | per-kind `implement` guide | `implement` |
-| `starter-kit/.agents/skills/write-testing/` | per-kind `implement` guide | `implement` |
-| `starter-kit/.agents/skills/write-documentation/` | per-kind `implement` guide | `implement` |
-| `starter-kit/.agents/skills/fix-flaky-test/` | narrow `implement` guide (loaded under `task_kind: fix`) | `implement` |
-| `starter-kit/.agents/skills/write-spec/` | author guide | `author` |
-| `starter-kit/.agents/skills/write-audit/` | author guide | `author` |
-| `starter-kit/.agents/skills/write-research/` | author guide | `author` |
-| `starter-kit/.agents/skills/write-bug-report/` | author guide | `author` |
-| `starter-kit/.agents/skills/write-prd/` | author guide | `author` |
-| `starter-kit/.agents/skills/write-rfc/` | author guide | `author` |
-| `starter-kit/.agents/skills/empirical-proof/` | cross-cutting fragment | `verify`, `review` |
-| `starter-kit/.agents/skills/distillation-discipline/` | cross-cutting fragment | `lower`, `decompose`, `promote` |
+| `pass-lint-spec/` | pass guide | `lint` |
+| `pass-improve-spec/` | pass guide | `improve` |
+| `pass-lower-spec/` | pass guide | `lower` |
+| `pass-decompose-spec/` | pass guide | `decompose` |
+| `pass-review-trace/` | pass guide (carries the Skeptic profile) | `review` |
+| `pass-promote-findings/` | pass guide | `promote` |
+| `write-spec/`, `write-audit/`, `write-research/`, `write-bug-report/`, `write-prd/`, `write-rfc/` | author guides | `author` |
+| `empirical-proof/` | cross-cutting fragment | `verify`, `review` |
+| `distillation-discipline/` | cross-cutting fragment | `lower`, `decompose`, `promote` |
+| `persona-architect/`, `persona-skeptic/`, `persona-researcher/`, `persona-auditor/`, `persona-surveyor/`, `persona-documentarian/` | authoring profiles | (parameterize a pass) |
 
-These directories sit under a `skills/` path for cross-tool compatibility; in Swarm's vocabulary they are pass guides, per-kind implement guides, author guides, and fragments. The two guide-less passes (`improve`, `lower`) ship no module here — their pass contracts stand on their own.
+**Reference in `docs/library/code-skills/` — the implement side (not shipped in the kit):**
+
+| Module | Role | Pass |
+|---|---|---|
+| `write-feature/`, `write-fix/`, `write-refactor/`, `write-rewrite/`, `write-migration/`, `write-performance/`, `write-testing/`, `write-documentation/` | per-kind `implement` guides | `implement` |
+| `fix-flaky-test/` | narrow `implement` guide (`task_kind: fix`) | `implement` |
+| `implement-and-verify/` | the one optional skill a **code repo** may copy | `implement`, `verify` |
+| `persona-builder/`, `persona-bug-hunter/`, `persona-test-author/`, `persona-performance-surgeon/`, `persona-migrator/`, `persona-lead-engineer/`, `persona-janitor/` | code-work profiles | (parameterize `implement`) |
+
+These directories sit under a `skills/` path for cross-tool compatibility; in Swarm's vocabulary they are pass guides, per-kind implement guides, author guides, and fragments. Every one of the nine passes now has a guide.
 
 ## Related
 

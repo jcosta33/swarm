@@ -1,6 +1,6 @@
 # Heuristic profiles
 
-> Swarm's reference for **heuristic profiles**: the optional cognitive stances that sharpen a pass without changing what the pass means — what a profile is, the seven-section profile contract (including the `## Refuses` red-flag table), the full thirteen-stance set (all thirteen ship as standalone `persona-*/SKILL.md` profiles), where profiles ship, and the single-axis profile-by-pass routing model.
+> Swarm's reference for **heuristic profiles**: the optional cognitive stances that sharpen a pass without changing what the pass means — what a profile is, the seven-section profile contract (including the `## Refuses` red-flag table), the full thirteen-stance set (six authoring stances ship in the starter kit; seven code-work stances are `docs/library/code-skills/` reference), where profiles ship, and the single-axis profile-by-pass routing model.
 
 A **heuristic profile** is an optional cognitive stance applied to a pass. It changes *what an agent looks for and refuses* while performing the pass; it never changes *how* the pass runs — that is the job of the pass guide — and it never defines load-bearing meaning. A profile is a parameter, not a person: it is not a character, not an actor, and not a procedure. Like every Swarm surface, a profile is **markdown only with no runtime**; it is a contract a human or an agent reads and adopts, never code that executes.
 
@@ -50,7 +50,7 @@ For example, the Skeptic stance — the canonical reference profile — refuses 
 
 ## The thirteen stdlib profiles
 
-Swarm models **thirteen** heuristic stances, and **all thirteen ship as standalone `starter-kit/.agents/skills/persona-*/SKILL.md` profiles** — installed, ready-to-load carriers discoverable and surgically activated by their `description`. There is no separate `profiles/` directory and no smaller installed subset: the full set ships, and the stances that cover the most common entry points carry the same weight as the rest.
+Swarm models **thirteen** heuristic stances, each a standalone `persona-*/SKILL.md` profile discoverable and surgically activated by its `description`. They **split by role** ([ADR-0051](../adrs/0051-complete-the-spec-repo-pivot.md)): the **six authoring stances** — `persona-architect`, `persona-skeptic`, `persona-researcher`, `persona-auditor`, `persona-surveyor`, `persona-documentarian` — ship in the starter kit (a spec repo authors and reviews specs); the **seven code-work stances** — `persona-builder`, `persona-bug-hunter`, `persona-test-author`, `persona-performance-surgeon`, `persona-migrator`, `persona-lead-engineer`, `persona-janitor` — are framework reference in `docs/library/code-skills/`, since a docs repo never runs the `implement` pass. The closed set is thirteen, split across two homes; there is no separate `profiles/` directory.
 
 | Stdlib profile | Stance | Pass(es) it parameterizes |
 |---|---|---|
@@ -80,7 +80,7 @@ Routing is this **single axis** — profile × pass — rather than a pair of lo
 
 ## Where profiles ship
 
-The thirteen stdlib profiles ship in the starter kit under **`starter-kit/.agents/skills/`** — one directory per profile (`persona-skeptic/`, `persona-architect/`, `persona-auditor/`, `persona-surveyor/`, `persona-researcher/`, `persona-bug-hunter/`, `persona-builder/`, `persona-janitor/`, `persona-migrator/`, `persona-performance-surgeon/`, `persona-test-author/`, `persona-documentarian/`, `persona-lead-engineer/`), each carrying a `SKILL.md` of `type: profile`. There is no separate `starter-kit/.agents/profiles/` directory — profiles live among the pass guides and fragments under `skills/`, discoverable and surgically activated by `description`. In an adopted project the same directories are installed under the project's skills path. A profile a project authors itself lives alongside them. Because a profile's carrier is incidental, a project that prefers to inline a stance into its pass guide is equally conformant, so long as the seven-section contract is satisfied.
+The six **authoring** profiles ship in the starter kit under **`starter-kit/.agents/skills/`** — one directory each (`persona-architect/`, `persona-skeptic/`, `persona-researcher/`, `persona-auditor/`, `persona-surveyor/`, `persona-documentarian/`), each a `SKILL.md` of `type: profile`. The seven **code-work** profiles (`persona-builder/`, `persona-bug-hunter/`, `persona-test-author/`, `persona-performance-surgeon/`, `persona-migrator/`, `persona-lead-engineer/`, `persona-janitor/`) live in **`docs/library/code-skills/`** as framework reference. There is no separate `profiles/` directory — profiles live among the pass guides and fragments. In an adopted spec repo the authoring profiles are installed under the project's skills path; a code repo takes none by default (it may copy a code profile if it wants one). Because a profile's carrier is incidental, a project that prefers to inline a stance into its pass guide is equally conformant, so long as the seven-section contract is satisfied.
 
 ## Authoring a profile
 

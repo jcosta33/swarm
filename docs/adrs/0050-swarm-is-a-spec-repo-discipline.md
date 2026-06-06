@@ -10,6 +10,11 @@ superseded_by:
 
 # ADR-0050: Swarm is a spec-repo discipline; the code repo stays pristine
 
+> **Refined by [ADR-0051](./0051-complete-the-spec-repo-pivot.md).** Specs and intent artifacts now live
+> **top-level** (`specs/`, `adrs/`, …), not under `.agents/specs/` as written below — `.agents/` holds only
+> tooling. The kit also ships the **authoring skills only** (the 17 code-implementation skills are
+> `docs/library/code-skills/` reference). Everything else here stands.
+
 ## Context
 
 [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md) cut adoption to a goldilocks set of six
