@@ -64,9 +64,11 @@ under this decision.)
    surviving difference must map to one of those rewrites. Neither build nor check is shipped code.
 
 5. **Self-containment + the coherence gate.** The kernel cites no `§N`/`Appendix` from a document it does
-   not ship (the only legitimate §-numbering is `versioning.md`'s own local `§1`–`§4` headings), and
-   `conformance.yaml`/`kernel/AGENTS.md` reference no `docs/` paths. The gate is a grep: fail if any shipped
-   file carries a `§N`/`Appendix` token not defined as a heading in its own tree, or a `docs/` path.
+   not ship. The only legitimate `§N` use is a **local self-reference** to a file's own numbered sections —
+   e.g. `versioning.md`'s `§1`–`§4` headings, or `SOL.md`'s `§2.4`/`§3.8` references to its own numbered
+   `2.4`/`3.8` sections (headed as a bare number, cited with the `§` prefix). `conformance.yaml`/`kernel/AGENTS.md`
+   reference no `docs/` paths. The gate is a grep: fail if any shipped file carries a `§N`/`Appendix` token
+   that does not resolve to a numbered section heading in the **same file**, or a `docs/` path.
 
 6. **Execution discipline:** the merge runs **pair-by-pair** (the merge direction differs per pair —
    `decompose.md` regenerates the kernel *from* docs; `errors.md`/`lint.md`/`promote.md` merge kernel→docs),
