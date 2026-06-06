@@ -1,132 +1,122 @@
 # Workspace Model
 
-> Swarm's reference for the workspace model: the adopted-project directory shape — the nine `.swarm/` directory contracts, the `.agents/` compatibility model, the one governing placement rule, the five source-code surface policies, and the commit policy.
+> Where an adopted project keeps Swarm's files and its own source artifacts. Swarm imposes **no runtime
+> and no filing cabinet**: it ships skills, templates, and reference cards you copy in, plus the SOL
+> language. Nothing else is created until something actually writes it.
 
-This page fixes the **adopted-project workspace** — the directory shape that appears inside a *consuming* project after it adopts Swarm. It is distinct from the framework-dev repository layout (the `docs/`, `examples/`, `evals/`, and `kernel/` siblings that explain, demonstrate, self-test, and package the kernel, §20.0). The framework repo is the **producer**; an adopted project is the **product**. The two MUST NOT be conflated.
+This page describes the **adopted project** (the product). It is distinct from the framework-dev repo
+(the producer: `docs/`, `examples/`, `evals/`, and the installable files). The two MUST NOT be conflated.
 
-As with everything in the kernel this is **NO RUNTIME** (Invariant 1, §2.1.1): the kernel is inert reference data and copyable templates, and every workspace path below is a directory a human or an agent populates — or that a future Swarm toolchain would populate **as a contract it builds against**, never a runtime Swarm ships. Every "runs" / "populates automatically" verb on this page resolves to that future-launcher contract.
+## No runtime, no imposed workspace (Invariant 1)
 
-## The one rule
+Swarm ships inert markdown — skills, templates, reference cards, and the language. There is no process it
+runs and no directory tree it must create. Every "the X pass writes Y" below is a **contract a human or a
+future toolchain fulfils**, never something Swarm executes. A directory therefore appears the first time
+someone (or a tool) writes into it — it is **never pre-stamped empty at install**. A scaffold of empty
+folders would be a filing cabinet for a clerk who does not exist yet.
 
-The placement of every adopted-project artifact is decided by a single rule (§20.5.4):
+## Install: files in your agent dir
 
-```text
-If it defines, tracks, or reconciles project intent   → .swarm/
-If it exists only so an agent CLI can load instructions → .agents/
-If it starts an agent correctly                        → AGENTS.md
-```
-
-This is **design rationale** — a layout and naming decision, not an empirical claim. The only grounded constraint in the workspace model is the NO-RUNTIME framing above (Invariant 1).
-
-## `.swarm/` is the canonical workspace
-
-`.swarm/` is **the** canonical Swarm workspace: everything that defines, tracks, or reconciles intent lives under it. It partitions into nine top-level categories — `sources/ status/ generated/ memory/ ledger/ archive/ kernel/ overlays/ tmp/` — each a distinct contract:
-
-| Directory | Holds | Category | Committed? | Populated by |
-| --- | --- | --- | --- | --- |
-| `kernel/` | The installed framework payload — `language/ templates/ passes/ skills/ conformance/ memory/`. **Framework-owned; replaced wholesale on a kernel upgrade — never hand-edited.** Project rules go in the sibling `overlays/` (ADR-0045). | payload | Yes | Installation from the framework repo's `kernel/`; kernel migrations |
-| `overlays/` | **Project-local rule bundles** layered onto the kernel — architecture conventions, extra refusals, local command bindings ([overlays](../library/overlays.md)). **Project-owned; lives *outside* `kernel/` so it survives a kernel upgrade** (ADR-0045). Ships seeded-empty. | project | Yes | The project; seeded empty from the framework repo's `kernel/overlays/` |
-| `sources/` | **Desired truth** + durable source artifacts: specs (`*.swarm.md`), PRDs, RFCs, research, audits, bugs, findings, ADRs, interfaces, NFRs (§20.3.4). | desired | Yes | Humans + the `author`/`improve` passes |
-| `status/` | **Observed** satisfaction + drift: per-spec satisfaction reports, task/worktree state, drift reports. Records whether code satisfies the spec; never redefines intent. A `worktrees/` entry records its `branch`, `base`, owning task id, and liveness, so an in-flight or long-lived (multi-session, e.g. a migration) worktree resumes from committed state rather than the gitignored task file. | observed | Yes | The `verify`/`review` passes; drift detection (future toolchain) |
-| `generated/` | **Generated** execution packets: task frames, traces, reviews, generated tests/docs. Recreatable from `sources/`; compacted into `ledger/` on completion. | generated | Mostly gitignored (see commit policy) | The `lower`/`decompose`/`implement`/`verify`/`review` passes |
-| `memory/` | **Durable recall** (§23): `INDEX.md` (the load-*when* map, never a dump), `glossary.md`, `patterns/`, `stale/`. | durable | Yes | The `promote` pass |
-| `ledger/` | **Compact reconciled history** (§23): `changes/ merges/ promotions/`. | durable | Yes | Reconciliation after merge/abandonment (future toolchain) |
-| `archive/` | Retired durable source artifacts, each linked to a replacement or closure summary — not silently deleted. | durable | Yes | The `promote` pass / manual retirement |
-| `tmp/` | Scratch only. No durable knowledge. | scratch | No | Ad-hoc agent/human scratch |
-
-The canonical tree (path *shape* is normative, §20.5.1):
+Swarm installs by **copying three folders** next to the skills you already use — there is no separate
+home and no symlink bridge:
 
 ```text
-project/
-  AGENTS.md                 # the bootloader (§31): how an agent STARTS; short, ≤200 lines / ≤25 KB
-
-  .swarm/                   # THE CANONICAL SWARM WORKSPACE
-    VERSION                 # adopted kernel version, semver (§25)
-    config.yaml             # surface policies, agent adapters, lint overrides — project-owned, seeded from kernel/config.yaml
-    kernel/                 # the INSTALLED payload (language templates passes skills conformance memory) — framework-owned, replaced on upgrade
-    overlays/               # PROJECT rule bundles → layered onto kernel/; project-owned, survives upgrade (ADR-0045)
-    sources/                # DESIRED truth      → specs/ prds/ rfcs/ research/ audits/ bugs/ findings/ adrs/ interfaces/ nfrs/
-    status/                 # OBSERVED state     → specs/ tasks/ worktrees/ drift/
-    generated/              # EXECUTION packets  → tasks/ traces/ reviews/ tests/ docs/
-    memory/                 # DURABLE recall     → INDEX.md glossary.md patterns/ stale/
-    ledger/                 # COMPACT history    → changes/ merges/ promotions/
-    archive/                # retired source artifacts (linked to replacements)
-    tmp/                    # scratch (gitignored)
-
-  .agents/                  # COMPATIBILITY MIRROR ONLY (not canonical)
-    skills/                 # mirrored/pointer → .swarm/kernel/skills/ (incl. persona-* profile stances)
+.agents/
+  skills/      # Swarm's pass / persona / author skills, alongside your own (names don't collide)
+  templates/   # starting points for specs, audits, …
+  reference/   # the closed-set rule cards (sol.md, proofs.md, ir.md)
 ```
 
-## The source / status / generated split
+If your agent CLI scans a specific skills directory (Claude Code scans `.claude/skills/`), put the skills
+**there** instead — they sit beside your own as ordinary entries. Swarm's skills are just skills, installed
+where skills live. An upgrade re-copies the `pass-*` / `persona-*` / `write-*` files; your own skills
+(different names) are untouched. That naming is the whole upgrade story — no mount to replace wholesale,
+nothing to bridge.
 
-The three execution-time categories are kept deliberately separate, because they answer three different questions and one must never silently overwrite another:
+## Where source artifacts go
 
-- **`sources/` — desired truth.** What the project *intends*: the obligation source. A spec here is primary for **intent**.
-- **`status/` — observed satisfaction + drift.** Whether the code actually satisfies that intent, and where it has drifted. It **records** reality against intent; it **never redefines** intent.
-- **`generated/` — execution packets.** The task frames, traces, and reviews produced while turning a source into verified change. Recreatable from `sources/`, and compacted into `ledger/` on completion so the workspace does not accumulate a permanent scratchpad.
+A spec (`*.swarm.md`), PRD, RFC, audit, finding, ADR, or interface is a normal document — keep it wherever
+your project already keeps docs. Its `type:` frontmatter says what it is; Swarm reads the **frontmatter**,
+not a mandated path. Swarm does not dictate a `sources/` tree.
 
-This split is the workspace-wide form of the per-path surface policy below: each names which side of the intent-versus-reality reconciliation an artifact (or a code region) sits on.
+## Durable memory (the `promote` target)
 
-## The ledger
+The `promote` pass lifts durable findings and patterns out of throwaway task state into a memory file, so a
+later session **recalls** them instead of re-deriving them. Externalising state to disk rather than holding
+it in a context window is what makes multi-session work tractable [[CTXENG]](../research/sources.md#CTXENG),
+and writing intermediate steps down rather than holding them implicitly is itself what makes multi-step
+work succeed [[SCRATCHPAD]](../research/sources.md#SCRATCHPAD) — a written self-reflection between attempts,
+not extra model capability, is what lets an agent improve [[REFLEXION]](../research/sources.md#REFLEXION),
+and persisting task state with explicit dependencies mirrors a pattern validated at vendor
+scale [[CCTASKS]](../research/sources.md#CCTASKS). That memory file is created the **first time** `promote`
+writes one (conventional path `.agents/memory/`); it is not pre-stubbed.
 
-`.swarm/ledger/` is the **compact reconciled history**: a durable, low-volume summary that survives after `generated/` execution packets are compacted away. Each ledger entry preserves what a future audit needs — **obligation coverage, changed surfaces, the proof run, the verdicts, and the promotion results** — so a completed unit of work leaves a permanent reconciled record rather than an ever-growing pile of task scratchpads. It is committed (`changes/ merges/ promotions/`); `generated/tasks/` and `tmp/` are not. The ledger is what lets `generated/` be safely gitignored: the durable facts have already been lifted out of it.
+## Project conventions
 
-## The resumption record
+Project-specific rules — architecture boundaries, extra refusals, local command bindings — go in your
+`AGENTS.md`, the file that already carries standing project facts and the `Commands` table. There is no
+separate overlays directory; a convention is a fact about the project, and project facts live in the
+bootloader an agent already reads first.
 
-Because every durable artifact lives in `.swarm/` rather than in a model's context window, a task that spans more than one session does not have to be re-derived when a fresh session picks it up. The workspace *is* the resumption record. Context is a finite resource, so the discipline is to externalise intermediate work into files and load only what the task needs back into the window [[CTXENG]](../research/sources.md#CTXENG); writing the intermediate steps down rather than holding them implicitly is itself what makes the multi-step work tractable [[SCRATCHPAD]](../research/sources.md#SCRATCHPAD). The same move is what lets a language agent *improve* at all: a written self-reflection between attempts — not extra model capability — is what lifts pass@1 from 80% to 91% [[REFLEXION]](../research/sources.md#REFLEXION), and a signal that lives only in attention is one that can be silently dropped. A new session reconstructs where the work stands by reading the same three durable surfaces that govern the work in the first place: the `sources/` artifact that fixes desired truth, the `status/` entry that records observed satisfaction and the task's current state, and — once a unit completes — the `ledger/` entry that compacts what the reconciliation produced. Decisions, findings, and the next concrete starting points are written into that durable state as the work proceeds, so the file content is full even when the context window is empty.
+## Intent, reality, and the reconciliation between them (the design contract)
 
-This is the same file-state-externalization discipline as the rest of the workspace, applied to continuity in time: the kernel deliberately does not try to solve long-context coherence at the model layer. Sessions time out and workers swap mid-task; the response is to externalize state so the next session lands in the same epistemic position the last one left, loading what the task names rather than re-investigating it. Persisting task state to disk with explicit inter-task dependencies — the `task.md` frame and the task DAG — mirrors a pattern validated at vendor scale [[CCTASKS]](../research/sources.md#CCTASKS).
+Swarm's value is keeping three things distinct and reconciled. This is **design** — realised by hand today,
+by a future toolchain later — **not** a set of directories you create up front:
+
+- **Desired truth** — what the project intends: the spec / source artifact. Primary for *intent*.
+- **Implementation reality** — the code. **Invariant 4: code is reality**, reconciled implementation, not a
+  build product of the spec.
+- **Observed satisfaction + drift** — whether the code satisfies the intent, recorded by trace / review /
+  verdicts. It records reality against intent and **never redefines** intent.
+
+A toolchain that tracks satisfaction, emits task / trace / review packets, or keeps a compacted history MAY
+write them under conventional paths (e.g. `status/`, `generated/`, `ledger/`) — **each created on first
+write**, and gitignored when recreatable from the source. The kernel fixes the *shape* of those records
+(the obligation graph, the verdict model, the coverage a history entry must preserve), not a directory you
+must materialise to adopt. Recreatable execution state (task frames, scratch) is throwaway; the durable
+record is the source artifact, the memory, and whatever compacted history a tool keeps.
 
 ## Source-code surface policies
 
-The workspace separation has a per-path projection over the codebase itself. A code region declares **exactly one** policy from a closed set of five (§16.6.2). This follows from **Invariant 4 — code is reality**: specs are primary for intent, code is primary for implementation reality, and the trace/review/status layer reconciles the two. A surface policy records which side of that reconciliation a region sits on.
+The reconciliation has a per-path projection over the codebase. A code region declares **exactly one**
+policy from a closed set of five — recording which side of the intent-versus-reality reconciliation it sits
+on (this follows from Invariant 4):
 
 | Policy | Meaning | Manual edits |
 | --- | --- | --- |
-| `generated` | Regenerated from a **named source artifact** (an OpenAPI doc, a schema, an interface spec) — the artifact is the truth, the file is its emission. | **Forbidden** — edit the source and regenerate; a hand-edit is overwritten and is a finding. |
-| `governed` | Reconciled implementation reality under an obligation: a spec owns intent, the code owns realization, trace/review reconcile them. | **Allowed only with an obligation trace** (`allowed_with_trace`) — every change carries an obligation id and emits a trace. |
-| `observed` | Existing code not yet governed — pre-existing reality with no obligation behind it. | Allowed, but the surface needs an audit + a spec before it can become `governed`. |
-| `external` | Vendor / third-party code (dependencies, generated SDKs you do not own, copied upstream). | **Do not modify** — changes belong upstream or in an owned wrapper. |
+| `generated` | Emitted from a **named source artifact** (an OpenAPI doc, a schema, an interface spec) — the artifact is the truth, the file is its emission. | **Forbidden** — edit the source and regenerate; a hand-edit is overwritten and is a finding. |
+| `governed` | Reconciled implementation under an obligation: a spec owns intent, the code owns realization, trace/review reconcile them. | **Allowed only with an obligation trace** — every change carries an obligation id and emits a trace. |
+| `observed` | Existing code not yet governed — pre-existing reality with no obligation behind it. | Allowed, but the surface needs an audit + a spec before it becomes `governed`. |
+| `external` | Vendor / third-party code you do not own. | **Do not modify** — changes belong upstream or in an owned wrapper. |
 | `deprecated` | Scheduled for removal or migration; retained until cutover. | Discouraged; permitted edits SHOULD be migration/removal steps, not new behavior. |
 
-`observed` is the **honest default** for brownfield adoption: real code that no obligation yet claims. It is the on-ramp — an audit (`.swarm/sources/audits/`) plus a spec promote `observed` → `governed`; it is never silently treated as if a spec already governed it.
-
-The doctrine this set **rejects** is equally important (§16.6.1): code is *not* disposable, source is *not* "regenerated from specs," manual edits are *not* forbidden, and the model MAY *not* rewrite the codebase from prose intent. Code is reconciled implementation reality, not a minified build product of the spec. Only a surface explicitly marked `generated` is regenerated, and even then only from a named source artifact.
-
-Surfaces are declared as a `surfaces:` map in `.swarm/config.yaml`, each path → `{policy, source, manual_edits}` (plus policy-specific fields such as `requires_audit`). Computing and enforcing the map is a future-tool concern; the **map shape is the kernel contract today**.
-
-## `.agents/` is a compatibility surface, not the source of truth
-
-`.agents/` exists **only** so a third-party agent CLI that looks for `.agents/skills/` can find loadable instructions (the `persona-*` profile stances mirror under `skills/` alongside the guides — there is no separate `profiles/` mirror). It is never the canonical home of project intent. Every file in `.agents/` MUST either point back to its canonical `.swarm/kernel/` (or `.swarm/generated/`) original, or be a verbatim compatibility copy of kernel material. The mirror is **one-directional** — `.agents/` derives from `.swarm/`, never the reverse — so there is exactly one source of truth and the compatibility surface can be regenerated or deleted without losing intent.
-
-A canonical artifact that exists *only* under `.agents/` is a layout defect, not a valid adoption. In particular, the following are canonical in `.swarm/` and MUST NOT live in `.agents/` as their primary home: primary specs (`.swarm/sources/specs/`), source-authority docs (PRDs, RFCs, research, ADRs, audits, findings, NFRs, interfaces), durable memory, the ledger, and status reports. (A spec root, a task root, or a memory root living *canonically* under `.agents/` is exactly the anti-pattern this rule forbids; any such path is permissible only as an explicitly-marked compatibility pointer or migration step.)
+`observed` is the **honest default** for brownfield adoption: real code no obligation yet claims. It is the
+on-ramp — an audit plus a spec promote `observed` → `governed`; it is never silently treated as already
+governed. The set **rejects** the doctrine that code is disposable or "regenerated from specs": only a
+surface explicitly marked `generated` is emitted from a source, and even then only from a named artifact.
+The surface map is a contract a future tool reads (a `surfaces:` map of `path → {policy, source}` in your
+Swarm config); computing and enforcing it is a future-tool concern, the **map shape is the contract today**.
 
 ## The CLI / agent boundary
 
-Swarm coordinates agent-CLI workers and **prepares and validates** work; it does **not** own the model loop, the file-editing mechanics, or the provider/MCP runtime, and it MUST NOT replace an agent CLI. The future launcher is a contract a toolchain builds against — it would scaffold task frames, bind `VERIFY BY` adapters through `AGENTS.md > Commands`, serialize write surfaces, and reconcile the ledger — all consistent with the orchestrator-worker, single-threaded-writes boundary. No canonical page implies Swarm is an agent runtime: there is no "Swarm is an agent CLI" and no "agent runtime" here. Every "runs" verb resolves to that future-launcher contract (Invariant 1).
+Swarm coordinates agent-CLI workers and **prepares and validates** work; it does **not** own the model loop,
+the file-editing mechanics, or the provider/MCP runtime, and it MUST NOT replace an agent CLI. The future
+launcher is a contract a toolchain builds against — it would scaffold task frames, bind `VERIFY BY` adapters
+through `AGENTS.md > Commands`, serialize write surfaces, and reconcile history — consistent with the
+orchestrator-worker, single-threaded-writes boundary. Every "runs" verb resolves to that contract
+(Invariant 1); nothing here makes Swarm an agent runtime.
 
 ## Monorepo: nested `AGENTS.md` (closest-wins)
 
-In a multi-package repo more than one `AGENTS.md` may coexist: the repo-root file carries the shared bindings and conventions, and a per-workspace file (e.g. `packages/api/AGENTS.md`) adds to or overrides them. An agent working inside a workspace reads the **closest** `AGENTS.md` up the directory tree — the nearest file wins, with the root as fallback; a workspace with no `AGENTS.md` inherits the root. Only the `## Commands` bindings and standing project facts differ per workspace: the `.swarm/` workspace (the installed kernel, memory, overlays, sources/status/generated) stays at the repo root and is shared, as does the `.agents/` (or `.claude/`) skill bridge. This is purely a bootloader-resolution rule for monorepos; it changes nothing about the obligation model.
-
-## Commit policy (informative)
-
-An adopted project SHOULD gitignore execution-local and scratch state while committing everything that defines, tracks, or reconciles intent:
-
-```gitignore
-# Swarm execution-local + scratch state (recreatable from sources)
-.swarm/generated/tasks/
-.swarm/tmp/
-# Optional: active traces/reviews are compacted into .swarm/ledger/ on completion.
-.swarm/generated/traces/
-.swarm/generated/reviews/
-```
-
-A project MUST NOT gitignore `.swarm/sources/`, `.swarm/status/`, `.swarm/memory/`, `.swarm/ledger/`, `.swarm/kernel/`, `.swarm/overlays/`, or `.swarm/archive/` unless it intentionally splits durable knowledge into a separate repository. `generated/` and `tmp/` are reconstructible from `sources/`; the rest are the durable record the reconciliation model depends on.
+In a multi-package repo more than one `AGENTS.md` may coexist: the repo-root file carries shared bindings
+and conventions; a per-workspace file (e.g. `packages/api/AGENTS.md`) adds to or overrides them. An agent
+reads the **closest** `AGENTS.md` up the tree — nearest wins, root as fallback; a workspace with no file
+inherits the root. Only the `## Commands` bindings and standing facts differ per workspace; the installed
+skills are shared. This is purely a bootloader-resolution rule; it changes nothing about the obligation model.
 
 ## Related
 
-- [Source artifacts](source-artifacts.md) — what lives in `.swarm/sources/` and the durable source-artifact types.
-- [Source authority](source-authority.md) — how `sources/` intent governs implementation reality.
-- [Compiler pipeline](compiler-pipeline.md) — the passes that populate `status/`, `generated/`, `memory/`, and `ledger/`.
-- [Conformance](conformance.md) — how an adopted workspace is checked against the kernel contracts.
+- [Source artifacts](source-artifacts.md) — the durable source-artifact types and what each carries.
+- [Source authority](source-authority.md) — how intent governs implementation reality.
+- [Compiler pipeline](compiler-pipeline.md) — the passes that produce traces, reviews, verdicts, and memory.
+- [Adopting Swarm](../ADOPTING.md) — the install steps.

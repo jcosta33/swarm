@@ -1,67 +1,63 @@
 # Adopting Swarm
 
-Swarm installs into a repository by **copying the kernel payload and seeding a `.swarm/` workspace** —
-there is no installer to run (NO RUNTIME). The fastest path is to hand the steps to the coding agent you
-already use; a human can run the same steps by hand.
+Adopting Swarm is **copying a few folders of files next to the skills you already use** — there is no
+installer to run (NO RUNTIME) and no workspace tree to create. The fastest path is to hand the steps to the
+coding agent you already use; a human can run the same steps by hand.
 
 ## Quick start — let your agent do it
 
 Paste this into your agent (Claude Code, Codex, Cursor, …), pointing it at a checkout of this repo:
 
 > Adopt the **Swarm** framework into this repository, following `<swarm-repo>/docs/ADOPTING.md`. Specifically:
-> 1. Copy the **runtime surface** into `.swarm/kernel/`: `<swarm-repo>/kernel/.agents/{skills,reference,templates,memory}`
->    and `<swarm-repo>/kernel/.agents/.swarm-version`. Do **NOT** copy `passes/`, `language/`, or
->    `conformance/` — each skill carries its pass *procedure* inline, and the shared closed-set rules ship
->    as the compact `reference/` cards (`sol.md`, `proofs.md`, `ir.md`). Together those are everything an
->    adopter needs; the full SOL/APS/passes manuals (the *why* + worked examples) and the golden corpus
->    stay in the `swarm` repo as the human reference.
+> 1. Copy Swarm's three folders next to my own skills. My skills live in **`<MY-SKILLS-DIR>`** (ask me if
+>    you're unsure — it's `.claude/skills/` for Claude Code, or the neutral `.agents/skills/`):
+>     - `<swarm-repo>/kernel/.agents/skills/*` → `<MY-SKILLS-DIR>/` (Swarm's `pass-*` / `persona-*` /
+>       `write-*` skills land **beside** my own — the names don't collide).
+>     - `<swarm-repo>/kernel/.agents/templates/` → `.agents/templates/`
+>     - `<swarm-repo>/kernel/.agents/reference/` → `.agents/reference/` (the closed-set rule cards
+>       `sol.md`, `proofs.md`, `ir.md` the skills name).
+>    Do **not** create any other directories. Do **not** copy `passes/`, `language/`, or `conformance/` —
+>    the skills carry their procedure inline and the `reference/` cards carry the shared rules; the full
+>    manuals are the framework's human reference and stay in the `swarm` repo.
 > 2. Put `<swarm-repo>/kernel/AGENTS.md` at my repo **root** as `AGENTS.md`, plus the `CLAUDE.md` and
 >    `GEMINI.md` one-line `@AGENTS.md` aliases. **If `AGENTS.md`/`CLAUDE.md` already exist, merge — do not
->    overwrite**: append Swarm's sections by heading, keep my existing content, and stop for my approval on
->    any conflict.
-> 3. Create the `.swarm/` workspace dirs: `sources/{specs,prds,rfcs,research,audits,bugs,findings,adrs,interfaces,nfrs}`,
->    `status/{specs,tasks,worktrees,drift}`, `generated/{tasks,traces,reviews,tests,docs}`,
->    `memory/{patterns,stale}`, `ledger/{changes,merges,promotions}`, `overlays/`, `archive/`, `tmp/`
->    (add a `.gitkeep` to each so they survive commit).
-> 4. Seed the project surfaces: copy `<swarm-repo>/kernel/.agents/memory/{INDEX.md,glossary.md}` → `.swarm/memory/`,
->    `<swarm-repo>/kernel/config.yaml` → `.swarm/config.yaml`, and `<swarm-repo>/kernel/overlays/README.md` → `.swarm/overlays/`.
-> 5. Write `.swarm/VERSION` from `<swarm-repo>/kernel/.agents/.swarm-version`.
-> 6. Surface the kernel skills into the dir your CLI scans: symlink `.claude/skills/* → ../.swarm/kernel/skills/*`
->    (Claude Code), or `.agents/skills/* → ../.swarm/kernel/skills/*` (the neutral cross-tool convention).
->    On Windows or where symlinks don't survive, copy instead.
-> 7. Append `<swarm-repo>/kernel/.gitignore.additions` to my `.gitignore`.
-> 8. Fill `AGENTS.md`'s `## Commands` table and `## Project facts` from this repo's **real** test / lint /
+>    overwrite**: append Swarm's sections by heading, keep my existing content, stop for my approval on any
+>    conflict.
+> 3. Fill `AGENTS.md`'s `## Commands` table and `## Project facts` from this repo's **real** test / lint /
 >    build commands and conventions — propose them from `package.json`/`Makefile`/CI and ask me to confirm.
-> 9. Report what you did per step.
+>    Put any project-specific rules (architecture boundaries, extra refusals) in `## Project facts` too —
+>    there is no separate overlays file.
+> 4. Report what you did per step.
 
-That's the whole adoption. The only things you must supply are the project-specific bits in step 8 (your
-commands and facts) and approval of any brownfield merge in step 2.
+That's the whole adoption: copy three folders, drop in the bootloader, fill in your commands. The only
+things you must supply are the project-specific bits in step 3.
 
 ## What lands where
 
-| From the kernel | → installs to | Owner |
+| From the framework | → installs to | Owner |
 | --- | --- | --- |
+| `kernel/.agents/skills/*` | `<MY-SKILLS-DIR>/` (e.g. `.claude/skills/` or `.agents/skills/`), **beside your own skills** | framework — re-copied on upgrade |
+| `kernel/.agents/templates/` | `.agents/templates/` | framework — re-copied on upgrade |
+| `kernel/.agents/reference/` | `.agents/reference/` | framework — re-copied on upgrade |
 | `kernel/AGENTS.md` (+ `CLAUDE.md`/`GEMINI.md` aliases) | repo **root** | project (you fill Commands + facts) |
-| `kernel/.agents/{skills,reference,templates,memory}` + `.swarm-version` | `.swarm/kernel/` | framework runtime surface — replaced wholesale on upgrade. (`passes/`, `language/`, `conformance/` are **not** shipped; skills carry the procedure, `reference/` carries the shared rules.) |
-| `kernel/config.yaml` | `.swarm/config.yaml` | project — survives upgrade |
-| `kernel/overlays/` | `.swarm/overlays/` | project — survives upgrade |
-| memory seed | `.swarm/memory/` | project — grown by the `promote` pass |
-| the kernel skills | your CLI's skills dir (`.claude/skills` / `.agents/skills`) via symlink/copy | framework, bridged |
 
-`.swarm/kernel/**` is framework-owned and replaced on upgrade; everything else under `.swarm/`
-(plus the root `AGENTS.md`) is yours and is preserved. See [`model/workspace.md`](model/workspace.md) for
-the full workspace contract.
+Nothing else is created. There is **no `.swarm/` directory, no mount, and no symlink bridge** — Swarm's
+skills are ordinary skills installed where your skills live. Source artifacts you author (a spec
+`*.swarm.md`, a PRD, an audit, a finding, an ADR) are normal documents: keep them wherever you keep docs;
+their `type:` frontmatter identifies them. A directory like `memory/` appears the first time the `promote`
+pass writes into it — never before.
 
 ## Brownfield (an existing repo)
 
-Adoption is non-destructive: `.swarm/kernel/` is new, so it never collides. The only merge points are the
-root `AGENTS.md`/`CLAUDE.md` (append Swarm's sections, keep yours, approve conflicts) and `.gitignore`
-(append-only). Existing code is `observed` until an audit + a spec govern it — adoption does not retrofit specs.
+Adoption is non-destructive. Swarm's skills have unique names (`pass-*`, `persona-*`, `write-*`) that can't
+collide with your own, so they drop into your skills dir without touching anything. The only merge point is
+the root `AGENTS.md`/`CLAUDE.md` (append Swarm's sections, keep yours, approve conflicts). Existing code is
+`observed` until an audit + a spec govern it — adoption does not retrofit specs. See
+[`model/workspace.md`](model/workspace.md) for the source-code surface policies.
 
 ## Upgrading
 
-Re-run the copy of `kernel/.agents/` → `.swarm/kernel/` from a newer checkout. `.swarm/kernel/**` is replaced;
-`.swarm/overlays/`, `.swarm/config.yaml`, your data workspace, and your filled `AGENTS.md` are **not** touched
-(diff the fresh `AGENTS.md` template against yours and fold in only new sections). Re-run the skills bridge.
-
-*A future `swarm` CLI may automate this; today it is these documented steps an agent or a human performs.*
+Re-copy Swarm's `skills/`, `templates/`, and `reference/` from a newer checkout. The skills overwrite the
+`pass-*` / `persona-*` / `write-*` entries; **your own skills (different names) are untouched**, and so is
+your filled `AGENTS.md`. That naming is the whole upgrade story — there is no mount to replace and no bridge
+to rebuild.

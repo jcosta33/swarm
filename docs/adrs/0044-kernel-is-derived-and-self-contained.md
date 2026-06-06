@@ -10,6 +10,11 @@ superseded_by:
 
 # ADR-0044: The kernel is a derived, self-contained payload — `docs/` is canonical for the language/passes twins
 
+> **Refined by [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md).** `docs/` stays
+> canonical and the derived files are still eyeball-diffed against it — that discipline is unchanged. What
+> changes is only the destination: the derived files install **in place** beside the project's own skills,
+> not into a `.swarm/kernel/` mount.
+
 ## Context
 
 `docs/language/` ↔ `kernel/.agents/language/` and `docs/passes/` ↔ `kernel/.agents/passes/` are

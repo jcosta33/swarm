@@ -1,12 +1,17 @@
 ---
 type: adr
 id: 0048-installed-payload-is-the-runtime-surface
-status: accepted
+status: superseded
 created: 2026-06-06
 updated: 2026-06-06
 supersedes:
-superseded_by:
+superseded_by: 0049-minimal-install-no-mount-no-imposed-workspace
 ---
+
+> **Superseded by [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md).** The "what to ship"
+> conclusion survives — skills + the compact `reference/` cards + templates, not the manuals or corpus (see
+> this ADR's Update). What 0049 overturns is the *destination*: that payload no longer mounts at
+> `.swarm/kernel/`; it installs in place beside the project's own skills, with no symlink bridge.
 
 # ADR-0048: The installed payload is the runtime surface, not the whole kernel
 

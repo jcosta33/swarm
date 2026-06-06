@@ -12,7 +12,7 @@
   universal startup + "do not" rules.
 
   WHAT MUST STAY OUT: pass procedures and how-to-review/audit/migrate steps (those live in the
-  self-contained skills under `.swarm/kernel/skills/`, loaded on demand) and full memory content.
+  self-contained skills installed beside your own skills, loaded on demand) and full memory content.
   The SOL/APS manual and the pass reference are NOT installed — they live in the Swarm project; this
   file names them, never inlines them.
 -->
@@ -21,7 +21,7 @@
 <!-- The always-on doctrine (the load-what-the-task-names rule, plus the universal invariants).
      Keep these as facts/rules, never step-by-step procedures. -->
 1. Read the current task file first.
-2. The Swarm workspace is `.swarm/` (canonical intent, status, memory, and the installed kernel).
+2. Swarm's skills, templates, and reference cards are installed beside your own skills; source artifacts (specs, audits, findings…) are normal docs identified by their `type:` frontmatter, kept wherever this repo keeps docs. There is no separate Swarm workspace directory.
 3. Treat `.swarm.md` blocks as authoritative over prose summaries.
 4. Use assigned obligation IDs as scope.
 5. Decide isolation before editing (see the `implement` pass): a code task with a source spec/audit runs in a `worktree+branch` named for the spec, off the base — never on it; a bare ad-hoc edit stays `in-place`.
@@ -45,18 +45,16 @@
 
 ## Pointers
 <!-- One-line pointers ONLY — never inline the target content. -->
-- Skills (a pass guide for every one of the 9 passes, per-kind implement & author guides, persona-* stances, fragments): `.swarm/kernel/skills/`. Each carries its pass *procedure* inline.
-- Operative reference cards (the shared closed-set rules every pass needs — SOL grammar, proofs/verdicts/adequacy, the IR/edges): `.swarm/kernel/reference/` (`sol.md`, `proofs.md`, `ir.md`). Load the card for the pass you're running.
-- Memory recall map (says *when to load* each entry; never dumped here): `.swarm/memory/INDEX.md`
-- Project rule bundles (overlays): `.swarm/overlays/` (project-owned; survives kernel upgrades)
+- Skills (a pass guide for every one of the 9 passes, per-kind implement & author guides, persona-* stances, fragments): your skills dir (e.g. `.agents/skills/` or `.claude/skills/`), beside your own. Each carries its pass *procedure* inline.
+- Operative reference cards (the shared closed-set rules every pass needs — SOL grammar, proofs/verdicts/adequacy, the IR/edges): `.agents/reference/` (`sol.md`, `proofs.md`, `ir.md`). Load the card for the pass you're running.
+- Project conventions (architecture boundaries, extra refusals, command bindings): in this file — see `## Project facts` and `## Commands` below.
 - The **full** SOL/APS/passes manuals (rationale, worked examples) are **not installed** — they live in the Swarm project (`docs/`); the shipped cards carry the operative rules, the manuals carry the *why*.
 
 ## Compatibility
-The kernel skills live at `.swarm/kernel/skills/`; for an agent CLI to discover them, adoption bridges
-them into the dir your CLI scans (`.claude/skills` for Claude Code, or the neutral `.agents/skills`) by
-symlink (copy where symlinks don't survive) — without that bridge the skills are invisible to the tool.
-That `.agents/`/`.claude/` surface is a one-directional mirror of `.swarm/kernel/skills/`; canonical
-Swarm artifacts live in `.swarm/`.
+Swarm's skills install **directly into the dir your CLI scans** (`.claude/skills/` for Claude Code, or the
+neutral `.agents/skills/`), beside your own skills — there is no separate home and no symlink bridge. Their
+names (`pass-*`, `persona-*`, `write-*`) don't collide with yours, so an upgrade just re-copies them and
+leaves your skills untouched. The reference cards sit in `.agents/reference/`.
 
 ## Commands
 <!--

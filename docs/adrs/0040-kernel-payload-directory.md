@@ -10,6 +10,11 @@ superseded_by:
 
 # ADR-0040: The kernel payload ships under `kernel/`
 
+> **Refined by [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md).** The *producer-side*
+> decision (the payload ships from a single directory in this repo) stands; the *adopter-side* mount it
+> defined (`.swarm/kernel/`) is gone — under 0049 the payload installs in place beside the project's own
+> skills. The physical producer directory is still named `kernel/` pending a tracked rename.
+
 ## Context
 
 The copyable framework payload — the unitary thing a consuming repository adopts wholesale — needs one shipping directory in this framework-dev repo. An earlier layout named that directory `scaffold/` (ADR [0008](./0008-empirical-proof-as-framework-primitive.md) still cites the earlier `/scaffold/.agents/templates/` path). The name was wrong twice over: it read as disposable boilerplate rather than the inert, versioned *kernel* a repo installs and keeps, and it did not match the term the spec uses everywhere else for that artifact. The §34.0 wave-2 note resolved this by renaming the payload root, but recorded the rename as a v0.2-deferred, optional cosmetic change — leaving v0.1 to ship under a name the rest of the kernel vocabulary had already abandoned. That left wave 2 ("install the payload") with no settled directory to lay the payload down under, and the spec's own §20.0 layout already drawing the tree under `kernel/`. The deferral and the frozen layout contradicted each other.
