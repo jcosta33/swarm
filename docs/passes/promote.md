@@ -116,7 +116,7 @@ Authorization is not validation. A memory write MUST pass consistency verificati
 
 ## Staleness
 
-A finding's `status` enum is `candidate | accepted | promoted | rejected | stale | superseded`. A finding becomes **`stale`** when its `content_hash` no longer matches the cited source/surfaces — the same drift signal behind the `STALE` verdict decorator and the spec↔code reconcile. A `stale` finding MUST NOT be relied on as authority; it routes to re-verification or supersession. A `superseded` finding records its replacement in the INDEX stale/superseded table. The kernel ships the **fields** that make staleness computable (`content_hash`, `origin_traces`); it does **not** ship the comparator — recomputing the hash and flipping `accepted -> stale` is a harness/CLI concern, aspirational/manual today ([Principle 1: NO RUNTIME](../PRINCIPLES.md#1-no-runtime) — every pass is a contract, never code this repo runs).
+A finding's `status` enum is `candidate | accepted | promoted | rejected | stale | superseded`. A finding becomes **`stale`** when its `content_hash` no longer matches the cited source/surfaces — the same drift signal behind the `STALE` verdict decorator and the spec↔code reconcile. A `stale` finding MUST NOT be relied on as authority; it routes to re-verification or supersession. A `superseded` finding records its replacement in the INDEX stale/superseded table. The kernel ships the **fields** that make staleness computable (`content_hash`, `origin_traces`); it does **not** ship the comparator — recomputing the hash and flipping `accepted -> stale` is a harness/CLI concern, aspirational/manual today ([Principle 1: NO RUNTIME](../PRINCIPLES.md#1-no-runtime)).
 
 ## Deferred to post-v0.1
 

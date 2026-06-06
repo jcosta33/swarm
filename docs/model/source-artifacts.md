@@ -2,7 +2,7 @@
 
 > Swarm's reference for source artifacts: which files a Swarm repository may contain, the `.swarm.` infix that partitions them into two classes, the canonical filenames per class, and the tiers on which conformance is defined.
 
-This page is the reader's first map of *which files a Swarm repository may contain* and *how the framework tells them apart*. Swarm is markdown-only and provider-neutral, with **no runtime**: every actor named below ("compiler", "parser", "linter", "planner", "checker") is a CONTRACT a future tool would build against, never shipped code (Invariant 1, NO RUNTIME — §2). Nothing on this page executes; every artifact is inert reference data, a copyable template, or a file a human or agent populates by hand.
+This page is the reader's first map of *which files a Swarm repository may contain* and *how the framework tells them apart*. Swarm is markdown-only and provider-neutral, with **no runtime** (Invariant 1, §2): every actor named below ("compiler", "parser", "linter", "planner", "checker") is a CONTRACT a future tool would build against, never shipped code — every artifact is inert reference data, a copyable template, or a file a human or agent populates by hand.
 
 This page covers the artifact *set*, its two-class partition, and the *tiers* on which conformance is defined. Adjacent material lives on sibling pages: repository layout and the adopted-project `.swarm/` workspace, the per-artifact contracts and copyable templates under [docs/artifacts/](../artifacts/), and the mechanically-checkable conformance procedure in [docs/model/conformance.md](conformance.md).
 

@@ -88,8 +88,4 @@ Final outcome:              PASS.
 
 ## How this is validated (no runtime)
 
-This is **inert data** (Invariant 1, NO RUNTIME). Swarm ships no parser, linter, lowerer,
-or checker; nothing in this directory executes. The verdicts above are **known independent of
-any tool** and are **validated by hand** until a checker (a deferred launcher concern, see [`../../conformance.yaml`](../../conformance.yaml))
-exists. When a tool does exist it MAY validate against these files; this manifest is the
-expected-outcome contract it would be checked against, not a tool Swarm provides.
+Inert data (NO RUNTIME): the verdicts above are known independent of any tool and validated by hand; this manifest is the expected-outcome contract a future checker would validate against, not a tool Swarm provides.
