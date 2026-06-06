@@ -40,9 +40,10 @@ contract a future tool builds against, never code this repo runs.
   claim cites a **verified** entry in `docs/research/sources.md`; non-peer-reviewed (caveated)
   sources never carry a `MUST`-level claim; a fabricated or misattributed source is never
   introduced. Web-verify a source (venue + finding) before grounding a claim on it.
-- **Citations.** Framework-wide inline citations use `[[KEY]](…/research/sources.md#KEY)` and
-  resolve to a real anchor in `docs/research/sources.md`. `docs/research/` is the cited corner;
-  the rest of `docs/` carries no `.agents/specs` paths.
+- **Citations.** Research is cited **contextually** — `[[KEY]](…/research/sources.md#KEY)` inline in the
+  doc whose claim it grounds, resolving to a real anchor in `docs/research/sources.md`. `docs/research/`
+  holds **only** that bibliography (no standalone research essays / "research layer"); the rest of `docs/`
+  carries no `.agents/specs` paths.
 - **Original framework, not a migration.** Present Swarm as originally designed — no
   buffet / à-la-carte / "Earlier Swarm framing" / migration self-presentation. ADRs keep their
   supersession ledger (internal decision history) but neutral wording.

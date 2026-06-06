@@ -1,8 +1,8 @@
-# Sources — the evidence base for `docs/research/`
+# Sources — the framework's evidence bibliography
 
-> This is the bibliography for Swarm's research layer. It is held to the **§0.7 discipline** ("real science, not astrology"): every load-bearing empirical claim in `docs/research/` cites a **verified** entry below, with the recorded caveats. Entries marked **caveated** (non-peer-reviewed) MUST NOT carry a `MUST`-level claim. Entries in **Rejected** MUST NOT be cited — they are recorded so a fabricated citation is never silently re-introduced.
+> This is the single bibliography the framework's **inline `[[KEY]]` citations resolve to**. Research is referenced *contextually* — each `[[KEY]]` sits in the doc whose claim it grounds (passes, language, library, model, ADRs, positioning) and links to its entry here; there is no separate "research layer" of standalone essays, only this ledger. It is held to the **§0.7 discipline** ("real science, not astrology"): every load-bearing empirical claim cites a **verified** entry below, with the recorded caveats. Entries marked **caveated** (non-peer-reviewed) MUST NOT carry a `MUST`-level claim. Entries in **Rejected** MUST NOT be cited — they are recorded so a fabricated citation is never silently re-introduced.
 >
-> This bibliography was assembled **after web-verification** (June 2026). Several headline figures that circulate in the skill-authoring literature rested on **fabricated/misattributed arXiv ids** and were rejected (see below). A few entries were already verified by the framework's own bibliography elsewhere; this layer **reuses that key** rather than re-deriving it.
+> This bibliography was assembled **after web-verification** (June 2026). Several headline figures that circulate in the skill-authoring literature rested on **fabricated/misattributed arXiv ids** and were rejected (see below). A few entries were already verified by the framework's own bibliography elsewhere; this ledger **reuses that key** rather than re-deriving it.
 
 ---
 

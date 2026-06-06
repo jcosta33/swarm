@@ -32,7 +32,7 @@ The authoring research is explicit that each unit of conditioning should be a **
 
 3. **The pass × profile routing is unchanged** ([0029](./0029-nine-pass-compiler-model.md), [0036](./0036-heuristic-profile-model.md)). This is a carrier/packaging decision — 0036 already holds that a profile's "carrier is an implementation detail." A task still names a pass and MAY name the profile and skill it activates; description-matching remains the launcher-less fallback ([0037](./0037-load-what-the-task-names.md)).
 
-4. Every skill stays **self-contained** ([0016](./0016-skills-are-self-contained.md)), **lazily loaded** ([0017](./0017-no-always-load-skills.md)), and **SOFT control that owns no semantics** (§26.1): it cites SOL/IR, the artifact contracts, the `docs/reference/` templates, and the `docs/research/` evidence, but defines none of them.
+4. Every skill stays **self-contained** ([0016](./0016-skills-are-self-contained.md)), **lazily loaded** ([0017](./0017-no-always-load-skills.md)), and **SOFT control that owns no semantics** (§26.1): it cites SOL/IR, the artifact contracts, the `docs/reference/` templates, and the `docs/research/sources.md` bibliography, but defines none of them.
 
 This record **refines, and does not supersede,** ADRs 0016, 0017, 0019, 0029, 0036, and 0037.
 
