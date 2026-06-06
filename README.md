@@ -55,18 +55,18 @@ The surface is exactly **7 block types** (`REQ`, `CONSTRAINT`, `INVARIANT`, `INT
 
 **→ [`docs/ADOPTING.md`](docs/ADOPTING.md) is the step-by-step guide** — a copy-paste prompt that hands the adoption to the coding agent you already use (or a human runs the same steps).
 
-The installable payload — the **kernel** — lives in this repo under [`kernel/`](./kernel/). On adoption it installs to **`.swarm/kernel/`** in the consuming project, and `kernel/AGENTS.md` becomes the project's `AGENTS.md` **bootloader** (how an agent starts; short, capped at ≤200 lines / ≤25 KB [[LOSTMID]](docs/research/sources.md#LOSTMID)). Nothing executes during or after this copy — the kernel is inert reference data and copyable templates.
+The installable files live in this repo under [`install/`](./install/). Adoption hands that folder to your coding agent, which integrates it into your repo under `.agents/` — the cross-tool agent directory you likely already have — and adapts `install/AGENTS.md` into your root `AGENTS.md` **bootloader** (how an agent starts; short, capped at ≤200 lines / ≤25 KB [[LOSTMID]](docs/research/sources.md#LOSTMID)). Nothing executes during or after — the installed files are inert reference data and copyable templates.
 
-In an adopted project, `.swarm/` is the canonical Swarm workspace, separating **desired** state from **observed** state from **generated** material:
+Swarm imposes **no `.swarm/` mount and no filing cabinet**. It prescribes only the handful of `.agents/` folders the flow actually uses, each one earned:
 
-- `.swarm/kernel/` — the installed payload (`language/`, `templates/`, `passes/`, `skills/`, `conformance/`, `memory/`); **framework-owned, replaced wholesale on a kernel upgrade**.
-- `.swarm/overlays/` — project-local rule bundles layered onto the kernel; **project-owned, lives *outside* `kernel/` so it survives an upgrade** (ADR-0045).
-- `.swarm/sources/` — desired truth: `*.swarm.md` specs plus PRDs, RFCs, research, audits, bugs, findings, ADRs, interfaces, NFRs.
-- `.swarm/status/` — observed satisfaction and drift; records whether code satisfies the spec, never redefines intent.
-- `.swarm/generated/` — execution packets (task frames, traces, reviews, generated tests/docs); recreatable from sources.
-- `.swarm/memory/`, `.swarm/ledger/`, `.swarm/archive/`, `.swarm/tmp/` — durable recall, compact reconciled history, retired artifacts, and scratch.
+- `.agents/skills/` — Swarm's pass/persona/author skills, beside your own (names don't collide). *(install)*
+- `.agents/reference/` — the closed-set rule cards (`sol.md`, `proofs.md`, `ir.md`) the skills name. *(install)*
+- `.agents/templates/` — artifact skeletons. *(install)*
+- `.agents/specs/` — your `*.swarm.md` sources (desired truth; the `author` pass writes here).
+- `.agents/tasks/` — task frames the run produces; **gitignored** (recreatable execution state).
+- `.agents/memory/` — durable recall the `promote` pass writes (the observed/learned record).
 
-`.agents/` is only an agent-tool **compatibility surface** — a one-directional mirror so a third-party agent CLI can find loadable instructions — never the canonical home of project intent. The governing placement rule: *defines/tracks/reconciles intent → `.swarm/`; exists only so an agent CLI can load instructions → `.agents/`; starts an agent correctly → `AGENTS.md`.*
+The three **install** folders are re-copied on upgrade; the three **flow** folders are yours. Other source artifacts (PRDs, RFCs, audits, findings, ADRs) are normal `type:`-tagged docs kept under `.agents/` however suits you — only `specs/`/`tasks/`/`memory/` are fixed, because the flow keys off them. Anything that would serve a future toolchain (drift status, generated packets, a reconciliation ledger) is created lazily if a tool ever writes it — never stamped in to adopt Swarm.
 
 ## The NO-RUNTIME invariant
 
@@ -84,9 +84,9 @@ Swarm holds five invariants in every part of the framework; the governing one is
 - [`docs/model/`](./docs/model/) — the compiler pipeline, source artifacts, source authority, and conformance.
 - [`docs/passes/`](./docs/passes/) — one page per pass (`author`, `lint`, `improve`, `lower`, `decompose`, `implement`, `verify`, `review`, `promote`).
 - [`docs/reference/`](./docs/reference/) — the flow graph, proof types, promotion protocol, distillation loss budget, and glossary.
-- [`kernel/`](./kernel/) — the installable payload (the templates, language references, passes, and skills — including the persona-* profile stances — that install to `.swarm/kernel/`).
+- [`install/`](./install/) — the installable files (the templates, reference cards, and skills — including the persona-* profile stances — an adopter copies into `.agents/`).
 
-Each area is the authoritative reference for what it covers; together with the [`kernel/`](./kernel/) payload, the `docs/` tree **is** Swarm. The references here are complete — there is no separate document a reader must defer to.
+Each area is the authoritative reference for what it covers; together with the [`install/`](./install/) files, the `docs/` tree **is** Swarm. The references here are complete — there is no separate document a reader must defer to.
 
 - [`docs/artifacts/`](./docs/artifacts/) — the contract for each artifact (spec, task, trace, review, finding, ADR, and the source-document types).
 - [`docs/library/`](./docs/library/) — pass guides, heuristic profiles, and overlays (the layers that parameterize a pass).

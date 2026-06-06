@@ -15,21 +15,21 @@ A repository is **Swarm-conformant if and only if** all four clauses hold. Omit 
 | (a) | **Language references present** | A self-contained copy of all six Tier-2 language/reference docs exists: the SOL reference, the APS reference, the lint/error taxonomy (the `SOL-<LAYER>NNN` catalogue), source-authority, the promotion protocol, and the distillation-loss-budget. |
 | (b) | **The seven core templates exist** | A copyable template is present for each of the seven Tier-1 core artifacts — `spec.swarm.md`, `task.md`, `trace.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md` — and each template satisfies its [source-artifact contract](source-artifacts.md). |
 | (c) | **Populated `AGENTS.md` bootloader** | `AGENTS.md` exists (not an empty placeholder), stays within the density cap of ≤200 lines / ≤25 KB, and its `Commands` table binds at least the required command rows. |
-| (d) | **Version file present** | The framework/package version file exists with a valid semver — `kernel/.agents/.swarm-version` in the framework-dev repo, or `.swarm/VERSION` in an adopted project. |
+| (d) | **Version file present** | The framework/package version file exists with a valid semver — `install/.agents/.swarm-version` in the framework-dev repo, or `.agents/swarm.version` in an adopted project. |
 
 A repository that fails any clause is **non-conformant**. Conditional artifacts (Tier 3 stdlib source-doc templates) and the reserved `.swarm.*.json` contract files are **not** required for conformance. Clauses (b)–(d) are the parts a manifest can mechanically encode; clause (a) is presence of the reference docs.
 
 ## The conformance contract (the manifest)
 
-A Swarm repository ships a machine-readable conformance encoding under `kernel/.agents/conformance/`. It is **inert versioned data**: the precise, testable definition a future checker would honour, and the artifact a human uses to validate a repository by hand today. Per the no-runtime invariant, nothing under this directory executes — Swarm ships the contract, never the checker.
+A Swarm repository ships a machine-readable conformance encoding under `install/.agents/conformance/`. It is **inert versioned data**: the precise, testable definition a future checker would honour, and the artifact a human uses to validate a repository by hand today. Per the no-runtime invariant, nothing under this directory executes — Swarm ships the contract, never the checker.
 
 The conformance directory contains exactly three things:
 
 | Path | Kind | Role |
 |---|---|---|
-| `kernel/.agents/conformance/conformance.yaml` | manifest (data) | the task-file schema, command rows, placeholder set, lint scheme, and required-suite matrix |
-| `kernel/.agents/conformance/README.md` | prose | states inertness, provenance, and the "checker is deferred" framing |
-| `kernel/.agents/conformance/fixtures/` | fixture suite | the golden corpus |
+| `install/.agents/conformance/conformance.yaml` | manifest (data) | the task-file schema, command rows, placeholder set, lint scheme, and required-suite matrix |
+| `install/.agents/conformance/README.md` | prose | states inertness, provenance, and the "checker is deferred" framing |
+| `install/.agents/conformance/fixtures/` | fixture suite | the golden corpus |
 
 *Design rationale.* A contract is publishable and useful without a shipped tool: a static-analysis result format, for instance, is a versioned interchange schema that stands on its own, independent of whichever analyzer produces or consumes it. The conformance contract is, by the same logic, a framework artifact in its own right.
 

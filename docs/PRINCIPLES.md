@@ -1,6 +1,6 @@
 # Principles
 
-> Swarm's reference for the load-bearing invariants and standing principles of the kernel: the tiebreakers that decide cases when two design choices collide. The installable payload that carries these principles into an adopted project ships under [`kernel/`](../kernel/).
+> Swarm's reference for the load-bearing invariants and standing principles of the kernel: the tiebreakers that decide cases when two design choices collide. The installable payload that carries these principles into an adopted project ships under [`install/`](../install/).
 
 Swarm treats a **specification as source code** and a **fleet of agents as the compiler**. Human intent is written as controlled markdown (the source); agents compile it into work that is implemented, verified against the original obligations, and promoted into durable memory. Everything below holds in *every* part of the framework — no construct may contradict an invariant.
 
@@ -111,16 +111,16 @@ Swarm holds itself to the same standard it imposes on agents: **real science, no
 
 ---
 
-## The `.swarm/` workspace categories
+## The workspace model (design)
 
-In an adopted project, these principles bind the layout of the canonical Swarm workspace. They are design/layout choices, not empirical claims.
+These are design/layout principles for an adopted project, not empirical claims. The concrete layout is in [`model/workspace.md`](model/workspace.md); this section states the principles behind it.
 
-### `.swarm/` is the canonical workspace
+### Swarm lives under `.agents/`, and prescribes only what the flow uses
 
-Swarm's artifacts live under `.swarm/` by default; `.agents/` is an agent-tool **compatibility surface**, not the Swarm root.
+Swarm installs under `.agents/` — the cross-tool agent directory — and prescribes only the handful of folders a pass actually reads or writes (`skills/`, `reference/`, `templates/`, `specs/`, `tasks/`, `memory/`). It imposes no `.swarm/` mount and stamps in no empty tree.
 
-- **Rationale.** Burying primary specs, memory, status, and ledger under a generic `.agents/` namespace conflates Swarm's source-of-truth workspace with the load surface a specific agent tool happens to read.
-- **Consequence.** Canonical specs, memory, status, and ledger live under `.swarm/` and not under `.agents/` as canonical. Anything mirrored into `.agents/` for tool compatibility points back to (or is copied from) `.swarm/kernel/` and is marked compatibility material. The installable payload ships in the framework repo under `kernel/` and installs to `.swarm/kernel/`.
+- **Rationale.** A NO-RUNTIME framework cannot justify a filing cabinet of directories nothing reads. Prescribing the proven-flow folders keeps adoption intuitive without overbearing structure; anything a *future* tool would write is created lazily, not up front.
+- **Consequence.** Source artifacts (specs, audits, findings, ADRs) are normal `type:`-tagged docs under `.agents/`; only `specs/`/`tasks/`/`memory/` are fixed because the flow keys off them. Project conventions live in the root `AGENTS.md`, not a separate overlays directory.
 
 ### Source, status, and generated are separate categories
 

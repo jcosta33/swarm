@@ -8,7 +8,7 @@ supersedes: 0045-overlays-are-project-owned, 0048-installed-payload-is-the-runti
 superseded_by:
 ---
 
-# ADR-0049: Minimal install — files in place, no mount, no imposed workspace
+# ADR-0049: Minimal install — `.agents/`, no mount, a small flow-based folder set
 
 ## Context
 
@@ -40,17 +40,33 @@ that, nothing requires a separate mount, a bridge, or a pre-built workspace tree
 2. **Upgrade is "re-copy the named files."** Swarm's skills carry recognizable names (`pass-*`, `persona-*`,
    `write-*`) that cannot collide with a project's own; an upgrade re-copies those, leaving the project's
    skills untouched. Replacement safety is a **naming** property, not a separate-mount property.
-3. **No imposed workspace.** Adoption creates **no** directory tree. A source artifact (`*.swarm.md`, PRD,
-   audit, finding, ADR…) is a normal document kept wherever the project keeps docs, classified by its
-   `type:` frontmatter — Swarm reads the frontmatter, not a mandated path. A directory (`memory/`,
-   and — for a future toolchain — `status/`/`generated/`/`ledger/`) is created **the first time something
-   writes into it**, never stamped empty at install.
+3. **A small, flow-based folder set under `.agents/` — the goldilocks middle** (see the Update below; this
+   corrects the original "no folders at all"). Swarm prescribes **six** folders, every one of which the
+   proven flow reads or durably writes — no more:
+
+   | `.agents/` folder | Earned by |
+   | --- | --- |
+   | `skills/` | every pass loads its procedure here (install) |
+   | `reference/` | the closed-set cards the skills name — `sol.md`/`proofs.md`/`ir.md` (install) |
+   | `templates/` | artifact skeletons `author`/`implement`/`review` start from (install) |
+   | `specs/` | `author` writes `*.swarm.md` sources; they need a home |
+   | `tasks/` | `decompose`/`implement` task frames — **gitignored** (recreatable execution state) |
+   | `memory/` | `promote` writes durable findings/patterns; `INDEX.md` is a required artifact |
+
+   Other source artifacts (audits, findings, ADRs, PRDs…) are normal `type:`-tagged documents that live
+   under `.agents/` however the project likes — **suggested, not mandated** (Swarm reads the frontmatter,
+   not a fixed path). The adopted-kernel **version marker** lives in `.agents/` (e.g. `.agents/swarm.version`),
+   not a `.swarm/` file. Anything that serves only a **future toolchain** — `status/` drift, `generated/`
+   packets, an append-only `ledger/`, `archive/`, `tmp/`, the on-disk `.json` IR/plan files — is created
+   **lazily, the first time a tool writes it**, never stamped empty at install. The test for prescribing a
+   folder is "does a pass a human/agent runs **today** read or durably write it?"
 4. **Project conventions live in `AGENTS.md`.** Architecture boundaries, extra refusals, and command
    bindings are project facts; they go in the bootloader an agent already reads first. There is no overlays
    directory (this is what supersedes [0045](./0045-overlays-are-project-owned.md)).
-5. **"kernel" is retired as an adopter-facing concept.** No adopted project has a kernel. (The producer
-   repo's source-of-payload directory is currently still named `kernel/`; renaming that physical directory
-   is a separate mechanical follow-up and does not block this decision.)
+5. **"kernel" is retired everywhere** — adopter-facing *and* in the producer repo. It is OS-runtime jargon
+   for a folder of markdown in a NO-RUNTIME framework. The concept is "the install" / "the installed files"
+   / "Swarm ships X"; the producer directory `install/` is renamed `install/`. (The repo-wide text sweep is a
+   tracked follow-up wave; this ADR fixes the decision.)
 
 This **supersedes [0048](./0048-installed-payload-is-the-runtime-surface.md)** (the payload no longer mounts
 at `.swarm/kernel/`; it installs in place) and **[0045](./0045-overlays-are-project-owned.md)** (no overlays
@@ -64,15 +80,15 @@ rather than into a mount).
 | Alternative | Why rejected |
 | --- | --- |
 | Keep the `.swarm/kernel/` mount + bridge | It exists only for wholesale replacement on upgrade, which unique skill names already give for free — and it caused two adoption bugs. Pure cost. |
-| Keep the pre-built workspace tree (lazy-create only the dead dirs) | Pre-creating *any* empty dir asserts a runtime that isn't there; the honest line is "create on first write." Half-measures keep the filing-cabinet smell. |
-| Delete the reconciliation model entirely (status/generated/ledger as concepts) | That is design, not noise — the intent/reality/observed split and the surface policies are Swarm's value. The fix is to stop *materialising* them at install, not to remove them. They remain documented contracts a tool fulfils. |
-| Rename the producer `kernel/` dir in this ADR | Out of scope here — a ~90-reference mechanical rename; tracked as a follow-up so this decision isn't blocked on it. |
+| Prescribe **zero** folders (create everything on first write) | The original form of this ADR. Over-corrected: the proven flow genuinely needs homes for specs, tasks, and memory, and leaving them unprescribed makes adoption *less* intuitive and `promote`'s routing point nowhere. See the goldilocks Update below. |
+| Keep the full pre-built workspace tree (~32 dirs) | The opposite extreme: 4 of 8 top-level dirs referenced by zero shipped skills; a filing cabinet for a runtime that isn't there. |
+| Delete the reconciliation model entirely (status/generated/ledger as concepts) | That is design, not noise — the intent/reality/observed split and the surface policies are Swarm's value. The fix is to stop *materialising* them at install, not to remove them. They remain documented contracts a tool fulfils, created lazily. |
 
 ## Consequences
 
-- **Positive:** adoption is "copy three folders into your skills dir." No empty tree, no mount, no bridge,
-  no new jargon. The two classes of bridge bug become impossible. The adopter's repo gains only the files it
-  will actually use.
+- **Positive:** adoption is "copy the install into `.agents/` and let six flow-based folders exist." No
+  empty tree, no mount, no bridge, no OS jargon. The two classes of bridge bug become impossible, and the
+  prescribed set matches how `.agents/` is already used in the wild.
 - **Negative:** the elaborate `docs/model/workspace.md` filesystem model is replaced by a slim one, and the
   ADRs/docs that referenced `.swarm/kernel/`, the workspace tree, or overlays must be swept. Done as part of
   this change.
@@ -80,11 +96,25 @@ rather than into a mount).
   reconciliation *design* (desired/reality/observed, surface policies) are unchanged — only where files
   physically land changes.
 
+## Update (goldilocks): a few prescribed folders, not zero
+
+The first form of this decision swung to "no folders at all — create everything on first write." A
+balanced review (flow → folder mapping; what's proven vs hypothetical) showed that over-corrected: the
+proven flow genuinely needs homes for **specs**, **tasks**, and **memory**, and leaving them unprescribed
+makes adoption *less* intuitive (a newcomer has nowhere obvious to put a spec) and leaves `promote`'s
+routing table pointing nowhere. The correction is the **goldilocks middle** now in Decision §3: prescribe
+the **six** `.agents/` folders the flow actually exercises, and only those — drop the ~26 dirs that served
+a future toolchain. The principle is unchanged ("don't materialise what nothing reads"); the boundary moved
+from *zero* to *the proven floor*. The review also caught a real defect: `conformance.md` required a
+`.swarm/VERSION` file that no longer exists — the version marker moves to `.agents/`.
+
 ## Status
 
-Accepted (v0.1). `docs/model/workspace.md` and `docs/ADOPTING.md` are rewritten to the minimal model; the
-bootloader template names the in-place install. Secondary doc sweep (artifact home paths, `library/overlays.md`,
-`conformance.md`, README, PRINCIPLES) and the producer-dir rename follow as tracked steps.
+Accepted (v0.1), amended same-day to the goldilocks set (see Update). `docs/model/workspace.md`,
+`docs/ADOPTING.md`, and the bootloader prescribe the six `.agents/` folders. Tracked follow-up waves: the
+repo-wide `kernel`→`install` rename (incl. the producer dir + `CLAUDE.md`), the verbosity cuts (a concise
+on-ramp; collapsing the three example walkthroughs; quarantining future-toolchain narration), and
+reconciling README / PRINCIPLES / `conformance.md` with this model.
 
 ## Affected obligations / constraints
 

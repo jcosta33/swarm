@@ -90,7 +90,7 @@ Two optional adjuncts MAY extend a verdict's provenance without altering this ba
 
 ## Copyable template
 
-The copyable skeleton is the framework template at **`kernel/.agents/templates/trace.md`** (installed into an adopted project at `.swarm/kernel/templates/trace.md`). Copy that file to start a new trace; this page is its contract. A shipped, uninstantiated template MAY leave `{{...}}` placeholders, but a *built* trace MUST NOT leave a binding clause as a `{{...}}` placeholder, and an unfilled `VERIFY BY`/`PROOF` clause in a built trace is a `SOL-V001` defect.
+The copyable skeleton is the framework template at **`install/.agents/templates/trace.md`** (installed into an adopted project at `.swarm/kernel/templates/trace.md`). Copy that file to start a new trace; this page is its contract. A shipped, uninstantiated template MAY leave `{{...}}` placeholders, but a *built* trace MUST NOT leave a binding clause as a `{{...}}` placeholder, and an unfilled `VERIFY BY`/`PROOF` clause in a built trace is a `SOL-V001` defect.
 
 ## Related
 

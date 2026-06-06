@@ -19,7 +19,7 @@ superseded_by:
 ADR 0015 is **extended, not replaced** (§30.2): the package axis it established is kept verbatim, and a **second, independent language axis is added alongside it**. A conformant repo MUST track both and MUST NOT merge them (§25.1):
 
 - **Language version** — the SOL + APS feature set. Carried **per file** in frontmatter as `swarm_language` (the SOL discriminator, e.g. `SOL/0.1`) and `aps_version` (e.g. `0.1`), so one repo MAY hold `spec.swarm.md` files at different language versions mid-migration (§25.1.1).
-- **Framework / package version** — the kernel payload, templates, pass guides, profiles, flow-graph. A single semver in `kernel/.agents/.swarm-version`, mirrored by an adopted project as `.swarm/VERSION` (§25.1.2). This is exactly [0015](./0015-versioning-scheme.md)'s field, unchanged.
+- **Framework / package version** — the kernel payload, templates, pass guides, profiles, flow-graph. A single semver in `install/.agents/.swarm-version`, mirrored by an adopted project as `.agents/swarm.version` (§25.1.2). This is exactly [0015](./0015-versioning-scheme.md)'s field, unchanged.
 
 The axes are coupled by **one directional rule** (§25.2): any change to the language version MUST force at least a framework MINOR (additive) or MAJOR (breaking) release; a framework release MAY occur with no language change. The trigger is one-way — language ⇒ framework, never framework ⇒ language — and is advisory while either axis is at major-version-zero (SemVer 2.0.0 §4). The emitted IR/plan MUST echo three distinct fields and merge none of them: `meta.language` (the grammar discriminator), `meta.version` (the spec-content semver), and `provenance.compiler_version` (the tool version, unset today — NO RUNTIME) (§25.3).
 

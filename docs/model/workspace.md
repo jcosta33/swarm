@@ -7,49 +7,61 @@
 This page describes the **adopted project** (the product). It is distinct from the framework-dev repo
 (the producer: `docs/`, `examples/`, `evals/`, and the installable files). The two MUST NOT be conflated.
 
-## No runtime, no imposed workspace (Invariant 1)
+## No runtime (Invariant 1)
 
 Swarm ships inert markdown — skills, templates, reference cards, and the language. There is no process it
-runs and no directory tree it must create. Every "the X pass writes Y" below is a **contract a human or a
-future toolchain fulfils**, never something Swarm executes. A directory therefore appears the first time
-someone (or a tool) writes into it — it is **never pre-stamped empty at install**. A scaffold of empty
-folders would be a filing cabinet for a clerk who does not exist yet.
+runs. Every "the X pass writes Y" below is a **contract a human or a future toolchain fulfils**, never
+something Swarm executes. So Swarm prescribes only the folders a pass run **today** actually reads or
+durably writes; anything that would serve only a future tool is created lazily, never stamped empty at
+install. The goal is the goldilocks middle: enough structure to be intuitive out of the box, no filing
+cabinet for a clerk who doesn't exist yet.
 
-## Install: files in your agent dir
+## Install: a small folder set under `.agents/`
 
-Swarm installs by **copying three folders** next to the skills you already use — there is no separate
-home and no symlink bridge:
+Everything Swarm lives under `.agents/` — the cross-tool agent directory your repo likely already has.
+Adoption prescribes **six** folders, every one earned by the flow:
 
 ```text
 .agents/
-  skills/      # Swarm's pass / persona / author skills, alongside your own (names don't collide)
-  templates/   # starting points for specs, audits, …
-  reference/   # the closed-set rule cards (sol.md, proofs.md, ir.md)
+  skills/        # install — Swarm's pass/persona/author skills, beside your own (names don't collide)
+  reference/     # install — the closed-set rule cards (sol.md, proofs.md, ir.md) the skills name
+  templates/     # install — starting points for specs, audits, traces, …
+  specs/         # your *.swarm.md sources (the `author` pass writes here)
+  tasks/         # task frames the run produces — gitignored (recreatable execution state)
+  memory/        # durable recall the `promote` pass writes — INDEX.md + findings/patterns
+  swarm.version  # the adopted Swarm version
+AGENTS.md        # repo root — the bootloader; fill its Commands table + project facts
 ```
 
-If your agent CLI scans a specific skills directory (Claude Code scans `.claude/skills/`), put the skills
-**there** instead — they sit beside your own as ordinary entries. Swarm's skills are just skills, installed
-where skills live. An upgrade re-copies the `pass-*` / `persona-*` / `write-*` files; your own skills
-(different names) are untouched. That naming is the whole upgrade story — no mount to replace wholesale,
-nothing to bridge.
+The three *install* folders (`skills/`, `reference/`, `templates/`) are re-copied on upgrade; the three
+*flow* folders are yours and grow as you work. If your agent CLI scans a fixed skills directory (Claude
+Code scans `.claude/skills/`), the skills go **there** instead — beside your own as ordinary entries, no
+separate home and no symlink bridge. Upgrade re-copies the `pass-*`/`persona-*`/`write-*` files; your own
+(differently-named) skills are untouched. That naming is the whole upgrade story.
 
-## Where source artifacts go
+Other source artifacts — PRDs, RFCs, audits, findings, ADRs, interfaces — are normal `type:`-tagged
+documents; keep them under `.agents/` however suits you (a flat `.agents/`, or subfolders like
+`.agents/audits/`). Swarm reads the **frontmatter**, not a mandated path, so this is **suggested, not
+prescribed**: only `specs/`, `tasks/`, and `memory/` are fixed, because the flow keys off them.
 
-A spec (`*.swarm.md`), PRD, RFC, audit, finding, ADR, or interface is a normal document — keep it wherever
-your project already keeps docs. Its `type:` frontmatter says what it is; Swarm reads the **frontmatter**,
-not a mandated path. Swarm does not dictate a `sources/` tree.
+## Why these three flow folders (and not the rest)
 
-## Durable memory (the `promote` target)
+- **`specs/`** — `author` produces the `*.swarm.md` source; intent has to live somewhere findable.
+- **`tasks/`** — `decompose`/`implement` write task frames; they're recreatable execution state, so they're
+  **gitignored** (`/.agents/tasks/`). The durable record is the spec, the code, and what `promote` keeps.
+- **`memory/`** — `promote` lifts durable findings and patterns out of throwaway task state so a later
+  session **recalls** them instead of re-deriving them. Externalising state to disk rather than holding it
+  in a context window is what makes multi-session work tractable [[CTXENG]](../research/sources.md#CTXENG);
+  writing intermediate steps down is itself what makes multi-step work succeed
+  [[SCRATCHPAD]](../research/sources.md#SCRATCHPAD); a written self-reflection between attempts, not extra
+  model capability, is what lets an agent improve [[REFLEXION]](../research/sources.md#REFLEXION); and
+  persisting task state with explicit dependencies mirrors a pattern validated at vendor
+  scale [[CCTASKS]](../research/sources.md#CCTASKS).
 
-The `promote` pass lifts durable findings and patterns out of throwaway task state into a memory file, so a
-later session **recalls** them instead of re-deriving them. Externalising state to disk rather than holding
-it in a context window is what makes multi-session work tractable [[CTXENG]](../research/sources.md#CTXENG),
-and writing intermediate steps down rather than holding them implicitly is itself what makes multi-step
-work succeed [[SCRATCHPAD]](../research/sources.md#SCRATCHPAD) — a written self-reflection between attempts,
-not extra model capability, is what lets an agent improve [[REFLEXION]](../research/sources.md#REFLEXION),
-and persisting task state with explicit dependencies mirrors a pattern validated at vendor
-scale [[CCTASKS]](../research/sources.md#CCTASKS). That memory file is created the **first time** `promote`
-writes one (conventional path `.agents/memory/`); it is not pre-stubbed.
+What is **not** prescribed (created lazily by a future tool, breaks no pass run today): a `status/` drift
+read-model, a `generated/` packet tree, an append-only `ledger/`, `archive/`, `tmp/`, and the on-disk
+`.json` IR/plan files. These remain documented contracts (see the reconciliation design below); they are
+simply not stamped into a repo to adopt Swarm.
 
 ## Project conventions
 

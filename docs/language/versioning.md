@@ -15,7 +15,7 @@ This is the normative labelling convention for both axes — what each one versi
 | Axis | What it versions | Carried in | Cadence |
 | ---- | ---------------- | ---------- | ------- |
 | **Language version** | The SOL + APS feature set: grammar, the 7 block types, the 5 modals, the clause keywords, the `SOL-<LAYER>NNN` lint codes | `*.swarm.md` frontmatter as the discriminator `swarm_language: SOL/0.1` (plus `aps_version`); echoed in the IR as `meta.language` | Small, slow-moving: `0.1`, `0.2`, `1.0` |
-| **Framework / package version** | The kernel payload, templates, pass guides, and profiles (the flow-graph and skills that ship with the package) | `kernel/.agents/.swarm-version` → an adopted project mirrors it as `.swarm/VERSION` (semver) | Ordinary, fast semver; may move many times between language bumps |
+| **Framework / package version** | The kernel payload, templates, pass guides, and profiles (the flow-graph and skills that ship with the package) | `install/.agents/.swarm-version` → an adopted project mirrors it as `.agents/swarm.version` (semver) | Ordinary, fast semver; may move many times between language bumps |
 
 (The block-type, modal, and lint-layer counts above are the kernel's fixed vocabulary — 7 block types, 5 modals, 5 lint layers S/P/M/V/O. This page reproduces those counts as labels for the language axis; the vocabulary itself is defined in [`./SOL.md`](./SOL.md) (blocks and modals) and [`./errors.md`](./errors.md) (lint layers).)
 
@@ -30,7 +30,7 @@ This document is language `0.1`; later language epochs are `0.2`, then `1.0`.
 
 ### §1.2 — Framework / package version: "which kernel payload shipped this repo?"
 
-The framework version answers **"which kernel payload, templates, and pass guides shipped this repo?"** It is a single semver string in `kernel/.agents/.swarm-version`; an adopted project mirrors it as `.swarm/VERSION`. It is **never** written in per-file frontmatter (§4). The language axis sits *alongside* the package axis, not in place of it: the framework version file predates the per-file language fields, and both coexist — the version file tracks the package, the frontmatter tracks the grammar.
+The framework version answers **"which kernel payload, templates, and pass guides shipped this repo?"** It is a single semver string in `install/.agents/.swarm-version`; an adopted project mirrors it as `.agents/swarm.version`. It is **never** written in per-file frontmatter (§4). The language axis sits *alongside* the package axis, not in place of it: the framework version file predates the per-file language fields, and both coexist — the version file tracks the package, the frontmatter tracks the grammar.
 
 ## §2 — The one-way trigger
 
@@ -94,7 +94,7 @@ spec_version: 0.1.0       # spec content version (= meta.version in the IR)
 | `aps_version: 0.1` | (not echoed in IR; governs the `SOL-P…` prose lint layer) | Language |
 | `spec_version: 0.1.0` | `meta.version` | Spec content |
 
-**Conformance note.** The canonical form is `swarm_language: SOL/0.1` (with the `SOL/` discriminator) plus a separate `spec_version`. A conformant repo MUST use this form; a bare `swarm_language: 0.1` (a number with no discriminator) is a `SOL-S…`-class frontmatter diagnostic (the `SOL-S` structural lint layer; see [`./errors.md`](./errors.md)). The framework version is **never** written in per-file frontmatter — it lives only in the framework version file (`kernel/.agents/.swarm-version`; `.swarm/VERSION` in an adopted project).
+**Conformance note.** The canonical form is `swarm_language: SOL/0.1` (with the `SOL/` discriminator) plus a separate `spec_version`. A conformant repo MUST use this form; a bare `swarm_language: 0.1` (a number with no discriminator) is a `SOL-S…`-class frontmatter diagnostic (the `SOL-S` structural lint layer; see [`./errors.md`](./errors.md)). The framework version is **never** written in per-file frontmatter — it lives only in the framework version file (`install/.agents/.swarm-version`; `.agents/swarm.version` in an adopted project).
 
 ## Related
 
