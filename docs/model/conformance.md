@@ -87,7 +87,7 @@ The manifest carries the unified lint scheme as inert data so the checker and th
 
 ### Count acceptance checks (A10–A16)
 
-The manifest's closed-set cardinalities are pinned as the **count acceptance checks A10–A16**: every closed set has exactly one cardinality, and a count that differs between any two documents (the SOL reference, the IR schema, the lint catalogue, the pass guides, and this manifest) is a failing check. The canonical members of each set are enumerated in the [flow graph](../reference/flow-graph.md) — the count-reconciliation hub — which this manifest shadows:
+The manifest's closed-set cardinalities are pinned as the **count acceptance checks A10–A16**: every closed set has exactly one cardinality, and a count that differs between any two documents (the SOL reference, the IR schema, the lint catalogue, the pass guides, and this manifest) is a failing check. The canonical members of each set are enumerated in the [flow graph](../reference/cheatsheet.md) — the count-reconciliation hub — which this manifest shadows:
 
 | Check | Closed set | Count |
 |---|---|---|
@@ -101,7 +101,7 @@ The manifest's closed-set cardinalities are pinned as the **count acceptance che
 
 ## The required verification-suite matrix
 
-The manifest also encodes the per-task-kind **required verification suite**: the proof-type/phase defaults that resolve to `cmd*` slots, so the question *"for a task of this kind, what proof MUST exist before it may merge?"* has one machine-readable answer. The canonical, human-readable matrix is the [flow graph](../reference/flow-graph.md) (the `(proof-type @ phase)` view); the manifest's `required_suite` is its shadow, with one row per task kind, resolving each recommendation to concrete adapter slots and named gates. The two MUST agree row-for-row.
+The manifest also encodes the per-task-kind **required verification suite**: the proof-type/phase defaults that resolve to `cmd*` slots, so the question *"for a task of this kind, what proof MUST exist before it may merge?"* has one machine-readable answer. The canonical, human-readable matrix is the [flow graph](../reference/cheatsheet.md) (the `(proof-type @ phase)` view); the manifest's `required_suite` is its shadow, with one row per task kind, resolving each recommendation to concrete adapter slots and named gates. The two MUST agree row-for-row.
 
 Each entry in a row is one of three slot kinds:
 
@@ -244,7 +244,7 @@ This "prepare → delegate → reconcile" split (the two OWNS tables above) is w
 - [SOL](../language/SOL.md) — the obligation language whose `VERIFY BY` bindings and `SURFACE`/`QUESTION` constructs the ladder tiers gate.
 - [Errors](../language/errors.md) — the full `SOL-<LAYER>NNN` lint/error catalogue the manifest references.
 - [APS](../language/APS.md) — the prose standard whose violations surface as `SOL-P*` codes.
-- [Flow graph](../reference/flow-graph.md) — the human-readable required-verification-suite matrix the manifest shadows.
+- [Flow graph](../reference/cheatsheet.md) — the human-readable required-verification-suite matrix the manifest shadows.
 - [Source artifacts](source-artifacts.md) — the seven Tier-1 core artifacts and their template contracts.
-- [Compiler pipeline](compiler-pipeline.md) — the `lower`/`decompose` lowering preconditions that tier 3 (Swarm-compilable) binds to.
+- [Compiler pipeline](how-swarm-works.md) — the `lower`/`decompose` lowering preconditions that tier 3 (Swarm-compilable) binds to.
 - [Task orchestration](../artifacts/task-orchestration.md) — the static coordination contract the toolchain owns one side of (prepare/reconcile) and tier 5 (Swarm-orchestratable) binds to.

@@ -644,10 +644,10 @@ A document is a conformant SOL/0.1 plan iff it: (1) has exactly the four top-lev
 
 ## Related
 
-- [docs/model/compiler-pipeline.md](../model/compiler-pipeline.md) — the seven phases / nine passes that emit and consume the IR and the plan; the `lower` and `decompose` passes that produce them.
+- [docs/model/how-swarm-works.md](../model/how-swarm-works.md) — the seven phases / nine passes that emit and consume the IR and the plan; the `lower` and `decompose` passes that produce them.
 - [docs/language/versioning.md](../language/versioning.md) — the two version axes and the three version fields (`meta.language`, `meta.version`, `provenance.compiler_version`) these envelopes carry.
 - [docs/language/SOL.md](../language/SOL.md) — the surface language: the 7 block types, 5 modals, and clause grammar these JSON fields are the lowering of.
 - [docs/language/errors.md](../language/errors.md) — the `SOL-<LAYER><NNN>` lint catalogue the `diagnostics[]` array carries.
 - [docs/reference/proof-types.md](./proof-types.md) — the 9 closed proof types and the `VERIFY BY <type>:<adapter>:<artifact>` binding the `verify_by[]` array normalizes.
-- [docs/reference/flow-graph.md](./flow-graph.md) — the canonical counts (7 kinds, 5 modals, 9 proof types, 7 edge types, 9 passes) the closed enumerations in these schemas MUST match.
+- [docs/reference/cheatsheet.md](./cheatsheet.md) — the canonical counts (7 kinds, 5 modals, 9 proof types, 7 edge types, 9 passes) the closed enumerations in these schemas MUST match.
 - [docs/model/conformance.md](../model/conformance.md) — which artifacts a conformant repository MUST carry, including these schemas verbatim.

@@ -54,9 +54,9 @@ The full mechanics behind these one-line definitions live in their owning framew
 - [SOL](../language/SOL.md) — the obligation language, its block types and clause grammar.
 - [APS](../language/APS.md) — the controlled-prose standard around SOL blocks.
 - [grammar](../language/grammar.md) — the complete clause grammar.
-- [IR schema](ir-schema.md) — the typed intermediate representation contract.
+- [IR schema](structured-form.md) — the typed intermediate representation contract.
 - [proof types](proof-types.md) — the nine closed verification kinds.
-- [compiler pipeline](../model/compiler-pipeline.md) — the seven phases and nine passes.
+- [compiler pipeline](../model/how-swarm-works.md) — the seven phases and nine passes.
 - [source authority](../model/source-authority.md) — the two-axis ordering that resolves conflicts.
 - [drift and staleness](drift-and-staleness.md) — the `STALE` decorator and 3-way reconcile.
 - [promotion protocol](promotion-protocol.md) — moving durable discoveries into findings, ADRs, audits, or memory.

@@ -1,7 +1,7 @@
 # Obligation IR — operative reference (condensed)
 
 The typed, machine-checkable form of a `*.swarm.md`. The surface is English-shaped UPPERCASE keywords;
-the IR is `snake_case` JSON. Full schema + worked instance: `docs/reference/ir-schema.md` (upstream).
+the IR is `snake_case` JSON. Full schema + worked instance: `docs/reference/structured-form.md` (upstream).
 
 ## Document shape
 `{ meta, nodes[], edges[], diagnostics[], provenance }`.

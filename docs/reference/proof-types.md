@@ -102,6 +102,6 @@ A bound proof produces exactly one CORE verdict — `PASS`, `FAIL`, `BLOCKED`, o
 
 - [SOL — The Swarm Obligation Language](../language/SOL.md) — the surface syntax that hosts the `VERIFY BY` clause.
 - [Errors and lint codes](../language/errors.md) — the `SOL-V` family, including `SOL-V009` (unknown-proof-type) and `SOL-V006` (`INTERFACE` must be `contract`).
-- [The IR and Plan JSON Schemas](ir-schema.md) — the `verify_by[]` IR field and its `{type, adapter, ref, selector, gate}` normalization.
+- [The IR and Plan JSON Schemas](structured-form.md) — the `verify_by[]` IR field and its `{type, adapter, ref, selector, gate}` normalization.
 - [Drift and staleness](drift-and-staleness.md) — the `WAIVED`/`STALE`/`CONTRADICTED` lifecycle decorators that annotate a verdict.
 - [Glossary](glossary.md) — the CORE verdict vocabulary (`PASS`/`FAIL`/`BLOCKED`/`UNVERIFIED`) and proof terms used here.

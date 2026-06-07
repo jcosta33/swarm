@@ -14,7 +14,7 @@ Swarm has no runtime ([0001](./0001-four-doc-types.md) line of reasoning; [PRINC
 
 Every task type declares a **required validation suite** drawn from the `AGENTS.md > Commands` contract. The suite is:
 
-1. **Canonically defined once** in [`reference/flow-graph.md`](../reference/flow-graph.md) (the "Task type → verification commands" matrix) and `reference/verification-gates.md` (the phase model: pre / periodic / post / self-review).
+1. **Canonically defined once** in [`reference/cheatsheet.md`](../reference/cheatsheet.md) (the "Task type → verification commands" matrix) and `reference/verification-gates.md` (the phase model: pre / periodic / post / self-review).
 2. **Instantiated** as one `[Paste output]` slot per required command in each skill's `references/task-template.md` `### Verification outputs` block (and the flat skill-less templates).
 3. **Referenced** by skill bodies in prose via the named `AGENTS.md > Commands > …` entry ([0018](./0018-agents-md-command-contract.md)), degrading to "ask the user" when unbound.
 

@@ -142,4 +142,4 @@ A reconciliation caveat: only the **counts** are frozen, not every row of the de
 - [proof types](proof-types.md) — the `VERIFY BY` binding grammar, adapter resolution, proof-type → `cmd*` mapping, and verdict mechanics.
 - [errors](../language/errors.md) — the five lint layers and the `SOL-<LAYER>NNN` code catalogue.
 - [drift and staleness](drift-and-staleness.md) — how a prior `PASS` becomes `STALE` and the maturity ladder.
-- [IR schema](ir-schema.md) — where the obligation graph and the two derived graphs emitted by `lower` are defined.
+- [IR schema](structured-form.md) — where the obligation graph and the two derived graphs emitted by `lower` are defined.

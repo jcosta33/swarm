@@ -20,7 +20,7 @@ contract a future tool builds against, never code this repo runs.
   `docs/` only; the golden corpus is top-level `conformance/`.
 - `evals/` — rubrics. `conformance/` — the golden corpus (producer test data for a future checker).
 - `.agents/` — this repo's agent-tool surface: `skills/` (a **curated subset** for developing *this* repo —
-  this repo is itself a docs/spec repo), `specs/swarm/` (the **frozen** build source), `audits/` (dev audits).
+  this repo is itself a docs/spec repo) and `audits/` (dev audits).
 
 ## Startup
 1. Read the current task / request first.
@@ -29,9 +29,9 @@ contract a future tool builds against, never code this repo runs.
 4. Map every completion claim to evidence (paste real output; a claim without it is unverified).
 
 ## Universal rules (the conventions that keep this repo coherent)
-- **Do NOT edit `.agents/specs/swarm/`.** It is the frozen build source — historical reference
-  only. The shipped framework (`docs/` + `starter-kit/`) is the product and the source of truth; all
-  changes go there (+ an ADR under `docs/adrs/`).
+- **The shipped framework (`docs/` + `starter-kit/`) is the product and the single source of truth.** All
+  changes go there (+ an ADR under `docs/adrs/`). (The old `.agents/specs/swarm/` build source has been
+  deleted — it was historical scaffolding, no longer kept.)
 - **`docs/` is the sole canonical home (ADR-0051 retired the `language`/`passes` twins).** The kit no longer
   ships copies of the manuals, so there is no file-pair to eyeball-diff. The shipped **skills + `reference/`
   cards** are still *derived* from `docs/` (single-sourced, ADR-0047): a rule lands in `docs/` first, then the
@@ -52,7 +52,7 @@ contract a future tool builds against, never code this repo runs.
 - **Carrier.** Skills ship as `SKILL.md` (discoverable, surgically `description`-activated), not
   `GUIDE.md`. Profiles are the `persona-*` skills under `skills/`; there is no `profiles/` dir.
 
-## Canonical closed sets (counts MUST reconcile everywhere; hub: `docs/reference/flow-graph.md`)
+## Canonical closed sets (counts MUST reconcile everywhere; hub: `docs/reference/cheatsheet.md`)
 - 7 block types · 5 modals · 7 verdicts (4 core + 3 lifecycle) · 9 proof types · 7 phases ·
   9 passes · 10 improve operations · 5 lint layers (S/P/M/V/O) · 7 edge types · 17 `task_kind` values.
 

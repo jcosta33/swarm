@@ -30,7 +30,7 @@ Each layer maps 1:1 to a compiler phase/pass. A code's letter tells you the phas
 | VERIFICATION | `V` | Proof-binding: missing / stale / non-observable proof | `VERIFY` | merge gate |
 | ORCHESTRATION | `O` | Planning / parallelism: write-conflict, dep cycle, blocking `QUESTION` reaching lowering | `LOWER` (raised by the lower / decompose passes, surfaced by the lint gate) | merge gate |
 
-The passes that raise each layer are described in [the compiler pipeline](../model/compiler-pipeline.md): S/P/M fire during [lint](../passes/lint.md) and [improve](../passes/improve.md), V during [verify](../passes/verify.md), and O during [lower](../passes/lower.md) and [decompose](../passes/decompose.md).
+The passes that raise each layer are described in [the compiler pipeline](../model/how-swarm-works.md): S/P/M fire during [lint](../passes/lint.md) and [improve](../passes/improve.md), V during [verify](../passes/verify.md), and O during [lower](../passes/lower.md) and [decompose](../passes/decompose.md).
 
 ### The diagnostic record
 
@@ -358,6 +358,6 @@ Two scope limits hold in v0.1, by design: `SOL-M002` contradiction fires on **ex
 - [lint](../passes/lint.md) and [improve](../passes/improve.md) — the passes that raise S/P/M codes and the closed repair ops.
 - [verify](../passes/verify.md) and [proof types](../reference/proof-types.md) — the merge gate and the `VERIFY BY` bindings the V codes check.
 - [lower](../passes/lower.md), [decompose](../passes/decompose.md), and [task orchestration](../artifacts/task-orchestration.md) — the planning surfaces the O codes guard.
-- [compiler pipeline](../model/compiler-pipeline.md) — how each layer maps 1:1 to a phase.
+- [compiler pipeline](../model/how-swarm-works.md) — how each layer maps 1:1 to a phase.
 - [conformance](../model/conformance.md) — the contract a `lint-spec` checker is graded against.
 - [source authority](../model/source-authority.md) — the authority order behind `SOL-M004`.

@@ -138,5 +138,5 @@ skills are shared. This is purely a bootloader-resolution rule; it changes nothi
 
 - [Source artifacts](source-artifacts.md) — the durable source-artifact types and what each carries.
 - [Source authority](source-authority.md) — how intent governs implementation reality.
-- [Compiler pipeline](compiler-pipeline.md) — the passes that produce traces, reviews, verdicts, and memory.
+- [Compiler pipeline](how-swarm-works.md) — the passes that produce traces, reviews, verdicts, and memory.
 - [Adopting Swarm](../ADOPTING.md) — the install steps.

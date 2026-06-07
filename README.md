@@ -10,7 +10,7 @@ This repository ships **markdown only**. Everything described here that "runs" �
 - **Agents-as-compiler.** A fleet of agents compiles intent, through an ordered and named sequence of transformations, into work that is implemented, verified against the original obligations, and promoted into durable project knowledge.
 - **The obligation graph** is the central object: a typed graph whose nodes are obligations (and the verdicts rendered on them) and whose edges are their relationships. Every role reduces to an operation on this graph, and the merge gate is a property of the graph — *every required obligation carries a passing verdict.*
 
-For where Swarm sits next to spec-driven tools, agent frameworks, and prompt libraries, see [`docs/positioning.md`](docs/positioning.md). For the full pipeline, see [`docs/model/compiler-pipeline.md`](docs/model/compiler-pipeline.md).
+For where Swarm sits next to spec-driven tools, agent frameworks, and prompt libraries, see [`docs/positioning.md`](docs/positioning.md). For the full pipeline, see [`docs/model/how-swarm-works.md`](docs/model/how-swarm-works.md).
 
 ## The 9-pass flow
 
@@ -24,7 +24,7 @@ Research, audits, and bug reports are normalized into a `*.swarm.md` spec; its o
 
 Swarm distinguishes **7 phases** (conceptual, fixed-order stages: `PARSE → NORMALIZE → LOWER → EXECUTE → VERIFY → REVIEW → PROMOTE`) from **9 passes** (schedulable transformations: `author → lint → improve → lower → decompose → implement → verify → review → promote`).
 
-The surface is small and closed: **7 block types** decorated by **5 modals**, binding proof with `VERIFY BY <type>:<adapter>:<artifact>` across **9 proof types**, judged by **7 verdicts**. Every closed set (and the exact members) is reconciled in one place — [`docs/reference/flow-graph.md`](docs/reference/flow-graph.md).
+The surface is small and closed: **7 block types** decorated by **5 modals**, binding proof with `VERIFY BY <type>:<adapter>:<artifact>` across **9 proof types**, judged by **7 verdicts**. Every closed set (and the exact members) is reconciled in one place — [`docs/reference/cheatsheet.md`](docs/reference/cheatsheet.md).
 
 ## Where the files go
 

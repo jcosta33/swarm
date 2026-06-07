@@ -19,7 +19,7 @@ Throughout `LOWER` the [**distillation-loss discipline**](../reference/distillat
 
 ## What the `lower` pass does
 
-`lower` consumes an approved `spec.swarm.md` and produces `*.swarm.ir.json` (the [IR envelope](../reference/ir-schema.md)). It is **mostly deterministic**. The pass MUST perform, **in order**:
+`lower` consumes an approved `spec.swarm.md` and produces `*.swarm.ir.json` (the [IR envelope](../reference/structured-form.md)). It is **mostly deterministic**. The pass MUST perform, **in order**:
 
 1. **Assign IR node ids.** Each surface block (short per-type id, e.g. `AC-001`) becomes an IR node whose id MAY be namespaced as `REQ.<spec>.AC-001`. Surface ids remain stable; the namespaced form is IR-only and the surface id MUST be recoverable from it.
 2. **Build typed edges.** Relationships are emitted as `edges[]` entries `{from, to, type, hard}`. Edges are the **single source of relationship truth** — a relationship MUST NOT be duplicated as a node scalar (the [edges section](#edges--the-single-source-of-relationship-truth-the-7-edge-types) below).
@@ -110,7 +110,7 @@ A conformant IR MUST contain all five keys; an empty spec still emits `nodes/edg
 
 Each node is one **merged obligation record**: the fully normalized form of a single surface block — one of the **seven block types** (`REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT`). "Merged" means every clause, modal, scope set, proof binding, status, and source span is collected into one record; only its *relationships* live elsewhere, in `edges[]`.
 
-Key node fields (the full field table is reproduced in the [IR schema](../reference/ir-schema.md)):
+Key node fields (the full field table is reproduced in the [IR schema](../reference/structured-form.md)):
 
 | Field | Required | Meaning |
 |---|---|---|
@@ -177,7 +177,7 @@ The three **scope sets**: `reads` (read/read parallel-safe, read/write a conflic
 
 ### `diagnostics[]` — SARIF-shaped findings
 
-Each diagnostic is `{code, level, node|source, message}` ([`errors`](../language/errors.md) owns the taxonomy, the [IR schema](../reference/ir-schema.md) the IR shape): `code` is a unified `SOL-<LAYER>NNN` where `<LAYER>` ∈ the **5 lint layers** `{S, P, M, V, O}`; `level` is the SARIF level `error`/`warning`/`note` (BLOCKING ⇒ `error`, ADVISORY ⇒ `warning`; `note` is informational / waiver-downgraded). **`off` is not a level** — a waiver demoting a code to `off` *suppresses* the diagnostic (omitted from `diagnostics[]` entirely). One of `node`/`source` MUST be present. Diagnostics live only in `diagnostics[]`; they are **never** folded into a node's `status` (status is the verdict, not the lint state).
+Each diagnostic is `{code, level, node|source, message}` ([`errors`](../language/errors.md) owns the taxonomy, the [IR schema](../reference/structured-form.md) the IR shape): `code` is a unified `SOL-<LAYER>NNN` where `<LAYER>` ∈ the **5 lint layers** `{S, P, M, V, O}`; `level` is the SARIF level `error`/`warning`/`note` (BLOCKING ⇒ `error`, ADVISORY ⇒ `warning`; `note` is informational / waiver-downgraded). **`off` is not a level** — a waiver demoting a code to `off` *suppresses* the diagnostic (omitted from `diagnostics[]` entirely). One of `node`/`source` MUST be present. Diagnostics live only in `diagnostics[]`; they are **never** folded into a node's `status` (status is the verdict, not the lint state).
 
 ### The three version fields (never merged) and `provenance`
 
@@ -193,7 +193,7 @@ The IR echoes three distinct version axes (the two-axis [versioning](../language
 
 ### Conformance
 
-A document is a conformant SOL/0.1 IR iff it: (1) has exactly the five top-level keys; (2) populates every field the [IR JSON Schema](../reference/ir-schema.md) marks `required` and supplies the documented `default` for any optional field omitted; (3) uses only the closed enumerations (**7 kinds, 5 modals, 9 proof types, 7 edge types, 7 verdict values**, the `SOL-<LAYER>NNN` code space); (4) represents every relationship once, as an edge; (5) keeps the three version fields distinct. The normative machine-readable form is the **[IR JSON Schema](../reference/ir-schema.md)**; where this prose and that schema disagree, the schema governs the shape and this page governs the intent.
+A document is a conformant SOL/0.1 IR iff it: (1) has exactly the five top-level keys; (2) populates every field the [IR JSON Schema](../reference/structured-form.md) marks `required` and supplies the documented `default` for any optional field omitted; (3) uses only the closed enumerations (**7 kinds, 5 modals, 9 proof types, 7 edge types, 7 verdict values**, the `SOL-<LAYER>NNN` code space); (4) represents every relationship once, as an edge; (5) keeps the three version fields distinct. The normative machine-readable form is the **[IR JSON Schema](../reference/structured-form.md)**; where this prose and that schema disagree, the schema governs the shape and this page governs the intent.
 
 ## Related
 
@@ -204,6 +204,6 @@ A document is a conformant SOL/0.1 IR iff it: (1) has exactly the five top-level
 - [`review`](review.md) — surfaces the orphan-target code `SOL-M003` and consumes the TRACE `implements`/`preserves` edges.
 - [SOL](../language/SOL.md) — the SOL surface grammar (the seven block types, five modals, `AND THE` chaining, `VERIFY BY` clause) `lower` reads from and normalizes into IR nodes.
 - [errors](../language/errors.md) — the `SOL-<LAYER>NNN` code taxonomy the gate predicates and diagnostics key against.
-- [IR schema](../reference/ir-schema.md) — the normative IR and plan JSON Schemas in full, reproducing the field tables this page summarizes.
+- [IR schema](../reference/structured-form.md) — the normative IR and plan JSON Schemas in full, reproducing the field tables this page summarizes.
 - [distillation-loss discipline](../reference/distillation-loss-budget.md) — the cross-cutting discipline carried into `LOWER`: authority and verification bindings carried intact, dropping ⇒ distillation error.
 - [`spec.swarm.md`](../artifacts/spec.md) — the surface spec artifact `lower` consumes.

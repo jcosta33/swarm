@@ -168,7 +168,7 @@ Swarm owns the **intent structure** — language, artifacts, passes, templates, 
 ## Related
 
 - [Non-goals](./NON-GOALS.md) — what Swarm deliberately is not, the negative space these principles protect.
-- [The compiler pipeline](./model/compiler-pipeline.md) — the seven phases and nine passes the obligation graph flows through.
+- [The compiler pipeline](./model/how-swarm-works.md) — the seven phases and nine passes the obligation graph flows through.
 - [The workspace model](./model/workspace.md) — how the source / status / generated categories above lay out on disk.
 - [Source authority](./model/source-authority.md) — the amendment and authority rules an ADR cites when changing a principle.
 - [Architecture decision records](./adrs/README.md) — the recorded amendments; a change to any invariant or principle lands as a new ADR.

@@ -41,7 +41,7 @@ durable discoveries into provenance-anchored artifacts. There is NO runtime — 
 pass guide. For a single obligation the partial order MUST be respected (no `verify` before
 `implement`, no `implement` before `lower`). The full per-pass input/output contract, the
 pass-to-phase mapping, and the contract notes are detailed in the compiler-pipeline
-reference ([`docs/model/compiler-pipeline.md`](../model/compiler-pipeline.md)) and the per-pass pages under [`docs/passes/`](../passes/).
+reference ([`docs/model/how-swarm-works.md`](../model/how-swarm-works.md)) and the per-pass pages under [`docs/passes/`](../passes/).
 
 ## Alternatives considered
 

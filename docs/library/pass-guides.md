@@ -190,7 +190,7 @@ These directories sit under a `skills/` path for cross-tool compatibility; in Sw
 
 ## Related
 
-- [The compiler pipeline](../model/compiler-pipeline.md) — the nine passes and seven phases a guide runs against, and the per-pass guide/fragment packaging (ADR-0042).
+- [The compiler pipeline](../model/how-swarm-works.md) — the nine passes and seven phases a guide runs against, and the per-pass guide/fragment packaging (ADR-0042).
 - [The `lint` pass](../passes/lint.md), [the `decompose` pass](../passes/decompose.md), [the `implement` pass](../passes/implement.md), [the `review` pass](../passes/review.md), and [the `promote` pass](../passes/promote.md) — the contracts the dedicated pass guides and the per-`task_kind` implement guides perform.
 - [The `verify` pass](../passes/verify.md) — the proof model and verdict vocabulary the `empirical-proof` fragment applies but never defines.
 - [The `task.md` artifact](../artifacts/task.md) — where a task names the pass guides and profiles to load.

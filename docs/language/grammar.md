@@ -17,7 +17,7 @@ There is one master layering of the language, and this page describes only one h
 - **Surface** — what a human writes — is **English-shaped UPPERCASE keywords** (`VERIFY BY`, `DEPENDS ON`, `OWNED BY`). This grammar is the surface.
 - **IR** — what a tool *emits*, never authored — is **snake_case fields** (`verify_by`, `depends_on`, `owner`).
 
-The EBNF below is the human surface; it never describes the IR. Wherever a surface keyword appears here, the corresponding snake_case field is reserved for the IR layer and MUST NOT appear at the surface. The IR envelope is specified separately in [the IR schema](../reference/ir-schema.md); this separation is one of the framework's load-bearing invariants. Keywords are UPPERCASE and case-sensitive; lowercase `must`/`should`/`may` and lowercase keywords carry no force and are parsed as prose.
+The EBNF below is the human surface; it never describes the IR. Wherever a surface keyword appears here, the corresponding snake_case field is reserved for the IR layer and MUST NOT appear at the surface. The IR envelope is specified separately in [the IR schema](../reference/structured-form.md); this separation is one of the framework's load-bearing invariants. Keywords are UPPERCASE and case-sensitive; lowercase `must`/`should`/`may` and lowercase keywords carry no force and are parsed as prose.
 
 ---
 
@@ -31,7 +31,7 @@ In v0.1 the arguments of conditions (`WHERE`/`WHILE`/`WHEN`/`IF`) are **opaque t
 
 ## 3. Normative EBNF
 
-This is the single normative grammar for the SOL surface syntax. The IR/JSON layer is not specified here (see [the IR schema](../reference/ir-schema.md)); surface keywords are space-separated uppercase, IR fields are snake_case.
+This is the single normative grammar for the SOL surface syntax. The IR/JSON layer is not specified here (see [the IR schema](../reference/structured-form.md)); surface keywords are space-separated uppercase, IR fields are snake_case.
 
 ```ebnf
 (* ===== Document and frontmatter ===== *)
@@ -271,7 +271,7 @@ The lint layers are **S/P/M/V/O** (Syntax / Prose / seMantic / Verification / Or
 Other framework pages that extend or consume this grammar:
 
 - [SOL — the Swarm Obligation Language (surface reference)](SOL.md) — the prose-and-examples teaching companion to this formal grammar; the seven block types, the five modals, and the seven-value verdict model in narrative form.
-- [The IR schema](../reference/ir-schema.md) — the snake_case `*.swarm.ir.json` envelope this surface lowers into; the other half of the surface-vs-IR layering.
+- [The IR schema](../reference/structured-form.md) — the snake_case `*.swarm.ir.json` envelope this surface lowers into; the other half of the surface-vs-IR layering.
 - [Lint codes](errors.md) — the full `SOL-<LAYER><NNN>` catalogue and severity model behind the production-attached codes cited here.
 - [APS — the controlled-prose standard](APS.md) — the prose layer (`prose_text`) SOL blocks interleave with, and the high-risk-word rules.
 - [Proof types](../reference/proof-types.md) — the closed nine proof types and `VERIFY BY` adapter resolution that `verify_ref` binds.

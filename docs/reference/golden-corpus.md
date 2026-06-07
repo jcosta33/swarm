@@ -44,7 +44,7 @@ spec.swarm.md  →  expected obligations  →  task frame  →  trace  →  verd
 | verdict | `<domain>.review.md` | per-obligation `VERDICT` blocks; the final verdict reaches the merge gate |
 | promotion | `<domain>.finding.md` | the durable finding the `promote` pass produces |
 
-The expected end-state verdict is recorded in the spec fixture's header, so the chain's correctness is known independent of any tool. The auth-refresh chain is documented stage-by-stage in [the compiler-pipeline reference](../model/compiler-pipeline.md) as the canonical worked example; that chain is exactly the positive auth-refresh fixture rendered for reading.
+The expected end-state verdict is recorded in the spec fixture's header, so the chain's correctness is known independent of any tool. The auth-refresh chain is documented stage-by-stage in [the compiler-pipeline reference](../model/how-swarm-works.md) as the canonical worked example; that chain is exactly the positive auth-refresh fixture rendered for reading.
 
 ## Per-domain canonical defect classes
 
@@ -260,7 +260,7 @@ The corpus ships one fixture no per-domain chain covers: **research-fanout**, th
 
 - [The conformance contract](../model/conformance.md) — the `conformance.yaml` manifest (task-file schema, command rows, placeholder set, lint scheme, required-suite matrix) the corpus is checked against, and the conformance maturity ladder.
 - [The lint catalogue](../language/errors.md) — every `SOL-<LAYER>NNN` code the negative fixtures trip, with its `{code, severity, layer, span, message, suggest}` record shape.
-- [The flow graph](./flow-graph.md) — the canonical counts (7 blocks, 5 modals, 7 verdicts, 9 proof types, 7 phases / 9 passes, 10 improve operations, 5 lint layers) and the per-task-kind default-suite matrix the rubrics cite.
-- [The compiler pipeline](../model/compiler-pipeline.md) — the auth-refresh chain rendered as the canonical stage-by-stage worked example; the positive auth-refresh fixture in readable form.
+- [The flow graph](./cheatsheet.md) — the canonical counts (7 blocks, 5 modals, 7 verdicts, 9 proof types, 7 phases / 9 passes, 10 improve operations, 5 lint layers) and the per-task-kind default-suite matrix the rubrics cite.
+- [The compiler pipeline](../model/how-swarm-works.md) — the auth-refresh chain rendered as the canonical stage-by-stage worked example; the positive auth-refresh fixture in readable form.
 - [Drift and staleness](./drift-and-staleness.md) — the trace-provenance schema and the four staleness conditions the drift-detection cross-pass predicate scores.
 - [Proof types and the `VERIFY BY` binding](./proof-types.md) — the nine closed proof types the verification bindings in every fixture draw from.
