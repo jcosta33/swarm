@@ -24,7 +24,7 @@ Research, audits, and bug reports are normalized into a `*.swarm.md` spec; its o
 
 Swarm distinguishes **7 phases** (conceptual, fixed-order stages: `PARSE → NORMALIZE → LOWER → EXECUTE → VERIFY → REVIEW → PROMOTE`) from **9 passes** (schedulable transformations: `author → lint → improve → lower → decompose → implement → verify → review → promote`).
 
-The surface is exactly **7 block types** (`REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT`) decorated by **5 modals** (`MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY` — no canonical `SHALL`). Obligations bind proof with `VERIFY BY <type>:<adapter>:<artifact>`, across **9 proof types** (`static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor`). Review renders one of **7 verdicts** (`PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED`, plus the lifecycle verdicts `WAIVED`, `STALE`, `CONTRADICTED`). Semantics-preserving repair uses **10 improve operations** (`NORMALIZE`, `ATOMIZE`, `CONCRETIZE`, `QUANTIFY`, `BIND`, `SCOPE`, `CLARIFY`, `DECONFLICT`, `COMPRESS`, `PROMOTE`).
+The surface is small and closed: **7 block types** decorated by **5 modals**, binding proof with `VERIFY BY <type>:<adapter>:<artifact>` across **9 proof types**, judged by **7 verdicts**. Every closed set (and the exact members) is reconciled in one place — [`docs/reference/flow-graph.md`](docs/reference/flow-graph.md).
 
 ## Where the files go
 

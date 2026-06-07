@@ -18,7 +18,7 @@ The model is **two-tier and provenance-anchored**. Rationale: chat transcripts a
 | Input | the task's discoveries + the resolved-or-pending promotion queue |
 | Output | durable writes to `.agents/memory/` and the durable source artifacts under `.agents/` (plus the `AGENTS.md` pointer case) and a fully-resolved promotion queue |
 | Close gate | a task MUST NOT close while any promotion item is `pending` |
-| Ships a stdlib pass guide in v0.1? | **Yes** — `promote` ships a dedicated pass guide, as do `lint`, `decompose`, and `review`; `implement` is served by the nine per-`task_kind` guides, `author` by the six author guides, and `verify` by the `empirical-proof` fragment; `improve` and `lower` ship none ([ADR-0042](../adrs/0042-skill-carrier-and-standalone-conditioning.md)) |
+| Ships a pass guide? | **Yes** — `promote` ships a dedicated pass guide, as do all six analysis passes (`lint`/`improve`/`lower`/`decompose`/`review`/`promote`); `implement` is served by the nine per-`task_kind` guides, `author` by the six author guides, and `verify` by the `empirical-proof` fragment ([ADR-0042](../adrs/0042-skill-carrier-and-standalone-conditioning.md)/[0051](../adrs/0051-complete-the-spec-repo-pivot.md)) |
 
 ## The two-tier memory model
 

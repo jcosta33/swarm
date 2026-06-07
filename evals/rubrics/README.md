@@ -10,7 +10,7 @@ The golden corpus pins *what a correct pipeline produces* — the expected oblig
 
 Each rubric is a small set of **checkable predicates**, not a Likert or quality score. A predicate either holds or it does not. The suite reports the count of failing predicates per pass, and **a single failing predicate fails the pass**. Every predicate is decidable against the pass's input artifact plus its output artifact alone — no runtime, no tool under test is presumed.
 
-These are **producer-side self-tests**. They measure the Swarm framework's own conformance fixtures and any agent-as-compiler executing the pipeline. They are deliberately *not* part of the kernel payload an adopter installs into `.swarm/`: an adopted project gets the language reference, the pass guides, and the lint catalogue, but not these rubrics, because an adopter does not re-grade the framework. That is why these pages live under `evals/` and may freely link sibling `docs/` pages.
+These are **producer-side self-tests**. They measure the Swarm framework's own conformance fixtures and any agent-as-compiler executing the pipeline. They are deliberately *not* part of the starter kit an adopter installs: an adopted project gets the authoring skills, reference cards, and templates, but not these rubrics, because an adopter does not re-grade the framework. That is why these pages live under `evals/` and may freely link sibling `docs/` pages.
 
 ## The nine rubrics, one per pass
 

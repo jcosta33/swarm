@@ -1,6 +1,6 @@
 # Conformance
 
-> Swarm's reference for conformance: what makes a repository Swarm-conformant (the four-clause definition), the inert conformance manifest that encodes it, and the five-tier maturity ladder for adoption progress.
+> Swarm's reference for conformance: what makes a repository Swarm-conformant (the three-clause definition), the inert conformance manifest that encodes it, and the five-tier maturity ladder for adoption progress.
 
 Swarm is markdown-only and has **no runtime**. Nothing in this page executes. The "checker" that would consume a conformance manifest is a *contract* a future Swarm toolchain would build against — it is never shipped here. Until such a launcher exists, the same contract still serves: a human validates a repository against it by hand, and the golden corpus pins the expected verdicts independently of any tool.
 
@@ -8,7 +8,7 @@ This page answers two questions: *what makes a repository Swarm-conformant?* (a 
 
 ## The conformance definition
 
-A repository is **Swarm-conformant if and only if** all four clauses hold. Omit any one and the repository MUST NOT be described as Swarm-conformant.
+A repository is **Swarm-conformant if and only if** all three clauses hold. Omit any one and the repository MUST NOT be described as Swarm-conformant.
 
 | # | Clause | Checkable evidence |
 |---|---|---|
@@ -153,7 +153,7 @@ The definition above is a single *binary* predicate — the terminal judgement. 
 | **4** | **Swarm-verifiable** | For implemented work, trace and review are complete and every completion claim is tied to evidence. | `trace.md` and `review.md` exist for the implemented obligations; each `IMPLEMENTS`/`PRESERVES`/`PROOF` claim carries content-hashed evidence and a core verdict; every completion claim binds to pasted proof output, never a bare "tests passed" claim (the `non-empty-paste` rule). |
 | **5** | **Swarm-orchestratable** | Work can be partitioned across agents and sequenced safely: the static coordination contract is complete. | The orchestration coordination contract is fully satisfied: declared write surfaces (named `SURFACE`s — there is no `locks` primitive) with the safe-parallelism predicate holding (no `SOL-O001`), obligation IDs preserved across the source→execution tiers, the coordination hand-off fields (owned/forbidden paths, status, parent contract), liveness/stall states, and the promotion queue. |
 
-**Tier 4 is the normative line.** A repository is *Swarm-verifiable if and only if it is Swarm-conformant* — tier 4 is exactly the four-clause definition at the top of this page. Tiers 1–3 below it and tier 5 above it are adoption labels, not the conformance predicate. The reserved label **Swarm-conformant** is the predicate name itself; it is not a sixth rung — it is the normative judgement that tier 4 coincides with, and a repository earns it by satisfying tier 4, never by satisfying tier 5 (which adds orchestration depth on top of, not in place of, conformance).
+**Tier 4 is the normative line.** A repository is *Swarm-verifiable if and only if it is Swarm-conformant* — tier 4 is exactly the three-clause definition at the top of this page. Tiers 1–3 below it and tier 5 above it are adoption labels, not the conformance predicate. The reserved label **Swarm-conformant** is the predicate name itself; it is not a sixth rung — it is the normative judgement that tier 4 coincides with, and a repository earns it by satisfying tier 4, never by satisfying tier 5 (which adds orchestration depth on top of, not in place of, conformance).
 
 A repository MAY sit at any tier. Because adoption is incremental, tiers 3–5 are optional adoption *depth*, not a defect when unmet. When reporting a repository's standing, a tool or human SHOULD report the **highest fully-satisfied tier**, and MUST NOT report a higher tier than is fully satisfied — a partially satisfied tier is, within that tier, non-conformant. Per the no-runtime invariant, tier 5 certifies the *contract*, not a live scheduler; the scheduler is a deferred launcher concern.
 

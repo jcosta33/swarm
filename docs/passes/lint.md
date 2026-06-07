@@ -26,7 +26,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 | Carrier profile | Skeptic |
 | Mutating? | No — emits diagnostics only |
 
-`lint` ships a **dedicated stdlib pass guide** (the `pass-lint-spec` skill); the guide is SOFT control (it tells an agent how to lint well) and MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning — those live only in SOL and the IR. (`lint`, `decompose`, `review`, and `promote` each ship a dedicated pass guide; `implement` is served by the nine per-`task_kind` guides and `author` by the six author guides; `improve` and `lower` ship no guide; `verify` is served by the `empirical-proof` fragment — see ADR-0042.)
+`lint` ships a **dedicated stdlib pass guide** (the `pass-lint-spec` skill); the guide is SOFT control (it tells an agent how to lint well) and MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning — those live only in SOL and the IR. (the six analysis passes — `lint`, `improve`, `lower`, `decompose`, `review`, `promote` — each ship a pass guide; `implement` is served by the nine per-`task_kind` guides, `author` by the six author guides, `verify` by the `empirical-proof` fragment — ADR-0042/0051.)
 
 ## What `lint` emits: the unified taxonomy
 

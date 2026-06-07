@@ -117,10 +117,10 @@ These are design/layout principles for an adopted project, not empirical claims.
 
 ### Swarm is a spec-repo discipline; the code repo stays pristine
 
-Swarm lives in a **spec / documentation repo** (intent — authored and reviewed under `.agents/`). A **code repo** that consumes specs stays clean: no required Swarm footprint, at most one opt-in `implement-and-verify` skill, with all Swarm scratch gitignored and durable outcomes pushed back to the spec repo as linked PRs. Co-located is the degenerate one-repo case. ([ADR-0050](adrs/0050-swarm-is-a-spec-repo-discipline.md))
+Swarm lives in a **spec / documentation repo** (intent — authored and reviewed as top-level content; `.agents/` holds only tooling). A **code repo** that consumes specs stays clean: no required Swarm footprint, at most one opt-in `implement-and-verify` skill, with all Swarm scratch gitignored and durable outcomes pushed back to the spec repo as linked PRs. Co-located is the degenerate one-repo case. ([ADR-0050](adrs/0050-swarm-is-a-spec-repo-discipline.md))
 
 - **Rationale.** Intent is curated by a few and consumed by many across repos; one spec can govern several code repos. Developers reject tools that litter their codebase, so a code repo keeps only its real sources of truth and its code. A NO-RUNTIME framework also cannot justify a filing cabinet of directories nothing reads.
-- **Consequence.** A spec repo prescribes only the flow folders it uses (`skills/`, `reference/`, `templates/`, `specs/`, `memory/`); a code repo prescribes none. No `.swarm/` mount, no version file, no empty tree. Project conventions live in the root `AGENTS.md`, not an overlays directory.
+- **Consequence.** A spec repo prescribes only the `.agents/` tooling folders it uses (`skills/`, `reference/`, `templates/`, `memory/`), with `specs/` and other intent top-level; a code repo prescribes none. No `.swarm/` mount, no version file, no empty tree. Project conventions live in the root `AGENTS.md`, not an overlays directory.
 
 ### SOL is an authoring aid, not a reading burden
 

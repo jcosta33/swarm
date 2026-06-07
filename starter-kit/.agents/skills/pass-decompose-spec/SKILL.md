@@ -17,7 +17,7 @@ This guide is SOFT control: procedure, not meaning. The load-bearing facts — w
 - The single safe-parallelism predicate and its surface semantics: the `decompose` pass.
 - The COVERAGE gate: the `decompose` pass.
 - The coordination record (`task-orchestration.md`) the run fans out into: the `decompose` pass orchestration artifact contract.
-- The carrier profile: the Lead Engineer heuristic profile, [`../persona-lead-engineer/SKILL.md`](../persona-lead-engineer/SKILL.md).
+- The carrier profile: the Lead Engineer heuristic profile, the Lead Engineer stance (a code-side profile in `docs/library/code-skills/`).
 
 ## Purpose
 
@@ -32,7 +32,7 @@ If an obligation reaches `decompose` with no `verify_by`, that is a `SOL-V001`-c
 
 ## Produces
 
-- One `task.md` work packet per partition unit — "the lowered work packet for one pass," the unit a single `implement` run owns (see [`../../templates/task.md`](../../templates/task.md)).
+- One `task.md` work packet per partition unit — "the lowered work packet for one pass," the unit a single `implement` run owns (the `task.md` packet shape).
 - The plan, named-as-contract `*.swarm.plan.json` (`auth-refresh.swarm.ir.json → auth-refresh.swarm.plan.json`). A SOL plan is one JSON object with **exactly four top-level keys** (see the `decompose` pass):
 
   | Key | Type | Cardinality | Carries |
@@ -65,7 +65,7 @@ Refuse, and emit no plan claim, when any of these hold:
 
 1. **Read the IR, not the prose.** Load `*.swarm.ir.json` and its two derived graphs (see the `decompose` pass). Resolve every obligation's `WRITES`/`READS` to `SURFACE` path-pattern sets, noting any `append-only`/`integration`/`shared` attribute (see the `decompose` pass). If a `SURFACE` is unnamed, treat each raw path/glob as its own singleton pattern set (see the `decompose` pass). *Why:* the partition is computed over declared access sets, never against a live filesystem and never by guessing — there is no runtime.
 
-2. **Partition into write-disjoint packets.** Group obligations into the smallest set of packets where each is a single pass (under an optional profile) over a selected set of scoped obligations. How finely to split is your heuristic as carrier (see [`../persona-lead-engineer/SKILL.md`](../persona-lead-engineer/SKILL.md)); Swarm fixes only the predicate (step 5) the partition must satisfy. Carry into each packet its assigned obligations, the constraints/invariants in force, the interfaces it touches, its write surfaces, and its verification bindings (see the `lower` pass and [`../../templates/task.md`](../../templates/task.md)). When two candidate sub-tasks need the same file they are not independent — sequence them with a `DEPENDS ON` edge rather than parallelizing (Lead Engineer hard constraint, [`../persona-lead-engineer/SKILL.md`](../persona-lead-engineer/SKILL.md); see also the `decompose` pass). *Why:* two tasks writing the same surface are not write-disjoint, so parallelizing them is the silent merge corruption `SOL-O001` exists to prevent.
+2. **Partition into write-disjoint packets.** Group obligations into the smallest set of packets where each is a single pass (under an optional profile) over a selected set of scoped obligations. How finely to split is your heuristic as carrier (see the Lead Engineer stance (a code-side profile in `docs/library/code-skills/`)); Swarm fixes only the predicate (step 5) the partition must satisfy. Carry into each packet its assigned obligations, the constraints/invariants in force, the interfaces it touches, its write surfaces, and its verification bindings (see the `lower` pass and the `task.md` packet). When two candidate sub-tasks need the same file they are not independent — sequence them with a `DEPENDS ON` edge rather than parallelizing (Lead Engineer hard constraint, the Lead Engineer stance (a code-side profile in `docs/library/code-skills/`); see also the `decompose` pass). *Why:* two tasks writing the same surface are not write-disjoint, so parallelizing them is the silent merge corruption `SOL-O001` exists to prevent.
 
 3. **Project owned paths and check containment.** For each packet, derive its `writes` as the file/glob projection of its assigned obligations' `WRITES` surfaces. Each owned pattern set MUST be a subset of that union under the subset semantics in the `decompose` pass — every path the owned set matches must also be matched by the declared `WRITES` set. An owned path touching a file outside any assigned obligation's declared write surface is the disjoint-scope violation `SOL-O005`; fix it by re-scoping the packet (shrink OWNED) or widening the obligation's `WRITES` in the source spec (add the surface) — never silently (see the `decompose` pass). *Why:* the two tiers may not diverge silently, or the source and execution partitions stop describing the same work.
 
@@ -94,7 +94,7 @@ Refuse, and emit no plan claim, when any of these hold:
 
    Then check that every `verified_by` edge and every TRACE `implements`/`preserves` edge resolves to a real node id in `nodes[]`; an unresolved target is an orphan (`SOL-M003`, surfaced at `review`). The count is *per `implement` packet* — an obligation legitimately recurs across its `implement`, `verify`, and `review` packets. All BLOCKING conditions MUST clear before any `implement` pass runs. *Why:* COVERAGE is the structural complement of distillation-loss; together they make the lowered work a bijection — nothing dropped, nothing stranded.
 
-7. **Emit the plan.** Write the four-key envelope (see the `decompose` pass) and one `task.md` per packet (see [`../../templates/task.md`](../../templates/task.md)). Mirror every `depends_on[]` as a `depends_on` edge and every shared-surface or read/write conflict as a `conflicts_with` edge in `edges[]` (see the `decompose` pass). Set `meta.derived_from`, `language`, `version`, and (optionally) the advisory `max_parallel`. Frame the artifact as the contract a future tool emits and a future launcher consumes — never the output of a shipped emitter or live scheduler (see the `decompose` pass).
+7. **Emit the plan.** Write the four-key envelope (see the `decompose` pass) and one `task.md` per packet (the `task.md` packet shape). Mirror every `depends_on[]` as a `depends_on` edge and every shared-surface or read/write conflict as a `conflicts_with` edge in `edges[]` (see the `decompose` pass). Set `meta.derived_from`, `language`, `version`, and (optionally) the advisory `max_parallel`. Frame the artifact as the contract a future tool emits and a future launcher consumes — never the output of a shipped emitter or live scheduler (see the `decompose` pass).
 
 8. **If the run fans out, emit the coordination record.** When concurrent workers will execute the plan, generate the `task-orchestration.md` (see the the `decompose` pass orchestration contract) — see the next section. It is the one place the parallel run is *recorded*; it never authors intent and never widens a worker's reach.
 
@@ -118,7 +118,7 @@ Verification bindings the acceptance bar names resolve through the consuming rep
 ## Output contract
 
 - A `*.swarm.plan.json` that is a conformant SOL/0.1 plan (see the `decompose` pass): exactly the four top-level keys; every required field populated (optional fields defaulted); **no `locks` field anywhere**; only the closed nine-pass set in `packets[].pass` and the closed edge-type set in `edges[]`; inter-packet relationships represented **once**, as edges; the three version fields (`meta.version`, the IR's `version`, the spec content version) kept distinct.
-- One `task.md` per packet, each carrying its assigned obligations, scope (owned paths ⊆ declared `WRITES`), `depends_on` order, and verification bindings (see [`../../templates/task.md`](../../templates/task.md)). A fanned-out worker's `task.md` carries the hand-off verbatim as its `## Parent contract`.
+- One `task.md` per packet, each carrying its assigned obligations, scope (owned paths ⊆ declared `WRITES`), `depends_on` order, and verification bindings (the `task.md` packet shape). A fanned-out worker's `task.md` carries the hand-off verbatim as its `## Parent contract`.
 - When the run fans out: a `task-orchestration.md` (plain `.md`, no `.swarm.` infix) with frontmatter (`type: task-orchestration`, `id`, `source`, `parallel_group`, `created`) and the four ordered sections — provenance note, `## Worker tracker`, `## Decisions`, `## Merge log` — its OWNED partition pairwise-disjoint and lowered from the obligations.
 - Every packet's `merge_safe` set by the safe-parallelism predicate verbatim (see the `decompose` pass), the two non-weakenable defaults honoured.
 - The COVERAGE gate cleared: no `SOL-O007`, no `SOL-O008`, no unresolved `verified_by`/`implements`/`preserves` target.

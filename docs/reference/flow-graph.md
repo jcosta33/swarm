@@ -58,7 +58,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 | `review` | `REVIEW` | M, V | Judges claims, applies lifecycle decorators, computes the merge gate. |
 | `promote` | `PROMOTE` | — | Moves durable discoveries into provenance-anchored artifacts. |
 
-Of the nine passes, `lint`, `decompose`, `review`, and `promote` each ship a **dedicated stdlib pass guide**; `implement` is served by **nine per-`task_kind` implement guides**, `author` by **six author guides**, and `verify` by the `empirical-proof` cross-cutting fragment; `improve` and `lower` ship **no guide** — they are fully specified by the language/verification references and MAY gain a guide later without a language-version change (ADR-0042). A guide-less pass is not a conformance gap. Pass guides are SOFT control: they MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning [[SKILLBP]](../research/sources.md#SKILLBP).
+Of the nine passes, the six analysis passes — `lint`, `improve`, `lower`, `decompose`, `review`, `promote` — each ship a **dedicated pass guide**; `implement` is served by **nine per-`task_kind` implement guides**, `author` by **six author guides**, and `verify` by the `empirical-proof` cross-cutting fragment (ADR-0042/0051). Every pass now has a guide, but a guide is an optional aid, not a conformance gate — the pass contract is the binding artifact. Pass guides are SOFT control: they MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning [[SKILLBP]](../research/sources.md#SKILLBP). The authoring guides ship in the starter kit; the implement-side guides are `docs/library/code-skills/` reference (ADR-0051).
 
 ## The proof-type × phase default-suite matrix
 

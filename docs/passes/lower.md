@@ -4,7 +4,7 @@
 
 `lower` is the fourth of the **nine passes** of the Swarm compiler pipeline (`author -> lint -> improve -> lower -> decompose -> implement -> verify -> review -> promote`). This page is the reference for that single pass and the **intermediate representation (IR)** it produces.
 
-Like every Swarm pass, `lower` has **no runtime**: it is a contract a human, an agent following a pass guide, or a future tool performs. The IR is specified as a versioned data contract — this repository ships **no emitter, no parser, and no validator** for it, and the only legal producer of an `.ir.json` file is a future compiler (Invariant 1). `lower` is one of the two passes (`improve`, `lower`) that ship **no stdlib pass guide** in v0.1 — it is fully specified by its pass contract and the language references, and a guide-less pass is not a conformance gap ([ADR-0042](../adrs/0042-skill-carrier-and-standalone-conditioning.md)).
+Like every Swarm pass, `lower` has **no runtime**: it is a contract a human, an agent following a pass guide, or a future tool performs. The IR is specified as a versioned data contract — this repository ships **no emitter, no parser, and no validator** for it, and the only legal producer of an `.ir.json` file is a future compiler (Invariant 1). `lower` ships a dedicated pass guide (`pass-lower-spec`, added when the self-containment gap was closed); the IR is still specified entirely by its pass contract and the language references, and a guide is an optional aid, not a conformance gate ([ADR-0042](../adrs/0042-skill-carrier-and-standalone-conditioning.md)/[0051](../adrs/0051-complete-the-spec-repo-pivot.md)).
 
 ## Where `lower` sits: the `LOWER` phase has two passes
 
