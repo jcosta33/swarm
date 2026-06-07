@@ -17,7 +17,7 @@
           "ref": "openapi/checkout.yaml", "selector": "submitCart", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "checkout.swarm.md", "line_start": 30, "line_end": 37,
+      "source": { "file": "specs/checkout/spec.swarm.md", "line_start": 30, "line_end": 37,
                   "content_hash": "sha256:2a7c…d0" }
     },
     {
@@ -35,7 +35,7 @@
           "selector": "validates-cart", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "checkout.swarm.md", "line_start": 41, "line_end": 47,
+      "source": { "file": "specs/checkout/spec.swarm.md", "line_start": 41, "line_end": 47,
                   "content_hash": "sha256:4b1f…12" }
     },
     {
@@ -53,7 +53,7 @@
           "selector": "charges-card", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "checkout.swarm.md", "line_start": 49, "line_end": 55,
+      "source": { "file": "specs/checkout/spec.swarm.md", "line_start": 49, "line_end": 55,
                   "content_hash": "sha256:5c2a…34" }
     },
     {
@@ -71,7 +71,7 @@
           "selector": "emails-receipt", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "checkout.swarm.md", "line_start": 57, "line_end": 63,
+      "source": { "file": "specs/checkout/spec.swarm.md", "line_start": 57, "line_end": 63,
                   "content_hash": "sha256:6d3b…56" }
     },
     {
@@ -89,7 +89,7 @@
           "selector": "writes-order", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "checkout.swarm.md", "line_start": 65, "line_end": 71,
+      "source": { "file": "specs/checkout/spec.swarm.md", "line_start": 65, "line_end": 71,
                   "content_hash": "sha256:7e4c…78" }
     },
     {
@@ -107,7 +107,7 @@
           "selector": "writes-ledger", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "checkout.swarm.md", "line_start": 73, "line_end": 80,
+      "source": { "file": "specs/checkout/spec.swarm.md", "line_start": 73, "line_end": 80,
                   "content_hash": "sha256:8f5d…9a" }
     },
     {
@@ -122,7 +122,7 @@
           "selector": "charge_at_most_once", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "checkout.swarm.md", "line_start": 84, "line_end": 87,
+      "source": { "file": "specs/checkout/spec.swarm.md", "line_start": 84, "line_end": 87,
                   "content_hash": "sha256:3b90…ee" }
     }
   ],

@@ -17,7 +17,7 @@
           "ref": "charge-card-contract", "selector": null, "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "payment-5xx.swarm.md", "line_start": 32, "line_end": 39,
+      "source": { "file": "specs/payment-5xx/spec.swarm.md", "line_start": 32, "line_end": 39,
                   "content_hash": "sha256:2c8d…b1" }
     },
     {
@@ -35,7 +35,7 @@
           "selector": "retries-bounded", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "payment-5xx.swarm.md", "line_start": 42, "line_end": 45,
+      "source": { "file": "specs/payment-5xx/spec.swarm.md", "line_start": 42, "line_end": 45,
                   "content_hash": "sha256:4f6a…e2" }
     },
     {
@@ -53,7 +53,7 @@
           "selector": "surfaces-502", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "payment-5xx.swarm.md", "line_start": 47, "line_end": 50,
+      "source": { "file": "specs/payment-5xx/spec.swarm.md", "line_start": 47, "line_end": 50,
                   "content_hash": "sha256:9a01…7c" }
     },
     {
@@ -68,7 +68,7 @@
           "selector": "zero_double_captures", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "payment-5xx.swarm.md", "line_start": 54, "line_end": 55,
+      "source": { "file": "specs/payment-5xx/spec.swarm.md", "line_start": 54, "line_end": 55,
                   "content_hash": "sha256:b730…5d" }
     }
   ],

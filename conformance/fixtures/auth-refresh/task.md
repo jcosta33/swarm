@@ -1,6 +1,6 @@
 <!--
 auth-refresh golden-corpus POSITIVE fixture — Stage 5 (work packet, passes: decompose, implement).
-The `decompose` pass projects the IR into a work packet whose write surfaces are a subset of
+The `decompose` pass projects the structured form into a work packet whose write surfaces are a subset of
 the assigned obligations' WRITES (the two-tier lowering rule, see the `lower` pass; a packet writing a
 path outside its declared WRITES is SOL-O005, G7). The `implement` pass executes it. Only the
 load-bearing frame is shown. Inert oracle data — Swarm runs nothing.

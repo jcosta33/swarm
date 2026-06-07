@@ -47,7 +47,7 @@ task_file:
 # Slot names are the cmd* slots bound in AGENTS.md > Commands.
 agents_md:
   required_command_rows: [cmdValidate, cmdTest, cmdFormat]                                 # MUST be present; absence is non-conformant
-  extended_command_rows: [cmdInstall, cmdTypecheck, cmdLint, cmdBuild, cmdValidateDeps, cmdBenchmark]   # SHOULD be present when the required-suite references them
+  extended_command_rows: [cmdInstall, cmdTypecheck, cmdLint, cmdBuild, cmdValidateDeps, cmdBenchmark, cmdContract, cmdSecurity]   # SHOULD be present when the required-suite references them
   out_of_contract:       [cmdMarkdownLint, cmdLinkCheck, cmdCitationCheck]                  # MAY be present; never required
 
 # --- The legal placeholder set -----------------------------------------------

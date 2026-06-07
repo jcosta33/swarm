@@ -87,7 +87,7 @@ The split matters because each layer has a different lifecycle: a pass guide is 
 
 ## Related
 
-- [`improve`](../passes/improve.md) — a pass that ships no guide; a project convention composes additively with its pass contract, adding project expectations without changing the procedure.
+- [`improve`](../passes/improve.md) — a project convention composes additively with its pass contract (and its `pass-improve-spec` guide), adding project expectations without changing the procedure.
 - [`verify`](../passes/verify.md) — the pass a convention's testing-policy and local-command-binding rules most often scope to.
 - [SOL](../language/SOL.md) — the obligation language whose semantics a project convention MUST NOT define or redefine.
 - [APS](../language/APS.md) — the prose standard a project convention MUST NOT redefine.

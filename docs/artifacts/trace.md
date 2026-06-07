@@ -86,7 +86,7 @@ Two optional adjuncts MAY extend a verdict's provenance without altering this ba
 
 ## Copyable template
 
-The copyable skeleton is the framework template at **`starter-kit/.agents/templates/trace.md`** (it ships with the installed starter kit). Copy that file to start a new trace; this page is its contract. A shipped, uninstantiated template MAY leave `{{...}}` placeholders, but a *built* trace MUST NOT leave a binding clause as a `{{...}}` placeholder, and an unfilled `VERIFY BY`/`PROOF` clause in a built trace is a `SOL-V001` defect.
+The copyable skeleton is the **code-side** template at **`docs/library/code-skills/templates/trace.md`** (it ships with the code-skills reference, not the authoring starter kit — a trace is implement-side). Copy that file to start a new trace; this page is its contract. A shipped, uninstantiated template MAY leave `{{...}}` placeholders, but a *built* trace MUST NOT leave a binding clause as a `{{...}}` placeholder, and an unfilled `VERIFY BY`/`PROOF` clause in a built trace is a `SOL-V001` defect.
 
 ## Related
 

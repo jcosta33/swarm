@@ -154,7 +154,7 @@ imports: [session-core]
 # Spec: Auth refresh
 ```
 
-*Design rationale:* the three version axes are never merged — `swarm_language` (language), `spec_version` (content), and (when a tool exists) `provenance.tool_version` (tool). The frontmatter carries the first two; the version-axis model is detailed in [versioning.md](versioning.md).
+*Design rationale:* the three version fields are never merged — `swarm_language` (language), `spec_version` (content), and (when a tool exists) `provenance.tool_version` (tool). The frontmatter carries the first two; the version-axis model is detailed in [versioning.md](versioning.md).
 
 ### 2.7 Binding vs commentary
 

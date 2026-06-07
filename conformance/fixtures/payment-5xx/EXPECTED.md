@@ -32,7 +32,7 @@ this manifest records the verdict a correct run must produce at each gate.
 | 7 | review | `review.md` | per-obligation `VERDICT`s; the `CONTRADICTED` → `BLOCKED` → `PASS` gate arc |
 | 8 | promote | `finding.md` | the durable finding promoted with full provenance |
 
-> The `task.md` here shows the **pipeline-relevant work-packet frame**, not a full task-file. The task-file-schema `required_sections` rule (see [`../../../templates/task.md`](../../../templates/task.md)) is exercised by [`../conformant-task.md`](../conformant-task.md) (positive) and [`../violations.md`](../violations.md) (negatives).
+> The `task.md` here shows the **pipeline-relevant work-packet frame**, not a full task-file. The task-file-schema `required_sections` rule (see [`../../../docs/library/code-skills/templates/task.md`](../../../docs/library/code-skills/templates/task.md)) is exercised by [`../conformant-task.md`](../conformant-task.md) (positive) and [`../violations.md`](../violations.md) (negatives).
 
 ## Expected lint diagnostics (stage 2, on the authored `spec.swarm.md`)
 
@@ -109,7 +109,7 @@ when both proofs agree after a recorded reconciliation.
   `sha256:6b22…9f` in the recorded trace.
 - Proof types span three of the nine (see the `verify` pass): `contract` (`IF-001`), `test` (`AC-020`/`AC-021`),
   and `monitor` (`I-001`) — the production observation that drives the contradiction.
-- Source specs live in `specs/<feature>/`; task/trace scratch is gitignored (e.g. `specs/payment-5xx/spec.swarm.md`).
+- Source specs live in `specs/<feature>/spec.swarm.md`; task/trace scratch is gitignored (e.g. `.agents/tasks/`).
 
 ## How this is validated (no runtime)
 

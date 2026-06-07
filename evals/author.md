@@ -34,6 +34,6 @@ The suite scores one cross-step predicate at the `author` output:
 
 ## Related
 
-- [The golden corpus](../../docs/reference/golden-corpus.md) — the `author` predicates and the research-fanout provenance fixture this rubric draws from.
-- [The `author` step guide](../../docs/passes/author.md) — the contract this rubric grades.
-- [Source artifacts](../../docs/model/source-artifacts.md) and [source authority](../../docs/model/source-authority.md) — the stance and authority rules predicates A1–A2 enforce.
+- [The golden corpus](../docs/reference/golden-corpus.md) — the `author` predicates and the research-fanout provenance fixture this rubric draws from.
+- [The `author` step guide](../docs/passes/author.md) — the contract this rubric grades.
+- [Source artifacts](../docs/model/source-artifacts.md) and [source authority](../docs/model/source-authority.md) — the stance and authority rules predicates A1–A2 enforce.

@@ -1,7 +1,7 @@
 <!--
 checkout golden-corpus fixture — Stage 6 (trace, pass: verify).
 The `verify` pass records a TRACE block per work packet plus the provenance the drift join
-depends on — the canonical seven fields: source_hash (echoing the IR node content_hash),
+depends on — the canonical seven fields: source_hash (echoing the structured-form node content_hash),
 per_surface_hash[] (each entry {surface, hash, exercised}), adapter, verdict, tier (the PROOF
 TYPE, never a RISK value), origin_obligations[], origin_traces[]. T-010 covers the submit
 packet; T-011 covers the serialized inventory packet. Inert oracle data; the proof results

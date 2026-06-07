@@ -17,7 +17,7 @@
           "ref": "refresh-session-contract", "selector": null, "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 9, "line_end": 15,
+      "source": { "file": "specs/auth-refresh/spec.swarm.md", "line_start": 9, "line_end": 15,
                   "content_hash": "sha256:1f4a…c0" }
     },
     {
@@ -35,7 +35,7 @@
           "selector": "replays-after-refresh", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 19, "line_end": 27,
+      "source": { "file": "specs/auth-refresh/spec.swarm.md", "line_start": 19, "line_end": 27,
                   "content_hash": "sha256:9b2e…41" }
     },
     {
@@ -53,7 +53,7 @@
           "selector": "replays-after-refresh", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 19, "line_end": 27,
+      "source": { "file": "specs/auth-refresh/spec.swarm.md", "line_start": 19, "line_end": 27,
                   "content_hash": "sha256:9b2e…41" }
     },
     {
@@ -71,7 +71,7 @@
           "selector": "clears-and-redirects", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 29, "line_end": 35,
+      "source": { "file": "specs/auth-refresh/spec.swarm.md", "line_start": 29, "line_end": 35,
                   "content_hash": "sha256:e8f7…2d" }
     },
     {
@@ -89,7 +89,7 @@
           "selector": "clears-and-redirects", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 29, "line_end": 35,
+      "source": { "file": "specs/auth-refresh/spec.swarm.md", "line_start": 29, "line_end": 35,
                   "content_hash": "sha256:e8f7…2d" }
     },
     {
@@ -104,7 +104,7 @@
           "selector": "no_unbounded_retry", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 39, "line_end": 42,
+      "source": { "file": "specs/auth-refresh/spec.swarm.md", "line_start": 39, "line_end": 42,
                   "content_hash": "sha256:7d10…aa" }
     }
   ],

@@ -22,8 +22,8 @@ precision and recall can be computed by hand or by a future harness.
 These are **design targets** for this curated, labeled set — chosen acceptance bars, not
 a measurement claimed of any deployed detector. They are deliberately above the
 field-measured ceiling for lightweight requirement-smell detection (~0.59 precision /
-~0.82 recall, with wide variation), because a curated gold corpus is a far more
-controlled setting than production prose.
+~0.82 recall, with wide variation) [[SMELLS]](../../../docs/research/sources.md#SMELLS), because a
+curated gold corpus is a far more controlled setting than production prose.
 
 | Metric | Target | Meaning on this corpus |
 | --- | --- | --- |

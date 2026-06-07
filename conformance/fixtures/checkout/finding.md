@@ -14,7 +14,7 @@ Inert oracle data.
 type: finding
 id: charge-and-order-write-must-be-atomic
 status: promoted
-related_obligations: [AC-013, AC-011, I-010]
+origin_obligations: [AC-013, AC-011, I-010]
 confidence: high
 ---
 

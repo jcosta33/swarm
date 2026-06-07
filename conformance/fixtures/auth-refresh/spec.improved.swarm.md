@@ -21,7 +21,7 @@ The `improve` pass applied the closed, intent-preserving ops (the `improve` pass
 Q-001 was resolved out-of-band by the spec owner (decision: redirect to `/login`);
 the resolution is recorded and Q-001 is removed, unblocking AC-002. All other clauses carry
 through unchanged (improve is semantics-preserving) — including AC-001's `AFFECTS I-001`, which
-lowers to the two affects edges in the IR. After improve all three lint diagnostics clear and no
+lowers to the two affects edges in the structured form. After improve all three lint diagnostics clear and no
 blocking QUESTION remains. Still inert oracle data.
 -->
 

@@ -90,11 +90,13 @@ The frontmatter MUST carry the full field set below — including the orchestrat
 
 ## Copyable template
 
-The copyable skeleton for this artifact is shipped at:
+The copyable skeleton for this artifact is the **code-side** template at:
 
 ```
-starter-kit/.agents/templates/task.md
+docs/library/code-skills/templates/task.md
 ```
+
+(`task.md` is implement-side execution scratch, so its skeleton ships with the code-skills reference, not the authoring starter kit — a pristine code repo needs none.)
 
 That template is the skeleton you copy to start a task; **this page is its contract**. Where the template gives empty slots and the field enum, this page gives the meaning of each slot and the rules a conformant `task.md` MUST satisfy. There is **one** task template for every kind of work; a `task_kind` value specializes it.
 

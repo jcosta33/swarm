@@ -2,7 +2,7 @@
 auth-refresh golden-corpus POSITIVE fixture — Stage 8 (promotion, pass: promote).
 After reconcile (AC-002 re-run -> PASS, gate open), a durable discovery from the task is
 promoted into a finding carrying full provenance (mandated by the `promote` pass;
-schema in [the finding template](../../../templates/finding.md)): origin_obligations,
+schema in [the finding template](../../../starter-kit/.agents/templates/finding.md)): origin_obligations,
 origin_traces, the pass+profile that produced it, reviewer/tool, content_hash, confidence,
 and applies-when bounds. The memory/INDEX.md MAP gains one link with a "Load when" condition;
 no procedure is inlined there (see the `promote` pass). Inert oracle data.

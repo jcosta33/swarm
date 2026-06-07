@@ -3,7 +3,7 @@ payment-5xx golden-corpus POSITIVE fixture — Stage 8 (promotion, pass: promote
 After reconcile (the CONTRADICTED between the bounded-retry test and the duplicate-captures
 monitor closed once both proofs agreed, gate open), a durable discovery from the task is
 promoted into a finding carrying full provenance (per the finding schema in
-[../../../templates/finding.md](../../../templates/finding.md)): origin_obligations,
+[../../../starter-kit/.agents/templates/finding.md](../../../starter-kit/.agents/templates/finding.md)): origin_obligations,
 origin_traces, the pass+profile that produced it, reviewer/tool, content_hash, confidence,
 and applies-when bounds. The memory/INDEX.md MAP gains one link with a "Load when" condition;
 no procedure is inlined there (see the `promote` pass). Inert oracle data.

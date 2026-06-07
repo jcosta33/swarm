@@ -2,7 +2,7 @@
 auth-refresh golden-corpus POSITIVE fixture — Stage 6 (trace, pass: verify).
 The `verify` pass records a TRACE block plus the provenance the drift join depends on — the
 canonical seven fields the the `verify` pass defines: source_hash
-(echoing the IR node content_hash), per_surface_hash[] (each entry {surface, hash, exercised}),
+(echoing the structured-form node content_hash), per_surface_hash[] (each entry {surface, hash, exercised}),
 adapter, verdict, tier (the PROOF TYPE per the `verify` pass, never a RISK
 value), origin_obligations[], origin_traces[].
 Inert oracle data; the proof results below are recorded, not executed here.

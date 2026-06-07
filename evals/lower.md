@@ -33,6 +33,6 @@ The suite scores one cross-step predicate at the `lower` output:
 
 ## Related
 
-- [The IR schema](../../docs/reference/ir-schema.md) — the node/edge shape W1–W5 and parse-validity check against.
-- [The `lower` step guide](../../docs/passes/lower.md) — the projection contract and the `edges[]` single-source-of-truth rule this rubric grades.
-- [The lint catalogue](../../docs/language/errors.md) — `SOL-O003` (blocking-question-reaches-lowering), the condition W4 enforces.
+- [The structured-form schema](../docs/reference/structured-form.md) — the node/edge shape W1–W5 and parse-validity check against.
+- [The `lower` step guide](../docs/passes/lower.md) — the projection contract and the `edges[]` single-source-of-truth rule this rubric grades.
+- [The lint catalogue](../docs/language/errors.md) — `SOL-O003` (blocking-question-reaches-lowering), the condition W4 enforces.

@@ -1,6 +1,6 @@
 <!--
 checkout golden-corpus fixture — Stage 5 (work packets, passes: decompose, implement).
-The `decompose` pass projects the IR into work packets whose write surfaces are a subset of
+The `decompose` pass projects the structured form into work packets whose write surfaces are a subset of
 the assigned obligations' WRITES (the two-tier lowering rule; a packet writing a path outside
 its declared WRITES is SOL-O005). The checkout IR decomposes into two packets with DISJOINT
 write surfaces — `checkout-submit` owns the service code (api/src/checkout/submit.ts) and the

@@ -1,6 +1,6 @@
 <!--
 payment-5xx golden-corpus POSITIVE fixture — Stage 7 (review + merge gate, pass: review,
-run under the `skeptic` profile, see [../../../skills/persona-skeptic/SKILL.md](../../../skills/persona-skeptic/SKILL.md)). The `review` pass consumes the trace and emits
+run under the `skeptic` profile, see [../../../starter-kit/.agents/skills/persona-skeptic/SKILL.md](../../../starter-kit/.agents/skills/persona-skeptic/SKILL.md)). The `review` pass consumes the trace and emits
 per-obligation VERDICT lines carrying a core value optionally decorated with a lifecycle
 value (see the `review` pass). AC-021 is a clean PASS. AC-020 (`test` PASS) and I-001 (`monitor` FAIL) disagree
 about the same no-double-charge property, so both carry the CONTRADICTED decorator with the

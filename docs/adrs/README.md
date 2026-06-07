@@ -2,9 +2,9 @@
 
 Each ADR is a dated, immutable record of one load-bearing decision — its **context**, the **decision**, and its **consequences** — so a fork can judge whether the choice still fits. The full truth of any decision is the **chain** of ADRs that touch it, not the latest one alone.
 
-This ledger is the index. It carries a row for **every** ADR — kept, amended, already-superseded, and new — with its current disposition (§30 of the kernel spec).
+This ledger is the index. It carries a row for **every** ADR — kept, amended, already-superseded, and new — with its current disposition. *(The `§N` markers throughout this ledger and the topic tables below reference the **historical kernel spec** — a monolithic document since folded into `docs/`; they are retained as decision-provenance, not live links.)*
 
-## Governance (Nygard immutability, §30.1)
+## Governance (Nygard immutability)
 
 > An accepted ADR **MUST NOT** be edited in place. "Amending" a decision means publishing a **new, superseding ADR**; the original keeps its body and gains only a `Superseded by ADR-NNNN` status line. Rewriting an ADR destroys the historical record that makes the chain auditable.
 

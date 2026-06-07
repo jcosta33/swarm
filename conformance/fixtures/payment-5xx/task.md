@@ -1,6 +1,6 @@
 <!--
 payment-5xx golden-corpus POSITIVE fixture — Stage 5 (work packet, passes: decompose, implement).
-The `decompose` pass projects the IR into a work packet whose write surfaces are a subset of
+The `decompose` pass projects the structured form into a work packet whose write surfaces are a subset of
 the assigned obligations' WRITES (the two-tier lowering rule, the `lower` pass; a packet writing a
 path outside its declared WRITES is SOL-O005, G7). AC-020 and AC-021 share the single write
 surface server/src/payments/charge.ts, so they form one serial packet (no parallel split to

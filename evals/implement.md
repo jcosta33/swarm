@@ -30,6 +30,6 @@ The suite scores one cross-step predicate at the `implement` output:
 
 ## Related
 
-- [The `implement` step guide](../../docs/passes/implement.md) — the `TRACE` claim contract (`IMPLEMENTS`/`PRESERVES`/`CHANGED`/`PROOF`) this rubric grades.
-- [Drift and staleness](../../docs/reference/drift-and-staleness.md) — the trace-provenance schema (`source_hash`, `per_surface_hash[]`) the claims feed, which later detects staleness.
-- [The golden corpus](../../docs/reference/golden-corpus.md) — the empty-paste / no-evidence fixture class M4 guards against.
+- [The `implement` step guide](../docs/passes/implement.md) — the `TRACE` claim contract (`IMPLEMENTS`/`PRESERVES`/`CHANGED`/`PROOF`) this rubric grades.
+- [Drift and staleness](../docs/reference/drift-and-staleness.md) — the trace-provenance schema (`source_hash`, `per_surface_hash[]`) the claims feed, which later detects staleness.
+- [The golden corpus](../docs/reference/golden-corpus.md) — the empty-paste / no-evidence fixture class M4 guards against.

@@ -16,7 +16,7 @@ The `review` step **renders the merge-gate judgment**: it compares trace claims 
 | Input artifacts | `trace.md` (implementation claims), the `spec.swarm.md` obligations, recorded verification evidence (see [`verify`](verify.md)), diffs |
 | Output artifact | `review.md` — the canonical container of `VERDICT` blocks |
 | Default proof suite for the `review` task kind | `manual @ REVIEW` over the recorded evidence; re-run of the bound `cmd*` proofs |
-| Lint layer | `SOL-V` (VERIFICATION) — well-formedness of verdicts (see [`lint`](lint.md)) |
+| Lint layer | `SOL-M`, `SOL-V` (SEMANTIC + VERIFICATION) — well-formedness of verdicts + cross-reference/authority floors (see [`lint`](lint.md)) |
 
 ## Review as exception-handling
 

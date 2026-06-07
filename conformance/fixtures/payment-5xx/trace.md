@@ -1,7 +1,7 @@
 <!--
 payment-5xx golden-corpus POSITIVE fixture — Stage 6 (trace, pass: verify).
 The `verify` pass records a TRACE block plus the provenance the drift join depends on — the
-canonical seven G11 fields (see the `verify` pass): source_hash (echoing the IR node content_hash),
+canonical seven G11 fields (see the `verify` pass): source_hash (echoing the structured-form node content_hash),
 per_surface_hash[] (each entry {surface, hash, exercised}), adapter, verdict,
 tier (the PROOF TYPE — see the `verify` pass — never a RISK value), origin_obligations[], origin_traces[].
 The AC-020/AC-021 `test` proofs PASS in the harness. The I-001 `monitor` proof reports a
