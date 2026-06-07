@@ -13,7 +13,7 @@ the structured form is `snake_case` JSON. Full schema + worked instance: `docs/r
   `provenance[]`.
 - **edges[]**: `{ from, to, type, hard }`.
 - **diagnostics[]**: the lint records.
-- **provenance**: `{ hash, compiler_version, compiled_at }`.
+- **provenance**: `{ hash, tool_version, emitted_at }`.
 
 ## The 7 edge types (closed)
 `depends_on` · `blocks` · `conflicts_with` · `verified_by` · `affects` · `implements` · `preserves`.

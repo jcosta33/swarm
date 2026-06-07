@@ -18,13 +18,13 @@ Nothing enforces this stance at runtime ([Swarm ships no runtime](README.md)); i
 
 ## Filename & placement
 
-A bug-report is a **working artifact**, not a compiler-visible source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
+A bug-report is a **working artifact**, not a Swarm-format source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
 
-- The human-authored, compiler-visible spec is `*.swarm.md` — the only hand-written file that carries the infix.
+- The human-authored, Swarm-format spec is `*.swarm.md` — the only hand-written file that carries the infix.
 - Emitted, contract-shaped outputs are `*.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`).
 - Working artifacts — including this one — are plain `.md` with **no** `.swarm.` infix.
 
-Therefore the file is named `bug-report.md` (or a descriptive `<topic>.bug-report.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.swarm.md`; doing so would mark a diagnosis as a compiler-visible source spec and is a placement defect. A conformant tool treats the missing infix as sufficient proof not to parse the file as a spec.
+Therefore the file is named `bug-report.md` (or a descriptive `<topic>.bug-report.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.swarm.md`; doing so would mark a diagnosis as a Swarm-format source spec and is a placement defect. A conformant tool treats the missing infix as sufficient proof not to parse the file as a spec.
 
 In an adopted project, a bug-report is **durable source material** — a `type: bug-report` document committed to the spec repo:
 

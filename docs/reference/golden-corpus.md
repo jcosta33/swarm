@@ -25,7 +25,7 @@ The corpus is built on three recurring problem domains, chosen because each clea
 - **checkout** — cart submission, exercising obligation-bundling and write-surface-conflict defects.
 - **payment-5xx** — payment-processor 5xx handling, exercising semantic-contradiction, orchestration, and vague-prose defects.
 
-Each domain ships **positive** fixtures (must-compile) and **negative** fixtures (must-be-rejected). The positive variant of a domain always proves the very obligation its negative variant violates, so the pair brackets the defect from both sides.
+Each domain ships **positive** fixtures (must-pass) and **negative** fixtures (must-be-rejected). The positive variant of a domain always proves the very obligation its negative variant violates, so the pair brackets the defect from both sides.
 
 ## The full flow chain (every positive fixture)
 

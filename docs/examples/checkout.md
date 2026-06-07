@@ -11,7 +11,7 @@
 
 An open (non-`[blocking]`) `QUESTION` `Q-010` rides alongside — whether the order and inventory writes belong in one transaction or two. Unlike `auth-refresh`'s `[blocking]` `Q-001`, a non-blocking question raises no `SOL-O003` risk and does not gate `lower`; it is recorded as a deferred choice and resolved out of band at `improve`.
 
-Everything else — the three version fields in the frontmatter, the SARIF-shaped `SOL-<LAYER><NNN>` diagnostics, the semantics-preserving `improve` ops, the `snake_case` structured-form projection, the `UNVERIFIED` default and `null` `compiler_version`, the trace provenance table's seven fields, the per-obligation `VERDICT` model, and the indexed `finding` — works exactly as the `auth-refresh` page describes.
+Everything else — the three version fields in the frontmatter, the SARIF-shaped `SOL-<LAYER><NNN>` diagnostics, the semantics-preserving `improve` ops, the `snake_case` structured-form projection, the `UNVERIFIED` default and `null` `tool_version`, the trace provenance table's seven fields, the per-obligation `VERDICT` model, and the indexed `finding` — works exactly as the `auth-refresh` page describes.
 
 ## The authored spec (Stage 1)
 
@@ -208,6 +208,6 @@ That closes the loop: a draft spec with one bundled obligation, a parallel write
 
 - [Walkthrough: `auth-refresh`](./auth-refresh.md) — the full eight-stage walkthrough this page is a delta against; the canonical single-packet positive run.
 - [Walkthrough: `payment-5xx`](./payment-5xx.md) — the contradiction case: a production `monitor` proof disagrees with a green harness test at the merge gate.
-- [Golden corpus](../reference/golden-corpus.md) — `checkout` is the positive (`must-compile`) fixture this walkthrough draws from; the authored source trips `SOL-P004` (bundled obligation) and `SOL-O001` (parallel write-surface conflict).
+- [Golden corpus](../reference/golden-corpus.md) — `checkout` is the positive (`must-pass`) fixture this walkthrough draws from; the authored source trips `SOL-P004` (bundled obligation) and `SOL-O001` (parallel write-surface conflict).
 - Step references, in flow order: [`author`](../passes/author.md), [`lint`](../passes/lint.md), [`improve`](../passes/improve.md), [`lower`](../passes/lower.md), [`decompose`](../passes/decompose.md), [`implement`](../passes/implement.md), [`verify`](../passes/verify.md), [`review`](../passes/review.md), [`promote`](../passes/promote.md)
 - Artifact references for each stage's output: [`spec`](../artifacts/spec.md), [`task`](../artifacts/task.md), [`trace`](../artifacts/trace.md), [`review`](../artifacts/review.md), [`finding`](../artifacts/finding.md), [`memory`](../artifacts/memory.md)

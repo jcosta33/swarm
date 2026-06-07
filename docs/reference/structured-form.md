@@ -4,7 +4,7 @@
 
 A Swarm specification is human-authored as controlled markdown (`*.swarm.md`); the **structured (JSON) form** is the typed, machine-checkable form of that same content. Where the surface is English-shaped UPPERCASE space-separated keywords (`VERIFY BY`, `DEPENDS ON`, `WRITES`), the structured form is `snake_case` JSON (`verify_by`, `depends_on`, `writes`): one document re-expressing every obligation, relationship, diagnostic, and provenance fact of one source file. The **plan** takes those obligations and groups the work needed to discharge them into schedulable **work packets**. Where the structured form answers *"what must hold and how do the obligations relate,"* the plan answers *"what units of work exist, in what order, on which surfaces, and which are safe to run at the same time."*
 
-Both are **emitted contracts, not running code**. Swarm is markdown-only and has NO RUNTIME: this is a spec format plus the agents that build from it, and it ships **no emitter, no parser, no validator, and no scheduler** that produces or consumes these files. The JSON Schemas below are versioned, inert data — the shape a *future* tool MUST honor so any producer and any consumer interoperate. `*.swarm.ir.json` and `*.swarm.plan.json` are reserved, documented filenames, never artifacts a shipped process writes. This is why `provenance.compiler_version` is **`null` today**: there is no emitter to stamp a tool version. A valid repository MUST carry these schemas verbatim and MUST frame any structured-form or plan instance as "the contract a future tool emits and a future launcher consumes," never as the output of shipped tooling.
+Both are **emitted contracts, not running code**. Swarm is markdown-only and has NO RUNTIME: this is a spec format plus the agents that build from it, and it ships **no emitter, no parser, no validator, and no scheduler** that produces or consumes these files. The JSON Schemas below are versioned, inert data — the shape a *future* tool MUST honor so any producer and any consumer interoperate. `*.swarm.ir.json` and `*.swarm.plan.json` are reserved, documented filenames, never artifacts a shipped process writes. This is why `provenance.tool_version` is **`null` today**: there is no emitter to stamp a tool version. A valid repository MUST carry these schemas verbatim and MUST frame any structured-form or plan instance as "the contract a future tool emits and a future launcher consumes," never as the output of shipped tooling.
 
 > Design rationale: binding downstream analysis to a typed structured form rather than to free-form prose is what makes the obligations mechanically checkable — topological sort over dependencies, cycle detection, write-surface conflict detection, the traceability join, merge-gate evaluation, and drift recomputation all read the structured form, not the markdown. This is the surface-vs-structured-form layering: a human authors the surface, a tool reasons over the structured form.
 
@@ -29,8 +29,8 @@ A SOL structured-form document MUST be a single JSON object with **exactly five 
 | `meta` | object | exactly 1 | Spec-level identity, language discriminator, version, status, ownership, imports. |
 | `nodes` | array of node objects | 0..n | The merged obligation records — one per surface block. |
 | `edges` | array of edge objects | 0..n | The typed relationships between nodes — the single source of relationship truth. |
-| `diagnostics` | array of diagnostic objects | 0..n | SARIF-shaped lint/compile findings keyed to the unified `SOL-<LAYER><NNN>` taxonomy. |
-| `provenance` | object | exactly 1 | Emission facts: source hash, compiler version, compile timestamp. |
+| `diagnostics` | array of diagnostic objects | 0..n | SARIF-shaped lint findings keyed to the unified `SOL-<LAYER><NNN>` taxonomy. |
+| `provenance` | object | exactly 1 | Emission facts: source hash, tool version, emit timestamp. |
 
 A valid structured-form document MUST contain all five keys. An empty spec (no blocks) still emits `nodes: []`, `edges: []`, `diagnostics: []` and fully-populated `meta` and `provenance`. No additional top-level keys are permitted in SOL/0.1; unknown top-level keys MUST be rejected by a validating consumer.
 
@@ -192,14 +192,14 @@ Diagnostics live only in `diagnostics[]`; they are never folded into node `statu
 ### 1.5 `provenance`
 
 ```json
-{ "hash": "sha256:source-file-digest…", "compiler_version": null, "compiled_at": "2026-05-31T12:00:00Z" }
+{ "hash": "sha256:source-file-digest…", "tool_version": null, "emitted_at": "2026-05-31T12:00:00Z" }
 ```
 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
 | `hash` | string | MUST | Content hash of the whole source `*.swarm.md` at emission. |
-| `compiler_version` | string \| null | MUST (MAY be `null`) | The emitting tool's version — the third version axis. **`null` today**, because no emitter ships. |
-| `compiled_at` | string \| null | MUST (MAY be `null`) | ISO-8601 timestamp of emission; `null` until a tool emits. |
+| `tool_version` | string \| null | MUST (MAY be `null`) | The emitting tool's version — the third version axis. **`null` today**, because no emitter ships. |
+| `emitted_at` | string \| null | MUST (MAY be `null`) | ISO-8601 timestamp of emission; `null` until a tool emits. |
 
 ### 1.6 The three version fields (never merged)
 
@@ -209,7 +209,7 @@ The envelope echoes **three distinct version axes**. They occupy three distinct 
 |---|---|---|---|
 | `meta.language` | LANGUAGE | Which SOL grammar / block set / modal set / lint codes apply | `SOL/0.1` |
 | `meta.version` | SPEC CONTENT | Which revision of this spec's obligations | e.g. `0.1.0` |
-| `provenance.compiler_version` | TOOL | Which emitter produced this structured form | `null` (no shipped emitter) |
+| `provenance.tool_version` | TOOL | Which emitter produced this structured form | `null` (no shipped emitter) |
 
 These three values drift independently and MUST remain three fields.
 
@@ -353,11 +353,11 @@ These three values drift independently and MUST remain three fields.
     "provenance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["hash", "compiler_version", "compiled_at"],
+      "required": ["hash", "tool_version", "emitted_at"],
       "properties": {
         "hash":             { "type": "string", "description": "Hash of the source *.swarm.md this structured form was emitted from" },
-        "compiler_version": { "type": ["string", "null"], "description": "Tool version; null until a tool exists; never merged with meta.language or meta.version" },
-        "compiled_at":      { "type": ["string", "null"], "format": "date-time" }
+        "tool_version": { "type": ["string", "null"], "description": "Tool version; null until a tool exists; never merged with meta.language or meta.version" },
+        "emitted_at":      { "type": ["string", "null"], "format": "date-time" }
       }
     }
   }
@@ -426,13 +426,13 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
   ],
   "provenance": {
     "hash": "sha256:c0ffee…",
-    "compiler_version": null,
-    "compiled_at": "2026-05-31T12:00:00Z"
+    "tool_version": null,
+    "emitted_at": "2026-05-31T12:00:00Z"
   }
 }
 ```
 
-Notes on the instance: `meta.language` (`SOL/0.1`), `meta.version` (`0.1.0`), and `provenance.compiler_version` (`null`, no tool exists) are the three distinct version fields and are never collapsed; the `verify_by[].adapter` values (`cmdTest`, `cmdValidate`) are AGENTS.md > Commands slots, not commands Swarm runs; node `status` is `UNVERIFIED` because no `VERDICT` block has judged either obligation yet; the diagnostic `code` matches `^SOL-[SPMVO][0-9]{3}$`.
+Notes on the instance: `meta.language` (`SOL/0.1`), `meta.version` (`0.1.0`), and `provenance.tool_version` (`null`, no tool exists) are the three distinct version fields and are never collapsed; the `verify_by[].adapter` values (`cmdTest`, `cmdValidate`) are AGENTS.md > Commands slots, not commands Swarm runs; node `status` is `UNVERIFIED` because no `VERDICT` block has judged either obligation yet; the diagnostic `code` matches `^SOL-[SPMVO][0-9]{3}$`.
 
 ### 1.9 Structured-form validity
 
@@ -593,11 +593,11 @@ A packet's `merge_safe` MUST be `false` if it has any unresolved `conflicts_with
     "provenance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["hash", "compiler_version", "compiled_at"],
+      "required": ["hash", "tool_version", "emitted_at"],
       "properties": {
         "hash":             { "type": "string", "description": "Hash of the source structured form/spec this plan was derived from." },
-        "compiler_version": { "type": ["string", "null"], "description": "Tool version; null until a tool exists." },
-        "compiled_at":      { "type": ["string", "null"], "format": "date-time" }
+        "tool_version": { "type": ["string", "null"], "description": "Tool version; null until a tool exists." },
+        "emitted_at":      { "type": ["string", "null"], "format": "date-time" }
       }
     }
   }
@@ -630,7 +630,7 @@ For the auth-refresh spec (one `INTERFACE`, one `REQ` depending on it, one `INVA
     { "from": "WP-002", "to": "WP-001", "type": "depends_on", "hard": true },
     { "from": "WP-003", "to": "WP-002", "type": "depends_on", "hard": true }
   ],
-  "provenance": { "hash": "sha256:…", "compiler_version": null, "compiled_at": "2026-05-31T12:00:00Z" }
+  "provenance": { "hash": "sha256:…", "tool_version": null, "emitted_at": "2026-05-31T12:00:00Z" }
 }
 ```
 
@@ -645,7 +645,7 @@ A document is a valid SOL/0.1 plan iff it: (1) has exactly the four top-level ke
 ## Related
 
 - [docs/model/how-swarm-works.md](../model/how-swarm-works.md) — the seven phases / nine steps that emit and consume the structured form and the plan; the `lower` and `decompose` steps that produce them.
-- [docs/language/versioning.md](../language/versioning.md) — the two version axes and the three version fields (`meta.language`, `meta.version`, `provenance.compiler_version`) these envelopes carry.
+- [docs/language/versioning.md](../language/versioning.md) — the two version axes and the three version fields (`meta.language`, `meta.version`, `provenance.tool_version`) these envelopes carry.
 - [docs/language/SOL.md](../language/SOL.md) — the surface language: the 7 block types, 5 modals, and clause grammar these JSON fields are the structured form of.
 - [docs/language/errors.md](../language/errors.md) — the `SOL-<LAYER><NNN>` lint catalogue the `diagnostics[]` array carries.
 - [docs/reference/proof-types.md](./proof-types.md) — the 9 closed proof types and the `VERIFY BY <type>:<adapter>:<artifact>` binding the `verify_by[]` array normalizes.

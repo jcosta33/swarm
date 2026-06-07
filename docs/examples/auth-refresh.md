@@ -213,12 +213,12 @@ Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST
       "type": "affects", "hard": false }
   ],
   "diagnostics": [],
-  "provenance": { "hash": "sha256:c33b…9e", "compiler_version": null,
-                  "compiled_at": "2026-05-31T00:00:00Z" }
+  "provenance": { "hash": "sha256:c33b…9e", "tool_version": null,
+                  "emitted_at": "2026-05-31T00:00:00Z" }
 }
 ```
 
-Every node enters `lower` at `status: UNVERIFIED` — the default before any verdict exists. `compiler_version` is `null` because no tool is shipped; the structured form is the contract a future tool would emit against, produced here by hand.
+Every node enters `lower` at `status: UNVERIFIED` — the default before any verdict exists. `tool_version` is `null` because no tool is shipped; the structured form is the contract a future tool would emit against, produced here by hand.
 
 ---
 
@@ -388,5 +388,5 @@ That closes the loop: a draft spec with three blocking defects and an open quest
 ## Related
 
 - Step references, in flow order: [`author`](../passes/author.md), [`lint`](../passes/lint.md), [`improve`](../passes/improve.md), [`lower`](../passes/lower.md), [`decompose`](../passes/decompose.md), [`implement`](../passes/implement.md), [`verify`](../passes/verify.md), [`review`](../passes/review.md), [`promote`](../passes/promote.md)
-- [Golden corpus](../reference/golden-corpus.md) — `auth-refresh` is the positive (`must-compile`) fixture this walkthrough draws from
+- [Golden corpus](../reference/golden-corpus.md) — `auth-refresh` is the positive (`must-pass`) fixture this walkthrough draws from
 - Artifact references for each stage's output: [`spec`](../artifacts/spec.md), [`task`](../artifacts/task.md), [`trace`](../artifacts/trace.md), [`review`](../artifacts/review.md), [`finding`](../artifacts/finding.md), [`memory`](../artifacts/memory.md)

@@ -26,7 +26,7 @@ Two adjacent files complete Tier-1 but are governed by their own contracts, not 
 
 | Class | Infix | This artifact |
 | --- | --- | --- |
-| Human-authored compiler-visible spec | `*.swarm.md` | no — the index is not a SOL source |
+| Human-authored Swarm-format spec | `*.swarm.md` | no — the index is not a SOL source |
 | Emitted Swarm artifact | `*.swarm.*` (e.g. `*.swarm.ir.json`) | no — the index is not emitted by Swarm |
 | Working artifact | plain `.md`, no infix | **yes** — `memory/INDEX.md` |
 

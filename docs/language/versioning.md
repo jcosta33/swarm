@@ -59,7 +59,7 @@ The emitted structured form and plan MUST echo **three distinct fields**, and a 
 | ----- | -------------- | ------- |
 | `meta.language` | The SOL **discriminator** — which grammar this structured form was parsed under | `"SOL/0.1"` |
 | `meta.version` | The **spec content version** — the semver of *this spec's intent*, independent of language and framework | `"0.1.0"` |
-| `provenance.compiler_version` | The **tool version** that emitted the structured form, when a tool exists | `null` / unset today (no runtime) |
+| `provenance.tool_version` | The **tool version** that emitted the structured form, when a tool exists | `null` / unset today (no runtime) |
 
 ```json
 {
@@ -69,12 +69,12 @@ The emitted structured form and plan MUST echo **three distinct fields**, and a 
     "title": "auth-refresh"
   },
   "provenance": {
-    "compiler_version": null
+    "tool_version": null
   }
 }
 ```
 
-These answer three different questions — *which grammar* (`meta.language`), *which revision of this spec's intent* (`meta.version`), and *which tool produced this* (`provenance.compiler_version`) — and a single number cannot answer all three. `provenance.compiler_version` is `null` today because Swarm has no runtime: the parser, linter, and checker are contracts a future tool builds against, never shipped code.
+These answer three different questions — *which grammar* (`meta.language`), *which revision of this spec's intent* (`meta.version`), and *which tool produced this* (`provenance.tool_version`) — and a single number cannot answer all three. `provenance.tool_version` is `null` today because Swarm has no runtime: the parser, linter, and checker are contracts a future tool builds against, never shipped code.
 
 ## §4 — G10: canonical frontmatter
 

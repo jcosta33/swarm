@@ -83,7 +83,7 @@ VERIFY BY monitor:cmdMonitor:dashboards/payments/duplicate-captures#zero_double_
 
 ## The structured form (Stage 4)
 
-`lower` halts on any unresolved blocking diagnostic or open blocking `QUESTION` (`SOL-O003`); the structured form exists *only because* `improve` deconflicted `AC-020` and closed `Q-001` first. `I-001` lowers with `modality: MUST NOT`. Only `AC-020 affects I-001` is an `affects` edge — `AC-021` surfaces the exhaustion error and does not touch the capture path, so it carries no edge to the invariant. As on every page, every node enters at `status: UNVERIFIED` and `compiler_version` is `null` (no tool is shipped).
+`lower` halts on any unresolved blocking diagnostic or open blocking `QUESTION` (`SOL-O003`); the structured form exists *only because* `improve` deconflicted `AC-020` and closed `Q-001` first. `I-001` lowers with `modality: MUST NOT`. Only `AC-020 affects I-001` is an `affects` edge — `AC-021` surfaces the exhaustion error and does not touch the capture path, so it carries no edge to the invariant. As on every page, every node enters at `status: UNVERIFIED` and `tool_version` is `null` (no tool is shipped).
 
 ## The work packet (Stage 5) — a pending monitor row
 
@@ -192,6 +192,6 @@ That closes the loop: a draft spec with a self-contradiction, a vague-quality cl
 - [Walkthrough: `checkout`](./checkout.md) — the multi-obligation atomicity case: a bundled obligation and a parallel write-surface conflict.
 - [Drift and staleness](../reference/drift-and-staleness.md) — the `CONTRADICTED` decorator and the not-silent reconcile discipline the merge gate enforces here.
 - [Proof types and the `VERIFY BY` binding](../reference/proof-types.md) — the nine proof types the bindings above draw from (`contract` for the `INTERFACE`, `test` for the obligations, `monitor` for the invariant — the production observation that drives the contradiction).
-- [Golden corpus](../reference/golden-corpus.md) — `payment-5xx` is the positive (`must-compile`) fixture this walkthrough draws from; its canonical defect class is the `MUST`-vs-`MUST NOT` contradiction (`SOL-M002`), the vague high-risk word (`SOL-P005`), and the blocking-question-at-structuring risk (`SOL-O003`).
+- [Golden corpus](../reference/golden-corpus.md) — `payment-5xx` is the positive (`must-pass`) fixture this walkthrough draws from; its canonical defect class is the `MUST`-vs-`MUST NOT` contradiction (`SOL-M002`), the vague high-risk word (`SOL-P005`), and the blocking-question-at-structuring risk (`SOL-O003`).
 - Step references, in flow order: [`author`](../passes/author.md), [`lint`](../passes/lint.md), [`improve`](../passes/improve.md), [`lower`](../passes/lower.md), [`decompose`](../passes/decompose.md), [`implement`](../passes/implement.md), [`verify`](../passes/verify.md), [`review`](../passes/review.md), [`promote`](../passes/promote.md)
 - Artifact references for each stage's output: [`spec`](../artifacts/spec.md), [`task`](../artifacts/task.md), [`trace`](../artifacts/trace.md), [`review`](../artifacts/review.md), [`finding`](../artifacts/finding.md), [`memory`](../artifacts/memory.md)

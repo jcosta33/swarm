@@ -81,6 +81,6 @@
       "type": "affects", "hard": false }
   ],
   "diagnostics": [],
-  "provenance": { "hash": "sha256:e91f…40", "compiler_version": null,
-                  "compiled_at": "2026-06-01T00:00:00Z" }
+  "provenance": { "hash": "sha256:e91f…40", "tool_version": null,
+                  "emitted_at": "2026-06-01T00:00:00Z" }
 }

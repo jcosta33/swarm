@@ -1,6 +1,6 @@
 # `spec.swarm.md` — the source spec
 
-A `spec.swarm.md` is the one human-authored, compiler-visible artifact in Swarm: APS prose interleaved with SOL obligation blocks, and the single source the obligations are built from. Every task, trace, verdict, and proof downstream traces back to a `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` block authored here.
+A `spec.swarm.md` is the one human-authored, Swarm-format artifact in Swarm: APS prose interleaved with SOL obligation blocks, and the single source the obligations are built from. Every task, trace, verdict, and proof downstream traces back to a `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` block authored here.
 
 Swarm ships **no runtime** (see the [artifacts README](README.md)). A `spec.swarm.md` is inert Markdown; nothing on this page executes.
 
@@ -21,12 +21,12 @@ A spec asserts only the 5 modals — `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`,
 
 ## Filename and placement
 
-The spec is the **only** human-authored file that carries the `.swarm.` infix. The infix is the sole, sufficient discriminator a Swarm tool uses to decide "do I parse this as SOL source": a filename containing `.swarm.` before its final extension is compiler-visible; a plain `.md` is a working artifact governed by its own contract, never parsed as SOL.
+The spec is the **only** human-authored file that carries the `.swarm.` infix. The infix is the sole, sufficient discriminator a Swarm tool uses to decide "do I parse this as SOL source": a filename containing `.swarm.` before its final extension is Swarm-format; a plain `.md` is a working artifact governed by its own contract, never parsed as SOL.
 
 | Class | Filename rule | Example |
 | --- | --- | --- |
-| **Compiler-visible (human-authored)** | MUST contain `.swarm.` before the extension; this class has exactly one hand-written member. | `auth.swarm.md` |
-| **Compiler-visible (emitted)** | MUST contain `.swarm.`; produced by a future tool, never hand-written. | `auth.swarm.ir.json`, `auth.swarm.plan.json`, `auth.swarm.trace.md` |
+| **Swarm-format (human-authored)** | MUST contain `.swarm.` before the extension; this class has exactly one hand-written member. | `auth.swarm.md` |
+| **Swarm-format (emitted)** | MUST contain `.swarm.`; produced by a future tool, never hand-written. | `auth.swarm.ir.json`, `auth.swarm.plan.json`, `auth.swarm.trace.md` |
 | **Working artifact** | MUST NOT contain `.swarm.`; plain `.md`. | `task.md`, `review.md`, `finding.md` |
 
 So the spec is named `<slug>.swarm.md` (e.g. `auth.swarm.md`, `checkout.swarm.md`). The sibling source artifacts that promote into it — audit, research, bug-report, PRD, RFC, finding, ADR — are all plain `.md`; no per-artifact `.swarm.*` name is introduced for any of them.

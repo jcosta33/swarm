@@ -23,16 +23,16 @@ What a trace MUST NOT do:
 - **It MUST NOT re-bless a binding by re-stamping a hash.** Provenance hashes are recorded as the byproduct of a real proof run. Rewriting a recorded hash without re-running the bound proof manufactures a false `PASS` and is forbidden — drift is resolved by a genuine re-run, an obligation amendment, or a code fix, never by editing the trace's hash in place.
 - **It MUST NOT introduce a green build as discharge.** A passing `cmd*` is *shape*, not truth. The `PROOF` reference must point at the proof bound to the obligation's `VERIFY BY`, not merely at an aggregate green suite; a bundled suite can pass while the patch is wrong.
 
-A `TRACE` block embedded in a trace is **quoted SOL data** — it MUST obey the SOL block grammar (the same grammar that governs obligation blocks in a source spec), even though the surrounding file is a working artifact, not a compiler-visible spec.
+A `TRACE` block embedded in a trace is **quoted SOL data** — it MUST obey the SOL block grammar (the same grammar that governs obligation blocks in a source spec), even though the surrounding file is a working artifact, not a Swarm-format spec.
 
 ## Filename and placement
 
-The `.swarm.` infix discriminates **compiler-visible** files (Swarm-parsed or emitted — they carry `.swarm.` before the final extension) from **working artifacts** (plain `.md`, governed by an artifact contract rather than the SOL grammar). The trace straddles this line in a specific way:
+The `.swarm.` infix discriminates **Swarm-format** files (parsed or emitted — they carry `.swarm.` before the final extension) from **working artifacts** (plain `.md`, governed by an artifact contract rather than the SOL grammar). The trace straddles this line in a specific way:
 
 | Form | Filename | Class | When |
 | --- | --- | --- | --- |
 | Copyable skeleton | `trace.md` | working (plain) | The shipped template — the uninstantiated form. |
-| Built instance | `trace.md` or `*.swarm.trace.md` | working / compiler-visible | A trace produced for a specific built spec; the `*.swarm.trace.md` name is permitted when the instance is tracked as a Swarm-emitted artifact alongside the spec it traces. |
+| Built instance | `trace.md` or `*.swarm.trace.md` | working / Swarm-format | A trace produced for a specific built spec; the `*.swarm.trace.md` name is permitted when the instance is tracked as a Swarm-emitted artifact alongside the spec it traces. |
 
 The template itself is the only *plain* form; a built instance MAY take the `*.swarm.trace.md` name so a future tool can select traces by the stable, greppable infix without inspecting content. The hashes a trace records live in the markdown trace and/or the emitted structured form (`*.swarm.ir.json`); both are contract shapes today, computed by no shipped tool.
 

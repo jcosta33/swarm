@@ -21,13 +21,13 @@ This stance is held by the source-authority discipline, not by a runtime tool: a
 
 ## Filename & placement
 
-A status is a **working artifact**, not a compiler-visible source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
+A status is a **working artifact**, not a Swarm-format source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
 
-- The human-authored, compiler-visible spec is `*.swarm.md` — the only hand-written file that carries the infix.
+- The human-authored, Swarm-format spec is `*.swarm.md` — the only hand-written file that carries the infix.
 - Emitted, contract-shaped outputs are `*.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`).
 - Working artifacts governed by an artifact contract rather than the SOL grammar are plain `.md` with **no** `.swarm.` infix.
 
-A status is the latter: it is named `*.status.md` (plain `.md`, no `.swarm.` infix). It MUST NOT be named `*.swarm.md` — that would mark an observation as a compiler-visible source spec and is a placement defect, exactly the corruption the desired/observed split exists to prevent.
+A status is the latter: it is named `*.status.md` (plain `.md`, no `.swarm.` infix). It MUST NOT be named `*.swarm.md` — that would mark an observation as a Swarm-format source spec and is a placement defect, exactly the corruption the desired/observed split exists to prevent.
 
 In an adopted project, a status is **observed state**, distinct from both the desired sources and the recreatable execution packets. In a **code repo** this read-model is the spec repo's lightweight coverage record (the PR's CI + review approval being the per-change verdict it aggregates); a structured `*.status.md` is the contract shape that read-model satisfies when one is kept:
 
@@ -113,7 +113,7 @@ the latest observed verdict, drift, and coverage.
 
 ## Copyable template
 
-**There is no copyable skeleton for this artifact.** A status is not started from a blank template you fill in — it is *generated* and *updated* from upstream records (the trace provenance and the review verdicts) by the verify, review, and promote steps, and its name mirrors the spec it observes (`<ctx>/<slug>.status.md`). The observed shape above is the **contract** every generated status MUST satisfy; this page is that contract. Do not hand-author a status as intent, and do not introduce a `*.status.swarm.md` form — the status is observed state, never a compiler-visible source.
+**There is no copyable skeleton for this artifact.** A status is not started from a blank template you fill in — it is *generated* and *updated* from upstream records (the trace provenance and the review verdicts) by the verify, review, and promote steps, and its name mirrors the spec it observes (`<ctx>/<slug>.status.md`). The observed shape above is the **contract** every generated status MUST satisfy; this page is that contract. Do not hand-author a status as intent, and do not introduce a `*.status.swarm.md` form — the status is observed state, never a Swarm-format source.
 
 ## Related
 

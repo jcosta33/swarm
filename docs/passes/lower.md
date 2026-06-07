@@ -101,8 +101,8 @@ The **structured form** is the typed, machine-checkable form of a SOL spec: a si
 | `meta` | object | exactly 1 | Spec-level identity, language discriminator, version, status, ownership, imports |
 | `nodes` | array | 0..n | The merged obligation records — one per surface block |
 | `edges` | array | 0..n | The typed relationships — the single source of relationship truth |
-| `diagnostics` | array | 0..n | SARIF-shaped lint/compile findings keyed to `SOL-<LAYER>NNN` |
-| `provenance` | object | exactly 1 | Emission facts: source hash, tool version, compile timestamp |
+| `diagnostics` | array | 0..n | SARIF-shaped lint findings keyed to `SOL-<LAYER>NNN` |
+| `provenance` | object | exactly 1 | Emission facts: source hash, tool version, emit timestamp |
 
 A valid structured form MUST contain all five keys; an empty spec still emits `nodes/edges/diagnostics: []` with fully-populated `meta` and `provenance`. **No additional top-level keys** are permitted in SOL/0.1, and unknown top-level keys MUST be rejected by a validating consumer. The structured-form layer is **snake_case throughout**: every UPPERCASE space-separated surface keyword maps to a snake_case field (`VERIFY BY`→`verify_by`, `DEPENDS ON`→`depends_on`, `OWNED BY`→`owner`, `WRITES`→`writes`, `READS`→`reads`, `AFFECTS`→`affects`). This casing split is normative and never mixed (the [SOL surface](../language/SOL.md) keywords vs the structured-form fields).
 
@@ -187,9 +187,9 @@ The structured form echoes three distinct version axes (the two-axis [versioning
 |---|---|---|---|
 | `meta.language` | LANGUAGE | Which SOL+APS grammar / block set / modal set / lint codes apply | `SOL/0.1` |
 | `meta.version` | SPEC CONTENT | Which revision of this spec's obligations | `0.1.0` |
-| `provenance.compiler_version` | TOOL | Which tool produced this structured form | `null` in this repo (no shipped tool) |
+| `provenance.tool_version` | TOOL | Which tool produced this structured form | `null` in this repo (no shipped tool) |
 
-`provenance` carries `{hash, compiler_version, compiled_at}`: `hash` is the whole-source digest at emission; `compiler_version` and `compiled_at` are **`null` in this repository** because no tool ships (Invariant 1).
+`provenance` carries `{hash, tool_version, emitted_at}`: `hash` is the whole-source digest at emission; `tool_version` and `emitted_at` are **`null` in this repository** because no tool ships (Invariant 1).
 
 ### What a valid structured form needs
 

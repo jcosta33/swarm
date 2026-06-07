@@ -20,9 +20,9 @@ Because research is the *detached* evidence store, its scope is wider than a sin
 
 ## Filename & placement
 
-`research.md` is a **working artifact** in the filename sense — a plain `.md` source-document, not a compiler-visible spec. The discriminator is the `.swarm.` filename infix:
+`research.md` is a **working artifact** in the filename sense — a plain `.md` source-document, not a Swarm-format spec. The discriminator is the `.swarm.` filename infix:
 
-- The single human-authored compiler-visible spec is `*.swarm.md`.
+- The single human-authored Swarm-format spec is `*.swarm.md`.
 - Emitted, contract-shaped Swarm outputs carry the `.swarm.*` infix (for example `*.swarm.ir.json`, `*.swarm.trace.md`).
 - Source-documents and working artifacts — research, audits, bug-reports, findings, tasks, reviews, ADRs — carry **no** infix and use a plain `.md` extension.
 

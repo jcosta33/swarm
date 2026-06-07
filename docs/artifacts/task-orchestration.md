@@ -28,11 +28,11 @@ This stance is held by the write-surface discipline, not by any runtime tool: th
 
 ## Filename & placement
 
-`task-orchestration.md` is a **working artifact**, not a compiler-visible source. Its filename therefore MUST NOT carry the `.swarm.` infix; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
+`task-orchestration.md` is a **working artifact**, not a Swarm-format source. Its filename therefore MUST NOT carry the `.swarm.` infix; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
 
 | Class | Rule | This artifact |
 | --- | --- | --- |
-| Compiler-visible spec | The human-authored spec is `*.swarm.md`. | No — a coordination record is not a source spec. |
+| Swarm-format spec | The human-authored spec is `*.swarm.md`. | No — a coordination record is not a source spec. |
 | Emitted Swarm output | Emitted artifacts carry `.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.plan.json`, `*.swarm.trace.md`). | No — a coordination record is not a Swarm-emitted output. |
 | **Working artifact** | Plain `.md`, **no** `.swarm.` infix (e.g. `task-orchestration.md`). | **Yes** — it is a human/agent-authored coordination record. |
 
@@ -225,7 +225,7 @@ And the `## Parent contract` each child task carries verbatim:
 
 ## Copyable template
 
-**There is no copyable skeleton for this artifact.** A coordination record is not started from a blank template you fill in — it is *generated* by the lead during the decompose step and updated as the parallel run proceeds, and it is gitignored execution scratch (`task-orchestration.md`), created lazily by a future tool. The worker partition is structured from the obligations' declared `WRITES` surfaces; the hand-offs, liveness, decisions, and merge log are recorded as the run unfolds. The observed shape above is the **contract** every generated coordination record MUST satisfy; this page is that contract. Do not hand-author it as intent, and do not introduce a `task-orchestration.swarm.md` form — it is generated execution material, never a compiler-visible source.
+**There is no copyable skeleton for this artifact.** A coordination record is not started from a blank template you fill in — it is *generated* by the lead during the decompose step and updated as the parallel run proceeds, and it is gitignored execution scratch (`task-orchestration.md`), created lazily by a future tool. The worker partition is structured from the obligations' declared `WRITES` surfaces; the hand-offs, liveness, decisions, and merge log are recorded as the run unfolds. The observed shape above is the **contract** every generated coordination record MUST satisfy; this page is that contract. Do not hand-author it as intent, and do not introduce a `task-orchestration.swarm.md` form — it is generated execution material, never a Swarm-format source.
 
 ## Related
 

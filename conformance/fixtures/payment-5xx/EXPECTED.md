@@ -1,6 +1,6 @@
 # payment-5xx — expected outcome (golden-corpus POSITIVE fixture)
 
-This manifest pins the expected outcome of the `payment-5xx` positive (must-compile)
+This manifest pins the expected outcome of the `payment-5xx` positive (must-pass)
 fixture, the inert oracle a conformant tool is checked against (see [`../../conformance.yaml`](../../conformance.yaml)). It is the authority
 for this directory: the per-stage files reproduce the `intent → promotion` pipeline, and
 this manifest records the verdict a correct run must produce at each gate.
@@ -10,7 +10,7 @@ this manifest records the verdict a correct run must produce at each gate.
 ## What this fixture is
 
 - **Domain:** payment-5xx (payment-processor 5xx handling — incident-driven, proof-heavy).
-- **Polarity:** positive — the obligation set must compile and reach a mergeable PASS.
+- **Polarity:** positive — the obligation set must lower cleanly and reach a mergeable PASS.
 - **Canonical defect cluster exercised (on the *authored* source, stage 1):**
   a `MUST` / `MUST NOT` contradiction on one trigger (`SOL-M002`), a vague-quality predicate
   ("handle failures gracefully", `SOL-P005`), and a blocking `QUESTION` (`Q-001`) that would

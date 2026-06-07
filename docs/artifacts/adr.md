@@ -28,13 +28,13 @@ The amended ADR's body stays frozen; only its `status` becomes `superseded` and 
 
 ## Filename & placement
 
-An ADR is a **working artifact**, not a compiler-visible source. Its filename therefore MUST NOT carry the `.swarm.` infix and MUST use a plain `.md` extension. The infix rule partitions every Swarm-tracked file into two classes: the human-authored compiler-visible source is `*.swarm.md` (only the spec); files that a future tool *emits* take the `*.swarm.*` shape (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`); everything an agent or human authors as a working record — including ADRs, findings, reviews, traces, and tasks — is plain `.md`. An ADR is parsed by no tool; it is structured Markdown governed by this contract, though it MAY quote SOL blocks as data.
+An ADR is a **working artifact**, not a Swarm-format source. Its filename therefore MUST NOT carry the `.swarm.` infix and MUST use a plain `.md` extension. The infix rule partitions every Swarm-tracked file into two classes: the human-authored Swarm-format source is `*.swarm.md` (only the spec); files that a future tool *emits* take the `*.swarm.*` shape (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`); everything an agent or human authors as a working record — including ADRs, findings, reviews, traces, and tasks — is plain `.md`. An ADR is parsed by no tool; it is structured Markdown governed by this contract, though it MAY quote SOL blocks as data.
 
 Concretely, the class boundary is:
 
 | Class | Filename shape | Example |
 | --- | --- | --- |
-| Compiler-visible source (human-authored) | `*.swarm.md` | `auth.swarm.md` |
+| Swarm-format source (human-authored) | `*.swarm.md` | `auth.swarm.md` |
 | Emitted by a future tool | `*.swarm.*` | `auth.swarm.ir.json`, `auth.swarm.trace.md` |
 | Working artifact (this class) | plain `.md` | `adr.md`, `0027-sol-is-the-language.md` |
 

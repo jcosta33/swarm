@@ -19,9 +19,9 @@ Where a finding governs once accepted: it carries weight as durable evidence in 
 
 ## Filename and placement
 
-`finding.md` is a **working artifact**, not a compiler-visible source. The discriminator is the `.swarm.` filename infix:
+`finding.md` is a **working artifact**, not a Swarm-format source. The discriminator is the `.swarm.` filename infix:
 
-- The single human-authored compiler-visible spec is `*.swarm.md`.
+- The single human-authored Swarm-format spec is `*.swarm.md`.
 - Emitted, contract-shaped Swarm outputs carry the `.swarm.*` infix (for example `*.swarm.ir.json`, `*.swarm.trace.md`).
 - Working artifacts — findings, tasks, reviews, ADRs — carry **no** infix and use a plain `.md` extension.
 

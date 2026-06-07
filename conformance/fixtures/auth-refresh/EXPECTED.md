@@ -1,6 +1,6 @@
 # auth-refresh — expected outcome (golden-corpus POSITIVE fixture)
 
-This manifest pins the expected outcome of the `auth-refresh` positive (must-compile)
+This manifest pins the expected outcome of the `auth-refresh` positive (must-pass)
 fixture, the inert oracle a conformant tool is checked against (see [`../../conformance.yaml`](../../conformance.yaml)). It is the authority
 for this directory: the per-stage files reproduce the full `intent → promotion` pipeline,
 and this manifest records the verdict a correct run must produce at each gate.
@@ -10,7 +10,7 @@ and this manifest records the verdict a correct run must produce at each gate.
 ## What this fixture is
 
 - **Domain:** auth-refresh (silent token refresh on 401).
-- **Polarity:** positive — the obligation set must compile and reach a mergeable PASS.
+- **Polarity:** positive — the obligation set must lower cleanly and reach a mergeable PASS.
 - **Canonical defect cluster exercised (on the *authored* source, stage 1):**
   a vague-quality predicate (`SOL-P005`), a `SHOULD` with no `BECAUSE`/`EXCEPT` (`SOL-S006`),
   a missing-verification binding (`SOL-V001`), the no-unbounded-retry `INVARIANT` (`I-001`),

@@ -25,11 +25,11 @@ What a `task.md` MUST NOT do:
 
 ## Filename & placement
 
-`task.md` is a **working artifact**, not a compiler-visible one. Its filename therefore MUST NOT carry the `.swarm.` infix; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
+`task.md` is a **working artifact**, not a Swarm-format one. Its filename therefore MUST NOT carry the `.swarm.` infix; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
 
 | Class | Rule | This artifact |
 | --- | --- | --- |
-| Compiler-visible spec | The human-authored spec is `*.swarm.md`. | No — a task is not a source spec. |
+| Swarm-format spec | The human-authored spec is `*.swarm.md`. | No — a task is not a source spec. |
 | Emitted Swarm output | Emitted artifacts carry `.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.plan.json`, `*.swarm.trace.md`). | No — a task is not an emitted Swarm output. |
 | **Working artifact** | Plain `.md`, **no** `.swarm.` infix (e.g. `task.md`). | **Yes** — `task.md` is a human/agent working artifact. |
 

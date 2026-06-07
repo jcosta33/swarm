@@ -18,13 +18,13 @@ Two named specializations reuse this exact template, frontmatter, and stance and
 
 ## Filename & placement
 
-An audit is a **working artifact**, not a compiler-visible source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
+An audit is a **working artifact**, not a Swarm-format source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
 
-- The human-authored, compiler-visible spec is `*.swarm.md` — the only hand-written file that carries the infix.
+- The human-authored, Swarm-format spec is `*.swarm.md` — the only hand-written file that carries the infix.
 - Emitted, contract-shaped outputs are `*.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`).
 - Working artifacts — including this one — are plain `.md` with **no** `.swarm.` infix.
 
-Therefore the file is named `audit.md` (or a descriptive `<topic>.audit.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.swarm.md`; doing so would mark an observation as a compiler-visible source spec and is a placement defect.
+Therefore the file is named `audit.md` (or a descriptive `<topic>.audit.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.swarm.md`; doing so would mark an observation as a Swarm-format source spec and is a placement defect.
 
 In an adopted project, an audit is **desired-side durable source material** — a `type: audit` document committed to the spec repo:
 

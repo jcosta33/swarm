@@ -139,6 +139,6 @@
       "type": "affects", "hard": false }
   ],
   "diagnostics": [],
-  "provenance": { "hash": "sha256:c901…7f", "compiler_version": null,
-                  "compiled_at": "2026-06-02T00:00:00Z" }
+  "provenance": { "hash": "sha256:c901…7f", "tool_version": null,
+                  "emitted_at": "2026-06-02T00:00:00Z" }
 }

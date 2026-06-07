@@ -10,20 +10,20 @@ Swarm partitions every repository file that participates in the flow into **exac
 
 | Class | Filename rule | Meaning |
 | --- | --- | --- |
-| **Compiler-visible** | MUST contain the `.swarm.` infix (e.g. `auth.swarm.md`, `auth.swarm.ir.json`). | The file is *Swarm-parsed or emitted*. Its bytes are subject to the SOL surface grammar or to the structured-form / plan JSON schemas. |
+| **Swarm-format** | MUST contain the `.swarm.` infix (e.g. `auth.swarm.md`, `auth.swarm.ir.json`). | The file is *parsed or emitted*. Its bytes are subject to the SOL surface grammar or to the structured-form / plan JSON schemas. |
 | **Working artifact** | MUST NOT contain `.swarm.`; uses a plain `.md` extension (e.g. `task.md`, `review.md`). | A *human / agent working artifact*: structured Markdown governed by an artifact contract on these pages, not by the SOL grammar — though it MAY embed SOL blocks (notably `VERDICT` and `TRACE`) as quoted data. |
 
 A conformant Swarm tool MUST treat the `.swarm.` infix as the **sole, sufficient discriminator** for "do I parse or emit this": it MUST NOT parse a plain `.md` working artifact as SOL source, and MUST NOT emit a Swarm-generated output to a path lacking the infix. *Design rationale:* the double-extension convention (`.test.ts`, `.d.ts`) lets tooling select files by a stable, greppable suffix without inspecting their content.
 
 There are three filename shapes, and the infix tells them apart:
 
-- **`*.swarm.md`** — the source spec. The **only** human-authored compiler-visible artifact.
+- **`*.swarm.md`** — the source spec. The **only** human-authored Swarm-format artifact.
 - **`*.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.plan.json`, `*.swarm.trace.md`)** — *emitted* Swarm-generated artifacts. A future tool writes these; in this version they are reserved contract names with no shipped emitter.
 - **plain `*.md` (e.g. `task.md`, `audit.md`)** — working artifacts and source documents, authored or worked by hand.
 
 ## 2. Canonical filenames by class
 
-### 2.1 Compiler-visible artifacts (`.swarm.` infix)
+### 2.1 Swarm-format artifacts (`.swarm.` infix)
 
 | Filename pattern | Role | Authored by | Schema / grammar | Status |
 | --- | --- | --- | --- | --- |
@@ -98,7 +98,7 @@ The copyable skeleton for each artifact lives in the starter kit under `starter-
 
 ## 5. Filename and placement in an adopted project
 
-Each page restates the `.swarm.` infix rule for its own class: `spec.swarm.md` is the one human-authored compiler-visible source (`.swarm.md`); a built trace MAY take the emitted `*.swarm.trace.md` name; every other working artifact and source document is a plain `.md`.
+Each page restates the `.swarm.` infix rule for its own class: `spec.swarm.md` is the one human-authored Swarm-format source (`.swarm.md`); a built trace MAY take the emitted `*.swarm.trace.md` name; every other working artifact and source document is a plain `.md`.
 
 In an adopted project a **feature is a folder**, and an artifact lives with the thing it serves ([ADR-0052](../adrs/0052-per-feature-spec-folders.md)):
 
@@ -115,7 +115,7 @@ Swarm identifies an artifact by its frontmatter `type:`, not its path, so a tool
 
 | Page | Artifact | Class | Role |
 | --- | --- | --- | --- |
-| [spec.md](./spec.md) | `spec.swarm.md` | compiler-visible | Source of obligations. |
+| [spec.md](./spec.md) | `spec.swarm.md` | Swarm-format | Source of obligations. |
 | [task.md](./task.md) | `task.md` | working | Structured step frame for one step. |
 | [trace.md](./trace.md) | `trace.md` | working | Implementation claims + evidence. |
 | [review.md](./review.md) | `review.md` | working | The verdict record (verdict container). |

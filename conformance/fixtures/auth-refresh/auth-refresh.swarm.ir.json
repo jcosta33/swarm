@@ -123,6 +123,6 @@
       "type": "depends_on", "hard": true }
   ],
   "diagnostics": [],
-  "provenance": { "hash": "sha256:c33b…9e", "compiler_version": null,
-                  "compiled_at": "2026-05-31T00:00:00Z" }
+  "provenance": { "hash": "sha256:c33b…9e", "tool_version": null,
+                  "emitted_at": "2026-05-31T00:00:00Z" }
 }

@@ -20,7 +20,7 @@ Three discipline lines define what `review.md` is and is not:
 
 | Class | Rule | This artifact |
 | --- | --- | --- |
-| Compiler-visible | filename carries the `.swarm.` infix before its final extension (e.g. `auth.swarm.md`, `auth.swarm.ir.json`); Swarm-parsed or emitted against the SOL grammar or the structured-form / plan schemas | not this artifact |
+| Swarm-format | filename carries the `.swarm.` infix before its final extension (e.g. `auth.swarm.md`, `auth.swarm.ir.json`); parsed or emitted against the SOL grammar or the structured-form / plan schemas | not this artifact |
 | Working artifact | filename has **no** `.swarm.` infix and uses plain `.md`; governed by an artifact contract, not the SOL grammar, though it MAY embed SOL blocks (here, `VERDICT`) as quoted data | **`review.md`** |
 
 The only human-authored `.swarm.` artifact is the source spec, `*.swarm.md`; emitted Swarm artifacts carry the `*.swarm.*` shape (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`). A review is neither — it is hand- or agent-populated structured markdown that *quotes* `VERDICT` blocks as data.

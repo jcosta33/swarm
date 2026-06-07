@@ -12,7 +12,7 @@ Swarm partitions every repository file that participates in the flow into **exac
 
 | Class | Filename rule | Meaning |
 | --- | --- | --- |
-| **Compiler-visible** | MUST contain the `.swarm.` infix (e.g. `auth.swarm.md`, `auth.swarm.ir.json`). | The file is *parsed or emitted by the build steps*. Its bytes are subject to the SOL grammar (see the [SOL reference](../language/SOL.md)) or the structured-form / plan JSON schemas (the [structured form](../reference/structured-form.md)). |
+| **Swarm-format** | MUST contain the `.swarm.` infix (e.g. `auth.swarm.md`, `auth.swarm.ir.json`). | The file is *parsed or emitted by the build steps*. Its bytes are subject to the SOL grammar (see the [SOL reference](../language/SOL.md)) or the structured-form / plan JSON schemas (the [structured form](../reference/structured-form.md)). |
 | **Working artifact** | MUST NOT contain `.swarm.`; uses a plain `.md` extension (e.g. `task.md`, `review.md`). | A *human/agent working artifact*: structured Markdown governed by an artifact contract, not by the SOL grammar — though it MAY embed SOL blocks (notably `VERDICT` and `TRACE`) as quoted data. |
 
 A conformant Swarm tool MUST treat the `.swarm.` infix as the **sole, sufficient discriminator** for "do I parse/emit this": it MUST NOT parse a plain `.md` working artifact as SOL source, and MUST NOT emit a build output to a path lacking the infix.
@@ -32,7 +32,7 @@ This page does not re-enumerate the broader Swarm taxonomies (5 modals, 9 proof 
 
 ## 3. Canonical filenames by class
 
-### 3.1 Compiler-visible artifacts (`.swarm.` infix)
+### 3.1 Swarm-format artifacts (`.swarm.` infix)
 
 | Filename pattern | Role | Authored by | Schema / grammar | Status in v0.1 |
 | --- | --- | --- | --- | --- |
@@ -77,7 +77,7 @@ Seven artifacts. Each MUST ship both (a) a documented contract and (b) a copyabl
 
 | # | Artifact | Class | Role |
 | --- | --- | --- | --- |
-| 1 | `spec.swarm.md` | compiler-visible | Source of obligations. |
+| 1 | `spec.swarm.md` | Swarm-format | Source of obligations. |
 | 2 | `task.md` | working | Structured step frame. |
 | 3 | `trace.md` | working | Implementation claims + evidence. |
 | 4 | `review.md` | working | Verdict record (verdict container). |
