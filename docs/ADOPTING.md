@@ -25,10 +25,12 @@ pristine** — a good SOL spec is self-legible, so a developer's repo needs esse
 >      code-repo skill.
 >
 > 3. **Spec / docs repo (including a fresh repo you are instantiating as one):**
->    - Copy `starter-kit/.agents/{skills,reference,templates,memory}` into this repo's `.agents/`. Put the
->      **skills** in whatever directory my agent CLI scans — `.claude/skills/` for Claude Code, otherwise
->      `.agents/skills/` — beside any skills I already have (their `pass-*`/`persona-*`/`write-*` names won't
->      collide with mine).
+>    - Copy `starter-kit/.agents/{reference,templates,memory}` into this repo's `.agents/`. Copy
+>      `starter-kit/.agents/skills/` **into the directory my agent CLI actually scans** — `.claude/skills/`
+>      for Claude Code, otherwise `.agents/skills/` — beside any skills I already have (their
+>      `pass-*`/`persona-*`/`write-*` names won't collide with mine). **Don't leave the skills in
+>      `.agents/skills/` if my CLI scans `.claude/skills/`** — there they sit unread, and the failure is
+>      silent (no error, the skills just never activate).
 >    - Put `starter-kit/AGENTS.md` at my repo **root** as `AGENTS.md`. If one already exists, **merge** by
 >      heading — keep my content and stop for my approval on any conflict. Add `CLAUDE.md` and `GEMINI.md` as
 >      **symlinks** to `AGENTS.md` (or one-line `@AGENTS.md` aliases where symlinks don't survive).

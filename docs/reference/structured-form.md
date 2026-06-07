@@ -129,7 +129,7 @@ Each surface `VERIFY BY <type>:<adapter>:<artifact>[#selector]` clause normalize
 | `file` | string | MUST | Relative path to the originating `*.swarm.md`. |
 | `line_start` | integer (≥1) | MUST | First line of the block (1-based). |
 | `line_end` | integer (≥1) | MUST | Last line of the block. |
-| `content_hash` | string | MUST | Content hash of the block's source text (e.g. `sha256:…`); the obligation-source hash the drift model joins against (drives `STALE` detection). |
+| `content_hash` | string | MUST | Content hash of the block's source text (e.g. `sha256:…`); the obligation-source hash the drift model joins against (drives `STALE` detection). **Tool-emitted** (Invariant 1: no shipped hasher) — a by-hand run records a documented placeholder (`pending:tool` or a git blob/commit ref), never a fabricated digest, and a hand-written hash is untrusted until a tool recomputes it. |
 
 #### 1.2.4 `status` — the verdict model, carried as two fields
 

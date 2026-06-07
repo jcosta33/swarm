@@ -20,7 +20,7 @@
 ## Swarm startup
 <!-- The always-on doctrine (the load-what-the-task-names rule, plus the universal invariants).
      Keep these as facts/rules, never step-by-step procedures. -->
-1. Read the current task file first.
+1. Read the current task file first — the run's scratch task frame, created when work begins (gitignored, not a committed repo file; template in the code-skills reference). A fresh repo has none yet: start from the request + the relevant `specs/<feature>/spec.swarm.md`.
 2. `.agents/` holds only Swarm tooling: `skills/` (beside your own), `reference/`, `templates/`, `memory/`. Your **specs live in per-feature folders** — `specs/<feature>/spec.swarm.md`, with each feature's supporting docs (audit/research/bug-report/…, `type:`-tagged) beside it; **ADRs** live in `decisions/` (numbered); **findings** live in `.agents/memory/`. No `.swarm/` mount.
 3. Treat `.swarm.md` blocks as authoritative over prose summaries.
 4. Use assigned obligation IDs as scope.

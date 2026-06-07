@@ -189,7 +189,7 @@ The structured form echoes three distinct version axes (the two-axis [versioning
 | `meta.version` | SPEC CONTENT | Which revision of this spec's obligations | `0.1.0` |
 | `provenance.tool_version` | TOOL | Which tool produced this structured form | `null` in this repo (no shipped tool) |
 
-`provenance` carries `{hash, tool_version, emitted_at}`: `hash` is the whole-source digest at emission; `tool_version` and `emitted_at` are **`null` in this repository** because no tool ships (Invariant 1).
+`provenance` carries `{hash, tool_version, emitted_at}`: `hash` is the whole-source digest at emission; `tool_version` and `emitted_at` are **`null` in this repository** because no tool ships (Invariant 1). The same honesty governs every hash a by-hand run touches (`hash` here, the `source` node's `content_hash` below, a trace's `source_hash`/`per_surface_hash[]`): with no shipped hasher, a by-hand author records a **documented placeholder** (`pending:tool`, or a git blob/commit ref) rather than a fabricated digest. A hand-written hash is untrusted until a tool recomputes it; the staleness join that consumes these hashes is a future-tool contract.
 
 ### What a valid structured form needs
 

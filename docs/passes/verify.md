@@ -303,7 +303,7 @@ For an obligation carrying `RISK high` or `RISK critical`, a single concrete `te
 | Obligation `RISK` | Adequate bound oracle |
 | --- | --- |
 | `low` \| `medium` | Any type per the per-block type-selection rules; `test` alone is acceptable. |
-| `high` \| `critical` | `property` \| `model`, OR a `test`/`contract` whose `oracle_adequacy.adequacy_evidence[]` carries `mutation` or `metamorphic` evidence. A bare concrete `test` with no adequacy evidence is `SOL-V011` (ADVISORY by default; BLOCKING in strict mode). |
+| `high` \| `critical` | `property` \| `model`, OR a `test`/`contract` whose `oracle_adequacy.adequacy_evidence[]` carries `mutation` or `metamorphic` evidence. A bare concrete `test` with no adequacy evidence is `SOL-V011`, **BLOCKING at this RISK** — it blocks the merge gate, not merely warns ([ADR-0055](../adrs/0055-close-the-gate-soft-control-gaps.md)). |
 
 This is the `INVARIANT` type-preference generalised to consequence: an `INVARIANT` is flagged because a universal predicate outruns an example; a `RISK high|critical` obligation is flagged because the *cost of a missed defect* outruns an example. The fix in both cases is an oracle that ranges over more than one input, or explicit evidence the example-based oracle is hard to fool.
 

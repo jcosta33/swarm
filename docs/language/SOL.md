@@ -452,7 +452,7 @@ The five lint layers are **S/P/M/V/O** (Syntax / Prose / seMantic / Verification
 | `SOL-P004` | Prose | Bundled obligation (BLOCKING) / >2 `AND THE` chain (advisory) |
 | `SOL-P008` | Prose | Hedged-prose ambiguity that should be a QUESTION |
 | `SOL-P058` | Prose | Deprecated `SHALL`/`SHALL NOT` alias |
-| `SOL-M001` | Semantic | Cross-spec id collision |
+| `SOL-M001` | Semantic | Actor / object / surface incompleteness — an unresolved referent across the spec / imports (also catches cross-spec id collision) |
 | `SOL-M003` | Semantic | Unbound cross-reference (unknown obligation/interface id) |
 | `SOL-V001` | Verification | Binding obligation with no `VERIFY BY` |
 | `SOL-V003` | Verification | INVARIANT bound only to a non-observable unit test |

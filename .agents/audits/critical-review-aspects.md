@@ -154,6 +154,23 @@ reviewable evidence*, never *automatic correctness*.
 hollow drift · 6. Hand-computed, single-spec parallel safety · 7. `SOL-M001` (and counts) reconcile? ·
 8. Stance laundering at `author` · 9. Adoption dead-ends · 10. §0.7 + adapter injection + over-claim.
 
+## Resolution status (2026-06-07)
+
+The six **fixable-defect** aspects now have contract fixes; the four **design-tensions** (#1, #2, #6, #10)
+remain watch-items **by design** (a deliberate consequence of Invariant 1 — they are not "fixed").
+
+- **#3 adequacy advisory, #4 empty-set gate, #8 uncovered-bug seam** → [ADR-0055](../../docs/adrs/0055-close-the-gate-soft-control-gaps.md):
+  the merge-gate predicate now (a) does not pass by vacuity on an empty in-scope set, (b) blocks on an
+  inadequate oracle for `RISK high|critical` (`SOL-V011` BLOCKING there, advisory for `low|medium`), and
+  (c) routes an uncovered bug through a spec amendment as the fix task's first obligation.
+- **#7 `SOL-M001` dual definition** → reconciled: `docs/language/SOL.md` now matches the canonical
+  `errors.md`/`lint.md` definition (actor/object/surface incompleteness, also catches cross-spec collision).
+- **#5 uncomputable hashes** → `trace.md`/`lower.md`/`structured-form.md` now mark hash fields tool-emitted,
+  with a documented by-hand placeholder convention; a hand-written hash is untrusted until a tool recomputes.
+- **#9 adoption dead-ends** → `docs/ADOPTING.md` disambiguates the skills-copy destination (silent-failure
+  warning) and `starter-kit/AGENTS.md` startup rule #1 clarifies the task file is run scratch, not a committed
+  repo file.
+
 ## Recommended obligations (prose — candidate watch-disciplines a spec/ADR could carry)
 
 - A conformance/coherence review SHOULD treat every "gate/check/enforced/MUST" as **advisory until a
