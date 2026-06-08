@@ -33,7 +33,9 @@ pristine** — a good SOL spec is self-legible, so a developer's repo needs esse
 >      silent (no error, the skills just never activate).
 >    - Put `starter-kit/AGENTS.md` at my repo **root** as `AGENTS.md`. If one already exists, **merge** by
 >      heading — keep my content and stop for my approval on any conflict. Add `CLAUDE.md` and `GEMINI.md` as
->      **symlinks** to `AGENTS.md` (or one-line `@AGENTS.md` aliases where symlinks don't survive).
+>      **symlinks** to `AGENTS.md` (`ln -s AGENTS.md CLAUDE.md` and `ln -s AGENTS.md GEMINI.md`) — one
+>      bootloader, many agent tools. Do **not** use `@AGENTS.md` import aliases (a regular file that just
+>      `@`-imports `AGENTS.md`); the entrypoints are symlinks so there is a single file, never a copy to drift.
 >    - Create a top-level **`specs/`** with **one folder per feature** — `specs/<feature>/spec.swarm.md` is
 >      the contract (where the `author` step writes), and that feature's supporting docs (audit, research,
 >      bug-report, PRD, RFC, …) sit beside it in the same folder. Create a top-level **`decisions/`** for ADRs
