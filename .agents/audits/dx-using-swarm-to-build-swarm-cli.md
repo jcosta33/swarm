@@ -82,6 +82,25 @@ title: DX of using Swarm to build swarm-cli (dogfooding findings)
   surveyor stance (observe the code, not the doc) caught it — but it shows convention docs drift from code
   with nothing reconciling them.
 
+## §3.5 From the `swarm lint` build (the dogfood starts eating itself)
+
+- **Milestone — F1's circularity begins to close.** `swarm lint` v1 now lints `*.swarm.md` specs (the
+  block-level `SOL-S` layer) — so the toolchain can finally **self-validate its own specs** for the
+  structural layer, instead of only by hand. Dogfooded clean on specs 002 & 005, `SOL-S005` on a malformed
+  REQ. A virtuous-cycle moment: the thing being built starts checking the things that build it.
+- **G6 — model-isolation makes a genuine shared contract awkward to consume.** The `Sol` barrel exports only
+  `parse_spec` (per the "don't re-export use-case types across modules" convention), so `lint` reaches the
+  IR via `ReturnType<typeof parse_spec>` inference rather than `import type { SwarmIr }`. It works, but the
+  IR **is** the intended cross-module contract (parser → lint → verify all reason over it); the convention
+  that prevents model coupling also hides the one type that is meant to cross. *Recommend:* allow a module to
+  export a designated *contract* type (vs internal models) — the IR is exactly that case.
+- **F3 reinforced (hard).** Reading the true test result was repeatedly confounded by the rtk proxy
+  condensing output to `PASS (n)` and by a **stale** JSON report (`ls -t` picked an older run showing 461
+  when the live suite was green); the process **exit code** was the only reliable signal. This is precisely
+  the "summary-only proof" the skeptic stance rejects — the verbatim artifact must be reachable.
+- **Minor adopter-facing wart:** a spawned command prints node's `--experimental-strip-types` warning to
+  stderr, polluting `swarm lint`'s output.
+
 ## §4 Recommendations (for the framework, distilled)
 
 1. **G1 is the headline:** require a spec's structural/packaging assumptions to cite a deciding ADR — the
