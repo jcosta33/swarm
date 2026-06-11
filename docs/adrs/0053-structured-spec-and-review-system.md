@@ -97,3 +97,5 @@ change. No follow-on migration.
   [[ORCHID]](./research/sources.md#ORCHID), [[METR]](./research/sources.md#METR),
   [[DORA2025]](./research/sources.md#DORA2025).
 - Does NOT change: any closed set, the SOL grammar, the nine steps, the verdicts, or the artifact set.
+
+> **Ledger note (2026-06-11):** refined by ADR-0057; intake-directory deferral partially superseded by ADR-0061.

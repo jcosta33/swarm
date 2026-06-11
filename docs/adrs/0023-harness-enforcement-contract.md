@@ -32,3 +32,5 @@ The `AGENTS.md > Commands` table ([0018](./0018-agents-md-command-contract.md)) 
 - **Call empirical-proof a "hard gate" and stop.** The audit's BLOCKER-adjacent finding: it over-claims enforcement the markdown layer cannot provide, and never names the self-attestation reality where the claim is made.
 - **Build the enforcer into this repo.** Violates Principle 1 (no runtime). The contract belongs in the framework; the enforcer belongs in the CLI.
 - **Drop the confidence claim entirely.** Throws away the real value (conspicuousness + a defined enforcement target). Scoping the claim honestly and specifying the contract keeps both.
+
+> **Ledger note (2026-06-11):** refined by ADR-0063 (four-level honesty framework).

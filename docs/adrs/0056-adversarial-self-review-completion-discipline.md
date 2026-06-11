@@ -79,3 +79,5 @@ Accepted (v0.1). The `## Self-review` strengthening, the task-template prompts, 
 - **Grounded by:** [[REFLEXION]](./research/sources.md#REFLEXION) (self-critique improves output) + the
   self-preference hazard already cited in `review`.
 - **Does NOT change:** any closed set, the SOL grammar, the nine steps, the verdict model, or the artifact set.
+
+> **Ledger note (2026-06-11):** refined by ADR-0064 (self-review carried inside the implement-task guide).

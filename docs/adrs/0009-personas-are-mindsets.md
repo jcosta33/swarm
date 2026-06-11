@@ -18,3 +18,5 @@ The seven shipped personas live as individual skills under `/scaffold/.agents/sk
 
 - Positive: transferable process; juniors can enforce Skeptic checks when the task demands it.
 - Negative: culturally unfamiliar — onboarding must emphasize mindset, not theatrical voice.
+
+> **Ledger note (2026-06-11):** partially superseded by ADR-0064 (personas fold into focused guides).

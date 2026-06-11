@@ -75,3 +75,5 @@ Accepted (v0.1). The vocabulary sweep + the schema-field rename + the fixture/ex
 - Contract change: the structured-form `provenance` fields `tool_version` (was `compiler_version`) and
   `emitted_at` (was `compiled_at`).
 - Does NOT change: any closed set, the SOL grammar, the nine steps, the verdicts, or the artifact set.
+
+> **Ledger note (2026-06-11):** refined by ADR-0057, ADR-0059.

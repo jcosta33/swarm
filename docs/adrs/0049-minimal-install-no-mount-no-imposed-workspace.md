@@ -127,3 +127,5 @@ reconciling README / PRINCIPLES / `conformance.md` with this model.
 - Refines: [0040](./0040-kernel-payload-directory.md), [0044](./0044-kernel-is-derived-and-self-contained.md).
 - Depends on: [0047](./0047-skills-are-self-contained.md) (self-contained skills make the in-place install safe).
 - Does NOT change: the obligation grammar, any closed set, or the intent/reality/observed reconciliation design.
+
+> **Ledger note (2026-06-11):** refined by ADR-0057, ADR-0062.

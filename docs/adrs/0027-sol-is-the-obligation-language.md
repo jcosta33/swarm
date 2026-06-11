@@ -56,3 +56,5 @@ Accepted (v0.1).
 - Adds: SOL as the single home of obligation semantics — the closed seven-block, five-modal surface (§5–§6); the binding-vs-commentary boundary (§5.9).
 - Modifies: prose's role — it is APS commentary around SOL, never the carrier of obligation force (§5.5, §5.9).
 - Supersedes: nothing.
+
+> **Ledger note (2026-06-11):** partially superseded by ADR-0058 (SOL becomes the optional stricter surface, a notation).

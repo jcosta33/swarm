@@ -54,3 +54,5 @@ Accepted (v0.1).
 - Adds: the `SOL-<LAYER><NNN>` namespace contract — one prefix, five layers (`S`/`P`/`M`/`V`/`O`), three-digit 100-blocks, append-only with tombstoning (§8.1.1).
 - Adds: the diagnostic-record shape `{ code, severity, layer, span, message, suggest }` as the checker-emit/surface contract (§8.1.2).
 - Supersedes: the `APS-*` code prefix, the flat `SOL101`/`SOL201`/`SOL301` codes, and the `SOL-L###` family — all subsumed by the unified `SOL-<LAYER><NNN>` namespace (§8.5).
+
+> **Ledger note (2026-06-11):** refined by ADR-0063 (codes become review checklists).

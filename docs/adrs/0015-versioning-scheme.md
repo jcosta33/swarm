@@ -20,3 +20,5 @@ The version a consumer holds is recorded in **`.agents/.swarm-version`** (a sing
 
 - Positive: teams can judge upgrade risk when refreshing scaffolds.
 - Negative: burdens maintainers with compatibility thinking — proportional to adoption.
+
+> **Ledger note (2026-06-11):** spec-file versioning clauses superseded by ADR-0058 (specs carry no language version).

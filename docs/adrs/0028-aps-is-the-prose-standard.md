@@ -55,3 +55,5 @@ Accepted (v0.1).
 - Adds: the prose-authority contract (all load-bearing meaning lives in SOL/IR; prose is a non-authoritative delivery layer carrying no obligation force) and the binding-clause-vs-commentary boundary as the standard governing all non-SOL prose (§7).
 - Modifies: none.
 - Supersedes: none.
+
+> **Ledger note (2026-06-11):** partially superseded by ADR-0058 (APS becomes advisory writing rules).

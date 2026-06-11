@@ -81,3 +81,5 @@ Accepted (v0.1).
 - Adds: the two-level phase-vs-pass distinction and the pass-to-phase mapping (§9.1, §9.3).
 - Modifies: the meaning of "compile" — now the disciplined transformation of intent into verified change across the nine passes (§9).
 - Supersedes: none.
+
+> **Ledger note (2026-06-11):** refined by ADR-0057 (nine steps become the advanced lifecycle); per-kind routing clauses partially superseded by ADR-0068.

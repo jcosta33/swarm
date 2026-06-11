@@ -56,3 +56,5 @@ Accepted (v0.1).
 - Adds: the two-tier memory contract — Tier-1 `memory/INDEX.md` (load-when discipline) + `memory/glossary.md`; Tier-2 immutable evidence store + `memory/patterns/*.md`.
 - Adds: mandatory provenance on every `accepted`/`promoted` finding (§23.3) and the discovery-to-target promotion routing (§23.4.2).
 - Modifies: task-closure — a task MUST NOT close while any promotion item is `pending`; task-local chatter is dispositioned `rejected` (execution-local), never promoted.
+
+> **Ledger note (2026-06-11):** refined by ADR-0067 (memory tiering).

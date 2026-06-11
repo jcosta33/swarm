@@ -111,3 +111,5 @@ follow-up.
 - Depends on: [0047](./0047-skills-are-self-contained.md) (self-contained skills make a one-skill
   implementing kit viable).
 - Does NOT change: the obligation grammar, any closed set, the nine passes, or the reconciliation design.
+
+> **Ledger note (2026-06-11):** refined by ADR-0060, ADR-0062.

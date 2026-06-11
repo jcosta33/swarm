@@ -66,3 +66,5 @@ Extends ADR-0015 (adds the language axis alongside the package axis; 0015's body
 - Adds: the language version axis (`swarm_language`, `aps_version`, per-file) and the one-way language⇒framework release trigger (§25.1–§25.2); the three distinct version fields in the IR/plan (§25.3).
 - Modifies: the scope of ADR-0015 — its single version is now explicitly the *package* axis, with the language axis tracked separately.
 - Supersedes: nothing (0015 is extended, not replaced).
+
+> **Ledger note (2026-06-11):** spec-file clauses superseded by ADR-0058 (no per-file language version).

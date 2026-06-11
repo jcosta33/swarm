@@ -20,3 +20,5 @@ Overlay personas remain **project-local** additions; they extend, not splinter, 
 
 - Positive: deterministic conditioning; Skeptic proofs never blend with Builder improvisation in the same task by default.
 - Negative: occasional misfit when reality straddles types — resolved by **re-tasking**, not persona blending mid-session.
+
+> **Ledger note (2026-06-11):** partially superseded by ADR-0064 (persona shipping model).

@@ -34,3 +34,5 @@ The `docs/personas/` catalogue still documents all 13 mindsets and marks which 7
 
 - **Ship all 13 as persona skills.** Five would be near-duplicates of their workflow skill, doubling the surface for no added discipline.
 - **Keep one consolidated `personas/SKILL.md`.** Forces all-or-nothing loading and can't give each mindset the directive `description` that self-assessment activation depends on.
+
+> **Ledger note (2026-06-11):** partially superseded by ADR-0064 (persona shipping model).

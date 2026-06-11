@@ -107,3 +107,5 @@ seam edit, and the two accompanying reconciliations are this change.
   `SOL-M001` row; the hash-field contracts in [`trace.md`](./artifacts/trace.md), [`lower.md`](./passes/lower.md),
   [`structured-form.md`](./reference/structured-form.md).
 - **Does NOT change:** any closed set, the SOL grammar, the nine steps, the verdict model, or the artifact set.
+
+> **Ledger note (2026-06-11):** refined by ADR-0063.

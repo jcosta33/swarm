@@ -75,3 +75,5 @@ Accepted (v0.1).
 - Adds: the `SKILL.md` carrier contract; the standalone per-`task_kind`, per-artifact, and per-profile skill set; surgical-`description` activation as the shipped norm.
 - Modifies: the carrier filename (`GUIDE.md` → `SKILL.md`) and the shipped-skill inventory (the "five stdlib pass guides" packaging).
 - Refines: [0016](./0016-skills-are-self-contained.md), [0017](./0017-no-always-load-skills.md), [0019](./0019-personas-ship-as-individual-skills.md), [0029](./0029-nine-pass-compiler-model.md), [0036](./0036-heuristic-profile-model.md), [0037](./0037-load-what-the-task-names.md).
+
+> **Ledger note (2026-06-11):** refined by ADR-0064; per-kind routing clauses partially superseded by ADR-0068.

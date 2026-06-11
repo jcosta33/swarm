@@ -50,6 +50,16 @@
 <a id="JUDGEBIAS"></a>
 **[JUDGEBIAS] Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.** Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li, Xing, Gonzalez, Stoica. **NeurIPS 2023 (Datasets & Benchmarks)**, arXiv:2306.05685. *Verified (June 2026, venue + finding).* Documents the structural biases of an LLM judge: **self-enhancement** (rates its own outputs more favourably), **position** (favours the first/last answer), and **verbosity** (favours longer answers). Grounds: judge bias is directional and predictable, so a `manual` verdict needs a recorded, independent, non-author judge.
 
+
+<a id="CLARIFYGPT"></a>
+**[CLARIFYGPT] ClarifyGPT: A Framework for Enhancing LLM-Based Code Generation via Requirements Clarification.** Mu et al. **FSE 2024** (Proc. ACM Softw. Eng., DOI 10.1145/3660810), arXiv:2310.10996. *Verified (June 2026, direct fetch + adversarial re-verification, 4/4 votes).* Detecting requirement ambiguity (code-consistency check), asking targeted clarifying questions, then regenerating raises GPT-4 Pass@1 **70.96%→80.80%** on MBPP-sanitized (human eval, n=10) and **68.02%→75.75%** average across four benchmarks (simulated users; simulation has ground-truth access — treat gains as an upper bound). Grounds: disambiguated requirement text measurably improves first-pass correctness — the mechanism a short curated spec front-loads.
+
+<a id="SPECFIX"></a>
+**[SPECFIX] Automated Repair of Ambiguous Problem Descriptions for LLM-Based Code Generation.** Jia, Morris, Ye, Sarro, Mechtaev. **ASE 2025**, arXiv:2505.07270. *Verified (June 2026, direct fetch + adversarial re-verification, 4/4 votes).* Repairing only the requirement TEXT (no interaction) modified **43.58%** of benchmark descriptions and improved Pass@1 on the modified subset by **30.9%** (+4.09% absolute benchmark-wide); repaired descriptions transfer across models (**+10.48%**). Grounds: a clarified spec is a durable, model-agnostic artifact — clearer written requirements causally improve correctness. Scope caveat: function-level benchmarks, not repo-level workflows.
+
+<a id="HUMANEVALCOMM"></a>
+**[HUMANEVALCOMM] HumanEvalComm: Benchmarking the Communication Competence of Code Generation for LLMs and LLM Agents.** Wu, Fard. **ACM TOSEM 2025**, arXiv:2406.00215. *Verified (June 2026, direct fetch + adversarial re-verification, 2/2 votes; Table-4 figures confirmed).* Injecting ambiguity/incompleteness into HumanEval drops Pass@1 **35–52%** (ChatGPT 65.58%→33.77% ambiguity, →27.95% incompleteness); **>60%** of model responses code anyway instead of asking. Boundary finding: a clarification-forcing agent on ALREADY-CLEAR tasks scored 27.45% vs 65.58% — indiscriminate process on clear tasks measurably hurts. Grounds: requirement clarity is load-bearing; spec effort must be conditional.
+
 ## Verified — reused from the kernel bibliography
 
 These were already verified by the framework's bibliography elsewhere; the entries below restate them so this layer is self-contained.
@@ -108,6 +118,16 @@ Treated as the kernel treats its own non-peer-reviewed sources: usable to *illus
 ### Preprints — web-verified arXiv (finding confirmed; cite as preliminary, never a `MUST`)
 
 A web-verified arXiv preprint is stronger than a blog post but is **not peer-reviewed**: it may *corroborate* or *illustrate* a direction, never carry a `MUST`. Each finding below was confirmed against the source (June 2026).
+
+<a id="SWEMUT"></a>
+**[SWEMUT] Saving SWE-Bench: A Benchmark Mutation Approach for Realistic Agent Evaluation.** **arXiv:2510.08996** (preprint). *Verified (June 2026, id + abstract).* Mutating formal GitHub-issue task descriptions into realistic short chat queries (telemetry-derived) drops agent resolution so far that public benchmarks **overestimate capability by >50%** for some models (~10–16% on an internal benchmark). Grounds: specification richness in the task input is load-bearing for agent success; terse prompting measurably underperforms.
+
+<a id="ASKORASSUME"></a>
+**[ASKORASSUME] Ask or Assume? Uncertainty-Aware Clarification-Seeking in Coding Agents.** **arXiv:2603.26233** (2026 preprint; id re-check pending — cite as preliminary only). On an underspecified SWE-bench Verified variant: full issue **70.80%** vs underspecified **54.80%** resolve rate (specification completeness alone ≈16 pts); calibrated clarification recovers to **69.40%**; an always-clarify baseline was WORST (47.20%). Grounds (preliminary): spec completeness and clarification are substitutable; indiscriminate clarification hurts.
+
+<a id="REACODER"></a>
+**[REACODER] Bridging the Gap between User Intent and LLM: A Requirement Alignment Approach for Code Generation.** **arXiv:2604.16198** (2026 preprint). *Verified (June 2026, id).* Requirement alignment before generation improves pass rates over all baselines across 4 models / 5 benchmarks (avg +7.9% to +30.3%); ablations attribute gains to both upfront QA-alignment (+5.82%) and checking generated code back against the requirement (+9.99%); costs more tokens than zero-shot. Preliminary; never a MUST-level ground.
+
 
 <a id="AGENTSMD-HARM"></a>
 **[AGENTSMD-HARM] Evaluating AGENTS.md.** Gloaguen, Mündler, Müller, Raychev, Vechev (ETH Zürich + LogicStar.ai). **arXiv:2602.11988** (preprint). *Verified (June 2026).* Two findings: (1) repository-specific commands are used far more often when **named** in the context file than when not (≈1.6×, *p*=0.01; ≈2.5×, *p*=0.05) — corroborates the Commands contract; (2) **over-specification hurts** — LLM-*generated* narrative context files reduced task success by ~3% while raising inference cost by **over 20%**, and even developer-written ones gave only a small gain at added cost. Its efficiency companion **(Lulla et al., arXiv:2601.20404) is a *contrasting* result** — developer-written `AGENTS.md` *reduced* runtime (~28.6%) and tokens (~16–20%); the two do not jointly establish "narrative is costly" and must not be cited as if they do. Grounds: the minimality / anti-bloat discipline (fewer, scoped, command-naming context files; not more narrative). *Where the `AGENTS.md > Commands` contract cites this (ADR-0018, ADR-0038), treat it as **corroborating** evidence — the contract's normative force rests on the [AGENTSMD-CONV] convention and the design reasoning, not on this preprint.*

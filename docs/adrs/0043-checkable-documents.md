@@ -79,3 +79,5 @@ spec prose only. Nothing here modifies the live lint pass yet. The design note +
 - Would modify (when implemented, not yet): the `SOL-P` advisory layer's **scope** (spec-prose-only → the artifact set) and its **severity rule** (a document-integrity check blocks only when backed by a deterministic resolving check).
 - Refines: [0027](./0027-sol-is-the-obligation-language.md), [0028](./0028-aps-is-the-prose-standard.md), [0030](./0030-unified-artifact-set.md), [0032](./0032-memory-model.md), [0034](./0034-unified-lint-namespace.md), [0035](./0035-seven-value-verdict-model.md), [0037](./0037-load-what-the-task-names.md). Relates to §8, §9, §11.6, §20.3 / §29.1, §23, §26.
 - Does NOT change: the obligation grammar, the blocking obligation-lint gate (spec-only), the five lint layers, the seven block types, the verdict set, or any canonical count.
+
+> **Ledger note (2026-06-11):** refined by ADR-0063.

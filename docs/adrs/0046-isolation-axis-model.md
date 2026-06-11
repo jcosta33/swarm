@@ -67,3 +67,5 @@ Accepted (v0.1).
 - Modifies: `implement.md` (a `## Isolation` section), the `task.md` frame, the `starter-kit/AGENTS.md` startup.
 - Refines: [0039](./0039-write-surface-model.md); operationalizes [0010](./0010-write-side-single-threaded.md).
 - Does NOT change: the merge gate, the write-surface conflict model, any canonical closed set.
+
+> **Ledger note (2026-06-11):** refined by ADR-0068 (a change-plan wave decomposes into worktree-isolated tasks; isolation rule unchanged).

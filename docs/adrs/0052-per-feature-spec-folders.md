@@ -117,3 +117,5 @@ docs and `promote.md` routing reconciled to the three-home model; each template 
   [[REDEFO]](./research/sources.md#REDEFO).
 - Does NOT change: the obligation grammar, any closed set, the nine steps, the verdicts, or the artifact
   taxonomy.
+
+> **Ledger note (2026-06-11):** partially superseded by ADR-0060 (hybrid workspace layout).

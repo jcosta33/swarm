@@ -56,3 +56,5 @@ Accepted (v0.1).
 - Adds: the golden-corpus obligation — a conformant repository MUST ship positive + negative fixtures across the three domains, each positive fixture carrying the full pipeline chain with verdicts pinned as data (§33.1–§33.3).
 - Adds: the held-out mutated-variant obligation — each canonical domain fixture MUST ship at least one semantically-equivalent regenerated twin as the conformance gate (§33.7.1).
 - Modifies: the conformance contract of ADR 0026 / §32 — the contract is now evidenced by a shipped fixture oracle, not by prose alone.
+
+> **Ledger note (2026-06-11):** refined by ADR-0065; corpus framing superseded by ADR-0066.

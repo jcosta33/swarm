@@ -58,3 +58,5 @@ Accepted (v0.1).
 - Adds: the conformance requirement to ship a contract + template for each Tier-1 artifact and the Tier-3 source-doc templates (§20.3, §20.4).
 - Modifies: the four-document model of ADR 0001 — recast onto the unified artifact set while keeping each source document's epistemic stance (§29; ADR 0001 kept verbatim).
 - Supersedes: none.
+
+> **Ledger note (2026-06-11):** refined by ADR-0059, ADR-0060, ADR-0061, ADR-0068 (artifact set re-tiered).

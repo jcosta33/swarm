@@ -30,3 +30,5 @@ The checker itself remains a CLI concern; this ADR makes the *contract + fixture
 - **Leave conformance as prose.** The status quo the audit faulted — nothing is checkable, including the framework's own structure.
 - **Ship the checker in this repo.** Violates Principle 1. The contract + fixtures are framework; the executor is CLI.
 - **Wait for the CLI to define its own contract.** Cedes the framework's definitional authority and guarantees drift between what the framework means and what a tool checks.
+
+> **Ledger note (2026-06-11):** refined by ADR-0063; validity clauses partially superseded by ADR-0066.

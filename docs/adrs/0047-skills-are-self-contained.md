@@ -85,3 +85,5 @@ citations are name-only provenance.
   [0042](./0042-skill-carrier-and-standalone-conditioning.md).
 - Enables: [0048](./0048-installed-payload-is-the-runtime-surface.md).
 - Does NOT change: any closed set, the obligation grammar, or the skill-owns-no-semantics invariant.
+
+> **Ledger note (2026-06-11):** refined by ADR-0064.

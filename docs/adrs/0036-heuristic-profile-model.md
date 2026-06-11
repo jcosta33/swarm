@@ -61,3 +61,5 @@ Accepted (v0.1).
 - Adds: the heuristic-profile contract (the seven canonical sections of §27.2) and the profile × pass routing rule (§27.3–27.4).
 - Modifies: the carrier rule for profiles — standalone file OR inlined pass guide, conformance binds the contract not the carrier (§27.1).
 - Supersedes: persona × task-type and persona × document-type routing; the "iron law" body shape; the "8 of 13 ship as skills" carrier rule.
+
+> **Ledger note (2026-06-11):** refined by ADR-0064 (profiles fold into focused guides; surveyor standalone).

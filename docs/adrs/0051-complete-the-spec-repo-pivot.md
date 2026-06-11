@@ -85,3 +85,5 @@ reworked to the final structure; `swarm-cli` (co-located) is realigned (specs to
 - Retires: the twin-maintenance mechanism of [0044](./0044-kernel-is-derived-and-self-contained.md) (`docs/` is the sole canonical home; no shipped twins).
 - Depends on: [0047](./0047-skills-are-self-contained.md) (self-contained skills make shipping no manuals/twins safe).
 - Does NOT change: the obligation grammar, any closed set, the nine passes, or the reconciliation design.
+
+> **Ledger note (2026-06-11):** refined by ADR-0057; validity bar partially superseded by ADR-0066.
