@@ -42,6 +42,16 @@ sources:
 - {{risk}} — fires when: {{condition}}
 - {{risk}} — fires when: {{condition}}
 
+## Open questions / unverified areas
+
+<!-- What this audit could NOT check, and questions that would change its
+     prioritization if answered. Every audit assumes some properties hold
+     without verifying them — name those here so the reader knows where the
+     evidence stops. -->
+
+- {{property assumed but not verified / area not inspected}} — why not: {{access, time, tooling}}
+- {{question that would reorder the risks if answered}}
+
 ## Candidate requirements
 
 <!-- What a spec written from this audit should require, in plain prose.

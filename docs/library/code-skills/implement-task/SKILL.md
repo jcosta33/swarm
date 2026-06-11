@@ -17,7 +17,9 @@ This is the deep version of the starter kit's `implement-task` guide — same ru
 for teams that want the full conditioning in the code repo. The task packet bounds your work: a
 scope of requirement IDs, areas not to change, and a Verify checklist. Your job is to satisfy
 exactly that scope and leave behind evidence a reviewer can check without trusting you. Every rule
-here is a convention the review packet inspects — nothing enforces them at edit time.
+here is a convention the review packet inspects — nothing enforces them at edit time. And none of
+them are fair-weather rules: the moment the work gets hard is precisely when they matter most — do
+not soften a constraint under pressure to get to done.
 
 ## Rules
 

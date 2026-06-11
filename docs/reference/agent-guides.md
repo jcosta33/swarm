@@ -35,6 +35,28 @@ procedure; the templates carry shape; this page is the index.
 (feature, fix, refactor, rewrite, migration, performance, testing, documentation,
 flaky tests) plus `implement-task` in long form. Optional — copy what your team uses.
 
+## Authoring your own guide
+
+The kit's guides are conventions, and so is their shape — copy it when your team writes its
+own:
+
+- **Make the `description` directive.** Open with the verb of the work ("Implement…",
+  "Review…"), say when the guide ALWAYS applies, name what it refuses to bypass, and end with
+  a Skip clause that names **task types**, never sibling guide names — "skip for reviewing
+  output", not "use review-output instead", so the description survives a renamed or absent
+  sibling. Agent tools load guides by matching the description against the task, and directive
+  phrasing is what gets a guide picked — observed in vendor-published trials, illustrative
+  rather than proven [[ACTIVATION-BLOG]](../research/sources.md#ACTIVATION-BLOG).
+- **Keep the body short; put depth one hop away.** A loaded guide is read whole — official
+  guidance caps the useful body around 500 lines and moves detail into `references/` files
+  loaded on demand [[SKILLBP]](../research/sources.md#SKILLBP).
+- **Number the rules and attach the why.** A rule without its one-line rationale gets traded
+  away under pressure. Add a Refuses table (temptation → do instead) — it catches the failure
+  modes prose rules miss, and every kit guide carries one.
+- **Make verification steps force output.** A step that says "verify X" invites a claim; a
+  step that says "paste the output of X" produces evidence. End with a self-review gate the
+  agent answers in writing.
+
 Guides are conventions: they steer an agent, nothing enforces them. Review stances —
 the cognitive postures the guides embed — are described in
 [review-stances.md](review-stances.md).

@@ -40,6 +40,9 @@ Stop and say so; do not proceed under the wrong label.
    edit is structurally blind to its outliers. Read, change, and check each file deliberately.
 4. **Run the checks at every batch, not only at the end.** A layering violation caught one batch
    old is cheap to undo; accumulated drift is its own untangling project. Paste output as you go.
+   ~10 files is a useful default batch size; tighten it where the change plan marks risk — "one
+   batch" that turns out to be the whole diff is the end-loaded checking this rule exists to
+   prevent.
 5. **Prefer deletion over modification — and prove every deletion safe.** For each deleted symbol,
    paste the search showing zero callers across source _and_ tests, plus a separate search for the
    symbol's **string form** (dynamic dispatch, registries, reflection, generated code, config) that
@@ -84,3 +87,9 @@ Before declaring the task done:
 - [ ] Old locations are empty of what moved; nothing orphaned.
 - [ ] The summary names changed files, commands with output, and finding candidates; you issued no
       review result on your own work.
+
+## Bundled resources
+
+- `references/task-template.md` — a working-notes scaffold for the run (equivalence check, batch
+  checkpoints, shim table, deletion-safety searches, self-review). The task packet itself uses the
+  kit's task template; the baseline, batch plan, and rollback live in the change plan.

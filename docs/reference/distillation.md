@@ -50,7 +50,10 @@ flag a task packet missing a requirement ID its source spec declares.
 
 The spec template's **Dropped from sources** section is this budget made visible: the author
 records what the ticket asked for that the spec deliberately leaves out, so the loss is
-auditable rather than accidental. That section is a convention — nothing in this repo checks it.
+auditable rather than accidental. An entry has to be specific enough to challenge — "dropped:
+implementation details" is a category, not a record; "dropped: the CSV export option (only JSON
+consumers exist)" is a decision someone can contest. That section is a convention — nothing in
+this repo checks it.
 
 ## Forbidden compositions
 

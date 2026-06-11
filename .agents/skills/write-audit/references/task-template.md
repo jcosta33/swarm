@@ -61,6 +61,7 @@ What area, goal, or initiative this audit covers and why it is being audited now
 - [ ] Draft observations, each grounded in evidence; keep them present-state, never the fix
 - [ ] Name risks with their firing conditions
 - [ ] Calibrate severity by blast radius; record reasoning for any contestable call
+- [ ] Record open questions / unverified areas — where the audit's evidence stops
 - [ ] Write candidate requirements in prose
 - [ ] Fill the completeness table in the self-review (all ✅)
 - [ ] Copy the `## Deliverable` block to its final home
@@ -116,6 +117,15 @@ trigger — not the remedy.
 
 - **R1** [severity] — <failure mode> — **fires when:** <condition>
 - **R2** …
+
+### Open questions / unverified areas
+
+What this audit could NOT check, and questions that would change its prioritization if
+answered. The self-review asks "what is the audit NOT saying" — this section is where the
+answer lives, in the deliverable where the reader can see it.
+
+- <property assumed but not verified / area not inspected> — why not: <access, time, tooling>
+- <question that would reorder the risks if answered>
 
 ### Candidate requirements
 

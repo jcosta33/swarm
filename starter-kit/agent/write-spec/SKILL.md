@@ -43,17 +43,26 @@ enforces it.
    why the existing ones do not fit. _Why: memory is not a survey — recall
    misses the helper added last week, and the duplication surfaces only when
    implementation collides with it._
-6. **Halt on ambiguity — never guess.** Any unresolved behavioral decision goes
+6. **Record structural decisions with their alternatives.** When the spec
+   commits a real choice — a boundary, a data flow, a compatibility stance —
+   note what was considered and rejected, in `decisions/` (an ADR) for anything
+   with reach beyond this spec, or under `## Dropped from sources` when it is a
+   cut. _Why: a decision without alternatives is incomplete — the reader cannot
+   tell whether the others were weighed or overlooked._
+7. **Halt on ambiguity — never guess.** Any unresolved behavioral decision goes
    under `## Open questions`, not into an AC. A spec with open questions is not
    `status: ready`. _Why: a guess written as a requirement commits a decision
    nobody made._ Either get the answer, or make the call explicitly, record it
    in the spec, and close the question.
-7. **Fill `## Dropped from sources`.** What the ticket or PRD asked for that
-   this spec deliberately leaves out, and why. _Why: a silent drop looks like
-   an oversight; a recorded drop is a decision someone can challenge._
-8. **Non-goals are load-bearing.** Say what this spec deliberately does not
+8. **Fill `## Dropped from sources`.** What the ticket or PRD asked for that
+   this spec deliberately leaves out, and why. Be specific enough to challenge:
+   "dropped: implementation details" is a category, not a record — "dropped:
+   the CSV export option (only JSON consumers exist)" is. _Why: a silent drop
+   looks like an oversight; a recorded drop is a decision someone can
+   challenge._
+9. **Non-goals are load-bearing.** Say what this spec deliberately does not
    change — it bounds the task and protects the reviewer from scope drift.
-9. **Need stricter structure?** Any spec can switch its requirements to
+10. **Need stricter structure?** Any spec can switch its requirements to
    structured (SOL) form: add `format: sol` to the frontmatter, per the note in
    `templates/spec.md`. Use it for high-risk work; plain form is the default.
 
@@ -96,3 +105,5 @@ Before handing the spec on, check each — fix, don't rationalize:
 - [ ] `Dropped from sources` accounts for everything the source asked for that
       this spec leaves out.
 - [ ] You can point at what you surveyed before any new pattern you introduced.
+- [ ] `git status` (pasted) shows only spec documents changed — the spec
+      session touched no code.

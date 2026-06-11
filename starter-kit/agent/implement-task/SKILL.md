@@ -66,6 +66,7 @@ enforces them at edit time.
 | Editing the spec to match what you built     | Flag the mismatch in the summary; the spec changes through its own review, not mid-task |
 | Marking your own work `pass`                 | Leave the result to the review packet                                                   |
 | Reusing output from before your last edit    | Re-run; paste the fresh output                                                          |
+| A Verify command missing from `AGENTS.md`    | Ask which command to run — a guessed run is a false signal; unresolvable = Unverified   |
 
 ## Self-review gate
 

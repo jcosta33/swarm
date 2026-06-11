@@ -26,7 +26,7 @@ runs or enforces anything.
 | [`write-performance/`](write-performance/SKILL.md)     | a measured bottleneck                            | baseline before any edit; identical protocol on both sides               |
 | [`write-documentation/`](write-documentation/SKILL.md) | docs humans read                                 | run every example; cite every behavior claim to file:line                |
 
-Most guides bundle a `references/task-template.md` — a working-notes scaffold for the run. The task
+Each per-kind guide bundles a `references/task-template.md` — a working-notes scaffold for the run. The task
 packet itself always uses the kit's task template; the scaffold is where the agent keeps its plan,
 pasted outputs, and self-review while working.
 

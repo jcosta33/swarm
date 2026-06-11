@@ -15,7 +15,7 @@ status: draft
 
 > **REVIEW SESSION** — Reviewing another agent's branch (or your own work in a fresh session). You may NOT modify code. Output: a findings list and a Suggested decision (Merge / Block until … / Abandon) that feeds the review packet (`templates/review.md`). Fixes happen in a downstream task.
 >
-> **AGENTS.md:** `{{cmdTest}}` / `{{cmdLint}}` / `{{cmdBuild}}` / `{{cmdTypecheck}}` resolve from `AGENTS.md > Commands`. Non-contract values (`{{cmdBenchmark}}`, `{{cmdValidateDeps}}`, `{{cmdTypecheck}}`) — ask the user. If `AGENTS.md` is missing, ask before substituting.
+> **AGENTS.md:** `{{cmdTest}}` / `{{cmdLint}}` / `{{cmdBuild}}` / `{{cmdTypecheck}}` resolve from `AGENTS.md > Commands`. Non-contract values (`{{cmdBenchmark}}`, `{{cmdValidateDeps}}`) — ask the user. If `AGENTS.md` is missing, ask before substituting.
 
 ---
 
@@ -65,9 +65,9 @@ Severity scale: `BLOCKER` (must fix before merge), `MAJOR` (should fix; merge bl
 
 ---
 
-## Verdict
+## Suggested decision
 
-<verdict>
+<suggested_decision>
 
 [pending — fill in at the end]
 
@@ -77,7 +77,7 @@ One of:
 - `**Block until …**` — blockers present; the original author must revise. List specific files/lines that must change.
 - `**Abandon**` — branch is unsalvageable; recommend starting over.
 
-</verdict>
+</suggested_decision>
 
 ---
 
@@ -91,7 +91,7 @@ One of:
 - Read the diff adversarially using the six-question checklist (intent, does-the-code-do-it, what-didn't-change, edge cases, production failures, unclaimed verifications)
 - Findings cite file and line; vague concerns get demoted or removed
 - Mistrust confident-sounding language in the worker's task file ("harmless", "should never", "by happy accident")
-- **Proactively research and read related docs.** Browse `specs/<feature>/`, `specs/<feature>/`, `<your-bugs-dir>/`, `docs/`, and `AGENTS.md` as needed.
+- **Proactively research and read related docs.** Browse `specs/<feature>/`, `findings/`, `decisions/`, `<your-bugs-dir>/`, `docs/`, and `AGENTS.md` as needed.
 
 ---
 
@@ -100,7 +100,7 @@ One of:
 - [ ] Read the worker's task file
 - [ ] Check out the branch under review (or compare from this worktree)
 - [ ] Run `git diff --stat`; paste in Diff overview
-- [ ] Run `{{cmdBuild}}` and `{{cmdTest}}` yourself (not trusting the worker's output)
+- [ ] Run `{{cmdBuild}}` and `{{cmdLint}}` yourself (not trusting the worker's output)
 - [ ] Run `{{cmdTest}}` yourself
 - [ ] Walk the diff with the six adversarial questions
 - [ ] Search for callers across the codebase (cross-module impact)
@@ -109,7 +109,7 @@ One of:
 - [ ] Read the source once with the worker's claims set aside; hunt for missed findings
 - [ ] Record findings with file/line specificity
 - [ ] Calibrate severities
-- [ ] Render verdict
+- [ ] Record the suggested decision
 - [ ] Self-review: Verification outputs pasted
 - [ ] Self-review: Independent verification answered
 - [ ] Self-review: Diff reading depth answered
@@ -154,7 +154,7 @@ Stop. A review that rubber-stamps a worker's claims is worse than no review — 
 
 - `git status` →
 - `git diff --stat` of branch under review:
-- `{{cmdTest}}` run by you (last 2 lines):
+- `{{cmdLint}}` run by you (last 2 lines):
 - `{{cmdTest}}` run by you (last 2 lines):
 
 ### Independent verification

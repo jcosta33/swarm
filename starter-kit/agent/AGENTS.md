@@ -43,6 +43,9 @@
 | cmdBuild | `{{build command}}` | production build |
 | cmdTypecheck | `{{tsc --noEmit / mypy}}` | types |
 
+An empty or missing slot means **ask** — never invent a command. A Verify item
+whose command cannot be resolved reads Unverified, not Pass.
+
 <!-- SOL-form `VERIFY BY <method>:<adapter>:<artifact>` lines resolve their adapter
      against these slot names (cmdTest, cmdLint, …). Keep the cmd prefix.
      Dedicated workspace repo: these name the commands of the code repos this
