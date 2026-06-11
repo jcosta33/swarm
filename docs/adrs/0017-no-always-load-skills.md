@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-Two concerns are candidates for loading on *every* task: task-file lifecycle and promotion discipline (`manage-task`), and routing and forbidden-flow rules (`documentation-gatekeeper`). A skill authored to load unconditionally is the wrong primitive. Skills load on demand and cost context every time they fire; content that must be present on every task is **persistent project context**, which belongs in the always-available entry file, not in a skill paid for on each activation [[LOSTMID]](../research/sources.md#LOSTMID).
+Two concerns are candidates for loading on *every* task: task-file lifecycle and promotion discipline (`manage-task`), and routing and forbidden-flow rules (`documentation-gatekeeper`). A skill authored to load unconditionally is the wrong primitive. Skills load on demand and cost context every time they fire; content that must be present on every task is **persistent project context**, which belongs in the always-available entry file, not in a skill paid for on each activation [[LOSTMID]](./research/sources.md#LOSTMID).
 
 An always-loaded skill also blurs the contract: an agent can't tell which skills matched the work from its `description` and which were force-fed, and consumers can't vendor selectively if two skills are secretly mandatory.
 

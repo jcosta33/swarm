@@ -50,6 +50,6 @@ entry; it never inlines the finding's procedure):
 
 ```text
 # memory/INDEX.md  (excerpt)
-- [Charge and order-write must be atomic](../findings/charge-and-order-write-must-be-atomic.md)
+- [Charge and order-write must be atomic](./findings/charge-and-order-write-must-be-atomic.md)
   — Load when: implementing or reviewing a checkout/payment path that charges then persists.
 ```

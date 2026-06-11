@@ -54,7 +54,7 @@ that, nothing requires a separate mount, a bridge, or a pre-built workspace tree
    | `skills/` | every pass loads its procedure here (install) |
    | `reference/` | the closed-set cards the skills name — `sol.md`/`proofs.md`/`ir.md` (install) |
    | `templates/` | artifact skeletons `author`/`implement`/`review` start from (install) |
-   | `specs/` | `author` writes `*.swarm.md` sources; they need a home |
+   | `specs/` | `author` writes `*.md` sources; they need a home |
    | `tasks/` | `decompose`/`implement` task frames — **gitignored** (recreatable execution state) |
    | `memory/` | `promote` writes durable findings/patterns; `INDEX.md` is a required artifact |
 

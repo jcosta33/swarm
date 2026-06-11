@@ -4,7 +4,7 @@
 
 `decompose` is a `LOWER`-phase step. It partitions the obligations into write-disjoint work packets (`task.md`), consuming the structured form — not the surface prose. Its rubric grades whether the partition is **safe to parallelize, total, and context-complete**.
 
-**Input artifact:** the typed structured form (`<domain>.swarm.ir.json`).
+**Input artifact:** the typed structured form (`<domain>.ir.json`).
 **Output artifact:** the set of `task.md` work packets.
 
 ## Output-grading predicates
@@ -32,6 +32,6 @@ The suite scores two cross-step predicates at the `decompose` output:
 
 ## Related
 
-- [The `decompose` step guide](../docs/passes/decompose.md) — the two-tier lowering rule (D4), the write-disjointness predicate (D1), and the packet-frame contract this rubric grades.
-- [The lint catalogue](../docs/language/errors.md) — `SOL-O001` (shared-write-surface-planned-parallel) and `SOL-O005` (owned-path-outside-write-surface), the codes D1 and D4 cite.
-- [The structured-form schema](../docs/reference/structured-form.md) — the obligation DAG and scope fields D2/D3/D5 are decided against.
+- [The `decompose` step guide](./docs/passes/decompose.md) — the two-tier lowering rule (D4), the write-disjointness predicate (D1), and the packet-frame contract this rubric grades.
+- [The lint catalogue](./docs/language/errors.md) — `SOL-O001` (shared-write-surface-planned-parallel) and `SOL-O005` (owned-path-outside-write-surface), the codes D1 and D4 cite.
+- [The structured-form schema](./docs/reference/structured-form.md) — the obligation DAG and scope fields D2/D3/D5 are decided against.

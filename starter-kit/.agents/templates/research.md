@@ -14,7 +14,7 @@ updated: {{createdAt}}
   STANCE: investigation / inquiry. This document SURVEYS options and evidence and
   commits to NO decision. It records what the inquiry has found and what remains
   open; it does NOT author REQ / CONSTRAINT / INVARIANT / INTERFACE obligation
-  blocks. Those are produced only when this research promotes to a `spec.swarm.md`
+  blocks. Those are produced only when this research promotes to a `spec.md`
   via the author pass (see `author`). As a detached first-class evidence
   store, one research artifact MAY feed many PRDs, specs, ADRs, findings, or audits at once.
 
@@ -64,7 +64,7 @@ updated: {{createdAt}}
 ## Recommendation
 
 <!-- A specific, actionable recommendation the spec author can lift into a
-     `spec.swarm.md` during the author pass. State the recommended direction and the
+     `spec.md` during the author pass. State the recommended direction and the
      findings (R-NNN) that ground it — but author no obligation blocks here; the
      recommendation is advisory, not a committed decision. If no recommendation is
      possible, state WHY and what would unblock one (typically an open Q-NNN). -->
@@ -72,7 +72,7 @@ updated: {{createdAt}}
 {{recommendation}}
 
 <!--
-  PROMOTION: this research promotes to a `spec.swarm.md` via the author pass (see `author`).
+  PROMOTION: this research promotes to a `spec.md` via the author pass (see `author`).
   Accepted findings (R-NNN) become `finding.md` artifacts; open questions (Q-NNN)
   carry forward as the spec's QUESTION blocks; the recommendation seeds the spec's
   obligations. Until then this document is non-authoritative evidence (see `promote`).

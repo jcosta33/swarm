@@ -1,7 +1,7 @@
 <!--
-Fixture — expected verdict: PASS; satisfies every rule in ../conformance.yaml.
+Fixture — expected verdict: PASS; satisfies every rule in ./conformance.yaml.
 POSITIVE task-file-schema oracle. A checker run against this MUST return conformant:
-all 8 required_sections (per ../conformance.yaml) present in order; non-empty-paste satisfied in
+all 8 required_sections (per ./conformance.yaml) present in order; non-empty-paste satisfied in
 ## Verification matrix; no-open-critical satisfied (status: done AND no unresolved
 blocking QUESTION). Inert oracle data — Swarm runs nothing.
 -->
@@ -11,7 +11,7 @@ type: task
 id: export-json-flag
 status: done # active | blocked | done | abandoned (done is terminal)
 task_kind: feature
-source: specs/export-json-flag/spec.swarm.md
+source: specs/export-json-flag/spec.md
 assigned_obligations: [AC-001, AC-002]
 constraints: [C-001]
 invariants: [I-001]
@@ -106,7 +106,7 @@ for any input, omitting `--json` yields exactly the output produced before this 
 | I-001 | `VERIFY BY property:cmdTest:tests/export.properties.ts#default-output-unchanged` | property `default-output-unchanged` passed across generated inputs | PASS |
 | gate:acceptance-criteria-coverage | every acceptance criterion maps to a passing proof | AC-001, AC-002 each map to a passing `cmdTest` proof above | PASS |
 
-Required paste slots (non-empty-paste, per ../conformance.yaml — fenced output or `n/a` + reason; never a bare placeholder):
+Required paste slots (non-empty-paste, per ./conformance.yaml — fenced output or `n/a` + reason; never a bare placeholder):
 
 - `git status` →
   ```

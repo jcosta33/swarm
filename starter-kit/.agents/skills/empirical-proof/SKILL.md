@@ -8,7 +8,7 @@ description: >
   `verify`/`review` pass records a `VERDICT` against a `VERIFY BY`, when a pass asserts how code
   behaves, or when recording a `PASS`/`FAIL`. Reject a bare "tests passed", schema-valid output,
   a paraphrase, a stale pre-edit run, or a reviewer trusting the worker's paste. Skip when a pass
-  authors/analyzes a `*.swarm.md` without running anything (lint, improve, lower, decompose), or
+  authors/analyzes a `*.md` without running anything (lint, improve, lower, decompose), or
   judges no behavioural claim.
 ---
 

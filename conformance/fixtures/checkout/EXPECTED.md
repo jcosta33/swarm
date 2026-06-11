@@ -23,18 +23,18 @@ correct run must produce at each gate.
 
 | Stage | Pass | File | Asserts |
 | ----- | ---- | ---- | ------- |
-| 1 | author | `spec.swarm.md` | authored source; parses; carries the seeded `SOL-P004` + `SOL-O001` defects |
+| 1 | author | `spec.md` | authored source; parses; carries the seeded `SOL-P004` + `SOL-O001` defects |
 | 2 | lint | (this manifest) | the two BLOCKING diagnostics |
-| 3 | improve | `spec.improved.swarm.md` | both diagnostics clear; `AC-010` atomized; the shared write surface deconflicted |
-| 4 | lower | `checkout.swarm.ir.json` | typed IR over the improved source; `edges[]` the sole relationship source |
+| 3 | improve | `spec.improved.md` | both diagnostics clear; `AC-010` atomized; the shared write surface deconflicted |
+| 4 | lower | `checkout.ir.json` | typed IR over the improved source; `edges[]` the sole relationship source |
 | 5 | decompose, implement | `task.md` | two work packets with disjoint write surfaces; write surfaces ⊆ assigned `WRITES` |
 | 6 | verify | `trace.md` | `TRACE T-010`/`T-011` + the 7-field provenance table |
 | 7 | review | `review.md` | per-obligation `VERDICT`s; unauthorized-change check; merge-gate outcome |
 | 8 | promote | `finding.md` | the durable finding promoted with full provenance |
 
-> The `task.md` here shows the **pipeline-relevant work-packet frame**, not a full task-file. The task-file-schema `required_sections` rule ([`../../conformance.yaml`](../../conformance.yaml)) is exercised by [`../conformant-task.md`](../conformant-task.md) (positive) and [`../violations.md`](../violations.md) (negatives).
+> The `task.md` here shows the **pipeline-relevant work-packet frame**, not a full task-file. The task-file-schema `required_sections` rule ([`././conformance.yaml`](././conformance.yaml)) is exercised by [`./conformant-task.md`](./conformant-task.md) (positive) and [`./violations.md`](./violations.md) (negatives).
 
-## Expected lint diagnostics (stage 2, on the authored `spec.swarm.md`)
+## Expected lint diagnostics (stage 2, on the authored `spec.md`)
 
 Two BLOCKING diagnostics fire, each in the unified `SOL-<LAYER><NNN>` namespace. Each is
 BLOCKING because it changes *what* gets built. Each names the closed `improve` op that repairs
@@ -95,7 +95,7 @@ no reconcile is needed (unlike auth-refresh, this chain is clean on first evalua
   `AC-010` `sha256:4b1f…12`, `AC-013` `sha256:5c2a…34`, `AC-014` `sha256:6d3b…56`,
   `AC-011` `sha256:7e4c…78`, `AC-012` `sha256:8f5d…9a`, `I-010` `sha256:3b90…ee`; the promoted
   finding pins `content_hash: sha256:5c2a…34` (the `AC-013` charge source span).
-- Source specs live in `specs/<feature>/spec.swarm.md`; task/trace scratch is gitignored (e.g. `.agents/tasks/`).
+- Source specs live in `specs/<feature>/spec.md`; task/trace scratch is gitignored (e.g. `.agents/tasks/`).
 
 ## How this is validated (no runtime)
 

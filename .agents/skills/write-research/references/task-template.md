@@ -7,7 +7,7 @@
 - Pass: author · task_kind: research-writing
 - Created: {{createdAt}}
 - Status: active
-- Deliverable path: `specs/<feature>/research.md` (plain `.md` — no `.swarm.` infix)
+- Deliverable path: `specs/<feature>/research.md` (plain `.md` — no `spec.md` naming)
 
 ---
 
@@ -43,7 +43,7 @@ lookahead?" not "how does scheduling work".
 
 - **No source/config/dependency changes — research document only.**
 - **No obligation blocks.** A `research.md` authors no `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`;
-  evidence acquires obligation force only when promoted into a `spec.swarm.md` via the author step.
+  evidence acquires obligation force only when promoted into a `spec.md` via the author step.
 - **Inquiry stance — commit to no decision.** Findings survey; the recommendation is advisory.
 - Use search tools aggressively — codebase, official docs, papers, standards, library source.
 - Mark unverified claims `[unconfirmed]`; never present them as findings.
@@ -106,7 +106,7 @@ verified product behaviour). Each entry carries enough specificity to re-find it
 only alongside the primary source it rests on.
 
 1. [<short-key>] <Author / Org>. *<Title>*. <venue / URL / repo+commit>.
-2. [<short-key>] ...
+2. [<short-key>] ..
 
 ### Findings
 
@@ -123,17 +123,17 @@ conclusion here.
 
 #### R-002 — <finding title>
 
-- **Claim:** <...>
-- **Evidence:** <...> [2]
-- **Confidence:** <...>
-- **Bears on:** <...>
+- **Claim:** <..>
+- **Evidence:** <..> [2]
+- **Confidence:** <..>
+- **Bears on:** <..>
 
 #### R-003 — <unverified finding>
 
-- **Claim:** <...> `[unconfirmed]`
+- **Claim:** <..> `[unconfirmed]`
 - **Evidence:** <why it could not be verified — paywalled, unreachable, conjecture from secondary>
 - **Confidence:** low
-- **Bears on:** <...>
+- **Bears on:** <..>
 
 ### Comparison
 
@@ -156,7 +156,7 @@ Unresolved points the inquiry surfaced. Each carries forward to the promoted spe
 block — do not settle one here by asserting a decision.
 
 - [ ] **Q-001** — <unresolved point; what answering it would unblock>
-- [ ] **Q-002** — <...>
+- [ ] **Q-002** — <..>
 
 ### Distillation Loss Statement
 
@@ -211,13 +211,13 @@ it:** <why>.
 ### The inquiry-stance constraint — check this first
 
 - Does the artifact author any `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` block? It must not — those
-  belong only to a `spec.swarm.md`. Did the recommendation stay advisory rather than reading as a
+  belong only to a `spec.md`. Did the recommendation stay advisory rather than reading as a
   committed decision? Are open points left open as `Q-NNN`, not silently settled?
   Answer:
 
 ### Filename / placement
 
-- Is the deliverable a plain `.md` (no `.swarm.` infix) in `specs/<feature>/`?
+- Is the deliverable a plain `.md` (no `spec.md` naming) in `specs/<feature>/`?
   Answer:
 
 ### Source coverage

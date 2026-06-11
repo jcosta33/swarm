@@ -4,7 +4,7 @@ name: write-spec
 pass: author
 activates_for_task_kind: spec-writing
 description: >-
-  Author pass: capture intent as a `*.swarm.md` spec — SOL obligation blocks each binding a proof,
+  Author pass: capture intent as a `*.md` spec — SOL obligation blocks each binding a proof,
   every requirement testable, ambiguity in QUESTION blocks. ALWAYS apply when a task names
   `author` or asks for a spec, requirements, acceptance criteria, or interface contract, or when
   normalizing a research/audit/PRD/RFC/NFR parent into binding intent. Never prescribe
@@ -15,7 +15,7 @@ description: >-
 
 # Step guide: write-spec (author)
 
-How to perform the `author` step — first of the nine steps (`author → lint → improve → lower → decompose → implement → verify → review → promote`) and the only one that *writes* a `*.swarm.md` source spec. `author` sits **outside** the seven analysis phases: the entry step before `PARSE`, the boundary where unstructured intent (chat, a research/audit/PRD/RFC parent) becomes the first Swarm-visible artifact. Analysis begins at the next step, which reads this step's output.
+How to perform the `author` step — first of the nine steps (`author → lint → improve → lower → decompose → implement → verify → review → promote`) and the only one that *writes* a `*.md` source spec. `author` sits **outside** the seven analysis phases: the entry step before `PARSE`, the boundary where unstructured intent (chat, a research/audit/PRD/RFC parent) becomes the first Swarm-visible artifact. Analysis begins at the next step, which reads this step's output.
 
 This guide is SOFT control: procedure, not meaning. The load-bearing facts — what each block type, modal, and proof type *means*, the required section order — are fixed by the SOL grammar (`reference/sol.md`, shipped) and the spec artifact contract, applied here, never redefined; load `reference/sol.md` for the exact block shapes, ids, modals, and section list while authoring. A correctly authored spec is understandable without this guide.
 
@@ -32,9 +32,9 @@ A spec is the contract between whoever specifies and whoever builds. An implemen
 
 ## Produces
 
-- One `*.swarm.md` source spec. The `.swarm.` infix before the final extension is the sole discriminator marking it Swarm-visible; a plain `.md` is a working artifact, never parsed as SOL. Name the spec `<slug>.swarm.md` (e.g. `auth-refresh.swarm.md`) and leave every parent (audit, research, PRD, RFC, finding, ADR) a plain `.md`. *Why:* the infix is what a future tool keys on to "parse this as obligations"; mis-naming a parent `.swarm.*` smuggles a non-spec into the Swarm's view.
+- One `*.md` source spec. The `spec.md` naming before the final extension is the sole discriminator marking it Swarm-visible; a plain `.md` is a working artifact, never parsed as SOL. Name the spec `<slug>.md` (e.g. `auth-refresh.md`) and leave every parent (audit, research, PRD, RFC, finding, ADR) a plain `.md`. *Why:* the infix is what a future tool keys on to "parse this as obligations"; mis-naming a parent `.*` smuggles a non-spec into the Swarm's view.
 
-The file carries YAML frontmatter (required set: `type: spec`, `id`, `swarm_language: SOL/0.1`, `aps_version`, `spec_version`, `status`) then the required sections in this exact order: `## Intent`, `## Non-goals`, `## Context`, `## Interfaces`, `## Obligations`, `## Constraints`, `## Invariants`, `## Questions`, `## Verification coverage`, `## Downstream tasks`, `## Distillation loss statement`. Copy the skeleton at Swarm's spec template (`templates/spec.swarm.md`) and replace every placeholder.
+The file carries YAML frontmatter (required set: `type: spec`, `id`, `swarm_language: SOL/0.1`, `aps_version`, `spec_version`, `status`) then the required sections in this exact order: `## Intent`, `## Non-goals`, `## Context`, `## Interfaces`, `## Obligations`, `## Constraints`, `## Invariants`, `## Questions`, `## Verification coverage`, `## Downstream tasks`, `## Distillation loss statement`. Copy the skeleton at Swarm's spec template (`templates/spec.md`) and replace every placeholder.
 
 ## Preserves
 
@@ -121,7 +121,7 @@ The deliverable *is* the proof for this step, so the gate is written and inspect
 - ❌ Specifying the mechanism (`use a Map`, `store in Redis`) instead of the requirement → over-constrains the solution and turns the spec into unchecked implementation. State the bound (`O(1) per key`) and let the implementer choose.
 - ❌ Leaving an unresolved decision as hedged prose ("we'll probably redirect to /login") → that is `SOL-P008`; lift it into a `[blocking]` QUESTION and resolve or decide before finishing.
 - ❌ Shipping the spec with a `[blocking]` QUESTION still open → it blocks structuring of everything it `AFFECTS` and is an orchestration error if it reaches the next step. Resolve, decide, or route it first.
-- ❌ Naming a parent `audit.swarm.md` / `research.swarm.md` → the `.swarm.` infix marks the one Swarm-visible spec; a parent is plain `.md`. Mis-naming smuggles a non-spec into the Swarm's view.
+- ❌ Naming a parent `audit.md` / `research.md` → the spec.md convention marks the one Swarm-visible spec; a parent is plain `.md`. Mis-naming smuggles a non-spec into the Swarm's view.
 - ❌ Dropping an architectural constraint, payload shape, or acceptance criterion into the loss statement's `### Dropped` → those are never droppable; only narrative, rejected alternatives, and survey prose may be dropped, and only with an accounting.
 - ❌ Writing the sections in a convenient order, or omitting `## Verification coverage` / `## Downstream tasks` → required sections out of order or missing is the document-level defect `SOL-S012`.
 - ❌ Hardcoding a concrete test/validate command into a `VERIFY BY` adapter → resolve `cmd*` slots through the consuming repo's `AGENTS.md > Commands`; if a slot is undefined, ask the user.
@@ -141,4 +141,4 @@ Before handoff, confirm — and paste real evidence into the task file where a s
 
 ## Bundled resources
 
-- `references/task-template.md` — the spec-authoring task file: objective, linked parents, the survey, a progress checklist, design decisions with named alternatives, a blocking-question tracker, and a self-review whose gate is the pasted blocking-question list and the completed distillation-loss statement. The deliverable (the `*.swarm.md` spec) is authored into its final home; the task file is gitignored working memory, discarded once the spec lands.
+- `references/task-template.md` — the spec-authoring task file: objective, linked parents, the survey, a progress checklist, design decisions with named alternatives, a blocking-question tracker, and a self-review whose gate is the pasted blocking-question list and the completed distillation-loss statement. The deliverable (the `*.md` spec) is authored into its final home; the task file is gitignored working memory, discarded once the spec lands.

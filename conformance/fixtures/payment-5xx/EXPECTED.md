@@ -1,7 +1,7 @@
 # payment-5xx — expected outcome (golden-corpus POSITIVE fixture)
 
 This manifest pins the expected outcome of the `payment-5xx` positive (must-pass)
-fixture, the inert oracle a conformant tool is checked against (see [`../../conformance.yaml`](../../conformance.yaml)). It is the authority
+fixture, the inert oracle a conformant tool is checked against (see [`././conformance.yaml`](././conformance.yaml)). It is the authority
 for this directory: the per-stage files reproduce the `intent → promotion` pipeline, and
 this manifest records the verdict a correct run must produce at each gate.
 
@@ -23,18 +23,18 @@ this manifest records the verdict a correct run must produce at each gate.
 
 | Stage | Pass | File | Asserts |
 | ----- | ---- | ---- | ------- |
-| 1 | author | `spec.swarm.md` | authored source; parses; carries the seeded defects |
+| 1 | author | `spec.md` | authored source; parses; carries the seeded defects |
 | 2 | lint | (this manifest) | the two BLOCKING diagnostics + the blocking-QUESTION note |
-| 3 | improve | `spec.improved.swarm.md` | the diagnostics clear; `Q-001` resolved and removed |
-| 4 | lower | `payment-5xx.swarm.ir.json` | typed IR; `edges[]` the sole relationship source; `monitor` binding on `I-001` |
+| 3 | improve | `spec.improved.md` | the diagnostics clear; `Q-001` resolved and removed |
+| 4 | lower | `payment-5xx.ir.json` | typed IR; `edges[]` the sole relationship source; `monitor` binding on `I-001` |
 | 5 | decompose, implement | `task.md` | work packet frame; write surfaces ⊆ assigned `WRITES`; `monitor` row `pending` |
 | 6 | verify | `trace.md` | `TRACE T-001` + the 7-field provenance table; `monitor` FAIL recorded |
 | 7 | review | `review.md` | per-obligation `VERDICT`s; the `CONTRADICTED` → `BLOCKED` → `PASS` gate arc |
 | 8 | promote | `finding.md` | the durable finding promoted with full provenance |
 
-> The `task.md` here shows the **pipeline-relevant work-packet frame**, not a full task-file. The task-file-schema `required_sections` rule (see [`../../../docs/library/code-skills/templates/task.md`](../../../docs/library/code-skills/templates/task.md)) is exercised by [`../conformant-task.md`](../conformant-task.md) (positive) and [`../violations.md`](../violations.md) (negatives).
+> The `task.md` here shows the **pipeline-relevant work-packet frame**, not a full task-file. The task-file-schema `required_sections` rule (see [`./././docs/library/code-skills/templates/task.md`](./././docs/library/code-skills/templates/task.md)) is exercised by [`./conformant-task.md`](./conformant-task.md) (positive) and [`./violations.md`](./violations.md) (negatives).
 
-## Expected lint diagnostics (stage 2, on the authored `spec.swarm.md`)
+## Expected lint diagnostics (stage 2, on the authored `spec.md`)
 
 Two BLOCKING diagnostics fire, each in the unified `SOL-<LAYER><NNN>` namespace (see the SOL error catalogue). Each is
 BLOCKING because it changes *what* gets built. Each names the closed `improve` op (see the `improve` pass) or
@@ -78,7 +78,7 @@ Both BLOCKING diagnostics clear and no blocking `QUESTION` remains:
 
 ## Expected merge-gate outcome (stage 7) → final
 
-`AC-021` is a clean `PASS`. `AC-020` (`test` PASS) and `I-001` (`monitor` FAIL) disagree about
+`AC-021` is a clean `PASS`AC-020` (`test` PASS) and `I-001` (`monitor` FAIL) disagree about
 the same no-double-charge property, so both carry the `CONTRADICTED` decorator with the two
 conflicting evidence refs (see the `review` pass). Per the proof-strength preorder
 `model > property | contract > test > static > manual | monitor`, the `test` PASS is the
@@ -109,7 +109,7 @@ when both proofs agree after a recorded reconciliation.
   `sha256:6b22…9f` in the recorded trace.
 - Proof types span three of the nine (see the `verify` pass): `contract` (`IF-001`), `test` (`AC-020`/`AC-021`),
   and `monitor` (`I-001`) — the production observation that drives the contradiction.
-- Source specs live in `specs/<feature>/spec.swarm.md`; task/trace scratch is gitignored (e.g. `.agents/tasks/`).
+- Source specs live in `specs/<feature>/spec.md`; task/trace scratch is gitignored (e.g. `.agents/tasks/`).
 
 ## How this is validated (no runtime)
 

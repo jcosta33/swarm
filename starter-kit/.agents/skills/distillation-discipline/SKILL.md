@@ -51,7 +51,7 @@ against the typed obligation set.
 ## Consumes
 
 - The higher-verbosity **source artifact** being distilled, load-bearing items still intact: a
-  `research.md`, `audit.md`, `bug-report.md`, approved `spec.swarm.md`, `finding.md`, `task.md`, or
+  `research.md`, `audit.md`, `bug-report.md`, approved `spec.md`, `finding.md`, `task.md`, or
   trace — whichever the composing step reads.
 - The **loss budget** (the `lower` step) as governing reference: the MAY-drop list,
   the MUST-survive list, and the per-boundary matrix row for the crossing in hand. The budget differs
@@ -108,7 +108,7 @@ These are distillation errors, not stylistic choices — halt, do not finalize:
 ## Procedure
 
 1. **Identify the boundary and pull its matrix row.** Name the crossing (e.g.
-   `spec.swarm.md → task`, `audit.md → spec.swarm.md`, `task.md → finding.md`). Read the matching
+   `spec.md → task`, `audit.md → spec.md`, `task.md → finding.md`). Read the matching
    row of the per-boundary matrix (the `lower` step) for the *permitted loss* and
    *forbidden loss* for exactly this
    crossing. **Do not generalize one row to another:** `spec → task` permits dropping only
@@ -230,5 +230,5 @@ fragment only marks the item as promoted rather than dropped.
 ## Bundled resources
 
 - [`references/worked-example.md`](./references/worked-example.md) — a full `research.md →
-  spec.swarm.md` walk-through applying this procedure, with the per-item check (step 4) and the
+  spec.md` walk-through applying this procedure, with the per-item check (step 4) and the
   resulting `Preserved / Dropped / Still-uncertain` statement (step 5).

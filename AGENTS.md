@@ -25,7 +25,7 @@ format and way of working**: you write specs, agents build from them. It ships *
 ## Startup
 1. Read the current task / request first.
 2. Load only the skill, pass, or context file the task names (`.agents/skills/`); do not always-load.
-3. Treat `.swarm.md` SOL blocks as authoritative over prose summaries.
+3. Treat `.md` SOL blocks as authoritative over prose summaries.
 4. Map every completion claim to evidence (paste real output; a claim without it is unverified).
 
 ## Universal rules (the conventions that keep this repo coherent)
@@ -41,7 +41,7 @@ format and way of working**: you write specs, agents build from them. It ships *
   sources never carry a `MUST`-level claim; a fabricated or misattributed source is never
   introduced. Web-verify a source (venue + finding) before grounding a claim on it.
 - **Citations.** Research is cited **contextually** — `[[KEY]](…/research/sources.md#KEY)` inline in the
-  doc whose claim it grounds, resolving to a real anchor in `docs/research/sources.md`. `docs/research/`
+  doc whose claim it grounds, resolving to a real anchor in `docs/research/sources.md`docs/research/`
   holds **only** that bibliography (no standalone research essays / "research layer"); the rest of `docs/`
   carries no `.agents/specs` paths.
 - **Original framework, not a migration.** Present Swarm as originally designed — no

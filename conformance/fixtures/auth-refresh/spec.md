@@ -11,9 +11,9 @@ status: draft
 
 <!--
 auth-refresh golden-corpus POSITIVE fixture — Stage 1 (authored source, pass: author).
-This is the only `.swarm.` artifact a human writes (see ../../../starter-kit/.agents/templates/spec.swarm.md); the `.swarm.` infix marks it
+This is the only spec artifact a human writes (see ../../../starter-kit/.agents/templates/spec.md); the spec.md convention marks it
 human-authored. It is inert oracle data: nothing runs it. As authored, it carries three
-seeded defects that the `lint` pass (see ../EXPECTED.md) is expected to surface —
+seeded defects that the `lint` pass (see ./EXPECTED.md) is expected to surface —
 SOL-V001 (AC-002 has no VERIFY BY), SOL-S006 (AC-002 SHOULD with no BECAUSE/EXCEPT),
 SOL-P005 (I-001 vague-quality predicate) — plus a blocking QUESTION (Q-001) that, if it
 reached the `lower` pass unresolved, would be SOL-O003.

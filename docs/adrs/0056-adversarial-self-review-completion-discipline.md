@@ -23,7 +23,7 @@ Swarm has two relevant mechanisms, and a gap between them:
   explicitly withheld from the actor's own work.
 
 The result: nothing in the framework requires an implementer to **adversarially** review their *own* output
-before declaring it done. Self-critique measurably improves agent output [[REFLEXION]](../research/sources.md#REFLEXION),
+before declaring it done. Self-critique measurably improves agent output [[REFLEXION]](./research/sources.md#REFLEXION),
 and the implementer is precisely the actor most prone to over-trusting their own result — yet the discipline
 was absent. (Raised in dogfooding: the operator asked that finishing *any* work include an adversarial
 self-review as the skeptic.)
@@ -76,6 +76,6 @@ Accepted (v0.1). The `## Self-review` strengthening, the task-template prompts, 
 - **Refines:** the `implement` step (`docs/passes/implement.md` `## Self-review`), `persona-skeptic`, the
   `implement-and-verify` skill, and the universal working rules (`AGENTS.md`).
 - **Reaffirms (does not change):** `implementer ≠ reviewer` and the independent merge gate (`docs/passes/review.md`).
-- **Grounded by:** [[REFLEXION]](../research/sources.md#REFLEXION) (self-critique improves output) + the
+- **Grounded by:** [[REFLEXION]](./research/sources.md#REFLEXION) (self-critique improves output) + the
   self-preference hazard already cited in `review`.
 - **Does NOT change:** any closed set, the SOL grammar, the nine steps, the verdict model, or the artifact set.

@@ -1,6 +1,6 @@
 # Positioning
 
-> Where Swarm sits next to its neighbours — spec-driven tools, agent frameworks, prompt libraries, and requirement languages — and the agentic failure modes it is built to position against. For the invariants that make the differences load-bearing, read [`PRINCIPLES.md`](./PRINCIPLES.md); for the boundaries that say what Swarm refuses to be, read [`NON-GOALS.md`](./NON-GOALS.md); for the one-paragraph statement of what Swarm *is*, read the [root README](../README.md).
+> Where Swarm sits next to its neighbours — spec-driven tools, agent frameworks, prompt libraries, and requirement languages — and the agentic failure modes it is built to position against. For the invariants that make the differences load-bearing, read [`PRINCIPLES.md`](./PRINCIPLES.md); for the boundaries that say what Swarm refuses to be, read [`NON-GOALS.md`](./NON-GOALS.md); for the one-paragraph statement of what Swarm *is*, read the [root README](./README.md).
 
 Most of the tools Swarm is compared to are doing a genuinely different job — and the comparison is most useful once that is clear. The short version: Swarm differs on three axes at once. It centers **typed obligations** rather than a document or a persona; it produces **verified output** (every required obligation must carry a passing verdict at the merge gate) rather than text a human still has to trust; and it ships **no runtime** — everything that "runs" is a contract a future tool builds against.
 
@@ -50,7 +50,7 @@ A note on what Swarm does *not* claim to have solved: live multi-agent orchestra
 
 ## See also
 
-- [Root README](../README.md) — what Swarm is, in one paragraph: a spec format and the agents that build from it.
+- [Root README](./README.md) — what Swarm is, in one paragraph: a spec format and the agents that build from it.
 - [`PRINCIPLES.md`](./PRINCIPLES.md) — the five invariants the differences above turn on (NO RUNTIME first).
 - [`NON-GOALS.md`](./NON-GOALS.md) — the deliberate boundaries: what Swarm refuses to be.
 - [`docs/research/sources.md`](./research/sources.md) — the source bibliography the inline `[[KEY]]` citations resolve to.

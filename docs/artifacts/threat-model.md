@@ -12,7 +12,7 @@ A `threat-model.md` is a **conditional Tier-3 source-doc** the stdlib SHOULD mak
 
 ## Filename & placement
 
-Plain `.md` (a working source artifact — **no** `.swarm.` infix). In an adopted project it is a `type: threat-model` document committed in `specs/<feature>/` beside the spec it hardens. It carries `type` + `id` frontmatter and no obligation blocks.
+Plain `.md` (a working source artifact — **no** `spec.md` naming). In an adopted project it is a `type: threat-model` document committed in `specs/<feature>/` beside the spec it hardens. It carries `type` + `id` frontmatter and no obligation blocks.
 
 ## Required sections
 
@@ -34,6 +34,6 @@ The skeleton is `starter-kit/.agents/templates/threat-model.md`. That file is th
 ## Related
 
 - [`audit.md`](./audit.md) — the general observation-only source-doc this mirrors for the security domain.
-- [`spec`](./spec.md) — what a threat promotes *into* (via the [`author`](../passes/author.md) pass).
-- [`source-artifacts`](../model/source-artifacts.md) — where the conditional Tier-3 source-docs are catalogued.
-- [`proof-types`](../reference/proof-types.md) — the `security` proof type a promoted threat binds to.
+- [`spec`](./spec.md) — what a threat promotes *into* (via the [`author`](./passes/author.md) pass).
+- [`source-artifacts`](./model/source-artifacts.md) — where the conditional Tier-3 source-docs are catalogued.
+- [`proof-types`](./reference/proof-types.md) — the `security` proof type a promoted threat binds to.

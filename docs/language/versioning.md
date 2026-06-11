@@ -14,14 +14,14 @@ This is the normative labelling convention for both axes — what each one versi
 
 | Axis | What it versions | Carried in | Cadence |
 | ---- | ---------------- | ---------- | ------- |
-| **Language version** | The SOL + APS feature set: grammar, the 7 block types, the 5 modals, the clause keywords, the `SOL-<LAYER>NNN` lint codes | `*.swarm.md` frontmatter as the discriminator `swarm_language: SOL/0.1` (plus `aps_version`); echoed in the structured form as `meta.language` | Small, slow-moving: `0.1`, `0.2`, `1.0` |
+| **Language version** | The SOL + APS feature set: grammar, the 7 block types, the 5 modals, the clause keywords, the `SOL-<LAYER>NNN` lint codes | `*.md` frontmatter as the discriminator `swarm_language: SOL/0.1` (plus `aps_version`); echoed in the structured form as `meta.language` | Small, slow-moving: `0.1`, `0.2`, `1.0` |
 | **Framework / package version** | The starter kit — templates, pass guides, profiles, the flow-graph, and skills that ship together | a **producer release tag** on the `swarm` repo (e.g. a git tag / changelog). An adopted project keeps **no** copy — see ADR-0050 | Ordinary, fast semver; may move many times between language bumps |
 
 (The block-type, modal, and lint-layer counts above are Swarm's fixed vocabulary — 7 block types, 5 modals, 5 lint layers S/P/M/V/O. This page reproduces those counts as labels for the language axis; the vocabulary itself is defined in [`./SOL.md`](./SOL.md) (blocks and modals) and [`./errors.md`](./errors.md) (lint layers).)
 
 ### §1.1 — Language version: "which grammar does this file speak?"
 
-The language version answers **"which grammar, blocks, modals, and lint codes does this file speak?"** It is carried **per file**, so a single repo MAY hold `spec.swarm.md` files at different language versions during a migration. Two frontmatter fields carry it:
+The language version answers **"which grammar, blocks, modals, and lint codes does this file speak?"** It is carried **per file**, so a single repo MAY hold `spec.md` files at different language versions during a migration. Two frontmatter fields carry it:
 
 - `swarm_language` — the **SOL discriminator**, written `SOL/0.1`.
 - `aps_version` — the **APS prose-standard version**, written `0.1`.
@@ -30,7 +30,7 @@ This document is language `0.1`; later language epochs are `0.2`, then `1.0`.
 
 ### §1.2 — Framework / package version: "which starter kit shipped this repo?"
 
-The framework version answers **"which release of the starter kit shipped these templates and pass guides?"** It is a **producer-side release tag** on the `swarm` repo. An adopted project keeps **no** per-repo version file — in a no-runtime, copy-the-files world nothing reads it, and you re-copy the kit to upgrade ([ADR-0050](../adrs/0050-swarm-is-a-spec-repo-discipline.md) §6, refining [ADR-0041](../adrs/0041-two-axis-versioning.md)). It is **never** written in per-file frontmatter (§4). The language axis sits *alongside* the package axis, not in place of it: only the **language** version travels with an adopted repo (in each spec's frontmatter); the package version is the producer's release label.
+The framework version answers **"which release of the starter kit shipped these templates and pass guides?"** It is a **producer-side release tag** on the `swarm` repo. An adopted project keeps **no** per-repo version file — in a no-runtime, copy-the-files world nothing reads it, and you re-copy the kit to upgrade ([ADR-0050](./adrs/0050-swarm-is-a-spec-repo-discipline.md) §6, refining [ADR-0041](./adrs/0041-two-axis-versioning.md)). It is **never** written in per-file frontmatter (§4). The language axis sits *alongside* the package axis, not in place of it: only the **language** version travels with an adopted repo (in each spec's frontmatter); the package version is the producer's release label.
 
 ## §2 — The one-way trigger
 
@@ -78,7 +78,7 @@ These answer three different questions — *which grammar* (`meta.language`), *w
 
 ## §4 — G10: canonical frontmatter
 
-To make the three-field mapping unambiguous, Swarm pins **one** frontmatter vocabulary across all `.swarm.md` and template files (rule G10):
+To make the three-field mapping unambiguous, Swarm pins **one** frontmatter vocabulary across all `.md` and template files (rule G10):
 
 ```text
 ---
@@ -94,11 +94,11 @@ spec_version: 0.1.0       # spec content version (= meta.version in the structur
 | `aps_version: 0.1` | (not echoed in the structured form; governs the `SOL-P…` prose lint layer) | Language |
 | `spec_version: 0.1.0` | `meta.version` | Spec content |
 
-**Conformance note.** The canonical form is `swarm_language: SOL/0.1` (with the `SOL/` discriminator) plus a separate `spec_version`. A conformant repo MUST use this form; a bare `swarm_language: 0.1` (a number with no discriminator) is a `SOL-S…`-class frontmatter diagnostic (the `SOL-S` structural lint layer; see [`./errors.md`](./errors.md)). The framework/package version is **never** written in per-file frontmatter, and (per [ADR-0050](../adrs/0050-swarm-is-a-spec-repo-discipline.md)) an adopted project keeps no version file at all — it is a producer release tag.
+**Conformance note.** The canonical form is `swarm_language: SOL/0.1` (with the `SOL/` discriminator) plus a separate `spec_version`. A conformant repo MUST use this form; a bare `swarm_language: 0.1` (a number with no discriminator) is a `SOL-S…`-class frontmatter diagnostic (the `SOL-S` structural lint layer; see [`./errors.md`](./errors.md)). The framework/package version is **never** written in per-file frontmatter, and (per [ADR-0050](./adrs/0050-swarm-is-a-spec-repo-discipline.md)) an adopted project keeps no version file at all — it is a producer release tag.
 
 ## Related
 
 - [SOL](./SOL.md) — the grammar, 7 block types, and 5 modals that the language axis versions.
 - [APS](./APS.md) — the prose standard carried by `aps_version`.
 - [Errors](./errors.md) — the `SOL-<LAYER>NNN` lint catalogue, including the `SOL-S` frontmatter diagnostics referenced above.
-- [Lint](../passes/lint.md) — the lint pass that flags a bare-number `swarm_language` as a `SOL-S` diagnostic.
+- [Lint](./passes/lint.md) — the lint pass that flags a bare-number `swarm_language` as a `SOL-S` diagnostic.

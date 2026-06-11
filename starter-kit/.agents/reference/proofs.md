@@ -55,7 +55,7 @@ A bare "tests passed" with no command/exit/output; schema-valid output; a stale 
 verdict with no recorded reasoning.
 
 ## Per-`task_kind` default suites (recommended, not a gate; override per obligation)
-Resolve `cmd*` through `AGENTS.md > Commands`. `gate:<name>` = an equivalence/coverage check.
+Resolve `cmd*` through `AGENTS.md > Commands`gate:<name>` = an equivalence/coverage check.
 - `feature`: `cmdValidate, cmdTest, cmdValidateDeps, gate:acceptance-criteria-coverage`
 - `fix`: `cmdValidate, cmdTest, gate:regression-test`
 - `refactor`: `cmdValidateDeps, cmdTypecheck, cmdTest, gate:behaviour-preservation`

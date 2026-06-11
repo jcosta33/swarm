@@ -18,13 +18,13 @@ description: >-
 
 How to author a `prd.md` well. It is **SOFT control**: procedure, not meaning. It MUST NOT define SOL/APS semantics, modality, authority order, or verification — those are fixed by the language references and step contract; this guide only *applies* them. The `prd.md` artifact contract (required sections, stance rules), the `author`-step contract (entry step, pre-`PARSE`, no runtime), and the SOL obligation grammar (`REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`) are fixed elsewhere and never redefined here.
 
-A PRD is one recognized **parent** the `author` step normalizes into a `spec.swarm.md`. Its epistemic stance is **intent**: it states desired product outcomes and is **non-authoritative until authored** into a spec. That stance is normative — it MUST be preserved on promotion — and is the single line every rule below defends.
+A PRD is one recognized **parent** the `author` step normalizes into a `spec.md`. Its epistemic stance is **intent**: it states desired product outcomes and is **non-authoritative until authored** into a spec. That stance is normative — it MUST be preserved on promotion — and is the single line every rule below defends.
 
 Per-section stance rules, the success-metrics table shape, filename/placement, and a worked before/after live one hop away in `references/prd-anatomy.md` — open it for lookup; do not re-derive a section's stance here.
 
 ## Purpose
 
-Produce a `prd.md` that records **product intent** — the problem, who is affected, the outcomes that define success — as a durable, citable source. The PRD is the upstream statement of *desire* an `author` step reads, distills, and turns into obligations. It carries **no obligations of its own**: it does not govern the codebase the way a spec or ADR does, and acquires obligation force only on promotion to a `spec.swarm.md`. *Why intent is its own artifact, not written straight into a spec:* provenance. Requirements practice distinguishes intent from evidence, proposal, decision, observation, and defect; recording it separately gives every later obligation a single origin of *why it exists*, preserved across promotion.
+Produce a `prd.md` that records **product intent** — the problem, who is affected, the outcomes that define success — as a durable, citable source. The PRD is the upstream statement of *desire* an `author` step reads, distills, and turns into obligations. It carries **no obligations of its own**: it does not govern the codebase the way a spec or ADR does, and acquires obligation force only on promotion to a `spec.md`. *Why intent is its own artifact, not written straight into a spec:* provenance. Requirements practice distinguishes intent from evidence, proposal, decision, observation, and defect; recording it separately gives every later obligation a single origin of *why it exists*, preserved across promotion.
 
 ## Consumes
 
@@ -34,7 +34,7 @@ Produce a `prd.md` that records **product intent** — the problem, who is affec
 
 ## Produces
 
-- One `prd.md` — a **working artifact**, plain `.md`, whose filename **MUST NOT** carry the `.swarm.` infix (that infix marks Swarm-visible files only; a PRD is never parsed or emitted by Swarm). In an adopted project it lives in its feature folder `specs/<feature>/`, co-located with the spec it scopes — never in durable recall (`.agents/memory/`) or gitignored execution scratch.
+- One `prd.md` — a **working artifact**, plain `.md`, whose filename **MUST NOT** carry the spec.md convention (that infix marks Swarm-visible files only; a PRD is never parsed or emitted by Swarm). In an adopted project it lives in its feature folder `specs/<feature>/`, co-located with the spec it scopes — never in durable recall (`.agents/memory/`) or gitignored execution scratch.
 - The seven required sections in fixed order, each on the **intent** side of the line. No obligation blocks. The PRD is the input an `author` step distills into a spec — not that spec.
 
 ## Procedure
@@ -79,7 +79,7 @@ Authoring a PRD needs **no `cmd*` slot**: it is a hand-authored source document,
 
 ## Output contract
 
-- One valid `prd.md`: `type: prd` frontmatter + the seven sections in order; plain `.md`, no `.swarm.` infix; in its feature folder `specs/<feature>/` in an adopted project.
+- One valid `prd.md`: `type: prd` frontmatter + the seven sections in order; plain `.md`, no `spec.md` naming; in its feature folder `specs/<feature>/` in an adopted project.
 - **Zero obligation blocks.** No `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` anywhere. Goals are outcomes; release constraints are delivery limits; success metrics are signals.
 - `## Non-goals` is present and non-empty.
 - Every statement sits on the intent side of the line — no mechanism, no obligation, no claim the PRD governs the codebase. The PRD remains the durable record of intent the eventual spec's obligations serve.
@@ -88,12 +88,12 @@ Authoring a PRD needs **no `cmd*` slot**: it is a hand-authored source document,
 
 Concrete failure modes, each with the correction:
 
-- ❌ Writing a goal as `REQ AC-001: WHEN … THE system MUST …`. → A goal is an outcome statement; obligation blocks exist only once the PRD promotes to a `spec.swarm.md` via the author step. Restate it as the *outcome* and let the author step mint the `REQ`.
+- ❌ Writing a goal as `REQ AC-001: WHEN … THE system MUST …`. → A goal is an outcome statement; obligation blocks exist only once the PRD promotes to a `spec.md` via the author step. Restate it as the *outcome* and let the author step mint the `REQ`.
 - ❌ Slipping a mechanism into `## Problem` or `## Goals` ("users need a Redis cache for sessions"). → State the outcome ("session lookups stay fast under load"); the mechanism is a proposal/design decision the spec or an RFC owns, not the PRD.
 - ❌ Leaving `## Non-goals` empty or omitting it. → It is mandatory and MUST NOT be empty; an absent boundary of intent is a defect. Name at least one outcome you are deliberately not pursuing.
 - ❌ A success metric with no observable column ("the feature feels faster"). → Each metric should name *how it is observed* so it can later seed a proof on the obligation it justified; an unobservable metric strands its goal.
 - ❌ Writing a `CONSTRAINT` block under `## Release constraints`. → Release constraints limit *delivery* (date/rollout/compliance/dependency); a `CONSTRAINT` restricts the solution space and is authored only into the spec.
-- ❌ Naming the PRD `<slug>.swarm.md` or placing it under `generated/`. → A PRD is a working artifact: plain `.md`, no `.swarm.` infix, in `specs/<feature>/`, co-located with the spec it scopes (never a recall record or gitignored scratch).
+- ❌ Naming the PRD `<slug>.md` or placing it under `generated/`. → A PRD is a working artifact: plain `.md`, no `spec.md` naming, in `specs/<feature>/`, co-located with the spec it scopes (never a recall record or gitignored scratch).
 - ❌ Treating the PRD as governing the codebase or as "the spec." → A PRD is non-authoritative until authored; it feeds the author step, which produces the obligation-bearing spec. The PRD asserts *desire*, the spec asserts *contract*.
 - ❌ Pasting research/findings into `## Linked evidence` instead of referencing them. → Link by `<source-id>#<local-id>`; the evidence artifact stays authoritative on its own facts, and the two cannot drift.
 
@@ -107,7 +107,7 @@ Before closing the step, confirm — and where a step would otherwise leave no v
 - [ ] **Metrics observable.** Every `## Success metrics` row names a target and how it is observed; flag any that cannot be.
 - [ ] **Delivery, not solution-space.** `## Release constraints` limits shipping, not what the solution may do.
 - [ ] **Evidence linked, not pasted.** `## Linked evidence` references its sources by id; no evidence restated inline.
-- [ ] **Valid shell.** Frontmatter (`type: prd`, `id`, `status`, `created`, `updated`) and the seven sections present and in order; filename is plain `.md`, no `.swarm.` infix.
+- [ ] **Valid shell.** Frontmatter (`type: prd`, `id`, `status`, `created`, `updated`) and the seven sections present and in order; filename is plain `.md`, no `spec.md` naming.
 
 ## Bundled resources
 

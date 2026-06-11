@@ -1,38 +1,38 @@
 # Artifacts
 
-This directory is the contract catalogue for every file a Swarm repository may contain: one page per artifact, each fixing that artifact's epistemic stance, required sections, frontmatter, and copyable skeleton. This page is the index — it defines the rules that *apply across* all artifacts (the `.swarm.` infix partition, filenames by class, the recognized parents of a spec, and the conventions every template obeys) and links each per-artifact contract.
+This directory is the contract catalogue for every file a Swarm repository may contain: one page per artifact, each fixing that artifact's epistemic stance, required sections, frontmatter, and copyable skeleton. This page is the index — it defines the rules that *apply across* all artifacts (the two-class partition, filenames by class, the recognized parents of a spec, and the conventions every template obeys) and links each per-artifact contract.
 
 Swarm is a spec format plus agents, markdown-only, with no runtime: every "parser/linter/planner/checker" is a CONTRACT a future tool would build against, never shipped code. Nothing here executes: every artifact is inert reference data, a copyable template, or a file a human or agent populates by hand.
 
-## 1. Two classes, one discriminator: the `.swarm.` infix
+## 1. Two classes: specs and working artifacts
 
-Swarm partitions every repository file that participates in the flow into **exactly two classes**, discriminated solely by whether the filename carries the literal infix `.swarm.` before its final extension.
+Swarm partitions every repository file that participates in the flow into **exactly two classes**:
 
-| Class | Filename rule | Meaning |
+| Class | How to identify | Meaning |
 | --- | --- | --- |
-| **Swarm-format** | MUST contain the `.swarm.` infix (e.g. `auth.swarm.md`, `auth.swarm.ir.json`). | The file is *parsed or emitted*. Its bytes are subject to the SOL surface grammar or to the structured-form / plan JSON schemas. |
-| **Working artifact** | MUST NOT contain `.swarm.`; uses a plain `.md` extension (e.g. `task.md`, `review.md`). | A *human / agent working artifact*: structured Markdown governed by an artifact contract on these pages, not by the SOL grammar — though it MAY embed SOL blocks (notably `VERDICT` and `TRACE`) as quoted data. |
+| **Spec** | Frontmatter `type: spec` — the sole source of SOL obligation blocks. | The file is *parsed or emitted*. Its bytes are subject to the SOL surface grammar or to the structured-form / plan JSON schemas. |
+| **Working artifact** | Frontmatter `type` is anything else (`task`, `review`, `finding`, `adr`, `audit`, `research`, …) or absent. | A *human / agent working artifact*: structured Markdown governed by an artifact contract on these pages, not by the SOL grammar — though it MAY embed SOL blocks (notably `VERDICT` and `TRACE`) as quoted data. |
 
-A conformant Swarm tool MUST treat the `.swarm.` infix as the **sole, sufficient discriminator** for "do I parse or emit this": it MUST NOT parse a plain `.md` working artifact as SOL source, and MUST NOT emit a Swarm-generated output to a path lacking the infix. *Design rationale:* the double-extension convention (`.test.ts`, `.d.ts`) lets tooling select files by a stable, greppable suffix without inspecting their content.
+A conformant Swarm tool MUST use frontmatter `type: spec` as the **sole, sufficient discriminator** for "do I parse this as SOL source": it MUST NOT parse a working artifact as SOL source, and MUST NOT emit a Swarm-generated output to a path whose frontmatter lacks `type: spec`.
 
-There are three filename shapes, and the infix tells them apart:
+There are three filename shapes:
 
-- **`*.swarm.md`** — the source spec. The **only** human-authored Swarm-format artifact.
-- **`*.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.plan.json`, `*.swarm.trace.md`)** — *emitted* Swarm-generated artifacts. A future tool writes these; in this version they are reserved contract names with no shipped emitter.
-- **plain `*.md` (e.g. `task.md`, `audit.md`)** — working artifacts and source documents, authored or worked by hand.
+- **`spec.md`** — the source spec. The **only** human-authored spec artifact.
+- **`*.<slug>.json` or `*.trace.md`** — *emitted* Swarm-generated artifacts. A future tool writes these; in this version they are reserved contract names with no shipped emitter.
+- **Plain `*.md` (e.g. `task.md`, `audit.md`)** — working artifacts and source documents, authored or worked by hand.
 
 ## 2. Canonical filenames by class
 
-### 2.1 Swarm-format artifacts (`.swarm.` infix)
+### 2.1 Spec artifacts
 
 | Filename pattern | Role | Authored by | Schema / grammar | Status |
 | --- | --- | --- | --- | --- |
-| `*.swarm.md` | Source spec — APS prose interleaved with SOL blocks. | Human / authoring agent | SOL surface grammar + APS prose standard | Live; the only hand-written `.swarm.` file. |
-| `*.swarm.ir.json` | Emitted structured form (the obligations). | Future tool | structured-form envelope | **Reserved contract name.** Not written by any shipped tool. |
-| `*.swarm.plan.json` | Emitted plan (structured, schedulable work packets + graphs). | Future planner tool | Plan envelope | **Reserved contract name.** Not written by any shipped tool. |
-| `*.swarm.trace.md` | Emitted / instantiated trace for a built spec. | Implement / verify step (today: agent by hand) | Trace contract + provenance | Copyable template is `trace.md` (plain); built *instances* MAY take the `*.swarm.trace.md` name. |
+| `spec.md` | Source spec — APS prose interleaved with SOL blocks. | Human / authoring agent | SOL surface grammar + APS prose standard | Live; the only hand-written spec file. |
+| `*.ir.json` | Emitted structured form (the obligations). | Future tool | structured-form envelope | **Reserved contract name.** Not written by any shipped tool. |
+| `*.plan.json` | Emitted plan (structured, schedulable work packets + graphs). | Future planner tool | Plan envelope | **Reserved contract name.** Not written by any shipped tool. |
+| `*.trace.md` | Emitted / instantiated trace for a built spec. | Implement / verify step (today: agent by hand) | Trace contract + provenance | Copyable template is `trace.md` (plain); built *instances* MAY take the `*.trace.md` name. |
 
-The two `.json` variants are **documented-as-contract names only**: Swarm pins their shape so a future launcher can build against a stable target, but Swarm ships no parser, emitter, planner, or checker. A repository MUST NOT claim that any `*.swarm.ir.json` or `*.swarm.plan.json` is *produced* by a Swarm tool; it MAY hold hand-written examples in the conformance corpus.
+The two `.json` variants are **documented-as-contract names only**: Swarm pins their shape so a future launcher can build against a stable target, but Swarm ships no parser, emitter, planner, or checker. A repository MUST NOT claim that any `*.ir.json` or `*.plan.json` is *produced* by a Swarm tool; it MAY hold hand-written examples in the conformance corpus.
 
 ### 2.2 Working artifacts (plain `.md`)
 
@@ -61,15 +61,15 @@ A repository MUST NOT contain a standalone `verdict.md`, and no tool MAY emit on
 
 ## 3. The recognized parents of a spec
 
-A spec is not born only from research. Swarm normalizes the many artefacts of requirements practice into one obligation-bearing `spec.swarm.md` rather than pretending every intent begins as research. Each **parent** carries an **epistemic stance** — what kind of knowledge it is allowed to assert — and that stance is preserved when its content is promoted into a spec.
+A spec is not born only from research. Swarm normalizes the many artefacts of requirements practice into one obligation-bearing `spec.md` rather than pretending every intent begins as research. Each **parent** carries an **epistemic stance** — what kind of knowledge it is allowed to assert — and that stance is preserved when its content is promoted into a spec.
 
 | Source class | Canonical artefact | Epistemic stance | Promotes to |
 | --- | --- | --- | --- |
-| Intent | `prd.md` | **intent** — desired product outcomes; non-authoritative until authored | a `spec.swarm.md` (via `author`) |
-| Evidence | `research.md` | **inquiry** — surveys options and evidence; commits to no decision | a `spec.swarm.md` (via `author`); many PRDs / specs / ADRs / findings |
-| Proposal | `rfc.md` | **proposal** — proposes a design; commits nothing until accepted | a `spec.swarm.md` (via `author`) or an `adr.md` |
+| Intent | `prd.md` | **intent** — desired product outcomes; non-authoritative until authored | a `spec.md` (via `author`) |
+| Evidence | `research.md` | **inquiry** — surveys options and evidence; commits to no decision | a `spec.md` (via `author`); many PRDs / specs / ADRs / findings |
+| Proposal | `rfc.md` | **proposal** — proposes a design; commits nothing until accepted | a `spec.md` (via `author`) or an `adr.md` |
 | Decision | `adr.md` | **decision** — an immutable architecture decision (Nygard) | governs as highest-authority constraint; feeds specs / tasks |
-| Observation | `audit.md` | **observation-only** — describes present state and risk; asserts no new intended behavior | a `spec.swarm.md` (via `author`); findings / refactor tasks |
+| Observation | `audit.md` | **observation-only** — describes present state and risk; asserts no new intended behavior | a `spec.md` (via `author`); findings / refactor tasks |
 | Defect | `bug-report.md` | **diagnosis-only** — reproduces and root-causes; prescribes no fix | a **fix task** (via `implement`) |
 | Discovery | `finding.md` | **evidence** — one durable, evidenced project fact | governs as evidence once accepted; feeds specs / ADRs / memory |
 | Scenario | `use-case.md` / examples | **scenario** — illustrates desired behavior by example | `REQ` / `INTERFACE` blocks in a spec (via `author`) |
@@ -90,7 +90,7 @@ Of these parents, five are shipped as **stdlib source-doc templates** — `audit
 These conventions are normative and apply to **every** artifact template in the catalogue:
 
 - Every artifact MUST carry YAML frontmatter delimited by `---`, with at minimum a `type` field naming the artifact and an `id`. Per-class fields (e.g. `status`, `created`, `updated`, `source_spec`) are fixed on each artifact's own page.
-- Placeholder tokens use `{{...}}`. A shipped, *uninstantiated* template MAY leave `{{...}}` placeholders; a **built** (populated) artifact MUST NOT leave a binding clause as a placeholder — an unfilled `VERIFY BY` placeholder in a built artifact is a `SOL-V001` lint defect.
+- Placeholder tokens use `{{..}}`. A shipped, *uninstantiated* template MAY leave `{{..}}` placeholders; a **built** (populated) artifact MUST NOT leave a binding clause as a placeholder — an unfilled `VERIFY BY` placeholder in a built artifact is a `SOL-V001` lint defect.
 - Tables are the required carrier for every matrix (verification, obligation-verdict, promotion queue). A row whose status cell is empty in a *built* artifact is treated as `UNVERIFIED`.
 - Surface SOL blocks embedded in a working artifact (`TRACE` in `trace.md`, `VERDICT` in `review.md`) are quoted SOL data and MUST obey the SOL block grammar — including the canonical vocabulary: the 7 block types, the 5 modal keywords (`MUST` / `MUST NOT` / `SHOULD` / `SHOULD NOT` / `MAY`), the 7 verdicts (4 core `PASS` / `FAIL` / `BLOCKED` / `UNVERIFIED` + 3 lifecycle `WAIVED` / `STALE` / `CONTRADICTED`), the 9 proof types, and the `VERIFY BY <type>:<adapter>:<artifact>` form.
 
@@ -98,12 +98,12 @@ The copyable skeleton for each artifact lives in the starter kit under `starter-
 
 ## 5. Filename and placement in an adopted project
 
-Each page restates the `.swarm.` infix rule for its own class: `spec.swarm.md` is the one human-authored Swarm-format source (`.swarm.md`); a built trace MAY take the emitted `*.swarm.trace.md` name; every other working artifact and source document is a plain `.md`.
+Each page restates the class rule for its own artifact: `spec.md` is the one human-authored spec source (identified by `type: spec` frontmatter); a built trace MAY take the emitted `*.trace.md` name; every other working artifact and source document is a plain `.md`.
 
-In an adopted project a **feature is a folder**, and an artifact lives with the thing it serves ([ADR-0052](../adrs/0052-per-feature-spec-folders.md)):
+In an adopted project a **feature is a folder**, and an artifact lives with the thing it serves ([ADR-0052](./adrs/0052-per-feature-spec-folders.md)):
 
-- **Feature-scoped source documents** — the contract `spec.swarm.md` and its supporting docs (`audit`, `research`, `bug-report`, `prd`, `rfc`, `threat-model`) live together in `specs/<feature>/`. Co-locating a feature's evidence with its contract keeps the requirement→evidence trail in one place [[SPECKIT]](../research/sources.md#SPECKIT) [[KIRO]](../research/sources.md#KIRO).
-- **Project-wide decisions** — ADRs live in `decisions/`, sequentially numbered, one per file [[ADR-CONV]](../research/sources.md#ADR-CONV).
+- **Feature-scoped source documents** — the contract `spec.md` and its supporting docs (`audit`, `research`, `bug-report`, `prd`, `rfc`, `threat-model`) live together in `specs/<feature>/`. Co-locating a feature's evidence with its contract keeps the requirement→evidence trail in one place [[SPECKIT]](./research/sources.md#SPECKIT) [[KIRO]](./research/sources.md#KIRO).
+- **Project-wide decisions** — ADRs live in `decisions/`, sequentially numbered, one per file [[ADR-CONV]](./research/sources.md#ADR-CONV).
 - **Durable recall** — `INDEX.md`, `glossary.md`, `patterns/`, and `stale/` live in `.agents/memory/`; a finding is committed here and indexed by `INDEX.md`.
 - **Recreatable execution packets** — task frames (`task.md`), traces (`trace.md`), reviews (`review.md`), generated tests and docs: execution scratch, gitignored or created lazily by a future tool.
 
@@ -115,7 +115,7 @@ Swarm identifies an artifact by its frontmatter `type:`, not its path, so a tool
 
 | Page | Artifact | Class | Role |
 | --- | --- | --- | --- |
-| [spec.md](./spec.md) | `spec.swarm.md` | Swarm-format | Source of obligations. |
+| [spec.md](./spec.md) | `spec.md` | Spec | Source of obligations. |
 | [task.md](./task.md) | `task.md` | working | Structured step frame for one step. |
 | [trace.md](./trace.md) | `trace.md` | working | Implementation claims + evidence. |
 | [review.md](./review.md) | `review.md` | working | The verdict record (verdict container). |
@@ -143,11 +143,11 @@ Swarm identifies an artifact by its frontmatter `type:`, not its path, so a tool
 
 ## Related
 
-- [docs/model/source-artifacts.md](../model/source-artifacts.md) — the artifact set and the `.swarm.` infix partition in the framework's overall model.
-- [docs/model/conformance.md](../model/conformance.md) — which artifacts a conformant repository MUST contain.
-- [docs/passes/author.md](../passes/author.md) — the step that promotes a source document into a `spec.swarm.md`.
-- [docs/passes/lower.md](../passes/lower.md), [docs/passes/decompose.md](../passes/decompose.md) — produce `task.md` pass frames from a spec.
-- [docs/passes/implement.md](../passes/implement.md), [docs/passes/verify.md](../passes/verify.md) — produce and check `trace.md`.
-- [docs/passes/review.md](../passes/review.md) — produces `review.md` and its `VERDICT` blocks.
-- [docs/passes/promote.md](../passes/promote.md) — produces `finding.md` and updates `memory/INDEX.md`.
-- [docs/language/SOL.md](../language/SOL.md) — the 7 block types these artifacts carry; [docs/language/errors.md](../language/errors.md) — the `SOL-<LAYER><NNN>` lint catalogue.
+- [docs/model/source-artifacts.md](./model/source-artifacts.md) — the artifact set and the two-class partition in the framework's overall model.
+- [docs/model/conformance.md](./model/conformance.md) — which artifacts a conformant repository MUST contain.
+- [docs/passes/author.md](./passes/author.md) — the step that promotes a source document into a `spec.md`.
+- [docs/passes/lower.md](./passes/lower.md), [docs/passes/decompose.md](./passes/decompose.md) — produce `task.md` pass frames from a spec.
+- [docs/passes/implement.md](./passes/implement.md), [docs/passes/verify.md](./passes/verify.md) — produce and check `trace.md`.
+- [docs/passes/review.md](./passes/review.md) — produces `review.md` and its `VERDICT` blocks.
+- [docs/passes/promote.md](./passes/promote.md) — produces `finding.md` and updates `memory/INDEX.md`.
+- [docs/language/SOL.md](./language/SOL.md) — the 7 block types these artifacts carry; [docs/language/errors.md](./language/errors.md) — the `SOL-<LAYER><NNN>` lint catalogue.

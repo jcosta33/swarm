@@ -54,7 +54,7 @@ It sits *downstream of every Swarm object*: it consumes language, artifact, pass
 
 ### Always-resident, by design
 
-Project conventions are **always-resident context** — they live in `AGENTS.md`, the bootloader an agent reads first on every task. This is the right lifecycle for a standing project fact: what this repo's architecture *is*, which command *is* the integration suite [[AGENTSMD-HARM]](../research/sources.md#AGENTSMD-HARM), what the domain *means* — none of it should be hidden behind lazy activation, because it is always true. (This contrasts with a pass guide or a profile, which loads only when a task names it. The split below is what keeps each rule in the layer whose lifecycle fits it [[CTXENG]](../research/sources.md#CTXENG).)
+Project conventions are **always-resident context** — they live in `AGENTS.md`, the bootloader an agent reads first on every task. This is the right lifecycle for a standing project fact: what this repo's architecture *is*, which command *is* the integration suite [[AGENTSMD-HARM]](./research/sources.md#AGENTSMD-HARM), what the domain *means* — none of it should be hidden behind lazy activation, because it is always true. (This contrasts with a pass guide or a profile, which loads only when a task names it. The split below is what keeps each rule in the layer whose lifecycle fits it [[CTXENG]](./research/sources.md#CTXENG).)
 
 ## The boundary
 
@@ -83,14 +83,14 @@ The split matters because each layer has a different lifecycle: a pass guide is 
 | Location | Holds |
 |---|---|
 | `AGENTS.md` | The repository's bootloader — the canonical home for project conventions alongside the `Commands` table and the standing project facts. Always read first; no separate overlays directory (ADR-0049). |
-| `packages/<name>/AGENTS.md` | A nested bootloader in a monorepo — adds to or overrides the root conventions for that workspace, closest-wins (see [workspace](../model/workspace.md)). |
+| `packages/<name>/AGENTS.md` | A nested bootloader in a monorepo — adds to or overrides the root conventions for that workspace, closest-wins (see [workspace](./model/workspace.md)). |
 
 ## Related
 
-- [`improve`](../passes/improve.md) — a project convention composes additively with its pass contract (and its `pass-improve-spec` guide), adding project expectations without changing the procedure.
-- [`verify`](../passes/verify.md) — the pass a convention's testing-policy and local-command-binding rules most often scope to.
-- [SOL](../language/SOL.md) — the obligation language whose semantics a project convention MUST NOT define or redefine.
-- [APS](../language/APS.md) — the prose standard a project convention MUST NOT redefine.
-- [errors](../language/errors.md) — the `SOL-<LAYER>NNN` lint catalog a project convention MUST NOT add to or override.
-- [conformance](../model/conformance.md) — where the regression check that confirms no project convention redefines a Swarm object lives, and which records that project conventions are not required for conformance.
-- [workspace](../model/workspace.md) — where project conventions live: the `AGENTS.md` bootloader, with no separate overlays directory (ADR-0049).
+- [`improve`](./passes/improve.md) — a project convention composes additively with its pass contract (and its `pass-improve-spec` guide), adding project expectations without changing the procedure.
+- [`verify`](./passes/verify.md) — the pass a convention's testing-policy and local-command-binding rules most often scope to.
+- [SOL](./language/SOL.md) — the obligation language whose semantics a project convention MUST NOT define or redefine.
+- [APS](./language/APS.md) — the prose standard a project convention MUST NOT redefine.
+- [errors](./language/errors.md) — the `SOL-<LAYER>NNN` lint catalog a project convention MUST NOT add to or override.
+- [conformance](./model/conformance.md) — where the regression check that confirms no project convention redefines a Swarm object lives, and which records that project conventions are not required for conformance.
+- [workspace](./model/workspace.md) — where project conventions live: the `AGENTS.md` bootloader, with no separate overlays directory (ADR-0049).

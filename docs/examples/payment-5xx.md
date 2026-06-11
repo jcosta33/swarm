@@ -87,7 +87,7 @@ VERIFY BY monitor:cmdMonitor:dashboards/payments/duplicate-captures#zero_double_
 
 ## The work packet (Stage 5) — a pending monitor row
 
-Both obligations write the same surface (`server/src/payments/charge.ts`), so they cannot run in parallel against it; the decomposer assigns them to **one serialized packet** rather than splitting across parallel tasks — satisfying the safe-parallelism predicate without any `SCOPE`-style split. The packet's `source` is `specs/payment-5xx/spec.swarm.md`.
+Both obligations write the same surface (`server/src/payments/charge.ts`), so they cannot run in parallel against it; the decomposer assigns them to **one serialized packet** rather than splitting across parallel tasks — satisfying the safe-parallelism predicate without any `SCOPE`-style split. The packet's `source` is `specs/payment-5xx/spec.md`.
 
 The distinctive detail is `I-001`'s `monitor` proof: a production dashboard cannot be "run" inside the packet, so its verification-matrix row stays `pending` at merge and resolves at verify/review from the production observation, not from this build:
 
@@ -118,7 +118,7 @@ In the provenance table the `monitor` row records the surface as `observed`, not
 
 ## The merge gate (Stage 7) — `CONTRADICTED`, not `STALE`
 
-Where `auth-refresh` reconciles a `STALE` obligation, `payment-5xx` reconciles a `CONTRADICTED` one. `AC-021` is a clean `PASS`. `AC-020` and `I-001` each carry the `CONTRADICTED` decorator because both proofs speak to the same property and disagree:
+Where `auth-refresh` reconciles a `STALE` obligation, `payment-5xx` reconciles a `CONTRADICTED` one. `AC-021` is a clean `PASS`AC-020` and `I-001` each carry the `CONTRADICTED` decorator because both proofs speak to the same property and disagree:
 
 ```text
 VERDICT AC-020: PASS (CONTRADICTED by review: bounded-retry test and the production duplicate-captures monitor disagree about the no-double-charge property)
@@ -190,8 +190,8 @@ That closes the loop: a draft spec with a self-contradiction, a vague-quality cl
 
 - [Walkthrough: `auth-refresh`](./auth-refresh.md) — the full eight-stage walkthrough this page is a delta against; its merge gate reconciles a `STALE` obligation rather than a `CONTRADICTED` one.
 - [Walkthrough: `checkout`](./checkout.md) — the multi-obligation atomicity case: a bundled obligation and a parallel write-surface conflict.
-- [Drift and staleness](../reference/drift-and-staleness.md) — the `CONTRADICTED` decorator and the not-silent reconcile discipline the merge gate enforces here.
-- [Proof types and the `VERIFY BY` binding](../reference/proof-types.md) — the nine proof types the bindings above draw from (`contract` for the `INTERFACE`, `test` for the obligations, `monitor` for the invariant — the production observation that drives the contradiction).
-- [Golden corpus](../reference/golden-corpus.md) — `payment-5xx` is the positive (`must-pass`) fixture this walkthrough draws from; its canonical defect class is the `MUST`-vs-`MUST NOT` contradiction (`SOL-M002`), the vague high-risk word (`SOL-P005`), and the blocking-question-at-structuring risk (`SOL-O003`).
-- Step references, in flow order: [`author`](../passes/author.md), [`lint`](../passes/lint.md), [`improve`](../passes/improve.md), [`lower`](../passes/lower.md), [`decompose`](../passes/decompose.md), [`implement`](../passes/implement.md), [`verify`](../passes/verify.md), [`review`](../passes/review.md), [`promote`](../passes/promote.md)
-- Artifact references for each stage's output: [`spec`](../artifacts/spec.md), [`task`](../artifacts/task.md), [`trace`](../artifacts/trace.md), [`review`](../artifacts/review.md), [`finding`](../artifacts/finding.md), [`memory`](../artifacts/memory.md)
+- [Drift and staleness](./reference/drift-and-staleness.md) — the `CONTRADICTED` decorator and the not-silent reconcile discipline the merge gate enforces here.
+- [Proof types and the `VERIFY BY` binding](./reference/proof-types.md) — the nine proof types the bindings above draw from (`contract` for the `INTERFACE`, `test` for the obligations, `monitor` for the invariant — the production observation that drives the contradiction).
+- [Golden corpus](./reference/golden-corpus.md) — `payment-5xx` is the positive (`must-pass`) fixture this walkthrough draws from; its canonical defect class is the `MUST`-vs-`MUST NOT` contradiction (`SOL-M002`), the vague high-risk word (`SOL-P005`), and the blocking-question-at-structuring risk (`SOL-O003`).
+- Step references, in flow order: [`author`](./passes/author.md), [`lint`](./passes/lint.md), [`improve`](./passes/improve.md), [`lower`](./passes/lower.md), [`decompose`](./passes/decompose.md), [`implement`](./passes/implement.md), [`verify`](./passes/verify.md), [`review`](./passes/review.md), [`promote`](./passes/promote.md)
+- Artifact references for each stage's output: [`spec`](./artifacts/spec.md), [`task`](./artifacts/task.md), [`trace`](./artifacts/trace.md), [`review`](./artifacts/review.md), [`finding`](./artifacts/finding.md), [`memory`](./artifacts/memory.md)

@@ -3,7 +3,7 @@ type: skill
 name: implement-and-verify
 description: >-
   Use in a CODE repo to implement a Swarm spec's obligation and prove it. ALWAYS apply when implementing
-  against a `*.swarm.md` obligation (a `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` acceptance criterion) that
+  against a `*.md` obligation (a `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` acceptance criterion) that
   a spec hands you — especially when running agents in parallel worktrees and trusting the result. Implement
   ONLY the assigned obligation(s), prove each with its `VERIFY BY` (real run output, not "looks done"), stay
   in scope, and push any durable learning/decision/drift back to the spec repo as a linked PR. Never leave
@@ -20,7 +20,7 @@ You do **not** need to know the SOL grammar. A good spec is self-legible: read t
 clauses (`WHEN … THE <actor> MUST <response> VERIFY BY <type>:<adapter>:<artifact>`) and act on them.
 
 ## What you're given
-- One or more **obligations** (by id, e.g. `AC-001`, `C-002`) from a `*.swarm.md` spec — the *desired truth*.
+- One or more **obligations** (by id, e.g. `AC-001`, `C-002`) from a `*.md` spec — the *desired truth*.
   The spec may live in this repo (co-located) or in a separate **spec repo** (referenced by id).
 - The repo's `AGENTS.md > Commands` table, which resolves a `VERIFY BY` clause's `<adapter>` (a `cmd*` slot)
   to a real command.

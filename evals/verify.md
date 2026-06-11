@@ -33,7 +33,7 @@ The suite scores two cross-step predicates at the `verify` output:
 
 ## Related
 
-- [Proof types and the `VERIFY BY` binding](../docs/reference/proof-types.md) — the nine proof types and the `VERIFY BY <type>:<adapter>:<artifact>` grammar V1/V3/V4 check against.
-- [The `verify` step guide](../docs/passes/verify.md) — the one-verdict-per-binding contract this rubric grades.
-- [The lint catalogue](../docs/language/errors.md) — `SOL-V008` (required binding with no verdict), the code V1 cites.
-- [Drift and staleness](../docs/reference/drift-and-staleness.md) — the seven provenance fields V4 records, which feed the later drift join.
+- [Proof types and the `VERIFY BY` binding](./docs/reference/proof-types.md) — the nine proof types and the `VERIFY BY <type>:<adapter>:<artifact>` grammar V1/V3/V4 check against.
+- [The `verify` step guide](./docs/passes/verify.md) — the one-verdict-per-binding contract this rubric grades.
+- [The lint catalogue](./docs/language/errors.md) — `SOL-V008` (required binding with no verdict), the code V1 cites.
+- [Drift and staleness](./docs/reference/drift-and-staleness.md) — the seven provenance fields V4 records, which feed the later drift join.

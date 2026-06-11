@@ -15,7 +15,7 @@ The corpus ships in two locations, each serving a different audience:
 | `conformance/fixtures/` | positive + negative fixtures, each carrying its expected verdict in its header | the conformance regression suite — the artifacts a checker (or hand-review) is run against |
 | `docs/examples/` | the three flow-complete positive walkthroughs | human readers and authors learning the flow end to end |
 
-The fixtures directory is the oracle; `docs/examples/` is the same three positive chains rendered as readable walkthroughs. The corpus is one of three inert-data artifacts that together encode the conformance contract: the [conformance manifest](../model/conformance.md) (`conformance/conformance.yaml`) encodes the schema and rules, the [lint catalogue](../language/errors.md) encodes every `SOL-<LAYER>NNN` code, and the golden corpus pins the verdicts. This page is the corpus's contract: what it must contain and what each fixture asserts.
+The fixtures directory is the oracle; `docs/examples/` is the same three positive chains rendered as readable walkthroughs. The corpus is one of three inert-data artifacts that together encode the conformance contract: the [conformance manifest](./model/conformance.md) (`conformance/conformance.yaml`) encodes the schema and rules, the [lint catalogue](./language/errors.md) encodes every `SOL-<LAYER>NNN` code, and the golden corpus pins the verdicts. This page is the corpus's contract: what it must contain and what each fixture asserts.
 
 ## The three recurring domains
 
@@ -32,23 +32,23 @@ Each domain ships **positive** fixtures (must-pass) and **negative** fixtures (m
 Each positive domain fixture ships the **complete flow chain** — one file per stage — so the corpus exercises the whole `intent → promotion` arc rather than a single transformation. The chain is the data that the three `docs/examples/` walkthroughs render in prose.
 
 ```text
-spec.swarm.md  →  expected obligations  →  task frame  →  trace  →  verdict  →  promotion
+spec.md  →  expected obligations  →  task frame  →  trace  →  verdict  →  promotion
 ```
 
 | Stage | Fixture file | Asserts |
 | --- | --- | --- |
-| source spec | `<domain>.swarm.md` | parses clean; only `MUST`-class modals; the `INVARIANT` is present |
+| source spec | `<domain>.md` | parses clean; only `MUST`-class modals; the `INVARIANT` is present |
 | expected obligations | `<domain>.expected-obligations.md` | the obligation list a correct `lower` step emits (ids, kinds, edges) |
 | task frame | `<domain>.task.md` | assigned obligations, write surfaces, verification bindings |
-| trace | `<domain>.swarm.trace.md` | `IMPLEMENTS` / `PRESERVES` / `PROOF` claims with content hashes |
+| trace | `<domain>.trace.md` | `IMPLEMENTS` / `PRESERVES` / `PROOF` claims with content hashes |
 | verdict | `<domain>.review.md` | per-obligation `VERDICT` blocks; the final verdict reaches the merge gate |
 | promotion | `<domain>.finding.md` | the durable finding the `promote` step produces |
 
-The expected end-state verdict is recorded in the spec fixture's header, so the chain's correctness is known independent of any tool. The auth-refresh chain is documented stage-by-stage in [the flow reference](../model/how-swarm-works.md) as the canonical worked example; that chain is exactly the positive auth-refresh fixture rendered for reading.
+The expected end-state verdict is recorded in the spec fixture's header, so the chain's correctness is known independent of any tool. The auth-refresh chain is documented stage-by-stage in [the flow reference](./model/how-swarm-works.md) as the canonical worked example; that chain is exactly the positive auth-refresh fixture rendered for reading.
 
 ## Per-domain canonical defect classes
 
-Each domain carries one canonical defect class (or a small cluster), encoded with unified `SOL-<LAYER>NNN` codes from the [lint catalogue](../language/errors.md). The negative fixture trips the defect; the positive fixture proves the obligation it violated.
+Each domain carries one canonical defect class (or a small cluster), encoded with unified `SOL-<LAYER>NNN` codes from the [lint catalogue](./language/errors.md). The negative fixture trips the defect; the positive fixture proves the obligation it violated.
 
 > **Fixture notation.** Inside the fenced fixtures below, an inline `# … -> SOL-Xxxx` comment is **editorial commentary, not part of the SOL** — each fixture's expected verdict is pinned in its metadata header, never parsed from comment text — and the indentation of block-body lines is **non-semantic** (leading whitespace is permitted and stripped before parsing). Stripping the annotations and indentation yields the bare-header SOL the grammar generates.
 
@@ -62,7 +62,7 @@ Each domain carries one canonical defect class (or a small cluster), encoded wit
 | positive | a bound `VERIFY BY test:…` proving a no-unbounded-retry `INVARIANT` | PASS |
 
 ```sol
-# auth-refresh.swarm.md — NEGATIVE (expected: REJECTED)
+# auth-refresh.md — NEGATIVE (expected: REJECTED)
 
 REQ AC-001:
   WHEN the refresh token is expired      # dangling: trigger with no THE <actor> <MODAL> consequence
@@ -79,7 +79,7 @@ REQ AC-003:
 ```
 
 ```sol
-# auth-refresh.swarm.md — POSITIVE (expected: PASS)
+# auth-refresh.md — POSITIVE (expected: PASS)
 
 INVARIANT I-001:
   the number of automatic refresh attempts per request MUST NOT exceed 1
@@ -101,7 +101,7 @@ REQ AC-001:
 | positive | the same obligations atomized + serialized on the shared surface | PASS |
 
 ```sol
-# checkout.swarm.md — NEGATIVE (expected: REJECTED)
+# checkout.md — NEGATIVE (expected: REJECTED)
 
 REQ AC-010:
   WHEN the cart is submitted
@@ -129,7 +129,7 @@ The positive variant splits `AC-010` into three single-obligation REQs and gives
 | positive | the QUESTION resolved, the contradiction deconflicted, the vague clause concretized | PASS |
 
 ```sol
-# payment-5xx.swarm.md — NEGATIVE (expected: REJECTED)
+# payment-5xx.md — NEGATIVE (expected: REJECTED)
 
 QUESTION Q-001 [blocking]:
   Should a 503 from the processor be retried or surfaced to the user?
@@ -161,7 +161,7 @@ Beyond the domain defects, the corpus ships fixtures for each task-file violatio
 | missing `Commands` row | an `AGENTS.md` omitting `cmdFormat` | the required command-row set | FAIL |
 | unresolved blocking QUESTION at close | `status: done` with an open blocking `QUESTION` | the no-open-critical content rule | FAIL |
 
-The **empty-paste** class guards the hallucinated-completion hole. A `task.md` can present every required heading and still claim "tests passed" with no pasted output — schema-valid, but not verified. Every completion claim must bind to actual pasted proof output (or an honest `n/a` with a one-line reason), never a bare `[Paste output]` placeholder. This is the corpus's encoding of the principle that schema-valid output is **not** verification [[REFLEXION]](../research/sources.md#REFLEXION).
+The **empty-paste** class guards the hallucinated-completion hole. A `task.md` can present every required heading and still claim "tests passed" with no pasted output — schema-valid, but not verified. Every completion claim must bind to actual pasted proof output (or an honest `n/a` with a one-line reason), never a bare `[Paste output]` placeholder. This is the corpus's encoding of the principle that schema-valid output is **not** verification [[REFLEXION]](./research/sources.md#REFLEXION).
 
 Additionally, the corpus ships at least one minimal syntax negative for **each `SOL-S` error family** (for example `SOL-S001` dangling condition, `SOL-S003` actor clause with no modal, `SOL-S005` prefix↔type mismatch, `SOL-S006` SHOULD-without-BECAUSE), so every error-code family has a guarding fixture and no family can silently regress.
 
@@ -243,24 +243,24 @@ The corpus SHOULD follow established benchmark-building hygiene so its measureme
 
 ## The research-fanout fixture
 
-The corpus ships one fixture no per-domain chain covers: **research-fanout**, the corpus's only **fan-out provenance** fixture. It exercises the property that one research artefact MAY feed many downstream artefacts. A single `research.md` evidence source is promoted by the `author` step into **multiple** `*.swarm.md` specs plus one `adr.md`, and every derived obligation cites the originating research span by its cross-file id.
+The corpus ships one fixture no per-domain chain covers: **research-fanout**, the corpus's only **fan-out provenance** fixture. It exercises the property that one research artefact MAY feed many downstream artefacts. A single `research.md` evidence source is promoted by the `author` step into **multiple** `*.md` specs plus one `adr.md`, and every derived obligation cites the originating research span by its cross-file id.
 
-**Provenance-id grammar.** A `research.md` tags citable evidence spans with ids `R-001`, `R-002`, … (the `R-` prefix marks an evidence span — parallel to the SOL block-id prefixes, but for a non-SOL evidence source). A derived obligation cites a span with the cross-file reference `research#R-NNN` in its `BECAUSE` clause — for example a derived `payments.swarm.md#AC-001` carrying `BECAUSE research#R-003`. This is a provenance reference, not a cross-spec obligation reference: `research` is an evidence-source stem (not a declared spec id) and `R-` is a provenance prefix (not a SOL block prefix). A citation whose span id is absent from the named `research.md`, or whose stem names no shipped source, is a provenance failure.
+**Provenance-id grammar.** A `research.md` tags citable evidence spans with ids `R-001`, `R-002`, … (the `R-` prefix marks an evidence span — parallel to the SOL block-id prefixes, but for a non-SOL evidence source). A derived obligation cites a span with the cross-file reference `research#R-NNN` in its `BECAUSE` clause — for example a derived `payments.md#AC-001` carrying `BECAUSE research#R-003`. This is a provenance reference, not a cross-spec obligation reference: `research` is an evidence-source stem (not a declared spec id) and `R-` is a provenance prefix (not a SOL block prefix). A citation whose span id is absent from the named `research.md`, or whose stem names no shipped source, is a provenance failure.
 
 | Fixture file | Holds | Asserts |
 | --- | --- | --- |
 | `research-fanout/research.md` | one detached evidence source with citable spans `R-001…R-NNN` | observation/evidence stance — it promotes rather than governs |
-| `research-fanout/<spec-a>.swarm.md` | derived obligations citing `research#R-…` | every obligation resolves to a research span; bare-header SOL parses clean |
-| `research-fanout/<spec-b>.swarm.md` | further derived obligations citing the same source | the source feeds more than one spec (the fan-out property) |
+| `research-fanout/<spec-a>.md` | derived obligations citing `research#R-…` | every obligation resolves to a research span; bare-header SOL parses clean |
+| `research-fanout/<spec-b>.md` | further derived obligations citing the same source | the source feeds more than one spec (the fan-out property) |
 | `research-fanout/<decision>.adr.md` | a decision whose constraints cite `research#R-…` | the source also feeds a decision artefact, not only specs |
 
-**Expected verdict: PASS.** The pass criterion is provenance resolution, not a verdict on the research itself: every derived obligation in every `*.swarm.md` and every `adr.md` constraint must resolve backward to exactly one `research#R-NNN` span in the single `research.md`, and that backward chain must be unbroken (the trace-completeness and `author` source-fidelity predicates). The `research.md` artefact itself yields **no `VERDICT`** — it is an evidence source, not an obligation-bearing spec, so it carries no `REQ` / `CONSTRAINT` / `INVARIANT` to verify and never reaches the merge gate; only the obligations it was promoted into do. A fixture in which a derived obligation cites no source span, or cites a span absent from `research.md`, is the negative companion and must be rejected as a source-fidelity / provenance failure. As with every hygiene fixture, research-fanout also ships a held-out mutated variant — regenerated research-span text and obligation ids, the same fan-out topology, the same PASS verdict.
+**Expected verdict: PASS.** The pass criterion is provenance resolution, not a verdict on the research itself: every derived obligation in every `*.md` and every `adr.md` constraint must resolve backward to exactly one `research#R-NNN` span in the single `research.md`, and that backward chain must be unbroken (the trace-completeness and `author` source-fidelity predicates). The `research.md` artefact itself yields **no `VERDICT`** — it is an evidence source, not an obligation-bearing spec, so it carries no `REQ` / `CONSTRAINT` / `INVARIANT` to verify and never reaches the merge gate; only the obligations it was promoted into do. A fixture in which a derived obligation cites no source span, or cites a span absent from `research.md`, is the negative companion and must be rejected as a source-fidelity / provenance failure. As with every hygiene fixture, research-fanout also ships a held-out mutated variant — regenerated research-span text and obligation ids, the same fan-out topology, the same PASS verdict.
 
 ## Related references
 
-- [The conformance contract](../model/conformance.md) — the `conformance.yaml` manifest (task-file schema, command rows, placeholder set, lint scheme, required-suite matrix) the corpus is checked against, and the conformance maturity ladder.
-- [The lint catalogue](../language/errors.md) — every `SOL-<LAYER>NNN` code the negative fixtures trip, with its `{code, severity, layer, span, message, suggest}` record shape.
+- [The conformance contract](./model/conformance.md) — the `conformance.yaml` manifest (task-file schema, command rows, placeholder set, lint scheme, required-suite matrix) the corpus is checked against, and the conformance maturity ladder.
+- [The lint catalogue](./language/errors.md) — every `SOL-<LAYER>NNN` code the negative fixtures trip, with its `{code, severity, layer, span, message, suggest}` record shape.
 - [The flow graph](./cheatsheet.md) — the canonical counts (7 blocks, 5 modals, 7 verdicts, 9 proof types, 7 phases / 9 steps, 10 improve operations, 5 lint layers) and the per-task-kind default-suite matrix the rubrics cite.
-- [The flow](../model/how-swarm-works.md) — the auth-refresh chain rendered as the canonical stage-by-stage worked example; the positive auth-refresh fixture in readable form.
+- [The flow](./model/how-swarm-works.md) — the auth-refresh chain rendered as the canonical stage-by-stage worked example; the positive auth-refresh fixture in readable form.
 - [Drift and staleness](./drift-and-staleness.md) — the trace-provenance schema and the four staleness conditions the drift-detection cross-step predicate scores.
 - [Proof types and the `VERIFY BY` binding](./proof-types.md) — the nine closed proof types the verification bindings in every fixture draw from.

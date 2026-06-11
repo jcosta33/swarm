@@ -10,7 +10,7 @@
 - Created: {{createdAt}}
 - Status: active
 - Pass: author · Task kind: bug-report-writing · Profile: Bug Hunter
-- Deliverable path: `{{bugReportPath}}` (a working artifact — plain `.md`, **no** `.swarm.` infix)
+- Deliverable path: `{{bugReportPath}}` (a working artifact — plain `.md`, **no** `spec.md` naming)
 
 ---
 

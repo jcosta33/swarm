@@ -4,7 +4,7 @@
 
 ## What `lint` is
 
-`lint` is one of Swarm's nine steps. It consumes a `spec.swarm.md` and emits a **lint report** — an array of diagnostic records plus an overall blocking status — without changing a single character of the spec. It catches defects *before any work is committed*.
+`lint` is one of Swarm's nine steps. It consumes a `spec.md` and emits a **lint report** — an array of diagnostic records plus an overall blocking status — without changing a single character of the spec. It catches defects *before any work is committed*.
 
 There is **no runtime** that runs `lint`. Like every step, it is a **contract** a future tool will build against; today a human or an agent following the `lint` stdlib step guide performs it by hand. This repository ships no parser, linter, or checker — only the specification of what one must do (Invariant 1).
 
@@ -20,7 +20,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 
 | Property | Value |
 | --- | --- |
-| Input artifact | `spec.swarm.md` |
+| Input artifact | `spec.md` |
 | Output artifact | lint report `{code, severity, layer, span, message, suggest}[]` + blocking status |
 | Phase(s) | `PARSE` + `NORMALIZE` |
 | Carrier profile | Skeptic |
@@ -30,7 +30,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 
 ## What `lint` emits: the unified taxonomy
 
-Every diagnostic uses one namespace: `SOL-<LAYER><NNN>` — the literal prefix `SOL`, a hyphen, one uppercase **layer letter**, and a three-digit number. There are **exactly five layers**, each mirroring a step 1:1, each a 100-block, **append-only with tombstoning** (a retired code is tombstoned in the [code catalogue](../language/errors.md) and its number is never reused).
+Every diagnostic uses one namespace: `SOL-<LAYER><NNN>` — the literal prefix `SOL`, a hyphen, one uppercase **layer letter**, and a three-digit number. There are **exactly five layers**, each mirroring a step 1:1, each a 100-block, **append-only with tombstoning** (a retired code is tombstoned in the [code catalogue](./language/errors.md) and its number is never reused).
 
 | Layer | Letter | Domain | Mirrors step / phase | Block range |
 | --- | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ Every diagnostic uses one namespace: `SOL-<LAYER><NNN>` — the literal prefix `
 
 A code's letter indicates the phase it belongs to and which guide repairs it. Note that although the `O` layer is *raised* by any LOWER-phase step (`lower` or `decompose`), it is *surfaced by the `lint` gate* — the layers and the steps are 1:1 by domain, not by who reports them.
 
-`APS-` is **retired as a code prefix**. "APS" survives only as the *name* of the prose standard. Every legacy `APS-*` code, every flat `SOL101`/`SOL201`/`SOL301` code, and every `SOL-L###` code is remapped into the unified namespace (the full translation table is in the [code catalogue](../language/errors.md)). Tools and authors MUST cite only the unified `SOL-<LAYER>###` codes.
+`APS-` is **retired as a code prefix**. "APS" survives only as the *name* of the prose standard. Every legacy `APS-*` code, every flat `SOL101`/`SOL201`/`SOL301` code, and every `SOL-L###` code is remapped into the unified namespace (the full translation table is in the [code catalogue](./language/errors.md)). Tools and authors MUST cite only the unified `SOL-<LAYER>###` codes.
 
 ### The diagnostic record shape
 
@@ -50,7 +50,7 @@ Every emitted diagnostic MUST be the object `{ code, severity, layer, span, mess
 
 | Field | Type | Meaning |
 | --- | --- | --- |
-| `code` | string | A `SOL-<LAYER><NNN>` code from this taxonomy / the [code catalogue](../language/errors.md) |
+| `code` | string | A `SOL-<LAYER><NNN>` code from this taxonomy / the [code catalogue](./language/errors.md) |
 | `severity` | enum | `BLOCKING` \| `ADVISORY` (a recorded waiver demotes the structured-form `level` to `warning` or suppresses to `off`) |
 | `layer` | enum | `S` \| `P` \| `M` \| `V` \| `O` (redundant with the code's letter; explicit for filtering) |
 | `span` | object | Source location `{ file, block, line, col }` (minimally `{ file, block }`) |
@@ -64,7 +64,7 @@ The structured form carries the same data SARIF-shaped into `diagnostics[]`: `se
   "code": "SOL-P005",
   "severity": "BLOCKING",
   "layer": "P",
-  "span": { "file": "auth-refresh.swarm.md", "block": "AC-001", "line": 22, "col": 9 },
+  "span": { "file": "auth-refresh.md", "block": "AC-001", "line": 22, "col": 9 },
   "message": "Vague-quality word 'gracefully' in a binding clause with no same-line observable criterion.",
   "suggest": "CONCRETIZE: replace with actor+action+object, or bind a VERIFY BY target."
 }
@@ -79,7 +79,7 @@ The severity model is **strictly binary**: every surface code lowers to `error` 
 
 The binding-clause vs commentary boundary re-classifies position-sensitive codes: `SOL-P056` (comparative without baseline) is BLOCKING inside an obligation block and ADVISORY in commentary; the high-risk-word rules are BLOCKING only inside binding clauses.
 
-*Design rationale:* whether a defect changes what gets built is detectable cheaply *before* generation — a defect that alters built behavior is exactly the class a pre-generation check can flag, and under-specification (a missing actor, object, or binding) is the most severe such defect because it silently licenses a guess [[PLANCODER]](../research/sources.md#PLANCODER). This is why actor/object incompleteness (`SOL-M001`) and uncaptured ambiguity (`SOL-P008`) are BLOCKING: they are the cheapest defects to catch and the most expensive to let through.
+*Design rationale:* whether a defect changes what gets built is detectable cheaply *before* generation — a defect that alters built behavior is exactly the class a pre-generation check can flag, and under-specification (a missing actor, object, or binding) is the most severe such defect because it silently licenses a guess [[PLANCODER]](./research/sources.md#PLANCODER). This is why actor/object incompleteness (`SOL-M001`) and uncaptured ambiguity (`SOL-P008`) are BLOCKING: they are the cheapest defects to catch and the most expensive to let through.
 
 ### Principal BLOCKING codes
 
@@ -91,7 +91,7 @@ The binding-clause vs commentary boundary re-classifies position-sensitive codes
 | `SOL-S003` | Actor clause (`THE <actor> …`) with no modal verb. |
 | `SOL-S005` | ID prefix does not match block type (e.g. `REQ C-001:`). |
 | `SOL-S006` | `SHOULD` / `SHOULD NOT` used without an accompanying `BECAUSE` or `EXCEPT`. |
-| `SOL-S012` | A `spec.swarm.md` missing a required top-level section, or sections out of mandated order (document-level companion of `SOL-O004`). |
+| `SOL-S012` | A `spec.md` missing a required top-level section, or sections out of mandated order (document-level companion of `SOL-O004`). |
 
 **P layer — controlled prose (the blocking set `SOL-P001`–`SOL-P008`):**
 
@@ -176,7 +176,7 @@ Three points keep this faithful to the spec:
 
 Both gates are **contracts checkable today by review and enforced by a future tool** — there is no runtime (Invariant 1). Today the `lint` carrier verifies the predicate by hand against the structured form; a future tool computes it from `nodes[]` and `edges[]`. A valid repository MUST state the gate as a review-checkable contract and MUST NOT claim it is enforced by shipped tooling.
 
-*Design rationale:* the planner→coder handoff is the dominant failure surface in multi-agent code generation — the gap between what a planner specifies and what a coder builds accounts for the majority of end-to-end failures [[PLANCODER]](../research/sources.md#PLANCODER) — and agents do not reliably ask for help on their own: on messy, ambiguous specs even the strongest models solve only a small fraction of tasks, and do not improve much even when handed an explicit tool to ask clarifying questions [[HILBENCH]](../research/sources.md#HILBENCH). The cost of ambiguity is large and measurable: ambiguous descriptions sharply degrade first-attempt success, and contradictory ones degrade it further still, whereas a clarify-then-generate loop materially raises success. Clarifying *before* lowering is therefore a precondition for safe handoff, resolving ambiguity at the point where it is cheapest to fix.
+*Design rationale:* the planner→coder handoff is the dominant failure surface in multi-agent code generation — the gap between what a planner specifies and what a coder builds accounts for the majority of end-to-end failures [[PLANCODER]](./research/sources.md#PLANCODER) — and agents do not reliably ask for help on their own: on messy, ambiguous specs even the strongest models solve only a small fraction of tasks, and do not improve much even when handed an explicit tool to ask clarifying questions [[HILBENCH]](./research/sources.md#HILBENCH). The cost of ambiguity is large and measurable: ambiguous descriptions sharply degrade first-attempt success, and contradictory ones degrade it further still, whereas a clarify-then-generate loop materially raises success. Clarifying *before* lowering is therefore a precondition for safe handoff, resolving ambiguity at the point where it is cheapest to fix.
 
 ## Severity overrides and waivers
 
@@ -197,5 +197,5 @@ This step page lists the principal inline codes only. Two v0.1 scoping notes car
 - [The `lower` step](lower.md) — the `LOWER` phase the CLARIFY gate brackets, and the COVERAGE gate that is the CLARIFY gate's sibling at the other LOWER boundary.
 - [The `decompose` step](decompose.md) — owner of the `O` (orchestration) layer: write-conflict, dependency-cycle, and the blocking-`QUESTION`-reaching-lowering codes.
 - [The `verify` step](verify.md) — owner of the `V` (verification) layer and the merge-gate where `V`/`O` blockers and `WAIVED` verdicts are decided.
-- [SOL — the spec language](../language/SOL.md) and [APS — the controlled-prose standard](../language/APS.md) — the grammar and prose rules the `S` and `P` layers detect against.
-- [Diagnostic codes (errors)](../language/errors.md) — the full per-layer code catalogue for the unified `SOL-<LAYER>###` namespace, plus the translation table that remaps every legacy `APS-*`, flat `SOL101`/`SOL201`/`SOL301`, and `SOL-L###` code into it.
+- [SOL — the spec language](./language/SOL.md) and [APS — the controlled-prose standard](./language/APS.md) — the grammar and prose rules the `S` and `P` layers detect against.
+- [Diagnostic codes (errors)](./language/errors.md) — the full per-layer code catalogue for the unified `SOL-<LAYER>###` namespace, plus the translation table that remaps every legacy `APS-*`, flat `SOL101`/`SOL201`/`SOL301`, and `SOL-L###` code into it.

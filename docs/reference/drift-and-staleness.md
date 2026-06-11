@@ -4,7 +4,7 @@ A proof's `PASS` is a statement about a *moment*: the obligation said X, the cod
 
 > **Future toolchain — not a shipped detector.** Swarm is markdown-only and has **no runtime**. Nothing on this page is shipped code: the content-hasher, the staleness check, the differ that compares recorded hashes against the working tree, and the reconcile workflow are all **contracts a future harness would build against**. Every "Swarm detects / the rule fires / `STALE` blocks the gate" below describes what a conformant tool — or a human, today — would do given these records; it does not describe a process Swarm runs. What this page defines is the schema the hashes live in and the rules that read them. Drift is read from **content hashes recorded in the trace / structured form** at the time of each `PASS`; there is no live observation of behavior.
 
-The governing doctrine is **CODE IS REALITY** (Invariant 4): specs are primary for *intent*, code is primary for *implementation reality*, and the trace/review/status layer reconciles the two. Code can *falsify* an obligation — forcing a fix or an amendment — but a passing run may never *silently re-bless* either side. Staleness is the mechanism that refuses to let a stale `PASS` masquerade as a current one. A green build is *shape*, not truth; staleness asks whether the evidence still matches reality, not whether the suite still exits zero [[REFLEXION]](../research/sources.md#REFLEXION).
+The governing doctrine is **CODE IS REALITY** (Invariant 4): specs are primary for *intent*, code is primary for *implementation reality*, and the trace/review/status layer reconciles the two. Code can *falsify* an obligation — forcing a fix or an amendment — but a passing run may never *silently re-bless* either side. Staleness is the mechanism that refuses to let a stale `PASS` masquerade as a current one. A green build is *shape*, not truth; staleness asks whether the evidence still matches reality, not whether the suite still exits zero [[REFLEXION]](./research/sources.md#REFLEXION).
 
 ## What each PASS records: the trace-provenance schema
 
@@ -27,15 +27,15 @@ Every `VERIFY BY` binding's **last `PASS`** records enough provenance to detect 
 
 | Field | Meaning |
 | --- | --- |
-| `source_hash` | Content hash of the *obligation source* — the exact bytes of the obligation block in `*.swarm.md` — at the time of the `PASS`. |
-| `per_surface_hash[]` | One `{surface, hash, exercised}` per surface in the obligation's declared `WRITES` set **and** the `READS` surfaces the proof exercised, at the time of the `PASS`. `exercised` is a bool — `true` iff the proof actually executed or analysed that surface. The proof's **evidence path** is the *derived* exercised subset (the entries with `exercised: true`); it is not a separate stored field. Recording `READS` hashes is what makes read-side drift detectable. |
+| `source_hash` | Content hash of the *obligation source* — the exact bytes of the obligation block in `*.md` — at the time of the `PASS`. |
+| `per_surface_hash[]` | One `{surface, hash, exercised}` per surface in the obligation's declared `WRITES` set **and** the `READS` surfaces the proof exercised, at the time of the `PASS`exercised` is a bool — `true` iff the proof actually executed or analysed that surface. The proof's **evidence path** is the *derived* exercised subset (the entries with `exercised: true`); it is not a separate stored field. Recording `READS` hashes is what makes read-side drift detectable. |
 | `adapter` | The `cmd*` slot the proof resolved through (the command slot named in `AGENTS.md > Commands`). |
 | `verdict` | The core verdict recorded — `PASS` for a drift-trackable binding. |
 | `tier` | The proof type (one of the nine — see [Proof Types and the `VERIFY BY` Binding](./proof-types.md)) — the same value recorded as `type` in the structured-form `verify_by[]` element; used for the proof-strength tie-break. |
 | `origin_obligations[]` | The obligation ids this `PASS` judged. |
 | `origin_traces[]` | The trace(s) that produced the change being judged. |
 
-The structured-form field names are snake_case. Hashes are recorded in markdown (`*.swarm.trace.md`) and/or the emitted structured form (`*.swarm.ir.json`). Computing them is a future-tool concern; the **schema is the Swarm contract** today. The two surfaces in the example above illustrate the central distinction the rest of this page turns on: `src/auth/client.ts` was `exercised: true` (it is on the evidence path), while `src/auth/session-store.ts` was declared but `exercised: false` (the proof never touched it).
+The structured-form field names are snake_case. Hashes are recorded in markdown (`*.trace.md`) and/or the emitted structured form (`*.ir.json`). Computing them is a future-tool concern; the **schema is the Swarm contract** today. The two surfaces in the example above illustrate the central distinction the rest of this page turns on: `src/auth/client.ts` was `exercised: true` (it is on the evidence path), while `src/auth/session-store.ts` was declared but `exercised: false` (the proof never touched it).
 
 ## The staleness rule
 
@@ -111,7 +111,7 @@ drift_coverage = ( count of required obligations whose latest verdict is STALE )
 
 The staleness rule detects drift *after* a `PASS`. *Before* any of that, a **surface policy** declares how Swarm is permitted to govern a given region of code at all. The two are one mechanism viewed at two times: the policy says what an edit to a surface is *allowed* to be, and the staleness rule says what an edit that violated that allowance *becomes*.
 
-A code region declares **exactly one** policy from a closed set of five: `generated`, `governed`, `observed`, `external`, `deprecated`. The full taxonomy — what each policy means, which manual edits each permits, and the rejected "code is disposable" doctrine — is defined in the [Workspace Model](../model/workspace.md). The policy load-bearing for drift is `governed`.
+A code region declares **exactly one** policy from a closed set of five: `generated`, `governed`, `observed`, `external`, `deprecated`. The full taxonomy — what each policy means, which manual edits each permits, and the rejected "code is disposable" doctrine — is defined in the [Workspace Model](./model/workspace.md). The policy load-bearing for drift is `governed`.
 
 Surface policies are declared as a `surfaces:` map: each path maps to `{policy, source, manual_edits}` plus any policy-specific fields. Computing and enforcing this map is a future-tool concern; the **map shape is the Swarm contract** today.
 
@@ -124,7 +124,7 @@ surfaces:
 
   src/auth/client.ts:
     policy: governed
-    source: specs/auth/auth-refresh.swarm.md
+    source: specs/auth/auth-refresh.md
     manual_edits: allowed_with_trace
 
   src/legacy:
@@ -134,7 +134,7 @@ surfaces:
     requires_audit: true
 ```
 
-The `source` field names the artifact that owns the surface: for `generated`, the artifact it is emitted from; for `governed`, the `*.swarm.md` spec that owns its intent; for `observed`, `none` (with `requires_audit: true` marking the on-ramp). This is the per-path projection of the source/status/generated separation Swarm holds for the whole workspace.
+The `source` field names the artifact that owns the surface: for `generated`, the artifact it is emitted from; for `governed`, the `*.md` spec that owns its intent; for `observed`, `none` (with `requires_audit: true` marking the on-ramp). This is the per-path projection of the source/status/generated separation Swarm holds for the whole workspace.
 
 ### `governed` + `allowed_with_trace` is the drift contract
 
@@ -147,10 +147,10 @@ A passing test does **not** discharge the obligation. A `governed` edit that shi
 
 ## Related
 
-- [Workspace Model](../model/workspace.md) — the five source-code surface policies (`generated`/`governed`/`observed`/`external`/`deprecated`) and the source/status/generated workspace split.
+- [Workspace Model](./model/workspace.md) — the five source-code surface policies (`generated`/`governed`/`observed`/`external`/`deprecated`) and the source/status/generated workspace split.
 - [Proof Types and the `VERIFY BY` Binding](./proof-types.md) — the nine proof types and the binding grammar whose last `PASS` records the provenance schema above.
-- [`verify` step](../passes/verify.md) — the step that records a `PASS` and its provenance hashes.
-- [`review` step](../passes/review.md) — where a `STALE` or `CONTRADICTED` verdict routes for reconciliation.
-- [`trace` artifact](../artifacts/trace.md) — the markdown carrier of the recorded hashes.
-- [`review.md` artifact](../artifacts/review.md) — the verdict container that holds `VERDICT … (STALE …)` blocks.
+- [`verify` step](./passes/verify.md) — the step that records a `PASS` and its provenance hashes.
+- [`review` step](./passes/review.md) — where a `STALE` or `CONTRADICTED` verdict routes for reconciliation.
+- [`trace` artifact](./artifacts/trace.md) — the markdown carrier of the recorded hashes.
+- [`review.md` artifact](./artifacts/review.md) — the verdict container that holds `VERDICT … (STALE …)` blocks.
 - [Promotion Protocol](./promotion-protocol.md) — the merge gate a `STALE` binding blocks.

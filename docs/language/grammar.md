@@ -1,8 +1,8 @@
 # The SOL Grammar — Consolidated EBNF Reference
 
-> Swarm's single formal grammar for the SOL surface language: the complete EBNF for everything you write inside a `*.swarm.md` file, the lint constraints attached to each production, and the v0.1 rules for opacity and deferral.
+> Swarm's single formal grammar for the SOL surface language: the complete EBNF for everything you write inside a `*.md` file, the lint constraints attached to each production, and the v0.1 rules for opacity and deferral.
 
-This page is the **complete, formal grammar** for SOL (the Swarm Obligation Language) — the human-authored `.swarm.md` surface syntax. A conformant `.swarm.md` parser MUST accept exactly the language this grammar generates and MUST reject any input outside it. Where [SOL.md](SOL.md) *teaches* the surface with prose, tables, and worked examples, this page is the **lossless reference**: every production, in one place, with no narrative gaps.
+This page is the **complete, formal grammar** for SOL (the Swarm Obligation Language) — the human-authored `.md` surface syntax. A conformant `.md` parser MUST accept exactly the language this grammar generates and MUST reject any input outside it. Where [SOL.md](SOL.md) *teaches* the surface with prose, tables, and worked examples, this page is the **lossless reference**: every production, in one place, with no narrative gaps.
 
 It is **markdown-only and provider-neutral**: nothing here is shipped code. A "parser" is the contract a future tool builds against; this repository runs no parser, linter, or structuring step. The grammar is the contract; the tool, when it exists, conforms to it.
 
@@ -17,7 +17,7 @@ There is one master layering of the language, and this page describes only one h
 - **Surface** — what a human writes — is **English-shaped UPPERCASE keywords** (`VERIFY BY`, `DEPENDS ON`, `OWNED BY`). This grammar is the surface.
 - **Structured form** — what a tool *emits*, never authored — is **snake_case fields** (`verify_by`, `depends_on`, `owner`).
 
-The EBNF below is the human surface; it never describes the structured form. Wherever a surface keyword appears here, the corresponding snake_case field is reserved for that layer and MUST NOT appear at the surface. The structured-form envelope is specified separately in [the structured form](../reference/structured-form.md); this separation is one of the framework's load-bearing invariants. Keywords are UPPERCASE and case-sensitive; lowercase `must`/`should`/`may` and lowercase keywords carry no force and are parsed as prose.
+The EBNF below is the human surface; it never describes the structured form. Wherever a surface keyword appears here, the corresponding snake_case field is reserved for that layer and MUST NOT appear at the surface. The structured-form envelope is specified separately in [the structured form](./reference/structured-form.md); this separation is one of the framework's load-bearing invariants. Keywords are UPPERCASE and case-sensitive; lowercase `must`/`should`/`may` and lowercase keywords carry no force and are parsed as prose.
 
 ---
 
@@ -31,7 +31,7 @@ In v0.1 the arguments of conditions (`WHERE`/`WHILE`/`WHEN`/`IF`) are **opaque t
 
 ## 3. Normative EBNF
 
-This is the single normative grammar for the SOL surface syntax. The structured-form/JSON layer is not specified here (see [the structured form](../reference/structured-form.md)); surface keywords are space-separated uppercase, structured-form fields are snake_case.
+This is the single normative grammar for the SOL surface syntax. The structured-form/JSON layer is not specified here (see [the structured form](./reference/structured-form.md)); surface keywords are space-separated uppercase, structured-form fields are snake_case.
 
 ```ebnf
 (* ===== Document and frontmatter ===== *)
@@ -231,7 +231,7 @@ nl                = "\n" | "\r\n";
 These rules are part of the grammar's contract. A conformant parser MUST honor them.
 
 1. **Opaque single-line text.** `condition_text`, `question_text`, `response`, `hold_text`, and `prose_text` are opaque single-line text in v0.1. No structured expression grammar (operators, comparisons, `AND`/`OR`) is defined; a parser MUST NOT attempt to tokenize their interior. The expression sublanguage is deferred to v0.2.
-2. **Timing keywords are deferred.** `WITHIN`, `BEFORE`, `UNTIL`, `IMMEDIATELY`, `EVENTUALLY` are **not productions in this grammar**; they are reserved for v0.2 (FRETish temporal semantics). Their appearance in a `.swarm.md` is parsed as opaque prose and SHOULD raise an advisory pointing to the deferral.
+2. **Timing keywords are deferred.** `WITHIN`, `BEFORE`, `UNTIL`, `IMMEDIATELY`, `EVENTUALLY` are **not productions in this grammar**; they are reserved for v0.2 (FRETish temporal semantics). Their appearance in a `.md` is parsed as opaque prose and SHOULD raise an advisory pointing to the deferral.
 3. **Rejected keywords.** `ALWAYS`/`NEVER` (as INVARIANT openers), `EXPOSES`/`INPUT`/`OUTPUT` (as INTERFACE clauses), and `MAP`/`TO`/`ORDER`/`ASK` are not part of the grammar and have no production; they MUST be rejected.
 4. **`THEN` placement.** `THEN` is legal only as the optional trailing sugar of `if_clause`; after `WHEN`/`WHILE` it MUST be rejected as a parse error.
 5. **Indentation is non-semantic.** A block body **clause** line MAY carry leading whitespace; that whitespace is stripped before the line is matched against its body production. Block **headers** (`req_header`, `constraint_header`, … and `surface_decl`) MUST remain flush-left (no leading whitespace). The `[ ws ]` allowance applies only to body clause lines.
@@ -271,8 +271,8 @@ The lint layers are **S/P/M/V/O** (Syntax / Prose / seMantic / Verification / Or
 Other framework pages that extend or consume this grammar:
 
 - [SOL — the Swarm Obligation Language (surface reference)](SOL.md) — the prose-and-examples teaching companion to this formal grammar; the seven block types, the five modals, and the seven-value verdict model in narrative form.
-- [The structured form](../reference/structured-form.md) — the snake_case `*.swarm.ir.json` envelope this surface is structured into; the other half of the surface-vs-structured-form layering.
+- [The structured form](./reference/structured-form.md) — the snake_case `*.ir.json` envelope this surface is structured into; the other half of the surface-vs-structured-form layering.
 - [Lint codes](errors.md) — the full `SOL-<LAYER><NNN>` catalogue and severity model behind the production-attached codes cited here.
 - [APS — the controlled-prose standard](APS.md) — the prose layer (`prose_text`) SOL blocks interleave with, and the high-risk-word rules.
-- [Proof types](../reference/proof-types.md) — the closed nine proof types and `VERIFY BY` adapter resolution that `verify_ref` binds.
+- [Proof types](./reference/proof-types.md) — the closed nine proof types and `VERIFY BY` adapter resolution that `verify_ref` binds.
 - [Language versioning](versioning.md) — the version axes that decide which grammar (`SOL/x.y`) applies, and the deferral of the v0.2 expression and timing sublanguages noted in §4.

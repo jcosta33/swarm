@@ -26,10 +26,10 @@ Like every Swarm step, `promote` has **no runtime**: a contract a human, agent, 
 
 ## Consumes
 
-- The task's **discoveries** — every durable fact, decision, pattern, terminology clarification, or workflow rule the task surfaced (from `task.md`, the `*.swarm.trace.md` claims, the `review.md` verdict record).
+- The task's **discoveries** — every durable fact, decision, pattern, terminology clarification, or workflow rule the task surfaced (from `task.md`, the `*.trace.md` claims, the `review.md` verdict record).
 - The **promotion queue** — the resolved-or-pending list of promotion items raised during the task.
 - The current Tier-1 map: `memory/INDEX.md` and `memory/glossary.md` — to check existing entries, prior findings to corroborate against, and terms already bound.
-- The relevant `origin_obligations` (`AC-`/`C-`/`I-`/`IF-…`) and `origin_traces` (`*.swarm.trace.md`) that produced each discovery's evidence.
+- The relevant `origin_obligations` (`AC-`/`C-`/`I-`/`IF-…`) and `origin_traces` (`*.trace.md`) that produced each discovery's evidence.
 
 ## Produces
 
@@ -50,7 +50,7 @@ The kinds are mutually exclusive by intent. A discovery with two faces (e.g. bot
 
 | Discovery | Promote to |
 |---|---|
-| New intended behaviour (a real obligation to build against) | `spec.swarm.md` (new/amended `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`), or an ADR when gated on an undecided architectural/product choice |
+| New intended behaviour (a real obligation to build against) | `spec.md` (new/amended `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`), or an ADR when gated on an undecided architectural/product choice |
 | Durable architectural/product decision (choice + alternatives + trade-offs) | An ADR (`type: adr`) in `decisions/` — project-wide, sequentially numbered |
 | Present-state risk or debt (what *is*, observed, not yet a chosen change) | An audit (`type: audit`) in `specs/<feature>/`, beside the spec it concerns — observation-only, never prescriptive |
 | Reproduced defect evidence (root cause + expected vs actual) | A bug-report (`type: bug-report`) in `specs/<feature>/`, beside the spec whose obligation it breaks — diagnosis-only; the fix promotes onward to a `task_kind: fix` task |
@@ -74,7 +74,7 @@ For a **finding**, fill the full provenance record — `claim`, `evidence`, `ori
 
 ### 5. Apply the validation gate where required
 
-For a **high-consequence** promotion, or any `pending` finding from an **externally-authored / untrusted source** (an agent file or rule supplied outside the project is a poisoning vector — its claims cannot be trusted on authorship alone), advance through `pending → validated → promoted`. `validated` requires **independent corroboration**: a second finding, a re-run proof, or a reviewer who is *not* the promoting agent (generalizing the two-finding pattern rule). **Rationale:** authorization is not validation — owner sign-off establishes *who* may write, never *whether the fact holds*; the gap is poisoning at ingestion, drift at consolidation, conflict at retrieval. `validated` is **non-terminal**: it does not satisfy the close gate alone — carry it to `promoted` (or another disposition) before closing.
+For a **high-consequence** promotion, or any `pending` finding from an **externally-authored / untrusted source** (an agent file or rule supplied outside the project is a poisoning vector — its claims cannot be trusted on authorship alone), advance through `pending → validated → promoted`validated` requires **independent corroboration**: a second finding, a re-run proof, or a reviewer who is *not* the promoting agent (generalizing the two-finding pattern rule). **Rationale:** authorization is not validation — owner sign-off establishes *who* may write, never *whether the fact holds*; the gap is poisoning at ingestion, drift at consolidation, conflict at retrieval. `validated` is **non-terminal**: it does not satisfy the close gate alone — carry it to `promoted` (or another disposition) before closing.
 
 ### 6. Index every promoted finding with a usable `Load when`
 

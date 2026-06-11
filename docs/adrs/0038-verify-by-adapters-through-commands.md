@@ -18,8 +18,8 @@ Pre-kernel Swarm faced a portability problem: an obligation that wants to be pro
 
 A `VERIFY BY <type>:<adapter>:<artifact>` clause names a closed, analyzable proof `<type>` (§15.1) and a project free-string `<adapter>`; the `<adapter>` resolves to a `cmd*` slot in the consuming repo's `AGENTS.md > Commands` table (§15.3, §31.3). This is the framework's **single indirection** binding an abstract, portable proof to a concrete project command:
 
-- The **obligation layer** (SOL, in `*.swarm.md`) declares *what kind of proof* and *which logical command + artifact* prove the obligation. `<type>` is closed and lint-typed; `<adapter>` and `<artifact>` are free strings, so the obligation ports across repos unchanged.
-- The **project layer** (`AGENTS.md > Commands`) names the concrete command for *this* repo. The `cmd*` placeholder rows **are** the adapters; only this table changes when a `spec.swarm.md` moves between repos. Naming a repository's commands in the context file — rather than narrating them — is the contract that makes those commands reliably reachable [[AGENTSMD-HARM]](../research/sources.md#AGENTSMD-HARM).
+- The **obligation layer** (SOL, in `*.md`) declares *what kind of proof* and *which logical command + artifact* prove the obligation. `<type>` is closed and lint-typed; `<adapter>` and `<artifact>` are free strings, so the obligation ports across repos unchanged.
+- The **project layer** (`AGENTS.md > Commands`) names the concrete command for *this* repo. The `cmd*` placeholder rows **are** the adapters; only this table changes when a `spec.md` moves between repos. Naming a repository's commands in the context file — rather than narrating them — is the contract that makes those commands reliably reachable [[AGENTSMD-HARM]](./research/sources.md#AGENTSMD-HARM).
 
 A binding whose `<adapter>` has no matching Commands row is `SOL-V002` (proof-not-executable), which surfaces as `BLOCKED` at the merge gate (§14.4), not `PASS` — the missing binding is recorded as honestly unknown, never silently passed. The Commands table is **soft control** (§17): it names what a future launcher *would* run; the kernel ships no runtime, and `AGENTS.md` MUST NOT claim it enforces or runs these commands (§31.3). The full proof taxonomy, binding grammar, default proof-type → `cmd*` mapping, and the Commands contract are specified in §15.1–§15.3 and §31.3.
 
@@ -27,7 +27,7 @@ A binding whose `<adapter>` has no matching Commands row is `SOL-V002` (proof-no
 
 | Alternative | Why rejected |
 | --- | --- |
-| Hardcode concrete commands in the `VERIFY BY` clause | Forks the obligation per stack and leaks tooling into a portable spec; the same `spec.swarm.md` would no longer port across repos (§15.3 rationale). |
+| Hardcode concrete commands in the `VERIFY BY` clause | Forks the obligation per stack and leaks tooling into a portable spec; the same `spec.md` would no longer port across repos (§15.3 rationale). |
 | Keep [0018](./0018-agents-md-command-contract.md)'s skill-prose indirection (commands named in skill bodies) | The kernel removes skills as the carrier of command references; skills are pass guides that MUST NOT own semantics (§26.1). Binding the indirection to a skill body leaves it on a surface the kernel no longer uses. |
 | Put the concrete command in the proof `<type>` | `<type>` is the closed, IR-typed, analyzable dimension (§15.1); putting a project command there would make the closed set un-closeable and break cross-repo portability. |
 | Resolve `<adapter>` against a per-repo runtime config the kernel ships | Swarm ships no runtime (§2); there is nothing to resolve against. The resolution target must be a markdown fact a human or future launcher reads — the `AGENTS.md` table. |

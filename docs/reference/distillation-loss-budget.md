@@ -43,10 +43,10 @@ The two lists above generalize. This matrix is the canonical per-boundary specia
 
 | From | To | Permitted loss | Forbidden loss |
 | ---- | -- | -------------- | -------------- |
-| `research.md` | `spec.swarm.md` | Source digressions, rejected options, low-confidence observations | Constraints, unresolved ambiguity, decision-changing evidence |
-| `audit.md` | `spec.swarm.md` | Low-priority cleanup details | Observed risks affecting target behavior |
+| `research.md` | `spec.md` | Source digressions, rejected options, low-confidence observations | Constraints, unresolved ambiguity, decision-changing evidence |
+| `audit.md` | `spec.md` | Low-priority cleanup details | Observed risks affecting target behavior |
 | `bug-report.md` | fix task | Duplicate failed reproduction attempts | Reliable reproduction, expected/actual behavior, root-cause evidence |
-| `spec.swarm.md` | task | Rationale not needed for execution | Obligation IDs, modality, constraints, invariants, verification bindings, non-goals |
+| `spec.md` | task | Rationale not needed for execution | Obligation IDs, modality, constraints, invariants, verification bindings, non-goals |
 | `finding.md` | task | Historical discussion | Actionable claim, applicability, evidence |
 | `task.md` | `finding.md` | Step-by-step execution log | Evidence for the durable claim |
 | task output | trace | Narrative detail | Obligation ID, changed files, proof |
@@ -61,24 +61,24 @@ Rationale: a gatekeeper is *soft control* — a model deciding whether to allow 
 - **Lint catches it structurally.** A structured task that omits an obligation ID its source spec declares, or a `VERIFY BY` binding present in the spec but absent in the task, is a `SOL-V001` / `SOL-M…` diagnostic.
 - **Source authority catches it semantically.** A distilled artifact that contradicts its higher-authority source is a `SOL-M004` authority-conflict, routed to amendment — the distillation cannot silently win.
 
-The human-authored declaration the lint checks against is the **`spec.swarm.md` distillation loss statement** — the `Preserved / Dropped / Still uncertain` section. It records what the author *intends* to be droppable, so the loss is **auditable rather than accidental**.
+The human-authored declaration the lint checks against is the **`spec.md` distillation loss statement** — the `Preserved / Dropped / Still uncertain` section. It records what the author *intends* to be droppable, so the loss is **auditable rather than accidental**.
 
 ## Forbidden compositions
 
 A **forbidden composition** is the silent mixing of two distinct epistemic stances — most dangerously, an **observation-only artifact silently becoming intent**. Examples:
 
-- an `audit.md` (observation of present state) read as if it were an approved `spec.swarm.md` (intended behavior);
+- an `audit.md` (observation of present state) read as if it were an approved `spec.md` (intended behavior);
 - a `research.md` (exploratory) treated as a decision;
 - a `bug-report.md` (diagnosis) treated as a fix authorization.
 
 These compositions are prevented by the **loss budget + source authority**, NOT by a documentation-gatekeeper:
 
-- The **loss budget** forces the crossing to be explicit. An audit *promotes to* a spec through the `audit.md → spec.swarm.md` row of the matrix above, which is an authoring act that re-states observations as obligations with their own IDs, modality, and verification bindings. There is no path by which an audit's prose becomes binding without that re-statement.
+- The **loss budget** forces the crossing to be explicit. An audit *promotes to* a spec through the `audit.md → spec.md` row of the matrix above, which is an authoring act that re-states observations as obligations with their own IDs, modality, and verification bindings. There is no path by which an audit's prose becomes binding without that re-statement.
 - **Source authority** ranks the stances. An `audit` (Axis A rank 4, observation) cannot silently amend an approved `spec` (rank 2); if it appears to, that is a `SOL-M004` authority-conflict routed to review.
 
 ### Worked example
 
-An `audit.md` notes "the refresh endpoint currently accepts rotated tokens." This is an **observation**, not intent. To affect the build it must promote into `spec.swarm.md` as a re-stated obligation (`CONSTRAINT C-014`) carrying modality and `VERIFY BY`. The audit prose alone has Axis-A rank 4 and `audit` / `security` domain; it never silently overwrites the product spec — the source-authority conflict procedure governs, and the loss budget forces the explicit re-statement. The epistemic stance is preserved end-to-end: an observation stays labeled an observation until an author deliberately turns it into intent.
+An `audit.md` notes "the refresh endpoint currently accepts rotated tokens." This is an **observation**, not intent. To affect the build it must promote into `spec.md` as a re-stated obligation (`CONSTRAINT C-014`) carrying modality and `VERIFY BY`. The audit prose alone has Axis-A rank 4 and `audit` / `security` domain; it never silently overwrites the product spec — the source-authority conflict procedure governs, and the loss budget forces the explicit re-statement. The epistemic stance is preserved end-to-end: an observation stays labeled an observation until an author deliberately turns it into intent.
 
 ## Validity note
 
@@ -86,8 +86,8 @@ A valid repo's distillation-loss-budget reference (this document) MUST state bot
 
 ## Related
 
-- [Promotion protocol](../reference/promotion-protocol.md) — the promotion boundary this budget governs.
-- [SOL](../language/SOL.md) — the lint family (`SOL-V001`, `SOL-M…`) that enforces the budget structurally and the `SOL-M004` authority-conflict that catches it semantically.
-- [Drift and staleness](../reference/drift-and-staleness.md) — how distilled artifacts are kept faithful to their sources over time.
-- [Proof types](../reference/proof-types.md) — the `VERIFY BY` proof paths that MUST survive every distillation.
-- [Glossary](../reference/glossary.md) — canonical definitions of obligation, modality, authority, and the artifact stances.
+- [Promotion protocol](./reference/promotion-protocol.md) — the promotion boundary this budget governs.
+- [SOL](./language/SOL.md) — the lint family (`SOL-V001`, `SOL-M…`) that enforces the budget structurally and the `SOL-M004` authority-conflict that catches it semantically.
+- [Drift and staleness](./reference/drift-and-staleness.md) — how distilled artifacts are kept faithful to their sources over time.
+- [Proof types](./reference/proof-types.md) — the `VERIFY BY` proof paths that MUST survive every distillation.
+- [Glossary](./reference/glossary.md) — canonical definitions of obligation, modality, authority, and the artifact stances.

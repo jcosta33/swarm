@@ -18,7 +18,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 
 ## Stage 1 — `author`: the human writes the spec
 
-`author` is the only stage where a human writes a `.swarm.` artifact directly. The output is a `spec.swarm.md`: frontmatter plus prose sections (`## Intent`, `## Interfaces`, `## Obligations`, `## Invariants`, `## Questions`) interleaved with typed SOL blocks. The author is not expected to write clean obligations on the first draft — that is what `lint` and `improve` are for. The frontmatter carries the three separate version fields: `swarm_language` (which grammar and lint codes apply), `aps_version` (the prose standard), and `spec_version` (the SemVer of this spec's content). They are never merged.
+`author` is the only stage where a human writes a `.` artifact directly. The output is a `spec.md`: frontmatter plus prose sections (`## Intent`, `## Interfaces`, `## Obligations`, `## Invariants`, `## Questions`) interleaved with typed SOL blocks. The author is not expected to write clean obligations on the first draft — that is what `lint` and `improve` are for. The frontmatter carries the three separate version fields: `swarm_language` (which grammar and lint codes apply), `aps_version` (the prose standard), and `spec_version` (the SemVer of this spec's content). They are never merged.
 
 Note the deliberate flaws planted here: `AC-002`'s `SHOULD clear the local session` carries no justification and the block has no `VERIFY BY`; `I-001` says retry count must not exceed "one" as a word rather than a measurable threshold; and `Q-001` is a `[blocking]` question hanging over `AC-002`.
 
@@ -119,13 +119,13 @@ the retry count for a single original request MUST NOT exceed 1
 VERIFY BY property:cmdTest:web/tests/auth-refresh.properties.ts#no_unbounded_retry
 ```
 
-Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST` — the spec owner judged the session-clear mandatory, so `SOL-S006` clears with no `BECAUSE` needed. `CONCRETIZE` fixed the threshold to the literal `1` and named the measured quantity, clearing `SOL-P005`. `BIND` attached a `test` proof to `AC-002` and a `property` proof to `I-001` (an `INVARIANT` prefers `property`, `model`, or `static` over a plain unit test), clearing `SOL-V001`. All three diagnostics now resolve, and with `Q-001` closed, the spec is ready to lower.
+Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST` — the spec owner judged the session-clear mandatory, so `SOL-S006` clears with no `BECAUSE` needed. `CONCRETIZE` fixed the threshold to the literal `1` and named the measured quantity, clearing `SOL-P005`BIND` attached a `test` proof to `AC-002` and a `property` proof to `I-001` (an `INVARIANT` prefers `property`, `model`, or `static` over a plain unit test), clearing `SOL-V001`. All three diagnostics now resolve, and with `Q-001` closed, the spec is ready to lower.
 
 ---
 
 ## Stage 4 — `lower`: emit the typed structured form
 
-`lower` projects the normalized spec into the typed structured form, `auth-refresh.swarm.ir.json`. Three things happen mechanically: uppercase SOL surface keywords become `snake_case` fields (`VERIFY BY` becomes `verify_by`, `DEPENDS ON` becomes a `depends_on` edge); every relationship moves into `edges[]`, the single source of relationship truth, never duplicated as a node scalar; and node ids become namespaced. Note that `AC-001`'s `AND THE` chain splits into two distinct obligations, `AC-001.1` and `AC-001.2`, each carrying its own predicate but sharing the trigger, write surface, and proof binding. A slice is shown.
+`lower` projects the normalized spec into the typed structured form, `auth-refresh.ir.json`. Three things happen mechanically: uppercase SOL surface keywords become `snake_case` fields (`VERIFY BY` becomes `verify_by`, `DEPENDS ON` becomes a `depends_on` edge); every relationship moves into `edges[]`, the single source of relationship truth, never duplicated as a node scalar; and node ids become namespaced. Note that `AC-001`'s `AND THE` chain splits into two distinct obligations, `AC-001.1` and `AC-001.2`, each carrying its own predicate but sharing the trigger, write surface, and proof binding. A slice is shown.
 
 ```json
 {
@@ -147,7 +147,7 @@ Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST
           "ref": "refresh-session-contract", "selector": null, "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 9, "line_end": 15,
+      "source": { "file": "auth-refresh.md", "line_start": 9, "line_end": 15,
                   "content_hash": "sha256:1f4a…c0" }
     },
     {
@@ -165,7 +165,7 @@ Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST
           "selector": "replays-after-refresh", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 19, "line_end": 27,
+      "source": { "file": "auth-refresh.md", "line_start": 19, "line_end": 27,
                   "content_hash": "sha256:9b2e…41" }
     },
     {
@@ -183,7 +183,7 @@ Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST
           "selector": "replays-after-refresh", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 19, "line_end": 27,
+      "source": { "file": "auth-refresh.md", "line_start": 19, "line_end": 27,
                   "content_hash": "sha256:9b2e…41" }
     },
     {
@@ -198,7 +198,7 @@ Each diagnostic maps to exactly one repair. `NORMALIZE` raised `SHOULD` to `MUST
           "selector": "no_unbounded_retry", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 39, "line_end": 42,
+      "source": { "file": "auth-refresh.md", "line_start": 39, "line_end": 42,
                   "content_hash": "sha256:7d10…aa" }
     }
   ],
@@ -232,7 +232,7 @@ type: task
 id: auth-refresh-client
 status: active
 task_kind: feature
-source: specs/auth-refresh/spec.swarm.md
+source: specs/auth-refresh/spec.md
 assigned_obligations: [AC-001, AC-002]
 invariants: [I-001]
 interfaces: [IF-001]
@@ -275,7 +275,7 @@ blocked_by: []
 type: trace
 id: auth-refresh-client-trace
 source_task: tasks/auth-refresh-client.md
-source_spec: specs/auth-refresh/spec.swarm.md
+source_spec: specs/auth-refresh/spec.md
 ---
 
 # Trace: auth-refresh client
@@ -300,14 +300,14 @@ PROOF property:cmdTest:web/tests/auth-refresh.properties.ts#no_unbounded_retry p
 
 ## Stage 7 — `review`: per-obligation verdicts and the merge gate
 
-`review` (run under the `skeptic` profile) consumes the trace and emits one `VERDICT` line per obligation. Each verdict carries a core value — `PASS`, `FAIL`, `BLOCKED`, or `UNVERIFIED` — optionally decorated with a lifecycle value. `AC-001` and `I-001` come back as clean `PASS`. `AC-002` is the interesting one: its bound test PASSed, but `web/src/http/client.ts` was edited *after* that PASS was recorded, so the recorded source no longer matches the current write-surface hash. The verdict is decorated `STALE`, with the prior verdict and the changed surface named in the decorator. A STALE required obligation is not a failure — but it is not mergeable either, until it is reconciled.
+`review` (run under the `skeptic` profile) consumes the trace and emits one `VERDICT` line per obligation. Each verdict carries a core value — `PASS`, `FAIL`, `BLOCKED`, or `UNVERIFIED` — optionally decorated with a lifecycle value. `AC-001` and `I-001` come back as clean `PASS`AC-002` is the interesting one: its bound test PASSed, but `web/src/http/client.ts` was edited *after* that PASS was recorded, so the recorded source no longer matches the current write-surface hash. The verdict is decorated `STALE`, with the prior verdict and the changed surface named in the decorator. A STALE required obligation is not a failure — but it is not mergeable either, until it is reconciled.
 
 ```text
 ---
 type: review
 id: auth-refresh-client-review
 source_trace: traces/auth-refresh-client-trace.md
-source_spec: specs/auth-refresh/spec.swarm.md
+source_spec: specs/auth-refresh/spec.md
 ---
 
 # Review: auth-refresh client
@@ -387,6 +387,6 @@ That closes the loop: a draft spec with three blocking defects and an open quest
 
 ## Related
 
-- Step references, in flow order: [`author`](../passes/author.md), [`lint`](../passes/lint.md), [`improve`](../passes/improve.md), [`lower`](../passes/lower.md), [`decompose`](../passes/decompose.md), [`implement`](../passes/implement.md), [`verify`](../passes/verify.md), [`review`](../passes/review.md), [`promote`](../passes/promote.md)
-- [Golden corpus](../reference/golden-corpus.md) — `auth-refresh` is the positive (`must-pass`) fixture this walkthrough draws from
-- Artifact references for each stage's output: [`spec`](../artifacts/spec.md), [`task`](../artifacts/task.md), [`trace`](../artifacts/trace.md), [`review`](../artifacts/review.md), [`finding`](../artifacts/finding.md), [`memory`](../artifacts/memory.md)
+- Step references, in flow order: [`author`](./passes/author.md), [`lint`](./passes/lint.md), [`improve`](./passes/improve.md), [`lower`](./passes/lower.md), [`decompose`](./passes/decompose.md), [`implement`](./passes/implement.md), [`verify`](./passes/verify.md), [`review`](./passes/review.md), [`promote`](./passes/promote.md)
+- [Golden corpus](./reference/golden-corpus.md) — `auth-refresh` is the positive (`must-pass`) fixture this walkthrough draws from
+- Artifact references for each stage's output: [`spec`](./artifacts/spec.md), [`task`](./artifacts/task.md), [`trace`](./artifacts/trace.md), [`review`](./artifacts/review.md), [`finding`](./artifacts/finding.md), [`memory`](./artifacts/memory.md)

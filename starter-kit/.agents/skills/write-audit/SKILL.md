@@ -37,7 +37,7 @@ specific, severity-calibrated, evidence-anchored.
 verify → review → promote`) — the boundary where unstructured intent becomes a Swarm-visible
 spec. An audit is *not* that spec: it is one of `author`'s recognized **parents**, a working `.md`
 artifact whose observed risk acquires obligation force only when a later `author` step promotes its
-recommendations *into* a `spec.swarm.md`. This guide produces that parent.
+recommendations *into* a `spec.md`. This guide produces that parent.
 
 ## Project context (the `cmd*` slots)
 
@@ -57,7 +57,7 @@ guess; a guessed command produces a false observation, and an audit's whole valu
 
 ## Produces
 
-- One `audit.md` working artifact (plain `.md`, never `*.swarm.md` — the `.swarm.` infix marks the
+- One `audit.md` working artifact (plain `.md`, never `*.md` — the spec.md convention marks the
   one human-authored Swarm-visible spec, so naming an audit that way mislabels an observation as
   an approved contract). Required sections, **in order**: `## Scope` (In/Out), `## Observations`,
   `## Risks`, `## Recommended obligations`, under a title and the observation-only stance note. A
@@ -81,7 +81,7 @@ These MUST NOT appear in a finalised audit:
 
 - **An obligation block.** An audit MUST NOT author `REQ` / `CONSTRAINT` / `INVARIANT` / `INTERFACE`
   blocks. Observed risk carries no binding force here; it acquires force only when a downstream
-  `author` step promotes it into a `spec.swarm.md`. An obligation block in an audit lets an
+  `author` step promotes it into a `spec.md`. An obligation block in an audit lets an
   observation be read as an approved contract and bypass authoring — the exact failure the
   observation-only stance exists to prevent.
 - **A prescribed fix.** An audit names what *is* and the risk it carries, not the remedy inline. The
@@ -151,7 +151,7 @@ radius keeps severity falsifiable instead of a vibe, and is what a downstream au
 ### 8. Nominate candidate obligations in prose, never as blocks
 
 `## Recommended obligations` describes, in plain prose, what a future spec SHOULD require — the
-candidate obligations a downstream `author` step would promote into a `spec.swarm.md`'s SOL blocks.
+candidate obligations a downstream `author` step would promote into a `spec.md`'s SOL blocks.
 Write what the spec should carry, not how to change the code. *Why:* this is the audit's one
 permitted forward-looking gesture; keeping it prose-only preserves the observation-only stance and
 stops the audit from smuggling intent across the boundary the author step guards.
@@ -179,7 +179,7 @@ redefine them. Two facts bound what this step records:
   source-authority order (an approved spec or ADR outranks the task, which outranks chat): an
   observation MUST NOT silently override a higher-authority
   artifact such as an approved spec or ADR; a lower-authority block that weakens a higher-authority
-  obligation is the authority-conflict defect `SOL-M004`. The audit promotes *into* a `spec.swarm.md`
+  obligation is the authority-conflict defect `SOL-M004`. The audit promotes *into* a `spec.md`
   via a later `author` step, where its recommendations become SOL obligations; it never becomes code
   or an obligation directly.
 - The boundary forbidding a file from being both spec and audit is **not** policed by this guide or
@@ -213,7 +213,7 @@ redefine them. Two facts bound what this step records:
 - ❌ Severity sorted by discovery order or how scary it feels → calibrate by blast radius and record
   the reasoning for any contestable call.
 - ❌ Inheriting a prior audit's framing → read it closed and re-derive every finding from the code.
-- ❌ Naming the audit `*.swarm.md` → that marks an observation as a Swarm-visible spec; an audit
+- ❌ Naming the audit `*.md` → that marks an observation as a Swarm-visible spec; an audit
   is plain `.md`.
 
 ## Self-review delta

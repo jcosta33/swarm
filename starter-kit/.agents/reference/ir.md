@@ -1,6 +1,6 @@
 # Structured form — operative reference (condensed)
 
-The typed, machine-checkable form of a `*.swarm.md`. The surface is English-shaped UPPERCASE keywords;
+The typed, machine-checkable form of a `*.md`. The surface is English-shaped UPPERCASE keywords;
 the structured form is `snake_case` JSON. Full schema + worked instance: `docs/reference/structured-form.md` (upstream).
 
 ## Document shape

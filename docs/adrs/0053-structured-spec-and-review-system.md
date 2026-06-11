@@ -14,16 +14,16 @@ superseded_by:
 
 Recent agent-evaluation evidence is consistent on one point: **the surrounding system matters as much as the
 model.** Harness/configuration choice alone moved aggregate scores by **23.8 points** on a fixed task set and
-model pool [[HARNESSBENCH]](../research/sources.md#HARNESSBENCH); an automatic-harness method lifted
+model pool [[HARNESSBENCH]](./research/sources.md#HARNESSBENCH); an automatic-harness method lifted
 Terminal-Bench 2 pass@1 **69.7%→77.0%** with the gains coming from *tools, middleware, and memory — not the
-system prompt* [[AHE]](../research/sources.md#AHE); a standardized harness + trace inspection is what made
-agent evaluation tractable at all [[HAL]](../research/sources.md#HAL); and frontier agents still score
-**< 65%** on hard, verifiable CLI tasks [[TERMBENCH]](../research/sources.md#TERMBENCH). In parallel,
+system prompt* [[AHE]](./research/sources.md#AHE); a standardized harness + trace inspection is what made
+agent evaluation tractable at all [[HAL]](./research/sources.md#HAL); and frontier agents still score
+**< 65%** on hard, verifiable CLI tasks [[TERMBENCH]](./research/sources.md#TERMBENCH). In parallel,
 **ambiguous requirements degrade code generation and models can't reliably self-resolve the ambiguity**
-[[ORCHID]](../research/sources.md#ORCHID). And the productivity story is not what it feels like: a 2025 RCT
+[[ORCHID]](./research/sources.md#ORCHID). And the productivity story is not what it feels like: a 2025 RCT
 measured experienced developers **~19% slower** with AI while they *believed* they were faster
-[[METR]](../research/sources.md#METR), and industry data finds adoption raises **both throughput and
-instability** absent a control layer [[DORA2025]](../research/sources.md#DORA2025).
+[[METR]](./research/sources.md#METR), and industry data finds adoption raises **both throughput and
+instability** absent a control layer [[DORA2025]](./research/sources.md#DORA2025).
 
 Read together, these say what Swarm should *be*, plainly: not "the smartest agent," but the layer that makes
 agent work **legible, safe, and reproducible** — clear specs in, reviewable evidence out, with a verification
@@ -68,14 +68,14 @@ grammar, the nine steps, the verdicts, or the artifact set.
 | Add an enterprise layer — `docs/enterprise/`, a "Spec Author" role, `intake/status/ledger/policy/` dirs | The useful substance already exists (spec-repo discipline 0050/0051, `WAIVED`, `status.md`, source-authority, promotion-protocol, source-classes). New dirs/roles add ceremony without new capability — against the minimality discipline. |
 | Build tool-specific intake connectors (Jira/Notion/Linear/…) | Couples the framework to vendors and adds a runtime surface. The agnostic source-classes + an optional `## Source inputs` link table capture upstream provenance with zero connectors. |
 | Expand the APS improve-operation set / high-risk-word list (per the source brief) | The improve-operation set is a **frozen closed set of 10** (conformance check A15); changing it breaks count reconciliation for no gain. |
-| Market as a "harness platform" / "compiler" | Overclaims, and the evidence rewards the opposite: the harness matters *internally* [[HARNESSBENCH]](../research/sources.md#HARNESSBENCH)[[AHE]](../research/sources.md#AHE), but users buy clarity, safety, and reviewable evidence — not a harness brand. |
+| Market as a "harness platform" / "compiler" | Overclaims, and the evidence rewards the opposite: the harness matters *internally* [[HARNESSBENCH]](./research/sources.md#HARNESSBENCH)[[AHE]](./research/sources.md#AHE), but users buy clarity, safety, and reviewable evidence — not a harness brand. |
 
 ## Consequences
 
 - **Positive:** a plain, evidence-grounded position (the control/verification layer); review-as-exceptions
   makes the payoff legible to a reviewer drowning in agent diffs; the framing is defensible against the
-  perceived-vs-real gap [[METR]](../research/sources.md#METR) and the adoption-instability finding
-  [[DORA2025]](../research/sources.md#DORA2025).
+  perceived-vs-real gap [[METR]](./research/sources.md#METR) and the adoption-instability finding
+  [[DORA2025]](./research/sources.md#DORA2025).
 - **Negative:** a bounded doc sweep — `positioning.md`, the root `README` on-ramp, `passes/review.md`
   foregrounding, the spec contract/template `## Source inputs` section, and the `sources.md` grounding. Done
   as part of this change.
@@ -92,8 +92,8 @@ change. No follow-on migration.
 - Refines: [0050](./0050-swarm-is-a-spec-repo-discipline.md), [0051](./0051-complete-the-spec-repo-pivot.md),
   [0052](./0052-per-feature-spec-folders.md) (positioning over the existing discipline + homes).
 - Keeps: [0049](./0049-minimal-install-no-mount-no-imposed-workspace.md) (`.agents/`, no mount).
-- Grounded by: [[HARNESSBENCH]](../research/sources.md#HARNESSBENCH), [[AHE]](../research/sources.md#AHE),
-  [[HAL]](../research/sources.md#HAL), [[TERMBENCH]](../research/sources.md#TERMBENCH),
-  [[ORCHID]](../research/sources.md#ORCHID), [[METR]](../research/sources.md#METR),
-  [[DORA2025]](../research/sources.md#DORA2025).
+- Grounded by: [[HARNESSBENCH]](./research/sources.md#HARNESSBENCH), [[AHE]](./research/sources.md#AHE),
+  [[HAL]](./research/sources.md#HAL), [[TERMBENCH]](./research/sources.md#TERMBENCH),
+  [[ORCHID]](./research/sources.md#ORCHID), [[METR]](./research/sources.md#METR),
+  [[DORA2025]](./research/sources.md#DORA2025).
 - Does NOT change: any closed set, the SOL grammar, the nine steps, the verdicts, or the artifact set.

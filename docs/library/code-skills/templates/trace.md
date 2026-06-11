@@ -2,7 +2,7 @@
 type: trace
 id: {{slug}}-trace
 source_task: {{task-frame-path}}
-source_spec: {{spec-id}}.swarm.md
+source_spec: {{spec-id}}.md
 created: {{createdAt}}
 ---
 
@@ -33,7 +33,7 @@ PROOF <verification output reference>
 
 <the canonical seven G11 fields **per binding** — this is what flips a PASS to STALE when source or surface drifts (see the `review` step); the recording timestamp lives in the frontmatter `created`, not here>
 
-- `source_hash` — content hash of the obligation source (the exact bytes of the obligation block in `*.swarm.md`) at the time of the PASS.
+- `source_hash` — content hash of the obligation source (the exact bytes of the obligation block in `*.md`) at the time of the PASS.
 - `per_surface_hash[]` — one `{surface, hash, exercised}` per declared `WRITES` surface **and** per `READS` surface the proof exercised (see the `review` step); `exercised: true` iff the proof actually executed/analysed that surface.
 - `adapter` — the `cmd*` slot the proof resolved through (see the `verify` step).
 - `verdict` — the core verdict recorded (`PASS` for a drift-trackable binding).

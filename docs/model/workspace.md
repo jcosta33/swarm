@@ -1,7 +1,7 @@
 # Workspace Model
 
 > Where Swarm's files and a project's source artifacts live. Swarm is a **spec-repo discipline** with **no
-> runtime and no filing cabinet**: intent lives in a spec repo; code repos stay pristine. ([ADR-0050](../adrs/0050-swarm-is-a-spec-repo-discipline.md))
+> runtime and no filing cabinet**: intent lives in a spec repo; code repos stay pristine. ([ADR-0050](./adrs/0050-swarm-is-a-spec-repo-discipline.md))
 
 This page describes the **adopted project** (the product), distinct from the framework-dev repo (the
 producer: `docs/`, `examples/`, `evals/`, and the starter kit). Adoption depends on the repo's **role**:
@@ -27,13 +27,13 @@ cabinet for a clerk who doesn't exist yet.
 
 Specs and intent artifacts live **as content**; `.agents/` holds **only** the agent tooling the authoring
 flow loads. A **feature is a folder**: its contract and its supporting docs sit together, so the
-requirement→evidence trail is one place ([ADR-0052](../adrs/0052-per-feature-spec-folders.md), refining
-[ADR-0051](../adrs/0051-complete-the-spec-repo-pivot.md)):
+requirement→evidence trail is one place ([ADR-0052](./adrs/0052-per-feature-spec-folders.md), refining
+[ADR-0051](./adrs/0051-complete-the-spec-repo-pivot.md)):
 
 ```text
 specs/
   <feature>/                 # one folder per feature (e.g. 001-contact-form/)
-    spec.swarm.md            # the *.swarm.md source (the `author` step writes here) — desired truth
+    spec.md            # the *.md source (the `author` step writes here) — desired truth
     audit.md  research.md …  # feature-scoped supporting docs, co-located (type:-tagged)
 decisions/     # project-wide ADRs — sequentially numbered (0001-, 0002-, …), one per file
 .agents/
@@ -49,8 +49,8 @@ The home rule: **feature-scoped** source docs (audit, research, bug-report, prd,
 **durable findings** live in `.agents/memory/`. Execution scratch (task frames, traces, reviews) is
 gitignored or the linked PR — a review you deliberately keep lands in the feature folder. This is the convergent convention of the
 leading spec-driven tools — per-feature folders that co-locate a feature's artifacts
-[[SPECKIT]](../research/sources.md#SPECKIT) [[KIRO]](../research/sources.md#KIRO) and a numbered decision
-ledger [[ADR-CONV]](../research/sources.md#ADR-CONV).
+[[SPECKIT]](./research/sources.md#SPECKIT) [[KIRO]](./research/sources.md#KIRO) and a numbered decision
+ledger [[ADR-CONV]](./research/sources.md#ADR-CONV).
 
 The `.agents/` install folders are re-copied on upgrade (`pass-*`/`persona-*`/`write-*` names can't collide
 with your own — that naming is the whole upgrade story). If your CLI scans a fixed skills dir (Claude Code →
@@ -70,20 +70,20 @@ as a linked PR**. Nothing litters the code repo.
 
 ## Why the spec repo prescribes these folders (and not the rest)
 
-- **`specs/<feature>/`** — `author` produces the `*.swarm.md` source; intent has to live somewhere findable,
+- **`specs/<feature>/`** — `author` produces the `*.md` source; intent has to live somewhere findable,
   and a per-feature folder keeps the contract and its supporting docs (the audit/research that fed it) in one
-  place, so the requirement→evidence trail doesn't scatter [[SPECKIT]](../research/sources.md#SPECKIT)
-  [[KIRO]](../research/sources.md#KIRO).
+  place, so the requirement→evidence trail doesn't scatter [[SPECKIT]](./research/sources.md#SPECKIT)
+  [[KIRO]](./research/sources.md#KIRO).
 - **`decisions/`** — ADRs are the one genuinely **project-wide** artifact (not bound to a single feature); a
-  sequentially-numbered ledger is the settled convention [[ADR-CONV]](../research/sources.md#ADR-CONV).
+  sequentially-numbered ledger is the settled convention [[ADR-CONV]](./research/sources.md#ADR-CONV).
 - **`memory/`** — `promote` lifts durable findings and patterns out of throwaway task state so a later
   session **recalls** them instead of re-deriving them. Externalising state to disk rather than holding it
-  in a context window is what makes multi-session work tractable [[CTXENG]](../research/sources.md#CTXENG);
+  in a context window is what makes multi-session work tractable [[CTXENG]](./research/sources.md#CTXENG);
   writing intermediate steps down is itself what makes multi-step work succeed
-  [[SCRATCHPAD]](../research/sources.md#SCRATCHPAD); a written self-reflection between attempts, not extra
-  model capability, is what lets an agent improve [[REFLEXION]](../research/sources.md#REFLEXION); and
+  [[SCRATCHPAD]](./research/sources.md#SCRATCHPAD); a written self-reflection between attempts, not extra
+  model capability, is what lets an agent improve [[REFLEXION]](./research/sources.md#REFLEXION); and
   persisting task state with explicit dependencies mirrors a pattern validated at vendor
-  scale [[CCTASKS]](../research/sources.md#CCTASKS).
+  scale [[CCTASKS]](./research/sources.md#CCTASKS).
 
 What is **not** prescribed (created lazily by a future tool, breaks no step run today): a `status/` drift
 read-model, a `generated/` packet tree, an append-only `ledger/`, `archive/`, `tmp/`, and the on-disk
@@ -158,4 +158,4 @@ skills are shared. This is purely a bootloader-resolution rule; it changes nothi
 - [Source artifacts](source-artifacts.md) — the durable source-artifact types and what each carries.
 - [Source authority](source-authority.md) — how intent governs implementation reality.
 - [How Swarm works](how-swarm-works.md) — the steps that produce traces, reviews, verdicts, and memory.
-- [Adopting Swarm](../ADOPTING.md) — the install steps.
+- [Adopting Swarm](./ADOPTING.md) — the install steps.

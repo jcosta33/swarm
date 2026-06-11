@@ -9,7 +9,7 @@ status: draft
 
 # Contact form — example spec
 
-A minimal `*.swarm.md` to copy. Prose explains; the **SOL blocks** carry the load-bearing requirements an
+A minimal `*.md` to copy. Prose explains; the **SOL blocks** carry the load-bearing requirements an
 agent must satisfy. This spec anchors its feature folder `specs/001-contact-form/`; its supporting docs (see
 `research.md` beside it) live in the same folder. Rename the folder and delete these examples once you have a
 real feature.

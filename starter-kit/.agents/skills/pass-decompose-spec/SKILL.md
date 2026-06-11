@@ -3,7 +3,7 @@ type: pass-guide
 name: pass-decompose-spec
 pass: decompose
 activates_for_task_kind: decompose
-description: The `decompose` pass: partition a lowered structured obligations into write-disjoint packets, set each `merge_safe` by the one safe-parallelism predicate, clear COVERAGE, emit the plan + coordination record. ALWAYS apply when a task names `decompose`, partitions `*.swarm.ir.json`, projects OWNED paths, or emits `*.swarm.plan.json`/`task-orchestration.md`, typically as Lead Engineer. Never author intent, redefine `merge_safe`/overlap/subset, parallelize unscoped/shared surfaces, or claim a running scheduler. Skip `lower` (prose→IR), `implement` (a packet), verdicts/merge gate (`verify`/`review`).
+description: The `decompose` pass: partition a lowered structured obligations into write-disjoint packets, set each `merge_safe` by the one safe-parallelism predicate, clear COVERAGE, emit the plan + coordination record. ALWAYS apply when a task names `decompose`, partitions `*.ir.json`, projects OWNED paths, or emits `*.plan.json`/`task-orchestration.md`, typically as Lead Engineer. Never author intent, redefine `merge_safe`/overlap/subset, parallelize unscoped/shared surfaces, or claim a running scheduler. Skip `lower` (prose→IR), `implement` (a packet), verdicts/merge gate (`verify`/`review`).
 ---
 
 # Step guide: decompose
@@ -25,7 +25,7 @@ Partition the obligations into task-sized, **write-disjoint** work packets — e
 
 ## Consumes
 
-- The structured form — `*.swarm.ir.json` — including the two graphs `lower` emitted: the dependency DAG (from `DEPENDS ON`) and the write-surface conflict graph (from `WRITES`/`SURFACE`/`READS`) (see the `decompose` step). `decompose` operates on the structured form, **not** the surface spec, so packet boundaries are computed from the typed graph, never re-parsed from prose (see the `lower` step). *Why:* re-parsing prose would let a packet boundary disagree with the structured scope; the typed graph is the single substrate two implementations must agree on.
+- The structured form — `*.ir.json` — including the two graphs `lower` emitted: the dependency DAG (from `DEPENDS ON`) and the write-surface conflict graph (from `WRITES`/`SURFACE`/`READS`) (see the `decompose` step). `decompose` operates on the structured form, **not** the surface spec, so packet boundaries are computed from the typed graph, never re-parsed from prose (see the `lower` step). *Why:* re-parsing prose would let a packet boundary disagree with the structured scope; the typed graph is the single substrate two implementations must agree on.
 - The `SURFACE` declarations and their attributes (`append-only`, `integration`, `shared`) referenced by the obligations' `WRITES`/`READS` (see the `decompose` step).
 
 If an obligation reaches `decompose` with no `verify_by`, that is a `SOL-V001`-class defect `BIND` should have answered during `improve` (see the `improve` step) — surface it; do not invent a binding here. *Why:* inventing one launders an unproven obligation past the gate meant to catch it.
@@ -33,18 +33,18 @@ If an obligation reaches `decompose` with no `verify_by`, that is a `SOL-V001`-c
 ## Produces
 
 - One `task.md` work packet per partition unit — "the structured work packet for one step," the unit a single `implement` run owns (the `task.md` packet shape).
-- The plan, named-as-contract `*.swarm.plan.json` (`auth-refresh.swarm.ir.json → auth-refresh.swarm.plan.json`). A SOL plan is one JSON object with **exactly four top-level keys** (see the `decompose` step):
+- The plan, named-as-contract `*.plan.json` (`auth-refresh.ir.json → auth-refresh.plan.json`). A SOL plan is one JSON object with **exactly four top-level keys** (see the `decompose` step):
 
   | Key | Type | Cardinality | Carries |
   |---|---|---|---|
   | `meta` | object | exactly 1 | plan identity; `derived_from` (the structured-form path); `language` `SOL/0.1`; `version`; optional `max_parallel` (advisory launcher hint, `null` = unspecified) |
-  | `packets` | array | 0..n | the schedulable work units (see the `decompose` step) |
-  | `edges` | array | 0..n | inter-packet relationships, recorded **once** here (the single-source-of-relationship-truth rule) |
+  | `packets` | array | 0.n | the schedulable work units (see the `decompose` step) |
+  | `edges` | array | 0.n | inter-packet relationships, recorded **once** here (the single-source-of-relationship-truth rule) |
   | `provenance` | object | exactly 1 | emission facts, same shape as the structured form's `provenance` (see the `lower` step) |
 
   Each `packets[]` record carries: `id`, `pass` (one of the nine), optional `profile`, `inputs`, `outputs`, `writes`, `reads`, `depends_on`, optional `lane`/`batch`, and `merge_safe` (see the `decompose` step). There is **no `locks` field anywhere** — a lock group *is* a named write SURFACE, so lock analysis reduces to write-set analysis (see the `decompose` step).
 
-- When the run fans out, the **coordination record** `task-orchestration.md` — a plain `.md` working artifact (no `.swarm.` infix; the infix marks parsed or emitted files, which a coordination record is not), generated and updated by hand as the run proceeds (see the the `decompose` step orchestration contract). Its shape and discipline are restated in the Coordination-record section below; field-by-field detail lives one hop away in `references/coordination-record.md`.
+- When the run fans out, the **coordination record** `task-orchestration.md` — a plain `.md` working artifact (no `spec.md` naming; the infix marks parsed or emitted files, which a coordination record is not), generated and updated by hand as the run proceeds (see the the `decompose` step orchestration contract). Its shape and discipline are restated in the Coordination-record section below; field-by-field detail lives one hop away in `references/coordination-record.md`.
 
 ## Preserves
 
@@ -63,7 +63,7 @@ Refuse, and emit no plan claim, when any of these hold:
 
 ## Procedure
 
-1. **Read the structured form, not the prose.** Load `*.swarm.ir.json` and its two derived graphs (see the `decompose` step). Resolve every obligation's `WRITES`/`READS` to `SURFACE` path-pattern sets, noting any `append-only`/`integration`/`shared` attribute (see the `decompose` step). If a `SURFACE` is unnamed, treat each raw path/glob as its own singleton pattern set (see the `decompose` step). *Why:* the partition is computed over declared access sets, never against a live filesystem and never by guessing — there is no runtime.
+1. **Read the structured form, not the prose.** Load `*.ir.json` and its two derived graphs (see the `decompose` step). Resolve every obligation's `WRITES`/`READS` to `SURFACE` path-pattern sets, noting any `append-only`/`integration`/`shared` attribute (see the `decompose` step). If a `SURFACE` is unnamed, treat each raw path/glob as its own singleton pattern set (see the `decompose` step). *Why:* the partition is computed over declared access sets, never against a live filesystem and never by guessing — there is no runtime.
 
 2. **Partition into write-disjoint packets.** Group obligations into the smallest set of packets where each is a single step (under an optional profile) over a selected set of scoped obligations. How finely to split is your heuristic as carrier (see the Lead Engineer stance (a code-side profile in `docs/library/code-skills/`)); Swarm fixes only the predicate (step 5) the partition must satisfy. Carry into each packet its assigned obligations, the constraints/invariants in force, the interfaces it touches, its write surfaces, and its verification bindings (see the `lower` step and the `task.md` packet). When two candidate sub-tasks need the same file they are not independent — sequence them with a `DEPENDS ON` edge rather than parallelizing (Lead Engineer hard constraint, the Lead Engineer stance (a code-side profile in `docs/library/code-skills/`); see also the `decompose` step). *Why:* two tasks writing the same surface are not write-disjoint, so parallelizing them is the silent merge corruption `SOL-O001` exists to prevent.
 
@@ -117,9 +117,9 @@ Verification bindings the acceptance bar names resolve through the consuming rep
 
 ## Output contract
 
-- A `*.swarm.plan.json` that is a valid SOL/0.1 plan (see the `decompose` step): exactly the four top-level keys; every required field populated (optional fields defaulted); **no `locks` field anywhere**; only the closed nine-step set in `packets[].pass` and the closed edge-type set in `edges[]`; inter-packet relationships represented **once**, as edges; the three version fields (`meta.version`, the structured form's `version`, the spec content version) kept distinct.
+- A `*.plan.json` that is a valid SOL/0.1 plan (see the `decompose` step): exactly the four top-level keys; every required field populated (optional fields defaulted); **no `locks` field anywhere**; only the closed nine-step set in `packets[].pass` and the closed edge-type set in `edges[]`; inter-packet relationships represented **once**, as edges; the three version fields (`meta.version`, the structured form's `version`, the spec content version) kept distinct.
 - One `task.md` per packet, each carrying its assigned obligations, scope (owned paths ⊆ declared `WRITES`), `depends_on` order, and verification bindings (the `task.md` packet shape). A fanned-out worker's `task.md` carries the hand-off verbatim as its `## Parent contract`.
-- When the run fans out: a `task-orchestration.md` (plain `.md`, no `.swarm.` infix) with frontmatter (`type: task-orchestration`, `id`, `source`, `parallel_group`, `created`) and the four ordered sections — provenance note, `## Worker tracker`, `## Decisions`, `## Merge log` — its OWNED partition pairwise-disjoint and structured from the obligations.
+- When the run fans out: a `task-orchestration.md` (plain `.md`, no `spec.md` naming) with frontmatter (`type: task-orchestration`, `id`, `source`, `parallel_group`, `created`) and the four ordered sections — provenance note, `## Worker tracker`, `## Decisions`, `## Merge log` — its OWNED partition pairwise-disjoint and structured from the obligations.
 - Every packet's `merge_safe` set by the safe-parallelism predicate verbatim (see the `decompose` step), the two non-weakenable defaults honoured.
 - The COVERAGE gate cleared: no `SOL-O007`, no `SOL-O008`, no unresolved `verified_by`/`implements`/`preserves` target.
 

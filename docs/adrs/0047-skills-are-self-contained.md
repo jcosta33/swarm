@@ -22,16 +22,16 @@ LLM agent:
   references load "as needed," and "files never referenced in a session never load at all." A skill that
   is only *correct* when the agent follows a pointer is betting on an optional step.
 - Swarm already carried the evidence against deep references: chained references "get partial-read and
-  silently dropped" [[SKILLBP]](../research/sources.md#SKILLBP), which is why the body-shape rule was
+  silently dropped" [[SKILLBP]](./research/sources.md#SKILLBP), which is why the body-shape rule was
   "one hop." The logical conclusion is **zero required hops**.
 - Non-salient / out-of-context material is underused (lost-in-the-middle, multi-turn decay
-  [[LOSTMID]](../research/sources.md#LOSTMID)), and agents default to parametric priors over provided
+  [[LOSTMID]](./research/sources.md#LOSTMID)), and agents default to parametric priors over provided
   context — so an agent handed a thin skill that *cites* "the verdict model" acts on its prior notion of
   it, often subtly wrong.
 
 Empirically, inspecting the kernel skills confirmed they were **already operationally self-contained**
-(the merge-gate predicate, verdict grammar, lint codes, etc. are stated inline); the `../../passes/` /
-`../../language/` links were already pure provenance. They were not load-bearing reads — they were the
+(the merge-gate predicate, verdict grammar, lint codes, etc. are stated inline); the `././passes/` /
+`././language/` links were already pure provenance. They were not load-bearing reads — they were the
 *only* reason the kernel had to ship `passes/` + `language/` at all (to keep those links from dangling).
 
 ## Decision

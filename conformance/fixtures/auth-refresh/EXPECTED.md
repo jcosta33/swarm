@@ -1,7 +1,7 @@
 # auth-refresh — expected outcome (golden-corpus POSITIVE fixture)
 
 This manifest pins the expected outcome of the `auth-refresh` positive (must-pass)
-fixture, the inert oracle a conformant tool is checked against (see [`../../conformance.yaml`](../../conformance.yaml)). It is the authority
+fixture, the inert oracle a conformant tool is checked against (see [`././conformance.yaml`](././conformance.yaml)). It is the authority
 for this directory: the per-stage files reproduce the full `intent → promotion` pipeline,
 and this manifest records the verdict a correct run must produce at each gate.
 
@@ -20,18 +20,18 @@ and this manifest records the verdict a correct run must produce at each gate.
 
 | Stage | Pass | File | Asserts |
 | ----- | ---- | ---- | ------- |
-| 1 | author | `spec.swarm.md` | authored source; parses; carries the seeded defects |
+| 1 | author | `spec.md` | authored source; parses; carries the seeded defects |
 | 2 | lint | (this manifest) | the three BLOCKING diagnostics + the blocking-QUESTION note |
-| 3 | improve | `spec.improved.swarm.md` | the three diagnostics clear; `Q-001` resolved and removed |
-| 4 | lower | `auth-refresh.swarm.ir.json` | typed IR; the two chained REQs each split per clause — `AC-001` → `AC-001.1`/`AC-001.2`, `AC-002` → `AC-002.1`/`AC-002.2` (six nodes: `IF-001`, `AC-001.1/.2`, `AC-002.1/.2`, `I-001`); `edges[]` the sole relationship source |
+| 3 | improve | `spec.improved.md` | the three diagnostics clear; `Q-001` resolved and removed |
+| 4 | lower | `auth-refresh.ir.json` | typed IR; the two chained REQs each split per clause — `AC-001` → `AC-001.1`/`AC-001.2`, `AC-002` → `AC-002.1`/`AC-002.2` (six nodes: `IF-001`, `AC-001.1/.2`, `AC-002.1/.2`, `I-001`); `edges[]` the sole relationship source |
 | 5 | decompose, implement | `task.md` | work packet frame; write surfaces ⊆ assigned `WRITES` |
 | 6 | verify | `trace.md` | `TRACE T-001` + the 7-field provenance table; one binding per surface obligation (`IF-001`, `AC-001`, `AC-002`, `I-001`) |
 | 7 | review | `review.md` | one `VERDICT` per required binding **including the `IF-001` interface contract** (an INTERFACE in scope is a judged obligation, merge-gate); merge-gate outcome |
 | 8 | promote | `finding.md` | the durable finding promoted with full provenance |
 
-> The `task.md` here shows the **pipeline-relevant work-packet frame** (scope + the verification matrix the trace consumes), not a full task-file. The task-file-schema `required_sections` rule ([`../../conformance.yaml`](../../conformance.yaml)) is exercised by the dedicated schema fixtures [`../conformant-task.md`](../conformant-task.md) (positive) and [`../violations.md`](../violations.md) (negatives).
+> The `task.md` here shows the **pipeline-relevant work-packet frame** (scope + the verification matrix the trace consumes), not a full task-file. The task-file-schema `required_sections` rule ([`././conformance.yaml`](././conformance.yaml)) is exercised by the dedicated schema fixtures [`./conformant-task.md`](./conformant-task.md) (positive) and [`./violations.md`](./violations.md) (negatives).
 
-## Expected lint diagnostics (stage 2, on the authored `spec.swarm.md`)
+## Expected lint diagnostics (stage 2, on the authored `spec.md`)
 
 Three BLOCKING diagnostics fire, each in the unified `SOL-<LAYER><NNN>` namespace (the SOL error catalogue). Each
 is BLOCKING because it changes *what* gets built. Each names the closed `improve` op (the `improve` pass) or
@@ -64,7 +64,7 @@ All three BLOCKING diagnostics clear and no blocking `QUESTION` remains:
 
 ## Expected merge-gate outcome (stage 7) → final
 
-`IF-001` (the interface contract), `AC-001`, and `I-001` are clean `PASS`. `AC-002` is `PASS (STALE …)`: its bound test PASSed, but
+`IF-001` (the interface contract), `AC-001`, and `I-001` are clean `PASS`AC-002` is `PASS (STALE …)`: its bound test PASSed, but
 `web/src/http/client.ts` was edited after the recorded PASS, so its source no longer matches
 (the `review` pass). A STALE required obligation is not mergeable.
 
@@ -84,7 +84,7 @@ Final outcome:              PASS.
 - Content hashes carried unchanged stage to stage: `AC-001` source `sha256:9b2e…41`,
   `I-001` source `sha256:7d10…aa`, `IF-001` source `sha256:1f4a…c0`; the promoted finding
   pins `content_hash: sha256:9b2e…41` (the `AC-001` source span).
-- Source specs live in `specs/<feature>/spec.swarm.md`; task/trace scratch is gitignored (e.g. `.agents/tasks/`).
+- Source specs live in `specs/<feature>/spec.md`; task/trace scratch is gitignored (e.g. `.agents/tasks/`).
 
 ## How this is validated (no runtime)
 

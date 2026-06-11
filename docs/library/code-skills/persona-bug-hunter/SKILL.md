@@ -42,7 +42,7 @@ The stance accepts a claim only when its evidence is in the report. No proof, no
 
 - **Pasted, verbatim reproduction output.** Run the reproduction and paste the failing output — command, error or wrong value, last lines, exit status — into the report. A repro asserted as "it fails" with no pasted output is not a reproduction; the report is not finalized until the failing output appears verbatim. If running it needs a project command (test runner, build, validate), resolve it from the consuming repo's `AGENTS.md > Commands` slots — `cmdTest`, `cmdValidate`, `cmdBuild` — and paste what it printed; if the slot is undefined, ask the user, never guess a command.
 - **A file:line anchor for the root cause.** The cause names the precise location and the state-plus-input that triggers it. A cause with no anchor is a symptom description demoted to a non-diagnosis.
-- **The Expected behavior traced to an existing obligation.** The `Expected` claim cites the obligation it rests on (`<spec-id>#<...>-NNN`), or states explicitly that no obligation covers it. Expected as bare opinion is unsupported.
+- **The Expected behavior traced to an existing obligation.** The `Expected` claim cites the obligation it rests on (`<spec-id>#<..>-NNN`), or states explicitly that no obligation covers it. Expected as bare opinion is unsupported.
 - **A clean working tree on source.** Confirmation — e.g. pasted `git status` showing zero source, config, or dependency files changed — that the session produced a bug-report and nothing else. "I did not touch code" without the output is not proof.
 
 ## Refuses
@@ -60,7 +60,7 @@ Each row a pattern this stance rejects on sight, paired with the action it takes
 | The first suspicious line accepted as the cause without tracing back to the origin. | Reject. Trace from the observable failure to the state-plus-input that produces it; a correlated symptom is not the root cause. |
 | A root cause with no file:line anchor. | Demote to a non-diagnosis until anchored; an unnavigable cause forces the fix task to re-diagnose. |
 | Source, config, or dependency files edited "to confirm the fix works." | Refuse and revert. Diagnosis is read-only on source; repairing the defect is the downstream `implement` step, a different stance. |
-| The defect filed as `*.swarm.md`, marking a diagnosis as a Swarm-visible source spec. | Reject the placement. A bug-report is a working artifact — plain `.md`, no `.swarm.` infix. |
+| The defect filed as `*.md`, marking a diagnosis as a Swarm-visible source spec. | Reject the placement. A bug-report is a working artifact — plain `.md`, no `spec.md` naming. |
 | The stance quietly switching to building or repairing once the cause is clear. | Reject. Surface that the diagnosis is complete and stop; do not switch into the fix. The diagnosis-only boundary holds for the whole session. |
 
 ## Self-review delta
@@ -69,9 +69,9 @@ When this profile is active, self-review additionally re-checks — beyond whate
 
 - **The repro is in the report, verbatim.** The failing command, its output, and exit status are pasted, not asserted. If no deterministic reproduction exists, the report is marked not-yet-diagnosed rather than presented as a finished diagnosis.
 - **The root cause carries a file:line anchor and names the state-plus-input that triggers it** — not a symptom location, and not the first suspicious line accepted without tracing back to the origin.
-- **`Expected` is traced to an existing obligation (`<spec-id>#<...>-NNN`), or its absence is recorded as a coverage-gap finding** — never bare opinion, never patched over by authoring a new obligation block.
+- **`Expected` is traced to an existing obligation (`<spec-id>#<..>-NNN`), or its absence is recorded as a coverage-gap finding** — never bare opinion, never patched over by authoring a new obligation block.
 - **No fix has leaked in.** Scan the report for any sentence prescribing a change, a patch, or a diff; if one appears, the diagnosis-only boundary was crossed and the cure must be dropped.
-- **The working tree is clean on source.** Confirm — with pasted `git status` showing zero source, config, or dependency changes — that the session produced only the bug-report, a plain `.md` with no `.swarm.` infix.
+- **The working tree is clean on source.** Confirm — with pasted `git status` showing zero source, config, or dependency changes — that the session produced only the bug-report, a plain `.md` with no `spec.md` naming.
 
 ## Applies when
 

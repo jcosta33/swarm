@@ -11,7 +11,7 @@ Every finding that reaches `accepted` or `promoted` MUST carry every field below
 | `claim` | The one durable fact, stated as a single proposition |
 | `evidence` | The file / command / output / source that grounds the claim |
 | `origin_obligations[]` | The obligation IDs (`AC-`/`C-`/`I-`/`IF-…`) the finding was discovered against |
-| `origin_traces[]` | The `*.swarm.trace.md` entries that produced the evidence |
+| `origin_traces[]` | The `*.trace.md` entries that produced the evidence |
 | `pass` + `profile` | The step and heuristic profile it was found under (e.g. `review` + `skeptic`) |
 | `reviewer_or_tool` | The human reviewer or tool/adapter that confirmed it |
 | `timestamp` | When it was promoted |

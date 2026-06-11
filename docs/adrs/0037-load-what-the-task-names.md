@@ -21,7 +21,7 @@ routing then depends on `description` quality: a vague or over-broad description
 and the agent has no authoritative statement of what it should load for the pass it is in.
 (Practitioner reports preliminarily suggest directive, exclusion-bearing descriptions
 activate more reliably than passive ones; the direction is illustrative, not load-bearing,
-and the kernel does not rest routing on it [[ACTIVATION-BLOG]](../research/sources.md#ACTIVATION-BLOG).)
+and the kernel does not rest routing on it [[ACTIVATION-BLOG]](./research/sources.md#ACTIVATION-BLOG).)
 Second, leaning on always-evaluated descriptions pushes toward more conditioning being
 ambiently present, which works against the density discipline that protects adherence and
 cost (§31). §26.4 resolves this by naming the canonical doctrine and demoting self-assessment
@@ -38,7 +38,7 @@ naming is present, an agent MAY fall back to matching a guide's self-activating 
 against the task, but this is a degraded mode, not the contract. ADR 0017's prohibition on
 always-loaded skills is kept verbatim — pass guides and profiles remain lazily loaded. The
 full specification, including the example `task.md` → guide binding, is detailed in the
-pass-guides reference ([`docs/library/pass-guides.md`](../library/pass-guides.md)). Loading remains **orthogonal** to the verification and
+pass-guides reference ([`docs/library/pass-guides.md`](./library/pass-guides.md)). Loading remains **orthogonal** to the verification and
 self-review deliverable: which conditioning loads (routing) and what proof a task must carry
 once active (verification) are independent axes, exactly as ADR 0020 established.
 

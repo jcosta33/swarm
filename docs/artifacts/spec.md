@@ -1,8 +1,8 @@
-# `spec.swarm.md` — the source spec
+# `spec.md` — the source spec
 
-A `spec.swarm.md` is the one human-authored, Swarm-format artifact in Swarm: APS prose interleaved with SOL obligation blocks, and the single source the obligations are built from. Every task, trace, verdict, and proof downstream traces back to a `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` block authored here.
+A `spec.md` is the one human-authored, spec-class artifact in Swarm: APS prose interleaved with SOL obligation blocks, and the single source the obligations are built from. Every task, trace, verdict, and proof downstream traces back to a `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` block authored here.
 
-Swarm ships **no runtime** (see the [artifacts README](README.md)). A `spec.swarm.md` is inert Markdown; nothing on this page executes.
+Swarm ships **no runtime** (see the [artifacts README](README.md)). A `spec.md` is inert Markdown; nothing on this page executes.
 
 ## Purpose and epistemic stance
 
@@ -21,27 +21,27 @@ A spec asserts only the 5 modals — `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`,
 
 ## Filename and placement
 
-The spec is the **only** human-authored file that carries the `.swarm.` infix. The infix is the sole, sufficient discriminator a Swarm tool uses to decide "do I parse this as SOL source": a filename containing `.swarm.` before its final extension is Swarm-format; a plain `.md` is a working artifact governed by its own contract, never parsed as SOL.
+The spec is identified by its frontmatter: `type: spec`. That is the sole, sufficient discriminator a Swarm tool uses to decide "do I parse this as SOL source". A plain `.md` working artifact is governed by its own contract, never parsed as SOL.
 
-| Class | Filename rule | Example |
+| Class | Identifier | Example |
 | --- | --- | --- |
-| **Swarm-format (human-authored)** | MUST contain `.swarm.` before the extension; this class has exactly one hand-written member. | `auth.swarm.md` |
-| **Swarm-format (emitted)** | MUST contain `.swarm.`; produced by a future tool, never hand-written. | `auth.swarm.ir.json`, `auth.swarm.plan.json`, `auth.swarm.trace.md` |
-| **Working artifact** | MUST NOT contain `.swarm.`; plain `.md`. | `task.md`, `review.md`, `finding.md` |
+| **Spec (human-authored)** | Frontmatter `type: spec`; this class has exactly one hand-written member. | `spec.md` |
+| **Spec (emitted)** | Derived from a spec by a future tool; never hand-written. | `auth.ir.json`, `auth.plan.json`, `auth.trace.md` |
+| **Working artifact** | Frontmatter `type` is anything else or absent; plain `.md`. | `task.md`, `review.md`, `finding.md` |
 
-So the spec is named `<slug>.swarm.md` (e.g. `auth.swarm.md`, `checkout.swarm.md`). The sibling source artifacts that promote into it — audit, research, bug-report, PRD, RFC, finding, ADR — are all plain `.md`; no per-artifact `.swarm.*` name is introduced for any of them.
+So the spec is named `spec.md` (e.g. `specs/auth/spec.md`, `specs/checkout/spec.md`). The sibling source artifacts that promote into it — audit, research, bug-report, PRD, RFC, finding, ADR — are all plain `.md`; no per-artifact special name is introduced for any of them.
 
 In an adopted project, the spec is **canonical, hand-authored intent**, committed to the spec repo:
 
-- The source spec is the `*.swarm.md` (e.g. `auth.swarm.md`), committed beside the plain-`.md` parents that promote into it (e.g. `auth-audit.md`).
-- The emitted, recreatable artifacts a future tool derives from the spec — the structured form (`auth.swarm.ir.json`) and the structured plan (`auth.swarm.plan.json`), both reserved contract names — together with traces, reviews, and task frames are execution scratch, gitignored or created lazily.
+- The source spec is `spec.md` (e.g. `specs/auth/spec.md`), committed beside the plain-`.md` parents that promote into it (e.g. `specs/auth/audit.md`).
+- The emitted, recreatable artifacts a future tool derives from the spec — the structured form (`auth.ir.json`) and the structured plan (`auth.plan.json`), both reserved contract names — together with traces, reviews, and task frames are execution scratch, gitignored or created lazily.
 - The recall layer (`INDEX`, glossary, patterns) is durable recall, committed.
 
-The spec is a `sources/` artifact because it is authored by hand and is the durable intent of record. Its emitted projections — the structured form (`*.swarm.ir.json`) and the plan (`*.swarm.plan.json`) — are `generated/` artifacts, recreatable from the spec and never hand-edited as intent. (Those `.json` names are reserved contracts: the framework ships no parser, emitter, or planner that writes them; a repo MAY hold hand-written examples in its corpus, but MUST NOT claim a Swarm tool produced them.)
+The spec is a `sources/` artifact because it is authored by hand and is the durable intent of record. Its emitted projections — the structured form (`*.ir.json`) and the plan (`*.plan.json`) — are `generated/` artifacts, recreatable from the spec and never hand-edited as intent. (Those `.json` names are reserved contracts: the framework ships no parser, emitter, or planner that writes them; a repo MAY hold hand-written examples in its corpus, but MUST NOT claim a Swarm tool produced them.)
 
 ## Required sections and fields, in order
 
-A conformant `spec.swarm.md` MUST carry the following sections in exactly this order. Omitting any required section, or presenting them out of order, is the document-level lint defect `SOL-S012` (BLOCKING) — distinct from the per-obligation scope advisory `SOL-O004` (an obligation lacking `WRITES`/`READS`/`AFFECTS`).
+A conformant `spec.md` MUST carry the following sections in exactly this order. Omitting any required section, or presenting them out of order, is the document-level lint defect `SOL-S012` (BLOCKING) — distinct from the per-obligation scope advisory `SOL-O004` (an obligation lacking `WRITES`/`READS`/`AFFECTS`).
 
 | # | Section | Meaning | Carries |
 | --- | --- | --- | --- |
@@ -95,18 +95,18 @@ Obligation content lives **only** in SOL blocks, each opened by a bare header `T
 The copyable skeleton for this artifact is:
 
 ```
-starter-kit/.agents/templates/spec.swarm.md
+starter-kit/.agents/templates/spec.md
 ```
 
 That file is the skeleton you copy and fill — every `{{placeholder}}` and each `<what goes here>` guide is replaced when you author a real spec. **This page is its contract**: the template is the shape, and the sections, ordering, frontmatter, block discipline, and epistemic-stance rules above are the obligations that shape must satisfy. In an adopted project the same skeleton ships with the installed starter kit.
 
 ## Related
 
-- `docs/passes/author.md` — the `author` step: the only step that *writes* a `spec.swarm.md`, normalizing its parents (audit, research, RFC, PRD, bug-report, finding, ADR) into it while preserving each parent's epistemic stance.
+- `docs/passes/author.md` — the `author` step: the only step that *writes* a `spec.md`, normalizing its parents (audit, research, RFC, PRD, bug-report, finding, ADR) into it while preserving each parent's epistemic stance.
 - `docs/passes/lint.md` — the `lint` step: the first step that *reads* the spec, checking well-formedness and raising `SOL-S012` when a required section is missing or out of order.
-- `docs/passes/lower.md` — the `lower` step: consumes the spec's SOL surface and emits the structured form (`*.swarm.ir.json`).
+- `docs/passes/lower.md` — the `lower` step: consumes the spec's SOL surface and emits the structured form (`*.ir.json`).
 - `docs/passes/decompose.md` — splits the obligations into the schedulable task frames named in this spec's `## Downstream tasks` table.
 - `docs/artifacts/task.md` — the structured work packet a spec's obligations become.
 - `docs/artifacts/audit.md`, `docs/artifacts/research.md`, `docs/artifacts/bug-report.md` — observation-, inquiry-, and diagnosis-stance parents that promote into a spec (the first two) or into a fix task (the last).
 - `docs/artifacts/finding.md`, `docs/artifacts/adr.md` — the evidence and decision parents that govern alongside, and can promote into, a spec.
-- `docs/model/source-artifacts.md` — the full `.swarm.` infix partition and the tiered required-artifact set this spec anchors.
+- `docs/model/source-artifacts.md` — the full two-class partition and the tiered required-artifact set this spec anchors.

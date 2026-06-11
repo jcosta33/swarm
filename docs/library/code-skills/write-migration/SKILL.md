@@ -73,7 +73,7 @@ never decides a verdict.
   (your **owned paths**, the only files you may touch); `verification_bindings`
   (the proofs each obligation demands); and the `task_kind` enum, which must read
   `migration` or `upgrade` for this guide to apply.
-- The migration spec — a SOL `*.swarm.md` whose `REQ`/`CONSTRAINT`/`INVARIANT`/
+- The migration spec — a SOL `*.md` whose `REQ`/`CONSTRAINT`/`INVARIANT`/
   `INTERFACE` blocks state what moves from A to B and what surface must be
   preserved — and the triggering audit, when one exists. Read it in full before
   editing.

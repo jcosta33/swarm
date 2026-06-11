@@ -13,12 +13,12 @@ A repository is **Swarm-conformant if and only if** all three clauses hold. Omit
 | # | Clause | Checkable evidence |
 |---|---|---|
 | (a) | **Language references present** | A self-contained copy of all six Tier-2 language/reference docs exists: the SOL reference, the APS reference, the lint/error taxonomy (the `SOL-<LAYER>NNN` catalogue), source-authority, the promotion protocol, and the distillation-loss-budget. |
-| (b) | **The core templates exist (per role)** | A spec repo ships copyable templates for its authoring artifacts — `spec.swarm.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md`, plus the source-doc types — each satisfying its [source-artifact contract](source-artifacts.md). The `task.md`/`trace.md` skeletons are **code-side** ([`../library/code-skills/templates/`](../library/code-skills/)); a pristine code repo needs none. The seven core artifact *types* are unchanged — only where each template ships ([ADR-0051](../adrs/0051-complete-the-spec-repo-pivot.md)). |
+| (b) | **The core templates exist (per role)** | A spec repo ships copyable templates for its authoring artifacts — `spec.md`, `review.md`, `finding.md`, `adr.md`, `memory/INDEX.md`, plus the source-doc types — each satisfying its [source-artifact contract](source-artifacts.md). The `task.md`/`trace.md` skeletons are **code-side** ([`./library/code-skills/templates/`](./library/code-skills/)); a pristine code repo needs none. The seven core artifact *types* are unchanged — only where each template ships ([ADR-0051](./adrs/0051-complete-the-spec-repo-pivot.md)). |
 | (c) | **Populated `AGENTS.md` bootloader** | `AGENTS.md` exists (not an empty placeholder), stays within the density cap of ≤200 lines / ≤25 KB, and its `Commands` table binds at least the required command rows. |
 
-(There is **no version-file clause** — per [ADR-0050](../adrs/0050-swarm-is-a-spec-repo-discipline.md) an adopted project keeps no per-repo version marker; the only load-bearing version is the per-spec `swarm_language` in frontmatter.) **Conformance is graded per role.** The clauses above describe a **spec / authoring repo** (where Swarm lives); a **code repo** that only *consumes* specs has a near-zero footprint — at most one opt-in skill, with Swarm scratch gitignored — and is not measured against (a)/(b).
+(There is **no version-file clause** — per [ADR-0050](./adrs/0050-swarm-is-a-spec-repo-discipline.md) an adopted project keeps no per-repo version marker; the only load-bearing version is the per-spec `swarm_language` in frontmatter.) **Conformance is graded per role.** The clauses above describe a **spec / authoring repo** (where Swarm lives); a **code repo** that only *consumes* specs has a near-zero footprint — at most one opt-in skill, with Swarm scratch gitignored — and is not measured against (a)/(b).
 
-A spec repo that fails a clause is **non-conformant**. Conditional artifacts (Tier 3 stdlib source-doc templates) and the reserved `.swarm.*.json` contract files are **not** required for conformance. Clauses (b)–(c) are the parts a manifest can mechanically encode; clause (a) is presence of the reference docs.
+A spec repo that fails a clause is **non-conformant**. Conditional artifacts (Tier 3 stdlib source-doc templates) and the reserved `.*.json` contract files are **not** required for conformance. Clauses (b)–(c) are the parts a manifest can mechanically encode; clause (a) is presence of the reference docs.
 
 ## The conformance contract (the manifest)
 
@@ -45,7 +45,7 @@ The manifest encodes, as inert data, the structural and content rules a well-for
   - `non-empty-paste` (on the *Verification matrix*): every required paste slot holds non-empty, non-placeholder text — a fenced command-output block, or `n/a` with a one-line reason — never a bare `[Paste output]` placeholder.
   - `no-open-critical`: no blocking `QUESTION` remains unresolved anywhere in the task when its frontmatter status is the terminal value `done`.
 
-`non-empty-paste` closes the hallucinated-completion hole: a "tests passed" claim with no pasted output is an invalid proof — schema-valid output is not verification [[REFLEXION]](../research/sources.md#REFLEXION).
+`non-empty-paste` closes the hallucinated-completion hole: a "tests passed" claim with no pasted output is an invalid proof — schema-valid output is not verification [[REFLEXION]](./research/sources.md#REFLEXION).
 
 ### Required command rows
 
@@ -87,7 +87,7 @@ The manifest carries the unified lint scheme as inert data so the checker and th
 
 ### Count acceptance checks (A10–A16)
 
-The manifest's closed-set cardinalities are pinned as the **count acceptance checks A10–A16**: every closed set has exactly one cardinality, and a count that differs between any two documents (the SOL reference, the structured-form schema, the lint catalogue, the step guides, and this manifest) is a failing check. The canonical members of each set are enumerated in the [flow graph](../reference/cheatsheet.md) — the count-reconciliation hub — which this manifest shadows:
+The manifest's closed-set cardinalities are pinned as the **count acceptance checks A10–A16**: every closed set has exactly one cardinality, and a count that differs between any two documents (the SOL reference, the structured-form schema, the lint catalogue, the step guides, and this manifest) is a failing check. The canonical members of each set are enumerated in the [flow graph](./reference/cheatsheet.md) — the count-reconciliation hub — which this manifest shadows:
 
 | Check | Closed set | Count |
 |---|---|---|
@@ -101,7 +101,7 @@ The manifest's closed-set cardinalities are pinned as the **count acceptance che
 
 ## The required verification-suite matrix
 
-The manifest also encodes the per-task-kind **required verification suite**: the proof-type/phase defaults that resolve to `cmd*` slots, so the question *"for a task of this kind, what proof MUST exist before it may merge?"* has one machine-readable answer. The canonical, human-readable matrix is the [flow graph](../reference/cheatsheet.md) (the `(proof-type @ phase)` view); the manifest's `required_suite` is its shadow, with one row per task kind, resolving each recommendation to concrete adapter slots and named gates. The two MUST agree row-for-row.
+The manifest also encodes the per-task-kind **required verification suite**: the proof-type/phase defaults that resolve to `cmd*` slots, so the question *"for a task of this kind, what proof MUST exist before it may merge?"* has one machine-readable answer. The canonical, human-readable matrix is the [flow graph](./reference/cheatsheet.md) (the `(proof-type @ phase)` view); the manifest's `required_suite` is its shadow, with one row per task kind, resolving each recommendation to concrete adapter slots and named gates. The two MUST agree row-for-row.
 
 Each entry in a row is one of three slot kinds:
 
@@ -143,12 +143,12 @@ The distinction matters for conformance because the `non-empty-paste` rule appli
 
 ## The conformance maturity ladder
 
-The definition above is a single *binary* predicate — the terminal judgement. But a repository adopting Swarm passes through observable intermediate states, and because adoption MAY be incremental, Swarm needs a vocabulary for "how far in" a repository is *without overloading the word conformant*. The **five-tier ladder** below answers that. Each tier is named, each is bound to checkable clauses already specified elsewhere on this page (the ladder introduces **no new obligations**), and each is a strict superset of the tier below it — a repository at tier *n* satisfies tiers `1..n`. The tiers are diagnostic labels for adoption progress; the only tier that coincides with the normative `Swarm-conformant` predicate is tier 4, **Swarm-verifiable**.
+The definition above is a single *binary* predicate — the terminal judgement. But a repository adopting Swarm passes through observable intermediate states, and because adoption MAY be incremental, Swarm needs a vocabulary for "how far in" a repository is *without overloading the word conformant*. The **five-tier ladder** below answers that. Each tier is named, each is bound to checkable clauses already specified elsewhere on this page (the ladder introduces **no new obligations**), and each is a strict superset of the tier below it — a repository at tier *n* satisfies tiers `1.n`. The tiers are diagnostic labels for adoption progress; the only tier that coincides with the normative `Swarm-conformant` predicate is tier 4, **Swarm-verifiable**.
 
 | Tier | Name | What it means | Bound to |
 |---|---|---|---|
 | **1** | **Swarm-readable** | The canonical structure is installed: a human or agent can read the repository as a Swarm repository. Nothing is yet checked for correctness. | Conformance clauses (a) and (b) hold — the six Tier-2 docs and seven Tier-1 templates are present and copyable. Clause (c) MAY still be unmet. |
-| **2** | **Swarm-lintable** | Authored specs are structurally and prose-valid: the obligation language parses and carries no blocking surface/prose defect. | Every approved `*.swarm.md` emits **zero blocking `SOL-S*` and zero blocking `SOL-P*`** diagnostics (blocking = the `severity` field's `BLOCKING` value, which structures to `level` `error`). `SOL-M*`/`SOL-V*`/`SOL-O*` are not gated here. |
+| **2** | **Swarm-lintable** | Authored specs are structurally and prose-valid: the obligation language parses and carries no blocking surface/prose defect. | Every approved `*.md` emits **zero blocking `SOL-S*` and zero blocking `SOL-P*`** diagnostics (blocking = the `severity` field's `BLOCKING` value, which structures to `level` `error`). `SOL-M*`/`SOL-V*`/`SOL-O*` are not gated here. |
 | **3** | **lowerable** | Approved specs can be lowered into tasks deterministically: every structuring precondition is present. | For every approved obligation: a stable ID, a proof binding (`VERIFY BY <type>:<adapter>:<artifact>` — a bare ref is advisory but a binding MUST exist), declared non-goals/scope, resolvable referenced `INTERFACE` blocks, and resolvable `DEPENDS ON` edges; and **no unresolved blocking `QUESTION` reaches structuring**. This is exactly the `lower`/`decompose` precondition set. |
 | **4** | **Swarm-verifiable** | For implemented work, trace and review are complete and every completion claim is tied to evidence. | `trace.md` and `review.md` exist for the implemented obligations; each `IMPLEMENTS`/`PRESERVES`/`PROOF` claim carries content-hashed evidence and a core verdict; every completion claim binds to pasted proof output, never a bare "tests passed" claim (the `non-empty-paste` rule). |
 | **5** | **Swarm-orchestratable** | Work can be partitioned across agents and sequenced safely: the static coordination contract is complete. | The orchestration coordination contract is fully satisfied: declared write surfaces (named `SURFACE`s — there is no `locks` primitive) with the safe-parallelism predicate holding (no `SOL-O001`), obligation IDs preserved across the source→execution tiers, the coordination hand-off fields (owned/forbidden paths, status, parent contract), liveness/stall states, and the promotion queue. |
@@ -170,11 +170,11 @@ A future toolchain would expose this verb set. Each verb is a transformation a h
 | Verb | Phase(s) it drives | What it would do |
 |---|---|---|
 | `init` | adoption | install or refresh the starter kit's files into a project (under `.agents/`) and adopt `AGENTS.md` |
-| `lint` | PARSE, NORMALIZE | emit `SOL-<LAYER>NNN` diagnostics against a `*.swarm.md` source |
+| `lint` | PARSE, NORMALIZE | emit `SOL-<LAYER>NNN` diagnostics against a `*.md` source |
 | `format` | NORMALIZE | apply the canonical surface form without changing intent |
 | `improve` | NORMALIZE | apply intent-preserving spec edits (the closed improve-operation set) |
-| `build-ir` | PARSE → NORMALIZE | emit the structured-form envelope (`*.swarm.ir.json`) |
-| `lower` / `plan` | LOWER | emit the schedulable plan projection of the structured form (`*.swarm.plan.json`) |
+| `build-ir` | PARSE → NORMALIZE | emit the structured-form envelope (`*.ir.json`) |
+| `lower` / `plan` | LOWER | emit the schedulable plan projection of the structured form (`*.plan.json`) |
 | `decompose` | LOWER | partition the plan into work packets, one per disjoint write surface |
 | `verify` | VERIFY | run resolved `cmd*` adapters, record core verdicts + lifecycle decorators |
 | `review` | REVIEW | assemble the review packet from trace + obligation set; record the verdict |
@@ -206,7 +206,7 @@ It MUST NOT own the **model-execution** lane. These concerns belong to the agent
 | the MCP runtime and the tool-calling runtime |
 | prompt-streaming UX |
 
-A toolchain that absorbed any model-execution concern would **become an agent CLI** — which the no-runtime invariant forecloses for this repo and which the boundary forbids for any future toolchain. The placement is the toolchain projection of Swarm's own scope: [Swarm owns a coordination contract, not a scheduler](../artifacts/task-orchestration.md), and a future toolchain owns the obligation boundary on either side of the coding loop, not the loop itself.
+A toolchain that absorbed any model-execution concern would **become an agent CLI** — which the no-runtime invariant forecloses for this repo and which the boundary forbids for any future toolchain. The placement is the toolchain projection of Swarm's own scope: [Swarm owns a coordination contract, not a scheduler](./artifacts/task-orchestration.md), and a future toolchain owns the obligation boundary on either side of the coding loop, not the loop itself.
 
 ### The agent-CLI adapter contract
 
@@ -241,10 +241,10 @@ This "prepare → delegate → reconcile" split (the two OWNS tables above) is w
 
 ## Related
 
-- [SOL](../language/SOL.md) — the obligation language whose `VERIFY BY` bindings and `SURFACE`/`QUESTION` constructs the ladder tiers gate.
-- [Errors](../language/errors.md) — the full `SOL-<LAYER>NNN` lint/error catalogue the manifest references.
-- [APS](../language/APS.md) — the prose standard whose violations surface as `SOL-P*` codes.
-- [Flow graph](../reference/cheatsheet.md) — the human-readable required-verification-suite matrix the manifest shadows.
+- [SOL](./language/SOL.md) — the obligation language whose `VERIFY BY` bindings and `SURFACE`/`QUESTION` constructs the ladder tiers gate.
+- [Errors](./language/errors.md) — the full `SOL-<LAYER>NNN` lint/error catalogue the manifest references.
+- [APS](./language/APS.md) — the prose standard whose violations surface as `SOL-P*` codes.
+- [Flow graph](./reference/cheatsheet.md) — the human-readable required-verification-suite matrix the manifest shadows.
 - [Source artifacts](source-artifacts.md) — the seven Tier-1 core artifacts and their template contracts.
 - [How Swarm works](how-swarm-works.md) — the `lower`/`decompose` preconditions that tier 3 (lowerable) binds to.
-- [Task orchestration](../artifacts/task-orchestration.md) — the static coordination contract the toolchain owns one side of (prepare/reconcile) and tier 5 (Swarm-orchestratable) binds to.
+- [Task orchestration](./artifacts/task-orchestration.md) — the static coordination contract the toolchain owns one side of (prepare/reconcile) and tier 5 (Swarm-orchestratable) binds to.

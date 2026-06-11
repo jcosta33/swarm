@@ -19,13 +19,13 @@ Where a finding governs once accepted: it carries weight as durable evidence in 
 
 ## Filename and placement
 
-`finding.md` is a **working artifact**, not a Swarm-format source. The discriminator is the `.swarm.` filename infix:
+`finding.md` is a **working artifact**, not a Swarm-format source. The discriminator is the `.` filename infix:
 
-- The single human-authored Swarm-format spec is `*.swarm.md`.
-- Emitted, contract-shaped Swarm outputs carry the `.swarm.*` infix (for example `*.swarm.ir.json`, `*.swarm.trace.md`).
+- The single human-authored Swarm-format spec is `*.md`.
+- Emitted, contract-shaped Swarm outputs carry the `.*` infix (for example `*.ir.json`, `*.trace.md`).
 - Working artifacts — findings, tasks, reviews, ADRs — carry **no** infix and use a plain `.md` extension.
 
-A finding is structured Markdown governed by this contract; it is **not** parsed as SOL source, and it **MUST NOT** be given a per-artifact `.swarm.*` name. A conformant tool treats the missing infix as sufficient proof not to parse the file as a spec.
+A finding is structured Markdown governed by this contract; it is **not** parsed as SOL source, and it **MUST NOT** be given a per-artifact `.*` name. A conformant tool treats the missing infix as sufficient proof not to parse the file as a spec.
 
 In an adopted project, a finding is a durable recall artifact — a `type: finding` document committed in **`.agents/memory/`**, where the recall map indexes it and patterns generalize from it:
 
@@ -47,7 +47,7 @@ A finding is **not** execution scratch: it is desired-truth-adjacent durable kno
 | `created` / `updated` | always | The provenance timestamp (`created` at discovery; `updated` on each status transition). |
 | `confidence` | always | `high \| medium \| low`. |
 | `origin_obligations` | on promotion | The obligation IDs (`AC-`/`C-`/`I-`/`IF-…`) the fact was discovered against. |
-| `origin_traces` | on promotion | The trace entries (`*.swarm.trace.md#<ID>`) that produced the evidence. |
+| `origin_traces` | on promotion | The trace entries (`*.trace.md#<ID>`) that produced the evidence. |
 | `pass` + `profile` | on promotion | The step and heuristic profile under which it was found (for example `review` + `skeptic`). |
 | `reviewer_or_tool` | on promotion | The human reviewer or tool/adapter that confirmed it. |
 | `content_hash` | on promotion | Hash of the cited source/surfaces at promotion time; this is the input the staleness check compares against. |

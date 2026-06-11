@@ -1,6 +1,6 @@
 # Code-implementation skills — framework reference (not in the starter kit)
 
-These are the **implement-side** skills. Per [ADR-0051](../../adrs/0051-complete-the-spec-repo-pivot.md) they
+These are the **implement-side** skills. Per [ADR-0051](././adrs/0051-complete-the-spec-repo-pivot.md) they
 are **not** bundled in the spec-repo starter kit — a docs/spec repo never runs the `implement` step, so
 shipping them there would be dead weight. They live here as **framework reference**.
 
@@ -20,6 +20,6 @@ here, but nothing here is shipped or required.
   `persona-performance-surgeon/`, `persona-migrator/`, `persona-lead-engineer/`, `persona-janitor/`.
 - **`templates/`** — the `task.md` and `trace.md` skeletons (implement/trace artifacts; code-side).
 
-See [`../../passes/implement.md`](../../passes/implement.md) for the `implement` step contract and
-[`../heuristic-profiles.md`](../heuristic-profiles.md) for the persona model (the closed set is thirteen —
+See [`././passes/implement.md`](././passes/implement.md) for the `implement` step contract and
+[`./heuristic-profiles.md`](./heuristic-profiles.md) for the persona model (the closed set is thirteen —
 six authoring profiles ship in the kit, these seven are here).

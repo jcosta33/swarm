@@ -1,6 +1,6 @@
 # Non-Goals
 
-> Swarm's reference for what is deliberately out of scope: the standing non-goals, the settled scope boundaries, and the "is / is not" line that separates the framework from a runtime. For what Swarm *is* in one paragraph, read the [root README](../README.md).
+> Swarm's reference for what is deliberately out of scope: the standing non-goals, the settled scope boundaries, and the "is / is not" line that separates the framework from a runtime. For what Swarm *is* in one paragraph, read the [root README](./README.md).
 
 The non-goals below are not omissions to be filled in later. They are deliberate boundaries that follow directly from the invariants: **NO RUNTIME** (Invariant 1) and **SOFT control is context, not enforcement** (Invariant 2). A non-goal is reopened only by a future ADR, never by drift.
 

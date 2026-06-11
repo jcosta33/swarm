@@ -1,8 +1,8 @@
 # SOL — The Swarm Obligation Language (Surface Reference)
 
-> Swarm's reference for the SOL surface language: the human-authored syntax, the seven block types, and the modal/verdict grammar you write inside `*.swarm.md` files.
+> Swarm's reference for the SOL surface language: the human-authored syntax, the seven block types, and the modal/verdict grammar you write inside `*.md` files.
 
-SOL (Swarm Obligation Language) is the human-authored surface language that appears inside `*.swarm.md` files. It is **markdown-only and provider-neutral**: nothing here is shipped code. A "parser", a "linter", and a "structuring" step are described as *contracts* a future tool would build against, never as software this repository runs.
+SOL (Swarm Obligation Language) is the human-authored surface language that appears inside `*.md` files. It is **markdown-only and provider-neutral**: nothing here is shipped code. A "parser", a "linter", and a "structuring" step are described as *contracts* a future tool would build against, never as software this repository runs.
 
 This page covers what you need to *write* SOL by hand. The snake_case structured-form/JSON layer is emitted from SOL, never authored — out of scope here.
 
@@ -13,11 +13,11 @@ This page covers what you need to *write* SOL by hand. The snake_case structured
 SOL documents are written in two distinct languages, and the reader MUST keep them separate. The same words — `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY` — appear in both, but they mean different things depending on which layer they sit in.
 
 - **The meta-language** is ordinary prose *about* SOL: this reference page, your own design notes, an AGENTS.md, a pass guide. Its normative keywords — **MUST, MUST NOT, SHOULD, SHOULD NOT, MAY, REQUIRED, OPTIONAL** — are interpreted per RFC 2119 / RFC 8174 and carry force *only* when uppercase. They are **directives to the reader/author/tool**. Example: "An `INTERFACE` block MUST carry a `VERIFY BY contract:` binding" is a rule this page levies on whoever writes an INTERFACE.
-- **The object-language** is SOL itself — the obligation text a human writes *inside* `*.swarm.md`. SOL's own modals (`MUST`/`MUST NOT`/`SHOULD`/`SHOULD NOT`/`MAY`; §2.4) decorate obligations and are **data being specified**, not directives to anyone reading this page. Example: in the SOL line `THE client MUST clear the local session`, the word `MUST` is an SOL token whose semantics §2.4 / §3 define — it is a fact recorded *about the client*, not a requirement levied on the reader.
+- **The object-language** is SOL itself — the obligation text a human writes *inside* `*.md`. SOL's own modals (`MUST`/`MUST NOT`/`SHOULD`/`SHOULD NOT`/`MAY`; §2.4) decorate obligations and are **data being specified**, not directives to anyone reading this page. Example: in the SOL line `THE client MUST clear the local session`, the word `MUST` is an SOL token whose semantics §2.4 / §3 define — it is a fact recorded *about the client*, not a requirement levied on the reader.
 
 The discriminator is the fence. **Every SOL fragment, grammar production, and template skeleton in this page sits inside a fenced code block tagged `sol` or `ebnf`; modal words inside such a fence are object-language (data).** Modal words in running prose are meta-language (directives). This is why, throughout this page, a sentence like "a binding REQ MUST carry a `VERIFY BY`" is a rule you must follow, while the `MUST` inside a `sol` example is just the obligation's recorded modality.
 
-A practical consequence: when a tool reads a `*.swarm.md`, it must treat the modals inside SOL blocks as the obligation's *content* (what to structure, judge, and verify), never as instructions addressed to the tool itself.
+A practical consequence: when a tool reads a `*.md`, it must treat the modals inside SOL blocks as the obligation's *content* (what to structure, judge, and verify), never as instructions addressed to the tool itself.
 
 ---
 
@@ -119,7 +119,7 @@ Each block carries a **per-type short id** `PREFIX-NNN` (`NNN` = one or more dec
 | `TRACE` | `T-` | `T-001` |
 | `VERDICT` | — (reuses the judged obligation's id) | `VERDICT AC-001:` |
 
-A prefix that does not match its block type is `SOL-S005`. IDs MUST be unique within one `*.swarm.md` (intra-spec duplicate = `SOL-S004`; cross-spec collision = `SOL-M001`).
+A prefix that does not match its block type is `SOL-S005`. IDs MUST be unique within one `*.md` (intra-spec duplicate = `SOL-S004`; cross-spec collision = `SOL-M001`).
 
 A **cross-spec reference** qualifies the id with the source spec id using a **hash** separator: `auth-refresh#AC-001`. The hash (not a colon) is chosen because `:` is already the block-header delimiter and the `verify_ref` delimiter, so a colon-qualified form would be ambiguous to a single-pass tokenizer. Dotted/namespaced ids (`REQ.auth-refresh.AC-001`) are **structured-form-only** and MUST NOT appear at the surface.
 
@@ -199,7 +199,7 @@ and_actor_clause = "AND", ws, "THE", ws, actor, ws, modal, ws, response, nl;
 ```
 
 - The four condition keywords are the **EARS** keywords, in order: `WHERE` (optional-feature inclusion) → `WHILE` (state/precondition) → `WHEN` (trigger/event) → `IF` (fault/error). A keyword-less requirement is *ubiquitous*. Their text is opaque (§2.4).
-- **`THEN` is optional sugar after `IF` only** (the EARS unwanted-behavior pattern); it MUST NOT appear after `WHEN`/`WHILE`/`WHERE`. `IF … THEN …` and `IF … <newline> THE …` are equivalent.
+- **`THEN` is optional sugar after `IF` only** (the EARS unwanted-behavior pattern); it MUST NOT appear after `WHEN`/`WHILE`/`WHERE`IF … THEN …` and `IF … <newline> THE …` are equivalent.
 - `THE <actor> <MODAL> <response>` is the mandatory consequence. A condition with no following actor clause is `SOL-S001`; an actor clause with no modal is `SOL-S003`.
 - **Modal-scan rule (normative):** the `modal` is the *first* modal terminal at a token boundary (longest-match — `MUST NOT` before `MUST`); everything before it is the actor, everything after is the response. A modal word belonging to the actor/response MUST be quoted/backticked, or the obligation MUST be reworded (the parser MUST NOT guess).
 - **`AND THE` chaining is permitted.** When structured, each `THE …` / `AND THE …` becomes a **separate obligation**. More than two chained consequences is a non-blocking warning (`SOL-P004`-adjacent, atomize suggested), never a hard error.
@@ -328,7 +328,7 @@ proof_result = "passed" | "failed" | "blocked" | "unverified";
 
 - `IMPLEMENTS` lists the REQ ids satisfied; `PRESERVES` lists the CONSTRAINT/INVARIANT ids not to be violated; `CHANGED` names modified surfaces (the basis for staleness detection).
 - Each `PROOF` line names a `verify_ref` and its observed `proof_result`. The four lowercase results map 1:1 to the uppercase VERDICT core values: `passed`→`PASS`, `failed`→`FAIL`, `blocked`→`BLOCKED`, `unverified`→`UNVERIFIED`. (`manual` is a proof *type*, never a result.)
-- A TRACE that claims `IMPLEMENTS` MUST carry at least one `PROOF` line — `PROOF` is grammatically mandatory, so a no-`PROOF` trace is a structural parse error (`SOL-S014`), not a missing-evidence lint. An `IMPLEMENTS`/`PRESERVES` naming an unknown obligation is `SOL-M003`. A `PROOF` line MUST reference real output — an unqualified "tests passed" is not admissible [[REFLEXION]](../research/sources.md#REFLEXION).
+- A TRACE that claims `IMPLEMENTS` MUST carry at least one `PROOF` line — `PROOF` is grammatically mandatory, so a no-`PROOF` trace is a structural parse error (`SOL-S014`), not a missing-evidence lint. An `IMPLEMENTS`/`PRESERVES` naming an unknown obligation is `SOL-M003`. A `PROOF` line MUST reference real output — an unqualified "tests passed" is not admissible [[REFLEXION]](./research/sources.md#REFLEXION).
 
 ```sol
 TRACE T-001:
@@ -466,8 +466,8 @@ The five lint layers are **S/P/M/V/O** (Syntax / Prose / seMantic / Verification
 
 Other framework pages that extend or consume what this page defines:
 
-- [APS — the controlled-prose standard](../language/APS.md) — the prose layer SOL blocks are interleaved with, and the high-risk-word rules.
-- [Lint codes](../language/errors.md) — the full `SOL-<LAYER><NNN>` catalogue behind the codes cited inline here.
-- [Language versioning](../language/versioning.md) — the two version axes (`swarm_language` vs framework/package) and the one-way trigger.
-- [Proof types](../reference/proof-types.md) — the closed nine proof types, their strength ordering, and `VERIFY BY` adapter resolution.
-- [verify pass](../passes/verify.md) and [review pass](../passes/review.md) — how `VERDICT` core values and lifecycle decorators are produced, and the merge gate.
+- [APS — the controlled-prose standard](./language/APS.md) — the prose layer SOL blocks are interleaved with, and the high-risk-word rules.
+- [Lint codes](./language/errors.md) — the full `SOL-<LAYER><NNN>` catalogue behind the codes cited inline here.
+- [Language versioning](./language/versioning.md) — the two version axes (`swarm_language` vs framework/package) and the one-way trigger.
+- [Proof types](./reference/proof-types.md) — the closed nine proof types, their strength ordering, and `VERIFY BY` adapter resolution.
+- [verify pass](./passes/verify.md) and [review pass](./passes/review.md) — how `VERDICT` core values and lifecycle decorators are produced, and the merge gate.

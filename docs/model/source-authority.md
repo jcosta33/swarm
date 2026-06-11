@@ -17,7 +17,7 @@ Axis A ranks an obligation by **the kind of artifact that contains it** and that
 | Rank | Artifact (with required status) | Notes |
 | ---- | ------------------------------- | ----- |
 | 1 (highest) | accepted `adr.md` | Immutable decision; the strongest recorded intent. |
-| 2 | approved `spec.swarm.md` | The behavioral contract (`status: approved`). |
+| 2 | approved `spec.md` | The behavioral contract (`status: approved`). |
 | 3 | accepted `finding.md` | A durable project fact (`status: accepted` or `promoted`). |
 | 4 | reviewed `audit.md` | Present-state observation that passed a `review` step. |
 | 5 | reviewed `research.md` | External / exploratory evidence that passed a `review` step. |
@@ -63,7 +63,7 @@ This prevents a low-criticality domain note (e.g. a `team`-rank remark in a revi
 
 ## Worked tie-break example
 
-A reviewed `audit.md` records a **`security`** obligation: *the refresh endpoint MUST reject reuse of a rotated refresh token*. An approved `spec.swarm.md` records a **`product`** obligation: *the refresh endpoint MUST accept the most recent token presented, for a seamless re-login*. They conflict on the same trigger (reuse of a prior refresh token).
+A reviewed `audit.md` records a **`security`** obligation: *the refresh endpoint MUST reject reuse of a rotated refresh token*. An approved `spec.md` records a **`product`** obligation: *the refresh endpoint MUST accept the most recent token presented, for a seamless re-login*. They conflict on the same trigger (reuse of a prior refresh token).
 
 Applying the conflict rule:
 
@@ -78,7 +78,7 @@ AFFECTS auth.refresh
 ```
 
 ```sol
-REQ AC-031: # from approved spec.swarm.md, domain: product
+REQ AC-031: # from approved spec.md, domain: product
 WHEN a client presents the most recent refresh token
 THE refresh endpoint MUST issue a new access token
 VERIFY BY test:cmdTest:auth-refresh#happy-path
@@ -89,7 +89,7 @@ AFFECTS auth.refresh
 
 ### Second example (below the hard-policy band)
 
-A reviewed `audit.md` records a **`team`**-domain note: *new modules SHOULD live under `src/v2/`*. An approved `spec.swarm.md` records a **`product`** obligation on the same surface. Neither is in the hard-policy band (ranks 1–3), so domain rank does **not** decide — **artifact authority does** (step 2), and the approved spec (rank 2) outranks the reviewed audit (rank 4). The product obligation wins; the audit note is advisory. Were the audit note instead a `security` obligation (in-band), step 1 would flip the result.
+A reviewed `audit.md` records a **`team`**-domain note: *new modules SHOULD live under `src/v2/`*. An approved `spec.md` records a **`product`** obligation on the same surface. Neither is in the hard-policy band (ranks 1–3), so domain rank does **not** decide — **artifact authority does** (step 2), and the approved spec (rank 2) outranks the reviewed audit (rank 4). The product obligation wins; the audit note is advisory. Were the audit note instead a `security` obligation (in-band), step 1 would flip the result.
 
 ## Invariants on both axes
 
@@ -157,7 +157,7 @@ The dividing line is **semantic effect**, expressed as a closed twelve-category 
 | Materially resolve a `[blocking]` `QUESTION` | Yes |
 | Accept a `manual` proof where no automated proof previously existed | Yes |
 | Approve or supersede an `adr.md` | Yes |
-| Promote a `finding.md` into an approved `spec.swarm.md` | Yes |
+| Promote a `finding.md` into an approved `spec.md` | Yes |
 | Add, remove, or repoint a `VERIFY BY` proof binding | Yes — what counts as proof changed |
 | Normalize formatting, casing, or surface-keyword form | No — normalization |
 | Fix an editorial typo with no semantic effect | No — normalization |
@@ -171,7 +171,7 @@ The "Yes" rows are exactly the edits that alter what the system must build, what
 Swarm defines **what** requires approval; it is deliberately silent on **who** approves. Approval **authority** for any "Yes" row is resolved through the same source-authority ladder that resolves conflicts: the approver is the **owner of the highest-ranked governing artifact in the relevant domain**.
 
 - An ADR change is approved by the owner of the accepted `adr.md` (Axis-A rank 1).
-- An obligation or `INTERFACE` change is approved by the owner of the approved `spec.swarm.md` (Axis-A rank 2).
+- An obligation or `INTERFACE` change is approved by the owner of the approved `spec.md` (Axis-A rank 2).
 - A cross-domain change is approved by the owner of the governing domain (Axis B) — e.g. a change touching a `security` obligation answers to the security-domain owner, not a `product` owner.
 
 There is **no** undefined "human role" in Swarm. "Approval required: Yes" means precisely "an authoring act by the relevant source-authority owner is required," never an appeal to an unspecified gatekeeper. *Who* that owner is — identity, title, headcount — stays a local org decision bound by the adopting repository, exactly as the high-oversight band's named human does; Swarm fixes only that the act must come from the resolved owner. A change applied without the authority resolved by this ladder is itself a `SOL-M004` authority-conflict: a lower-ranked actor (an agent, a skill, an un-promoted note) silently amending a higher-ranked artifact.
@@ -180,8 +180,8 @@ This is the same authority that governs the high-oversight band above: a band ob
 
 ## Related
 
-- [SOL — the obligation language](../language/SOL.md) — the surface form of the obligations whose conflicts and edits this procedure governs.
-- [Verify — verdict model and proof taxonomy](../passes/verify.md) — the `WAIVED` / `STALE` / `CONTRADICTED` lifecycle and the named-authority discipline a band verdict and waiver carry.
-- [The `improve` step](../passes/improve.md) — where the single normalization category MAY be applied without approval; the "Yes" rows are exactly what `improve` may not silently apply.
-- [The `promote` step](../passes/promote.md) — promotion of a `finding.md` into a spec, an approval-required change that gives the finding its new container's authority.
-- [Swarm lint codes](../language/errors.md) — `SOL-M002`, `SOL-M004`, and `SOL-V010`, the diagnostics this procedure emits.
+- [SOL — the obligation language](./language/SOL.md) — the surface form of the obligations whose conflicts and edits this procedure governs.
+- [Verify — verdict model and proof taxonomy](./passes/verify.md) — the `WAIVED` / `STALE` / `CONTRADICTED` lifecycle and the named-authority discipline a band verdict and waiver carry.
+- [The `improve` step](./passes/improve.md) — where the single normalization category MAY be applied without approval; the "Yes" rows are exactly what `improve` may not silently apply.
+- [The `promote` step](./passes/promote.md) — promotion of a `finding.md` into a spec, an approval-required change that gives the finding its new container's authority.
+- [Swarm lint codes](./language/errors.md) — `SOL-M002`, `SOL-M004`, and `SOL-V010`, the diagnostics this procedure emits.

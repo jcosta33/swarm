@@ -17,7 +17,7 @@ rest of the example.
 ## Question
 
 What server-side validation must the contact form enforce so a malformed or hostile submission cannot persist
-bad data — and which of those rules belong as obligations in `spec.swarm.md`?
+bad data — and which of those rules belong as obligations in `spec.md`?
 
 ## Findings
 
@@ -26,7 +26,7 @@ bad data — and which of those rules belong as obligations in `spec.swarm.md`?
 - **Claim:** client-side validation is bypassable; the server MUST reject a missing/malformed email itself.
 - **Evidence:** standard web-security guidance (never trust the client); observed in similar forms.
 - **Confidence:** high
-- **Bears on:** `REQ AC-002` in `spec.swarm.md` (reject invalid with 422, persist nothing).
+- **Bears on:** `REQ AC-002` in `spec.md` (reject invalid with 422, persist nothing).
 
 ## Open questions
 

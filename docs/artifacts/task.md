@@ -1,6 +1,6 @@
 # `task.md` — the step frame
 
-`task.md` is the bounded work packet of the Swarm flow: the structured, self-contained frame for **one step** over an assigned set of obligation ids, carrying its parent contract, its write surfaces, its verification bindings, and the slots where execution evidence accumulates [[SCRATCHPAD]](../research/sources.md#SCRATCHPAD). Among the obligations it is the node where intent stops being a partitioned plan and becomes a single owned unit of work — the unit one `implement` (or `author`/`review`) run discharges, traces, and verifies. A task frame is a disk-persistent, dependency-aware unit of work, carrying its dependency edges as frontmatter rather than holding them in context [[CCTASKS]](../research/sources.md#CCTASKS).
+`task.md` is the bounded work packet of the Swarm flow: the structured, self-contained frame for **one step** over an assigned set of obligation ids, carrying its parent contract, its write surfaces, its verification bindings, and the slots where execution evidence accumulates [[SCRATCHPAD]](./research/sources.md#SCRATCHPAD). Among the obligations it is the node where intent stops being a partitioned plan and becomes a single owned unit of work — the unit one `implement` (or `author`/`review`) run discharges, traces, and verifies. A task frame is a disk-persistent, dependency-aware unit of work, carrying its dependency edges as frontmatter rather than holding them in context [[CCTASKS]](./research/sources.md#CCTASKS).
 
 Swarm ships **no runtime** (see the [artifacts README](README.md)): the "step" a `task.md` frames is a CONTRACT a human, an agent following a step guide, or a future tool performs, never shipped code. A `task.md` is inert structured Markdown that an agent populates by hand; nothing in it executes.
 
@@ -21,17 +21,17 @@ What a `task.md` MUST NOT do:
 - It MUST NOT weaken the constraints, invariants, or non-goals it inherits.
 - It MUST NOT close with an unresolved promotion item, and MUST NOT claim completion without evidence.
 
-`task_kind` is a frontmatter **enum that parameterizes which step runs** — it is a dimension, not a step. The nine steps are the fixed transformation set; `task_kind` selects which step guide(s) and profile apply inside two of them. The build/change kinds (`feature`, `fix`, `refactor`, `rewrite`, `migration`, `upgrade`, `performance`, `testing`, `documentation`) all route to the `implement` step. The authoring kinds (`spec-writing`, `research-writing`, `audit-writing`, `bug-report-writing`, `deepen-audit`) route to `author`. `review` selects `review`; `orchestration` and `integration` select `decompose` plus a merge-gate `review` under the Lead Engineer profile. There is no `kickback` kind: kickback is the **re-entry** of the `implement` step on a `FAIL`/`UNVERIFIED` verdict, an edge in the flow graph, not a task type.
+`task_kind` is a frontmatter **enum that parameterizes which step runs** — it is a dimension, not a step. The nine steps are the fixed transformation set; `task_kind` selects which step guide(s) and profile apply inside two of them. The build/change kinds (`feature`, `fix`, `refactor`, `rewrite`, `migration`, `upgrade`, `performance`, `testing`, `documentation`) all route to the `implement` step. The authoring kinds (`spec-writing`, `research-writing`, `audit-writing`, `bug-report-writing`, `deepen-audit`) route to `author`review` selects `review`; `orchestration` and `integration` select `decompose` plus a merge-gate `review` under the Lead Engineer profile. There is no `kickback` kind: kickback is the **re-entry** of the `implement` step on a `FAIL`/`UNVERIFIED` verdict, an edge in the flow graph, not a task type.
 
 ## Filename & placement
 
-`task.md` is a **working artifact**, not a Swarm-format one. Its filename therefore MUST NOT carry the `.swarm.` infix; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
+`task.md` is a **working artifact**, not a Swarm-format one. Its filename therefore MUST NOT carry the spec.md convention; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
 
 | Class | Rule | This artifact |
 | --- | --- | --- |
-| Swarm-format spec | The human-authored spec is `*.swarm.md`. | No — a task is not a source spec. |
-| Emitted Swarm output | Emitted artifacts carry `.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.plan.json`, `*.swarm.trace.md`). | No — a task is not an emitted Swarm output. |
-| **Working artifact** | Plain `.md`, **no** `.swarm.` infix (e.g. `task.md`). | **Yes** — `task.md` is a human/agent working artifact. |
+| Swarm-format spec | The human-authored spec is `*.md`. | No — a task is not a source spec. |
+| Emitted Swarm output | Emitted artifacts carry `.*`  (e.g. `*.ir.json`, `*.plan.json`, `*.trace.md`). | No — a task is not an emitted Swarm output. |
+| **Working artifact** | Plain `.md`, **no** `spec.md` naming (e.g. `task.md`). | **Yes** — `task.md` is a human/agent working artifact. |
 
 A `task.md` MAY embed SOL blocks (the assigned obligations, the constraints and invariants it preserves) as **quoted data**; embedding them does not make the file a SOL source, and a conformant tool MUST NOT parse a plain `task.md` as a spec.
 
@@ -55,9 +55,9 @@ The frontmatter MUST carry the full field set below — including the orchestrat
 | --- | --- |
 | `type: task` | Fixed discriminator for the artifact class. |
 | `id` | The task slug. |
-| `status` | `active \| blocked \| done \| abandoned`. `done` is terminal. |
+| `status` | `active \| blocked \| done \| abandoned`done` is terminal. |
 | `task_kind` | The enum that parameterizes which step runs (see Purpose above). |
-| `source` | Path to the source doc / `spec.swarm.md` this step structures from. |
+| `source` | Path to the source doc / `spec.md` this step structures from. |
 | `assigned_obligations` | The obligation ids assigned as this task's scope (`AC-001`, `REQ-002`, …). |
 | `constraints` | The `C-` ids this step MUST preserve. |
 | `invariants` | The `I-` ids this step MUST preserve. |
@@ -65,7 +65,7 @@ The frontmatter MUST carry the full field set below — including the orchestrat
 | `write_surfaces` | The paths this step may write; MUST be a subset of the assigned obligations' `WRITES` surfaces (a path outside is `SOL-O005`). |
 | `verification_bindings` | Per assigned obligation: obligation id → proof binding (adapter / command reference). |
 | `parallel_group` | The coordination group this task runs in, for the disjointness proof; or `none`. |
-| `isolation` | `worktree+branch \| in-place` — where this task's work happens, **orthogonal to `parallel_group`** ([ADR-0046](../adrs/0046-isolation-axis-model.md); the rule is in [the `implement` step](../passes/implement.md)). MAY be omitted to let the rule decide: a code task with a `source` spec/audit → `worktree+branch` off the base; ad-hoc/doc/review work → `in-place`. |
+| `isolation` | `worktree+branch \| in-place` — where this task's work happens, **orthogonal to `parallel_group`** ([ADR-0046](./adrs/0046-isolation-axis-model.md); the rule is in [the `implement` step](./passes/implement.md)). MAY be omitted to let the rule decide: a code task with a `source` spec/audit → `worktree+branch` off the base; ad-hoc/doc/review work → `in-place`. |
 | `base` | The branch this task's worktree/branch forks from and merges back to (default `main`; the dev's current HEAD when handed off mid-branch). |
 | `blocked_by` | Task / obligation ids this step waits on; `[]` if unblocked. |
 | `produces` | Artifact paths this step emits under `generated/` (e.g. the `trace.md` / `review.md` it writes); `[]` when the step emits no durable artifact. |
@@ -107,5 +107,5 @@ That template is the skeleton you copy to start a task; **this page is its contr
 - **`docs/passes/author.md`** — the step the source-authoring `task_kind`s activate.
 - **`docs/passes/verify.md`** and **`docs/passes/review.md`** — the steps that consume a task's claimed work and fill the verdict side of its verification matrix; a `FAIL`/`UNVERIFIED` here re-enters `implement` (kickback).
 - **`docs/passes/promote.md`** — the step that drains a task's promotion queue into specs, ADRs, or memory.
-- **`docs/model/source-artifacts.md`** — the full artifact set, the `.swarm.` infix partition, and the conformance tiers in which `task.md` is a Tier-1 core artifact.
+- **`docs/model/source-artifacts.md`** — the full artifact set, the spec.md convention partition, and the conformance tiers in which `task.md` is a Tier-1 core artifact.
 - **`docs/model/workspace.md`** — the adopted-project layout (durable sources / execution scratch / durable recall) where the task frame lives as gitignored execution scratch.

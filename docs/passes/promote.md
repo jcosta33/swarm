@@ -4,7 +4,7 @@
 
 `promote` is the last of the **nine steps** of the Swarm flow (`author -> lint -> improve -> lower -> decompose -> implement -> verify -> review -> promote`). This page is the reference for that single step.
 
-Like every Swarm step, `promote` has **no runtime** ([Principle 1: NO RUNTIME](../PRINCIPLES.md#1-no-runtime)): it is a contract a human, an agent following a step guide, or a future tool performs. Swarm ships the *files and the discipline* a retrieval/promotion tool would build against — not a retrieval engine, validation scorer, or eviction manager. Nothing here is shipped code.
+Like every Swarm step, `promote` has **no runtime** ([Principle 1: NO RUNTIME](./PRINCIPLES.md#1-no-runtime)): it is a contract a human, an agent following a step guide, or a future tool performs. Swarm ships the *files and the discipline* a retrieval/promotion tool would build against — not a retrieval engine, validation scorer, or eviction manager. Nothing here is shipped code.
 
 ## What the step does
 
@@ -18,7 +18,7 @@ The model is **two-tier and provenance-anchored**. Rationale: chat transcripts a
 | Input | the task's discoveries + the resolved-or-pending promotion queue |
 | Output | durable writes to `.agents/memory/` (findings/patterns/glossary), the feature folder `specs/<feature>/` (specs + their supporting docs), and `decisions/` (ADRs) — plus the `AGENTS.md` pointer case — and a fully-resolved promotion queue |
 | Close gate | a task MUST NOT close while any promotion item is `pending` |
-| Ships a step guide? | **Yes** — `promote` ships a dedicated step guide, as do all six analysis steps (`lint`/`improve`/`lower`/`decompose`/`review`/`promote`); `implement` is served by the nine per-`task_kind` guides, `author` by the six author guides, and `verify` by the `empirical-proof` fragment ([ADR-0042](../adrs/0042-skill-carrier-and-standalone-conditioning.md)/[0051](../adrs/0051-complete-the-spec-repo-pivot.md)) |
+| Ships a step guide? | **Yes** — `promote` ships a dedicated step guide, as do all six analysis steps (`lint`/`improve`/`lower`/`decompose`/`review`/`promote`); `implement` is served by the nine per-`task_kind` guides, `author` by the six author guides, and `verify` by the `empirical-proof` fragment ([ADR-0042](./adrs/0042-skill-carrier-and-standalone-conditioning.md)/[0051](./adrs/0051-complete-the-spec-repo-pivot.md)) |
 
 ## The two-tier memory model
 
@@ -28,7 +28,7 @@ The model is **two-tier and provenance-anchored**. Rationale: chat transcripts a
 
 | Artifact | Role | Discipline |
 |---|---|---|
-| `memory/INDEX.md` | A **map of links, not explanations**; links into Tier-2, never duplicates bodies | Every entry MUST carry a **`Load when`** condition (the trigger telling a future agent the entry is relevant). The **load-when discipline**: an entry that cannot name *when it matters* MUST be removed — it is dead weight against the loss budget and the always-loaded density cap, since attention degrades for information buried in a long context [[LOSTMID]](../research/sources.md#LOSTMID). |
+| `memory/INDEX.md` | A **map of links, not explanations**; links into Tier-2, never duplicates bodies | Every entry MUST carry a **`Load when`** condition (the trigger telling a future agent the entry is relevant). The **load-when discipline**: an entry that cannot name *when it matters* MUST be removed — it is dead weight against the loss budget and the always-loaded density cap, since attention degrades for information buried in a long context [[LOSTMID]](./research/sources.md#LOSTMID). |
 | `memory/glossary.md` | One word, one meaning (controlled vocabulary: each term resolves to a single sense so agents never disambiguate at read time) | Each entry binds exactly one term to one definition; a contested term is **split**, never overloaded. An in-file `TERM` in a spec takes precedence over the glossary for that spec. |
 
 ### Tier-2 — the immutable evidence store (the territory)
@@ -52,7 +52,7 @@ Every finding that reaches `accepted` or `promoted` MUST carry the full provenan
 | `claim` | The one durable fact, as a single proposition |
 | `evidence` | The file/command/output/source grounding the claim |
 | `origin_obligations[]` | The obligation IDs (`AC-/C-/I-…`) the finding was discovered against |
-| `origin_traces[]` | The `*.swarm.trace.md` entries that produced the evidence |
+| `origin_traces[]` | The `*.trace.md` entries that produced the evidence |
 | `pass+profile` | The step + heuristic profile it was found under (e.g. `review[profile: skeptic]`) |
 | `reviewer_or_tool` | The human reviewer or tool/adapter that confirmed it |
 | `timestamp` | When it was promoted |
@@ -84,7 +84,7 @@ The kinds are mutually exclusive by intent; a discovery with two faces (e.g. bot
 
 | Discovery | Promote to |
 |---|---|
-| New intended behaviour (a real obligation to build against) | `spec.swarm.md` (new/amended `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`), or an ADR when gated on an undecided architectural/product choice |
+| New intended behaviour (a real obligation to build against) | `spec.md` (new/amended `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`), or an ADR when gated on an undecided architectural/product choice |
 | Durable architectural/product decision (choice + alternatives + trade-offs) | An ADR (a `type: adr` doc in `decisions/`, `<nnnn>-<slug>.md`) — project-wide, sequentially numbered |
 | Present-state risk or debt (what *is*, observed, not yet a chosen change) | An audit (a `type: audit` doc in `specs/<feature>/`, beside the spec it concerns) — observation-only, never prescriptive |
 | Reproduced defect evidence (root cause + expected vs actual) | A bug-report (a `type: bug-report` doc in `specs/<feature>/`, beside the spec whose obligation it breaks) — diagnosis-only; the fix promotes onward to a `task_kind: fix` task |
@@ -98,7 +98,7 @@ Two consequences hold across every row. First, weakening an obligation is forbid
 
 ### G9 — "universal workflow rule" promotions never inline procedure
 
-A universal-workflow-rule promotion collides with the ≤200-line bootloader cap and the fact/procedure split [ADR-0017](../adrs/0017-no-always-load-skills.md): only persistent **facts** belong in `AGENTS.md`; **procedures** belong in step guides. Swarm resolves it normatively:
+A universal-workflow-rule promotion collides with the ≤200-line bootloader cap and the fact/procedure split [ADR-0017](./adrs/0017-no-always-load-skills.md): only persistent **facts** belong in `AGENTS.md`; **procedures** belong in step guides. Swarm resolves it normatively:
 
 | Where it goes | What goes there |
 |---|---|
@@ -116,7 +116,7 @@ Authorization is not validation. A memory write MUST pass consistency verificati
 
 ## Staleness
 
-A finding's `status` enum is `candidate | accepted | promoted | rejected | stale | superseded`. A finding becomes **`stale`** when its `content_hash` no longer matches the cited source/surfaces — the same drift signal behind the `STALE` verdict decorator and the spec↔code reconcile. A `stale` finding MUST NOT be relied on as authority; it routes to re-verification or supersession. A `superseded` finding records its replacement in the INDEX stale/superseded table. Swarm ships the **fields** that make staleness computable (`content_hash`, `origin_traces`); it does **not** ship the comparator — recomputing the hash and flipping `accepted -> stale` is a harness/CLI concern, aspirational/manual today ([Principle 1: NO RUNTIME](../PRINCIPLES.md#1-no-runtime)).
+A finding's `status` enum is `candidate | accepted | promoted | rejected | stale | superseded`. A finding becomes **`stale`** when its `content_hash` no longer matches the cited source/surfaces — the same drift signal behind the `STALE` verdict decorator and the spec↔code reconcile. A `stale` finding MUST NOT be relied on as authority; it routes to re-verification or supersession. A `superseded` finding records its replacement in the INDEX stale/superseded table. Swarm ships the **fields** that make staleness computable (`content_hash`, `origin_traces`); it does **not** ship the comparator — recomputing the hash and flipping `accepted -> stale` is a harness/CLI concern, aspirational/manual today ([Principle 1: NO RUNTIME](./PRINCIPLES.md#1-no-runtime)).
 
 ## Deferred to post-v0.1
 
@@ -130,4 +130,4 @@ This page fixes the *requirements* of the step, not its step-by-step procedure �
 - [`verify`](verify.md) — produces the traces and proofs that become a finding's evidence and corroboration.
 - [`implement`](implement.md) — where universal-workflow-rule procedures land under the G9 tie-break.
 - [`author`](author.md) and [`lint`](lint.md) — the start of the flow, where promoted intent re-enters as obligations.
-- [SOL](../language/SOL.md) — the lint codes (`SOL-M004`, `SOL-P006`, `SOL-P057`) this step resolves or routes to amendment.
+- [SOL](./language/SOL.md) — the lint codes (`SOL-M004`, `SOL-P006`, `SOL-P057`) this step resolves or routes to amendment.

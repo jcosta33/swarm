@@ -23,7 +23,7 @@ rule on the load path, not a new subsystem.
 Isolation is a **binary**, decided by reading the task frame; a frame `isolation:` field overrides it, and
 it is **orthogonal to `parallel_group`** (a single non-parallel task can still need a worktree):
 
-- **A code task implementing a spec or audit-remediation** (it has a `source:` `*.swarm.md` / audit-derived
+- **A code task implementing a spec or audit-remediation** (it has a `source:` `*.md` / audit-derived
   spec) → a **worktree + branch off the base**. The branch is named for what it implements:
   `swarm/<spec-slug>` for a whole spec, `swarm/<spec-slug>/<task-slug>` for one obligation or a fan-out
   worker (one grammar — single-task and parallel reconcile). `base:` records the merge target (default

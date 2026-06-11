@@ -11,9 +11,9 @@ status: draft
 
 <!--
 checkout golden-corpus fixture — Stage 1 (authored source, pass: author).
-This is the only `.swarm.` artifact a human writes; the `.swarm.` infix marks it
+This is the only spec artifact a human writes; the spec.md convention marks it
 human-authored. It is inert oracle data: nothing runs it. As authored, it carries the
-checkout domain's canonical defect class that the `lint` pass (see ../EXPECTED.md) is
+checkout domain's canonical defect class that the `lint` pass (see ./EXPECTED.md) is
 expected to surface:
   - SOL-P004 (AC-010 bundles three separable obligations in one REQ — validate the cart
               AND charge the card AND email the receipt) — repaired by improve op ATOMIZE.

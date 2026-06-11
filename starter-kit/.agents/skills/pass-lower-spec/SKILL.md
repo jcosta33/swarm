@@ -3,7 +3,7 @@ type: pass-guide
 name: pass-lower-spec
 pass: lower
 description: >-
-  Run the `lower` pass: transform an improved `spec.swarm.md` into the typed obligation IR — nodes over
+  Run the `lower` pass: transform an improved `spec.md` into the typed obligation IR — nodes over
   the 7 block types, relationships as edges only, every node source-mapped, lossless for binding content.
   ALWAYS apply when a task names the `lower` pass, a spec must become the machine-checkable IR, or a
   downstream pass needs the obligations. Never lower past an unresolved blocking QUESTION, drop an
@@ -23,12 +23,12 @@ states in prose. Every later step reasons over the structured form (`decompose` 
 against it). Structuring is a faithful re-expression, not a rewrite: it adds no intent and drops no binding.
 
 ## Consumes
-- The improved `spec.swarm.md` (lint-clean, no blocking `QUESTION`).
+- The improved `spec.md` (lint-clean, no blocking `QUESTION`).
 - `reference/ir.md` (the structured-form document shape, the 7 edge types, the structuring contract) and `reference/sol.md`
   (the surface forms being structured).
 
 ## Produces
-- `<spec>.swarm.ir.json`: `{ meta, nodes[], edges[], diagnostics[], provenance }` — one node per SOL block,
+- `<spec>.ir.json`: `{ meta, nodes[], edges[], diagnostics[], provenance }` — one node per SOL block,
   relationships in `edges[]`, every node source-mapped, lossless for binding content.
 
 ## Procedure

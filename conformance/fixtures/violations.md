@@ -1,7 +1,7 @@
 # Conformance violations — expected-FAIL fixtures
 
 One minimal example per violation class. Each must make a checker return **non-conformant**,
-citing the named rule from `../conformance.yaml`. This is the checker's regression suite: if a
+citing the named rule from `./conformance.yaml`. This is the checker's regression suite: if a
 checker passes any of these, the checker (or the manifest) is wrong.
 
 ---

@@ -27,7 +27,7 @@ This completes the pivot to the owner's restated principles — **no bloat, stra
 
 ## Decision
 
-1. **Specs and intent artifacts live top-level, outside `.agents/`.** In an adopted spec repo, `*.swarm.md`
+1. **Specs and intent artifacts live top-level, outside `.agents/`.** In an adopted spec repo, `*.md`
    specs live in `specs/`, and other intent docs (`adrs/`, `audits/`, `findings/`, PRDs, RFCs) are top-level
    content too. **`.agents/` holds only tooling** — `skills/`, `reference/`, `templates/`, `memory/`. Specs
    are the product, not agent tooling. (This refines [ADR-0050](./0050-swarm-is-a-spec-repo-discipline.md),

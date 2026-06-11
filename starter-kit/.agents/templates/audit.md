@@ -14,7 +14,7 @@ updated: {{createdAt}}
 > present-state risk, debt, drift, duplication, unsafe patterns. It MUST NOT
 > prescribe a fix inline and MUST NOT author `REQ`/`CONSTRAINT`/`INVARIANT`/
 > `INTERFACE` obligation blocks. Obligations come into existence only when this
-> audit promotes to a `spec.swarm.md` via the the `author` pass. Until then this
+> audit promotes to a `spec.md` via the the `author` pass. Until then this
 > is non-authoritative evidence.
 
 ## Scope
@@ -32,7 +32,7 @@ command output, grep result, or other observable). State present state only;
 do not state the fix.>
 
 - {{observation}} — evidence: `{{path}}:{{line}}` / {{command output or other evidence}}
-- {{observation}} — evidence: {{...}}
+- {{observation}} — evidence: {{..}}
 
 ## Risks
 
@@ -45,7 +45,7 @@ conditions under which they would fire. Still observation, not prescription.>
 ## Recommended obligations
 
 <Candidate obligations a downstream `author` pass would promote into a
-`spec.swarm.md`. Describe what the spec SHOULD require, in plain prose — do NOT
+`spec.md`. Describe what the spec SHOULD require, in plain prose — do NOT
 write SOL obligation blocks here; the author pass emits them on promotion.>
 
 - {{candidate obligation a future spec should carry}}

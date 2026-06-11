@@ -20,9 +20,9 @@
 ## Swarm startup
 <!-- The always-on doctrine (the load-what-the-task-names rule, plus the universal invariants).
      Keep these as facts/rules, never step-by-step procedures. -->
-1. Read the current task file first — the run's scratch task frame, created when work begins (gitignored, not a committed repo file; template in the code-skills reference). A fresh repo has none yet: start from the request + the relevant `specs/<feature>/spec.swarm.md`.
-2. `.agents/` holds only Swarm tooling: `skills/` (beside your own), `reference/`, `templates/`, `memory/`. Your **specs live in per-feature folders** — `specs/<feature>/spec.swarm.md`, with each feature's supporting docs (audit/research/bug-report/…, `type:`-tagged) beside it; **ADRs** live in `decisions/` (numbered); **findings** live in `.agents/memory/`. No `.swarm/` mount.
-3. Treat `.swarm.md` blocks as authoritative over prose summaries.
+1. Read the current task file first — the run's scratch task frame, created when work begins (gitignored, not a committed repo file; template in the code-skills reference). A fresh repo has none yet: start from the request + the relevant `specs/<feature>/spec.md`.
+2. `.agents/` holds only Swarm tooling: `skills/` (beside your own), `reference/`, `templates/`, `memory/`. Your **specs live in per-feature folders** — `specs/<feature>/spec.md`, with each feature's supporting docs (audit/research/bug-report/…, `type:`-tagged) beside it; **ADRs** live in `decisions/` (numbered); **findings** live in `.agents/memory/`. No `.swarm/` mount.
+3. Treat `.md` blocks as authoritative over prose summaries.
 4. Use assigned obligation IDs as scope.
 5. Decide isolation before editing (see the `implement` step): a code task with a source spec/audit runs in a `worktree+branch` named for the spec, off the base — never on it; a bare ad-hoc edit stays `in-place`.
 6. Load only the step / profile / context files the task names.
@@ -48,7 +48,7 @@
 <!-- One-line pointers ONLY — never inline the target content. -->
 - Skills (the authoring kit: 6 source-author guides, the `lint`/`improve`/`lower`/`decompose`/`review`/`promote` step guides, 6 authoring `persona-*` stances, 2 fragments): your skills dir (e.g. `.agents/skills/` or `.claude/skills/`), beside your own. Each carries its step *procedure* inline. (Code-implementation skills aren't here — they're Swarm-project reference.)
 - Operative reference cards (the shared closed-set rules every step needs — SOL grammar, proofs/verdicts/adequacy, the structured form/edges): `.agents/reference/` (`sol.md`, `proofs.md`, `ir.md`). Load the card for the step you're running.
-- Specs + intent: `specs/<feature>/` (the contract `spec.swarm.md` + its supporting docs co-located). Decisions: `decisions/` (numbered ADRs). Durable recall: `.agents/memory/` — `INDEX.md` (the load-*when* map), `glossary.md` (terms), `findings/` (durable facts), `patterns/`.
+- Specs + intent: `specs/<feature>/` (the contract `spec.md` + its supporting docs co-located). Decisions: `decisions/` (numbered ADRs). Durable recall: `.agents/memory/` — `INDEX.md` (the load-*when* map), `glossary.md` (terms), `findings/` (durable facts), `patterns/`.
 - Project conventions (architecture boundaries, extra refusals, command bindings): in this file — see `## Project facts` and `## Commands` below.
 - The **full** SOL/APS/steps manuals (rationale, worked examples) are **not installed** — they live in the Swarm project (`docs/`); the shipped cards carry the operative rules, the manuals carry the *why*.
 

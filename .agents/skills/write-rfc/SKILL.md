@@ -63,7 +63,7 @@ undefined, ask before claiming the file is clean.
 
 ## Produces
 
-- One `rfc.md` — a **working artifact** (plain `.md`, **never** the `.swarm.` infix; no tool
+- One `rfc.md` — a **working artifact** (plain `.md`, **never** the spec.md convention; no tool
   parses or emits it). In an adopted project it lives in its feature folder `specs/<feature>/`, beside
   the spec it can promote into — never in durable recall (`.agents/memory/`) or gitignored execution scratch.
 - The six required sections, in order, each on the proposal side of the line: `## Problem`,
@@ -194,7 +194,7 @@ bound what this step records:
 - **A settled decision** — the immutable architecture decision (context, decision,
   alternatives-rejected, consequences) is an ADR; an RFC's accepted proposal *promotes into* one.
 - **The obligation-bearing behavioral contract** — the `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE`
-  blocks live in a `*.swarm.md` spec; an RFC's `## Proposal` is the upstream that promotes into it,
+  blocks live in a `*.md` spec; an RFC's `## Proposal` is the upstream that promotes into it,
   the only place a proposed mechanism acquires obligation force.
 - **Present-state observation and risk** — what *is*, observed and not yet a chosen change, is an
   audit; an RFC's `## Problem` may *cite* it but does not become it.
@@ -222,7 +222,7 @@ bound what this step records:
   `QUESTION Q-NNN [blocking|non-blocking]:` in `## Open questions` (unmarked hedging is `SOL-P008`).
 - ❌ Promoting an RFC with a blocking question still open → resolve or downgrade it first; a blocking
   question reaching structuring is `SOL-O003`.
-- ❌ A `.swarm.` infix in the filename → an RFC is a working artifact; it stays plain `.md`, never the
+- ❌ A `spec.md` naming in the filename → an RFC is a working artifact; it stays plain `.md`, never the
   Swarm-visible infix.
 - ❌ A `## Decision requested` that names no promotion target → name the accepted ADR and/or approved
   spec the proposal promotes into, or the decision cannot be acted on.
@@ -250,6 +250,6 @@ local task file:
 - **Decision is exact and targeted.** Does `## Decision requested` name the precise decision and its
   promotion target (an accepted ADR and/or an approved spec)?
 - **Frontmatter complete.** Are `type: rfc`, a stable `id`, a valid `status`, and `created` /
-  `updated` all set, and is the filename plain `.md` with no `.swarm.` infix?
+  `updated` all set, and is the filename plain `.md` with no `spec.md` naming?
 - **Soft control.** Did this RFC stay a proposal that applies Swarm semantics, never one that
   redefines them?

@@ -23,7 +23,7 @@ Binding (carry force): `REQ`, `CONSTRAINT`, `INVARIANT`. Non-binding: `INTERFACE
 `VERDICT` reuses the judged id. Cross-spec ref: `spec-id#AC-001` (hash, not colon).
 
 ## The 5 modals (exactly five; uppercase, case-sensitive)
-`MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY`. `SHALL`/`SHALL NOT`/`CAN`/`WILL` are not modals.
+`MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY`SHALL`/`SHALL NOT`/`CAN`/`WILL` are not modals.
 Lowercase `must`/`should` is plain prose, no force. A modal that belongs to the actor/response must be
 backticked, or the parser must not guess (modal-scan = first modal terminal at a token boundary,
 longest-match: `MUST NOT` before `MUST`).

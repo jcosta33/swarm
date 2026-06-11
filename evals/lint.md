@@ -4,7 +4,7 @@
 
 `lint` is the `PARSE` + `NORMALIZE`-phase step — the only step that straddles two phases (well-formedness plus smell detection). It is **non-mutating**: it emits diagnostics in the unified `SOL-<LAYER>NNN` namespace and changes not one character of the spec. Its rubric grades whether the diagnostic set is *complete and correct against the fixture's pinned expected diagnostics*, not whether the spec is clean.
 
-**Input artifact:** a `spec.swarm.md` carrying pinned expected diagnostics (in its fixture header / `EXPECTED.md`).
+**Input artifact:** a `spec.md` carrying pinned expected diagnostics (in its fixture header / `EXPECTED.md`).
 **Output artifact:** the lint report (SARIF-shaped diagnostic records).
 
 ## Output-grading predicates
@@ -16,7 +16,7 @@ Each predicate MUST hold. Any single failing predicate fails the step.
 | L1 | **Parse-validity decided** | Every `SOL-S###` defect pinned in the fixture is reported with its **correct code and span**; a known-defective fixture is never reported clean. | A pinned `SOL-S###` defect is missed, reported with the wrong code, or the fixture is reported "clean" while a seeded defect remains — a false negative. |
 | L2 | **Blocking recall complete** | Every **blocking** defect — `SOL-S`, `SOL-M`, `SOL-V`, and every blocking `SOL-P` — pinned in the fixture is detected. | Any blocking diagnostic the fixture pins is absent from the report. |
 | L3 | **Non-mutating** | The spec text and semantics in the report's view are **byte-identical** to the input; `lint` reports, never rewrites. | The report alters, reorders, or normalizes any spec text — lint has overstepped into `improve`. |
-| L4 | **Severity-correct** | Each diagnostic's `severity` (`BLOCKING`/`ADVISORY`) matches the [lint catalogue](../docs/language/errors.md) entry for its code. | A diagnostic's severity disagrees with the catalogue (e.g. a catalogued-BLOCKING code emitted ADVISORY). |
+| L4 | **Severity-correct** | Each diagnostic's `severity` (`BLOCKING`/`ADVISORY`) matches the [lint catalogue](./docs/language/errors.md) entry for its code. | A diagnostic's severity disagrees with the catalogue (e.g. a catalogued-BLOCKING code emitted ADVISORY). |
 
 ### Blocking-QUESTION note
 
@@ -32,6 +32,6 @@ None of the four cross-step predicates are scored at the `lint` output: `lint` e
 
 ## Related
 
-- [The lint catalogue](../docs/language/errors.md) — the `{code, severity, layer, span, message, suggest}` record shape and the catalogued severity L4 checks against.
-- [The `lint` step guide](../docs/passes/lint.md) — the non-mutation contract L3 enforces.
-- [The golden corpus](../docs/reference/golden-corpus.md) — the per-domain seeded defects and the labeled prose corpus this rubric is scored over.
+- [The lint catalogue](./docs/language/errors.md) — the `{code, severity, layer, span, message, suggest}` record shape and the catalogued severity L4 checks against.
+- [The `lint` step guide](./docs/passes/lint.md) — the non-mutation contract L3 enforces.
+- [The golden corpus](./docs/reference/golden-corpus.md) — the per-domain seeded defects and the labeled prose corpus this rubric is scored over.

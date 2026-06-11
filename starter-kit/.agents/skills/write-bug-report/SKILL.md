@@ -147,7 +147,7 @@ evidence the next reader can check.
   (rule 7).
 - **In `## Reproduction`:** "should reproduce" or "in theory". Either it reproduces (paste
   it) or it is marked `[unable to reproduce]` with an explanation (rule 8).
-- **In the filename:** the `.swarm.` infix. A bug-report is a working artifact named plain
+- **In the filename:** the spec.md convention. A bug-report is a working artifact named plain
   `.md`; the infix marks a Swarm-visible spec, which this is not.
 
 ## Anti-patterns
@@ -204,6 +204,6 @@ evidence the next reader can check.
   decisions, and a self-review hard gate demanding pasted reproduction output) plus a
   `## Deliverable` block carrying the Symptom · Reproduction · Root cause · Affected
   obligations structure, a reproduction-attempts history, and a hypothesis tracker. Copy it
-  into your project's task-file location, substitute the `{{...}}` placeholders from the
+  into your project's task-file location, substitute the `{{..}}` placeholders from the
   consuming repo's `AGENTS.md` command slots, and fill it in as you work; at close, promote
   the `## Deliverable` block to the bug-report's final home.

@@ -15,7 +15,7 @@ Stance: proposal / pre-decision. An RFC advocates ONE technical approach but
 commits to none until the requested decision is made. It authors NO obligation
 blocks (no REQ / CONSTRAINT / INVARIANT / INTERFACE); obligations come into
 existence only when this proposal promotes forward via the author pass to an
-accepted adr.md and/or an approved spec.swarm.md.
+accepted adr.md and/or an approved spec.md.
 -->
 
 ## Problem
@@ -55,4 +55,4 @@ MUST NOT be promoted. -->
 ## Decision requested
 
 <the exact decision being asked for, and its promotion target — an accepted
-adr.md and/or an approved spec.swarm.md>
+adr.md and/or an approved spec.md>

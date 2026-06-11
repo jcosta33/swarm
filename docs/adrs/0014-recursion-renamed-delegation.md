@@ -19,4 +19,4 @@ Behaviour unchanged — naming only.
 ## Consequences
 
 - Positive: clearer intent for audit/compliance audiences.
-- Negative: glossary must clarify synonyms ([`reference/glossary.md`](../reference/glossary.md)).
+- Negative: glossary must clarify synonyms ([`reference/glossary.md`](./reference/glossary.md)).

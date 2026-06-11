@@ -8,7 +8,7 @@ order record (db/orders); `checkout-inventory` owns the inventory ledger (db/inv
 serialized behind `checkout-submit` by `blocked_by`, mirroring the AC-012 DEPENDS ON AC-011
 edge. Because the two packets' WRITES are pairwise disjoint and the dependency is explicit, the
 safe-parallelism predicate holds and no SOL-O001 fires (this is exactly the defect the authored
-source carried; see ../EXPECTED.md). Only the load-bearing frame is shown. Inert oracle data —
+source carried; see ./EXPECTED.md). Only the load-bearing frame is shown. Inert oracle data —
 Swarm runs nothing.
 -->
 
@@ -17,7 +17,7 @@ type: task
 id: checkout-submit
 status: active
 task_kind: feature
-source: specs/checkout/spec.swarm.md
+source: specs/checkout/spec.md
 assigned_obligations: [AC-010, AC-013, AC-014, AC-011]
 invariants: [I-010]
 interfaces: [IF-010]

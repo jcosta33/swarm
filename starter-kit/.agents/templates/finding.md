@@ -20,7 +20,7 @@ confidence: high | medium | low
 <!--
 A finding is one durable, provenance-anchored project fact discovered during work
 (see the `promote` pass). It is the Tier-2 evidence store the
-memory index ([`../memory/INDEX.md`](../memory/INDEX.md)) links into.
+memory index ([`./memory/INDEX.md`](./memory/INDEX.md)) links into.
 This is a source-doc: it records a fact, it does NOT declare obligations.
 No REQ / CONSTRAINT / INVARIANT / INTERFACE blocks belong here — those appear
 only after a finding is promoted into a spec/audit by the author pass.

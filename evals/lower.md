@@ -1,11 +1,11 @@
 # `lower` — step-output rubric
 
-> The output-quality predicate for the `lower` step: a candidate structured form MUST carry every obligation as a node with its id/modality/actor/trigger/response intact, preserve every `VERIFY BY` binding and authority scope, invent no edge, and emit **nothing at all** while a blocking diagnostic or blocking `QUESTION` is unresolved. Each predicate is a boolean a reviewer decides by comparing the normalized spec against the emitted `.swarm.ir.json` — no runtime.
+> The output-quality predicate for the `lower` step: a candidate structured form MUST carry every obligation as a node with its id/modality/actor/trigger/response intact, preserve every `VERIFY BY` binding and authority scope, invent no edge, and emit **nothing at all** while a blocking diagnostic or blocking `QUESTION` is unresolved. Each predicate is a boolean a reviewer decides by comparing the normalized spec against the emitted `.ir.json` — no runtime.
 
-`lower` is a `LOWER`-phase step. It projects the normalized, approved spec into the typed structured form (`<domain>.swarm.ir.json`): uppercase SOL surface keywords become `snake_case` fields, every relationship moves into `edges[]` (the single source of relationship truth), and node ids become namespaced. Its rubric grades whether the projection is **total and faithful** — nothing dropped, nothing invented.
+`lower` is a `LOWER`-phase step. It projects the normalized, approved spec into the typed structured form (`<domain>.ir.json`): uppercase SOL surface keywords become `snake_case` fields, every relationship moves into `edges[]` (the single source of relationship truth), and node ids become namespaced. Its rubric grades whether the projection is **total and faithful** — nothing dropped, nothing invented.
 
-**Input artifact:** the normalized, approved `spec.swarm.md`.
-**Output artifact:** the typed structured form (`<domain>.swarm.ir.json`).
+**Input artifact:** the normalized, approved `spec.md`.
+**Output artifact:** the typed structured form (`<domain>.ir.json`).
 
 ## Output-grading predicates
 
@@ -33,6 +33,6 @@ The suite scores one cross-step predicate at the `lower` output:
 
 ## Related
 
-- [The structured-form schema](../docs/reference/structured-form.md) — the node/edge shape W1–W5 and parse-validity check against.
-- [The `lower` step guide](../docs/passes/lower.md) — the projection contract and the `edges[]` single-source-of-truth rule this rubric grades.
-- [The lint catalogue](../docs/language/errors.md) — `SOL-O003` (blocking-question-reaches-lowering), the condition W4 enforces.
+- [The structured-form schema](./docs/reference/structured-form.md) — the node/edge shape W1–W5 and parse-validity check against.
+- [The `lower` step guide](./docs/passes/lower.md) — the projection contract and the `edges[]` single-source-of-truth rule this rubric grades.
+- [The lint catalogue](./docs/language/errors.md) — `SOL-O003` (blocking-question-reaches-lowering), the condition W4 enforces.

@@ -1,6 +1,6 @@
-# Worked example: `research.md → spec.swarm.md` distillation
+# Worked example: `research.md → spec.md` distillation
 
-A concrete walk-through of the procedure in `SKILL.md` applied to a `research.md → spec.swarm.md`
+A concrete walk-through of the procedure in `SKILL.md` applied to a `research.md → spec.md`
 crossing — the first row of the per-boundary loss matrix in the `lower` step (*permitted loss:* source digressions,
 rejected options, low-confidence observations; *forbidden loss:* constraints, unresolved ambiguity,
 decision-changing evidence). The body keeps a one-line input/output pair to show the shape; this
@@ -18,7 +18,7 @@ Still-uncertain` statement (step 5).
 
 ## Step 1 — boundary and matrix row
 
-Crossing: `research.md → spec.swarm.md`. Permitted loss for this row: source digressions, rejected
+Crossing: `research.md → spec.md`. Permitted loss for this row: source digressions, rejected
 options, low-confidence observations. Forbidden loss: constraints, unresolved ambiguity,
 decision-changing evidence. The historical SCA narrative and the legacy comparison are *digressions*
 (permitted); the two-step `client_secret` contract is a *constraint* (forbidden to lose); the

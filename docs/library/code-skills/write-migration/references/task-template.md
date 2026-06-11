@@ -51,7 +51,7 @@
 
 ## Linked docs
 
-- Migration spec (the `*.swarm.md`): `{{specFile}}`
+- Migration spec (the `*.md`): `{{specFile}}`
 - Triggering audit (if any): `<path>`
 
 ---

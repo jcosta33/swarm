@@ -23,7 +23,7 @@ updated: 2026-06-07
 ## Observations
 
 - The submit handler logs the full request body on error — evidence: `server/contact/submit.ts:42`
-  (`logger.error({ body }, ...)`). The raw message body reaches the logs.
+  (`logger.error({ body }, ..)`). The raw message body reaches the logs.
 - Email is validated only client-side; the server persists whatever it receives — evidence:
   `server/contact/submit.ts:18` (no server-side validation before the insert).
 

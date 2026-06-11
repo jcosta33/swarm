@@ -1,7 +1,7 @@
 # How Swarm works: the flow
 
 > What Swarm is and how a spec moves from human intent to durable memory. For the one-paragraph
-> overview, see the [root README](../../README.md); this page is the reference for the steps, the
+> overview, see the [root README](././README.md); this page is the reference for the steps, the
 > layers they move through, and the two-level phase/step model that schedules them.
 
 Swarm is a **spec format plus the agents that build from it**. Human intent is written as a
@@ -32,8 +32,8 @@ The full journey is an ordered chain of artifact transitions, each produced by a
 consumed by the next:
 
 ```text
-*.swarm.md  →  structured form (*.swarm.ir.json)  →  plan (*.swarm.plan.json)
-            →  task.md  →  trace (*.swarm.trace.md)  →  review.md  →  promotion
+*.md  →  structured form (*.ir.json)  →  plan (*.plan.json)
+            →  task.md  →  trace (*.trace.md)  →  review.md  →  promotion
    surface      lint/improve         lower/decompose        implement
                                   verify/review        promote
 ```
@@ -59,15 +59,15 @@ layers are contract-only — reserved names with no shipped emitter (Invariant 1
 
 | Layer | Artifact(s) | Origin | Role |
 | --- | --- | --- | --- |
-| **Surface** | `*.swarm.md` | **Human-authored** (the only human-authored `.swarm.` artifact) | Captures intent as APS prose + SOL obligation blocks. |
-| **Structured form** | `*.swarm.ir.json` | **Machine-emitted; contract-only name** (reserved; no shipped emitter — Invariant 1) | The spec's obligations: nodes are obligations + judgments, edges are relationships. The central object every step reads and writes. |
-| **Plan** | `*.swarm.plan.json` | **Machine-emitted; contract-only name** (reserved; no shipped emitter) | The schedulable projection of the structured form: dependency DAG + write-conflict graph + bounded work packets. |
+| **Surface** | `*.md` | **Human-authored** (the only human-authored `.` artifact) | Captures intent as APS prose + SOL obligation blocks. |
+| **Structured form** | `*.ir.json` | **Machine-emitted; contract-only name** (reserved; no shipped emitter — Invariant 1) | The spec's obligations: nodes are obligations + judgments, edges are relationships. The central object every step reads and writes. |
+| **Plan** | `*.plan.json` | **Machine-emitted; contract-only name** (reserved; no shipped emitter) | The schedulable projection of the structured form: dependency DAG + write-conflict graph + bounded work packets. |
 | **Execution** | `task.md` | **Human/agent working artifact** (plain `.md`) | One bounded work packet, one step — the unit handed to a single agent in a single lane. |
-| **Trace** | `*.swarm.trace.md` | **Machine-emitted instance** (template `trace.md` is human-copyable) | TRACE blocks: IMPLEMENTS / PRESERVES / CHANGED / PROOF — the agent's claims about which obligations it discharged. |
+| **Trace** | `*.trace.md` | **Machine-emitted instance** (template `trace.md` is human-copyable) | TRACE blocks: IMPLEMENTS / PRESERVES / CHANGED / PROOF — the agent's claims about which obligations it discharged. |
 | **Verdict** | `review.md` | **Human/agent working artifact** (`VERDICT` is a language block; `review.md` is its container — there is no `verdict.md`) | VERDICT blocks (core + lifecycle) + the merge gate. |
 | **Promotion** | `finding.md`, `adr.md`, `memory/INDEX.md`, `memory/patterns/*.md` | **Human/agent working artifacts** | Durable discoveries anchored with provenance. |
 
-The `.swarm.` infix is the discriminator: a `.swarm.` filename is parsed or emitted by the agents; a
+The `spec.md` naming is the discriminator: a `.` filename is parsed or emitted by the agents; a
 plain `.md` filename is a human/agent working artifact. The structured-form layer is what every step
 operates on: `lint` annotates it with diagnostics, `improve` rewrites nodes without changing their
 meaning, `lower`/`decompose` derive the plan's DAG and conflict graph from it, `implement` produces
@@ -127,11 +127,11 @@ contract performed today by a human or agent following a step guide.
 
 | Step | Phase(s) | Input → Output | What it does | Lint layer touched |
 | --- | --- | --- | --- | --- |
-| `author` | entry (pre-`PARSE`) | chat / `research.md` / `audit.md` / `bug-report.md` / prior spec → `spec.swarm.md` draft | Captures human intent as SOL obligations + APS prose. | — (produces input to lint) |
-| `lint` | `PARSE` + `NORMALIZE` | `spec.swarm.md` → lint report + blocking status | Detects defects **without changing semantics**; decides well-formedness, surfaces smells. | S / P / M / V / O |
+| `author` | entry (pre-`PARSE`) | chat / `research.md` / `audit.md` / `bug-report.md` / prior spec → `spec.md` draft | Captures human intent as SOL obligations + APS prose. | — (produces input to lint) |
+| `lint` | `PARSE` + `NORMALIZE` | `spec.md` → lint report + blocking status | Detects defects **without changing semantics**; decides well-formedness, surfaces smells. | S / P / M / V / O |
 | `improve` | `NORMALIZE` | spec + lint report → normalized spec + improvement report | Applies the closed 10-operation set (§3), strictly semantics-preserving. | answers the codes mapped in §3 |
-| `lower` | `LOWER` | approved spec → `*.swarm.ir.json` | Assigns node ids, builds typed edges, normalizes `verify_by`, emits the two derived graphs. | `SOL-O###` |
-| `decompose` | `LOWER` | `*.swarm.ir.json` → `task.md` packets (+ `*.swarm.plan.json`) | Partitions the obligations into write-disjoint work packets. | `SOL-O###` (e.g. `SOL-O005`) |
+| `lower` | `LOWER` | approved spec → `*.ir.json` | Assigns node ids, builds typed edges, normalizes `verify_by`, emits the two derived graphs. | `SOL-O###` |
+| `decompose` | `LOWER` | `*.ir.json` → `task.md` packets (+ `*.plan.json`) | Partitions the obligations into write-disjoint work packets. | `SOL-O###` (e.g. `SOL-O005`) |
 | `implement` | `EXECUTE` | `task.md` → code/docs/tests + `trace.md` | Produces the change for assigned obligations only; records TRACE claims, gathers evidence. | — (claims feed verify/review) |
 | `verify` | `VERIFY` | `trace.md` + bound proofs + `AGENTS.md > Commands` → per-obligation core verdict | Runs each `VERIFY BY` binding through its resolved adapter; one verdict per binding. | `SOL-V###` |
 | `review` | `REVIEW` | spec + `trace.md` + diff + evidence → `review.md` | Judges claims; applies lifecycle decorators; computes the merge gate. | `SOL-M###`, `SOL-V###` |
@@ -170,7 +170,7 @@ note: adversarial review is not its own guide — it is `review[profile: skeptic
 one of the 13 `persona-*` profiles — 6 ship in the kit, 7 are `code-skills/` reference.) Step-guide
 bodies follow the established skill-authoring discipline — a ~500-line body cap, a third-person
 description, progressive disclosure, and an explain-the-WHY pattern
-[[SKILLBP]](../research/sources.md#SKILLBP).
+[[SKILLBP]](./research/sources.md#SKILLBP).
 
 ---
 
@@ -215,7 +215,7 @@ Trigger codes use the unified `SOL-<LAYER>###` namespace; APS violations surface
 | 7 | `CLARIFY` | `SOL-P008` | Behavioral uncertainty buried in prose → an explicit interpretation **OR** a `QUESTION` block. |
 | 8 | `DECONFLICT` | `SOL-M002` | Two obligations (or obligation vs higher artifact) contradict → resolved per source authority, or raised to amendment. |
 | 9 | `COMPRESS` | `SOL-P054`, `SOL-P055` | Non-load-bearing noise / redundancy → removed; text interpreted consistently (covers both redundancy removal and consistent-reading stabilization). |
-| 10 | `PROMOTE` | promotion protocol | Durable fact in task-local state → moved to `finding.md` / `spec.swarm.md` / `adr.md` / memory with provenance. |
+| 10 | `PROMOTE` | promotion protocol | Durable fact in task-local state → moved to `finding.md` / `spec.md` / `adr.md` / memory with provenance. |
 
 `CONCRETIZE` and `QUANTIFY` share trigger `SOL-P005` but differ in repair: `CONCRETIZE` substitutes
 *observable behavior* (qualitative), `QUANTIFY` a *measurable threshold* (quantitative). The author
@@ -259,7 +259,7 @@ obligation. Dropping any is a **distillation error**, not an optimization.
 
 ### 4.1 The `lower` step
 
-`lower` consumes an approved `spec.swarm.md` and produces `*.swarm.ir.json`. Mostly deterministic. It
+`lower` consumes an approved `spec.md` and produces `*.ir.json`. Mostly deterministic. It
 MUST, in order: **(1)** assign each surface block (e.g. `AC-001`) a node id, stable, optionally
 namespaced as `REQ.<spec>.AC-001`; **(2)** emit relationships as `edges[]` `{from, to, type, hard}`
 with `type ∈ {depends_on, blocks, conflicts_with, verified_by, affects, implements, preserves}` —
@@ -270,12 +270,12 @@ overlap → `conflicts_with`; each `VERIFY BY` → `verified_by`); **(3)** norma
 adapter recorded as written and resolved through `AGENTS.md > Commands` **at verify time**, not at
 structuring time; **(4)** emit the two derived graphs — a **dependency DAG** from `depends_on` edges
 and a **write-surface conflict graph** from `WRITES`/`SURFACE` and the READS/WRITES rule below — the
-substrate the safe-parallelism predicate (§5) runs on. The per-step page [`lower`](../passes/lower.md)
+substrate the safe-parallelism predicate (§5) runs on. The per-step page [`lower`](./passes/lower.md)
 carries the full procedure.
 
 ### 4.2 AND THE chaining
 
-A `REQ` MAY chain obligations with `[AND THE <actor> <MODAL> <response>]*`. `lower` MUST split each
+A `REQ` MAY chain obligations with `[AND THE <actor> <MODAL> <response>]*`lower` MUST split each
 chained clause into a **distinct obligation node**, one per `THE`/`AND THE` clause, each inheriting
 the parent's bindings unless overridden. The *n*-th clause (the leading `THE` is 1, each `AND THE`
 thereafter) structures to id `<surface-id>.<n>` (e.g. `AC-001.1`, `AC-001.2`). A surface
@@ -289,15 +289,15 @@ requires **every** split sub-obligation to carry `PASS`/`WAIVED`.
 
 ### 4.3 The `decompose` step
 
-`decompose` consumes `*.swarm.ir.json` and produces `task.md` work packets. It is the machinery that
+`decompose` consumes `*.ir.json` and produces `task.md` work packets. It is the machinery that
 partitions the obligations into bounded, write-disjoint work — a deliberate decomposition of the task
-rather than a single flat step [[TREEOFTHOUGHTS]](../research/sources.md#TREEOFTHOUGHTS). It MUST
+rather than a single flat step [[TREEOFTHOUGHTS]](./research/sources.md#TREEOFTHOUGHTS). It MUST
 **partition** obligations into work packets (each carrying its assigned obligations,
 constraints/invariants in force, interfaces touched, write surfaces, and verification bindings — the
 `task.md` contract); **project** each packet's owned paths from its assigned obligations' `WRITES`
 surfaces; and **compute merge order** from `depends_on` edges as a partial order, proving owned paths
 of any two parallel-scheduled packets pairwise disjoint via the write-surface conflict graph (§5). The
-per-step page [`decompose`](../passes/decompose.md) carries the full procedure.
+per-step page [`decompose`](./passes/decompose.md) carries the full procedure.
 
 ### 4.4 Key structuring rules
 
@@ -378,21 +378,21 @@ The **plan** is the **schedulable projection of the structured form**: it takes 
 hand to one agent in one lane. Where the structured form answers "what must hold and how do the
 obligations relate," the plan answers "what units of work exist, in what order, on which surfaces, and
 which are safe to run at the same time." The plan is Swarm's **static coordination contract** (§5.1) —
-*not* a running scheduler. The file uses the `.swarm.` infix: `auth-refresh.swarm.ir.json` plans to
-`auth-refresh.swarm.plan.json`.
+*not* a running scheduler. The file uses the spec.md convention: `auth-refresh.ir.json` plans to
+`auth-refresh.plan.json`.
 
 > **Contract, not executor (normative).** The plan schema is **documented, versioned data**. **Plan
 > derivation is the `decompose` step** — there is no separate "planner" step. What is **out of Swarm's
 > scope** is the **scheduler/harness** that would execute the packets live across agents (a launcher
 > concern). This repository ships **no running emitter and no scheduler** (Principle 1): frame any
-> `.swarm.plan.json` as "the contract a future tool emits and a future launcher consumes."
+> `.plan.json` as "the contract a future tool emits and a future launcher consumes."
 
 A plan document is a single JSON object with **exactly four top-level keys** (`meta`, `packets`,
 `edges`, `provenance`); each **work packet** is one schedulable unit — a single step applied (under an
 optional profile) to a selected set of obligations, with declared scope (`writes`/`reads`),
 ordering (`depends_on`), and a merge-safety verdict (`merge_safe`). It carries no `locks` field;
 lock-set analysis *is* write-set analysis at surface granularity (§5.1). The full envelope, the
-per-packet field table, and the JSON Schema are in [the structured-form reference](../reference/structured-form.md).
+per-packet field table, and the JSON Schema are in [the structured-form reference](./reference/structured-form.md).
 
 ### 5.1 The safe-parallelism predicate
 
@@ -415,11 +415,11 @@ constraint on safe parallelism.
 
 Other framework pages that this flow reads, writes, or hands off to:
 
-- **The nine steps in depth** — one page per step: [`author`](../passes/author.md), [`lint`](../passes/lint.md), [`improve`](../passes/improve.md), [`lower`](../passes/lower.md), [`decompose`](../passes/decompose.md), [`implement`](../passes/implement.md), [`verify`](../passes/verify.md), [`review`](../passes/review.md), [`promote`](../passes/promote.md).
-- **The surface layer** — the obligation language and prose standard the spec is authored in: [SOL](../language/SOL.md), [APS](../language/APS.md), and the [lint catalogue](../language/errors.md).
-- **The structured form and plan in depth** — the JSON envelopes and schemas: [structured form](../reference/structured-form.md).
-- **Truth and judgment** — what `verify`/`review` render: [proof types](../reference/proof-types.md) and the [seven-value verdict model](../adrs/0035-seven-value-verdict-model.md).
-- **Promotion and memory** — where durable discoveries land: the [promotion protocol](../reference/promotion-protocol.md).
-- **Distillation discipline** — the loss budget that structuring MUST respect: [distillation loss budget](../reference/distillation-loss-budget.md).
+- **The nine steps in depth** — one page per step: [`author`](./passes/author.md), [`lint`](./passes/lint.md), [`improve`](./passes/improve.md), [`lower`](./passes/lower.md), [`decompose`](./passes/decompose.md), [`implement`](./passes/implement.md), [`verify`](./passes/verify.md), [`review`](./passes/review.md), [`promote`](./passes/promote.md).
+- **The surface layer** — the obligation language and prose standard the spec is authored in: [SOL](./language/SOL.md), [APS](./language/APS.md), and the [lint catalogue](./language/errors.md).
+- **The structured form and plan in depth** — the JSON envelopes and schemas: [structured form](./reference/structured-form.md).
+- **Truth and judgment** — what `verify`/`review` render: [proof types](./reference/proof-types.md) and the [seven-value verdict model](./adrs/0035-seven-value-verdict-model.md).
+- **Promotion and memory** — where durable discoveries land: the [promotion protocol](./reference/promotion-protocol.md).
+- **Distillation discipline** — the loss budget that structuring MUST respect: [distillation loss budget](./reference/distillation-loss-budget.md).
 - **Coordination** — the workspace and authority model the plan and promotion sit inside: [workspace](./workspace.md) and [source authority](./source-authority.md).
 - **Conformance** — what makes a valid Swarm repo faithful to this flow: [conformance](./conformance.md).

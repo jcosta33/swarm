@@ -1,12 +1,12 @@
 # `prd.md` — product intent
 
-A PRD is a source document that records the **product intent** behind a body of work — the problem, the affected users, and the outcomes that define success — so that every downstream obligation has a single, citable origin of *why* it exists. It is a recognized **parent of a spec**: it asserts intent, it carries no obligations of its own, and it normalizes into a `spec.swarm.md` through the author step, with its epistemic stance preserved across that promotion.
+A PRD is a source document that records the **product intent** behind a body of work — the problem, the affected users, and the outcomes that define success — so that every downstream obligation has a single, citable origin of *why* it exists. It is a recognized **parent of a spec**: it asserts intent, it carries no obligations of its own, and it normalizes into a `spec.md` through the author step, with its epistemic stance preserved across that promotion.
 
 ## Purpose & epistemic stance
 
 A PRD asserts **intent**: it states *what outcome is wanted and why*, and nothing about the mechanism that would deliver it. That is the whole of the knowledge it is permitted to carry, and the boundary is load-bearing.
 
-- A `prd.md` **MUST NOT** author `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` obligation blocks. Those blocks come into existence only when the PRD promotes to a `spec.swarm.md` via the author step. Embedding them in the PRD would let an *intent* be read as an approved behavioral contract and silently bypass the authoring step where intent acquires obligation force — the same prohibition that keeps an audit from prescribing a fix or a bug-report from naming an implementation.
+- A `prd.md` **MUST NOT** author `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` obligation blocks. Those blocks come into existence only when the PRD promotes to a `spec.md` via the author step. Embedding them in the PRD would let an *intent* be read as an approved behavioral contract and silently bypass the authoring step where intent acquires obligation force — the same prohibition that keeps an audit from prescribing a fix or a bug-report from naming an implementation.
 - Its goals are **outcome statements, never `REQ` blocks**; its release constraints are limits on *delivery*, never authored `CONSTRAINT` blocks; its success metrics describe *signals*, not verification bindings.
 - A PRD is **non-authoritative until authored**. It does not govern the codebase the way a spec or an ADR does. It is the upstream statement of desire that an author step reads, distills, and turns into obligations; once promoted, the PRD remains the durable record of the intent those obligations serve, and its stance (intent) is exactly what the promotion preserves.
 
@@ -14,12 +14,12 @@ Intent is captured as its own artifact, rather than written straight into a spec
 
 ## Filename & placement
 
-The PRD obeys the `.swarm.` infix partition that separates Swarm-format files from working artifacts.
+The PRD obeys the spec.md convention partition that separates Swarm-format files from working artifacts.
 
-- A `prd.md` is a **working artifact**: its filename **MUST NOT** contain the `.swarm.` infix, and it uses a plain `.md` extension. It is structured Markdown governed by this artifact contract, not by the SOL grammar, and it is never parsed or emitted by Swarm.
-- The one human-authored Swarm-format spec is `*.swarm.md`; emitted artifacts take a `*.swarm.*` name (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`). A PRD is neither — it is a hand-authored source that *feeds* a spec, so it stays plain `.md`.
+- A `prd.md` is a **working artifact**: its filename **MUST NOT** contain the spec.md convention, and it uses a plain `.md` extension. It is structured Markdown governed by this artifact contract, not by the SOL grammar, and it is never parsed or emitted by Swarm.
+- The one human-authored Swarm-format spec is `*.md`; emitted artifacts take a `*.md` name  (e.g. `*.ir.json`, `*.trace.md`). A PRD is neither — it is a hand-authored source that *feeds* a spec, so it stays plain `.md`.
 
-In an adopted project, a PRD is a durable source artifact — a `type: prd` document committed in `specs/<feature>/`, beside the `spec.swarm.md` it promotes into (a pre-spec PRD starts the feature folder). A PRD is **never** execution scratch (the derived task frames, traces, and reviews a run produces, recreatable from sources) and **never** durable recall (the index, glossary, patterns, and stale records). A PRD is desired-state source, so the feature folder is its home.
+In an adopted project, a PRD is a durable source artifact — a `type: prd` document committed in `specs/<feature>/`, beside the `spec.md` it promotes into (a pre-spec PRD starts the feature folder). A PRD is **never** execution scratch (the derived task frames, traces, and reviews a run produces, recreatable from sources) and **never** durable recall (the index, glossary, patterns, and stale records). A PRD is desired-state source, so the feature folder is its home.
 
 ## Required sections / fields, in order
 
@@ -62,8 +62,8 @@ That file is the skeleton you copy to start a new PRD; **this page is its contra
 ## Related
 
 - **`docs/passes/author.md`** — the author step: the single step that reads a PRD (and the other parents of a spec) and emits the `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` obligation blocks, preserving the PRD's intent stance on promotion.
-- **`docs/artifacts/spec.md`** — `spec.swarm.md`, the obligation-bearing contract a PRD promotes into; the only place product intent acquires obligation force.
+- **`docs/artifacts/spec.md`** — `spec.md`, the obligation-bearing contract a PRD promotes into; the only place product intent acquires obligation force.
 - **`docs/artifacts/rfc.md`** — the **proposal** parent (`rfc.md`): where a PRD states *what outcome* is wanted, an RFC proposes *how* a technical approach would deliver it; a PRD often cites or originates an RFC.
 - **`docs/artifacts/research.md`** — the **evidence** parent (`research.md`): the detached evidence store a PRD's `## Linked evidence` section points into to ground its intent.
 - **`docs/artifacts/finding.md`** — the **discovery** parent (`finding.md`): a single durable fact a PRD may cite as evidence for the problem it states.
-- **`docs/model/source-artifacts.md`** — the artifact set and the `.swarm.` infix partition that places `prd.md` as a conditional, never-required source-doc template.
+- **`docs/model/source-artifacts.md`** — the artifact set and the spec.md convention partition that places `prd.md` as a conditional, never-required source-doc template.

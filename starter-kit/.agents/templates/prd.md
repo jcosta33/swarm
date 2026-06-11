@@ -14,7 +14,7 @@ updated: {{createdAt}}
 Stance: intent-only. This source doc states WHAT outcome is wanted and WHY,
 never the mechanism. It MUST NOT author REQ/CONSTRAINT/INVARIANT/INTERFACE
 obligation blocks — those come into existence only when this PRD promotes to a
-spec.swarm.md via the author pass. Required when a change initiates new product
+spec.md via the author pass. Required when a change initiates new product
 behaviour or alters the scope of existing behaviour.
 -->
 

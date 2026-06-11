@@ -2,7 +2,7 @@
 auth-refresh golden-corpus POSITIVE fixture — Stage 8 (promotion, pass: promote).
 After reconcile (AC-002 re-run -> PASS, gate open), a durable discovery from the task is
 promoted into a finding carrying full provenance (mandated by the `promote` pass;
-schema in [the finding template](../../../starter-kit/.agents/templates/finding.md)): origin_obligations,
+schema in [the finding template](./././starter-kit/.agents/templates/finding.md)): origin_obligations,
 origin_traces, the pass+profile that produced it, reviewer/tool, content_hash, confidence,
 and applies-when bounds. The memory/INDEX.md MAP gains one link with a "Load when" condition;
 no procedure is inlined there (see the `promote` pass). Inert oracle data.
@@ -44,6 +44,6 @@ the entry; it never inlines the finding's procedure, per the `promote` pass):
 
 ```text
 # memory/INDEX.md  (excerpt)
-- [Refresh storm on shared 401](../findings/refresh-storm-on-shared-401.md)
+- [Refresh storm on shared 401](./findings/refresh-storm-on-shared-401.md)
   — Load when: implementing or reviewing concurrent token-refresh paths.
 ```

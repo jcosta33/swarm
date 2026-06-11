@@ -25,11 +25,11 @@ trigger, modality, or the union of responses an obligation requires. If a change
 obligation means, that is an `author` amendment, not an improve.
 
 ## Consumes
-- The `spec.swarm.md` and the `lint` report (the `{code, severity, layer, span, suggest}` records).
+- The `spec.md` and the `lint` report (the `{code, severity, layer, span, suggest}` records).
 - `reference/sol.md` (the surface grammar the repairs must stay within).
 
 ## Produces
-- The repaired `spec.swarm.md` with every BLOCKING lint code cleared and no blocking `QUESTION` left, each
+- The repaired `spec.md` with every BLOCKING lint code cleared and no blocking `QUESTION` left, each
   edit traceable to the op that made it. No obligation, modality, or binding dropped (no distillation loss).
 
 ## The ten operations (closed; each clears a code class)
@@ -56,7 +56,7 @@ In spec order: `NORMALIZE  ATOMIZE  CONCRETIZE  QUANTIFY  BIND  SCOPE  CLARIFY  
 9. **COMPRESS** (`SOL-P054`, `SOL-P055`) — remove non-load-bearing noise / redundancy and stabilize
    phrasing, **without** dropping any obligation, modality, or binding.
 10. **PROMOTE** (the promotion protocol) — move a durable fact out of task-local state to its home
-    (`finding.md`/`spec.swarm.md`/`adr.md`/memory) with provenance, leaving the obligation lean.
+    (`finding.md`/`spec.md`/`adr.md`/memory) with provenance, leaving the obligation lean.
 
 ## Procedure
 1. For each BLOCKING code in the report, read its `suggest` op (the code→op map is in

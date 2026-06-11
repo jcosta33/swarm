@@ -8,11 +8,11 @@
 - Profile: Architect
 - Created: {{createdAt}}
 - Status: active
-- Deliverable: `specs/<feature>/spec.swarm.md`
+- Deliverable: `specs/<feature>/spec.md`
 
 ---
 
-> SPEC-AUTHORING SESSION — produces a `*.swarm.md` source spec, not code. The spec declares what MUST hold; the implementer picks the mechanism. Resolve every `[blocking]` QUESTION before finishing. Complete the distillation-loss statement before close.
+> SPEC-AUTHORING SESSION — produces a `*.md` source spec, not code. The spec declares what MUST hold; the implementer picks the mechanism. Resolve every `[blocking]` QUESTION before finishing. Complete the distillation-loss statement before close.
 >
 > `VERIFY BY` adapters resolve `cmd*` slots from the consuming repo's `AGENTS.md > Commands` (`cmdTest`/`cmdValidate`/`cmdFormat`/`cmdBenchmark`/`cmdLint`/`cmdTypecheck`). If a needed slot is undefined, ask the user — never guess a command.
 
@@ -121,7 +121,7 @@ One row per blocking question. The spec is not finishable while any row is unres
 
 ### Stance preserved
 
-- Did any parent's observation / inquiry / proposal get asserted as intent without being lifted into a SOL block here? Any parent mis-named with a `.swarm.` infix?
+- Did any parent's observation / inquiry / proposal get asserted as intent without being lifted into a SOL block here? Any parent mis-named with a `spec.md` naming?
   Answer:
 
 ### Sections + ids

@@ -2,7 +2,7 @@
 
 `review.md` is the verdict record of Swarm's obligations: the working artifact that renders one typed `VERDICT` per required proof binding and decides, for a whole change set, whether the merge gate opens. It is the single place in the framework where the question "did this actually get done?" is answered, and it is the artifact the `promote` step reads before any change advances.
 
-**Where a verdict lives ([ADR-0050](../adrs/0050-swarm-is-a-spec-repo-discipline.md)).** In a **code repo**, the **PR is the default verdict** — CI is the proof and review approval is the merge gate; this page's structured `review.md` is **opt-in**, for audit/compliance or once a tool consumes it, and is **not** written into a pristine code repo by default. The contract below is what such a structured review MUST satisfy *when you do keep one* (or in a co-located repo); a durable verdict outcome can also be contributed back to the spec repo as a linked PR.
+**Where a verdict lives ([ADR-0050](./adrs/0050-swarm-is-a-spec-repo-discipline.md)).** In a **code repo**, the **PR is the default verdict** — CI is the proof and review approval is the merge gate; this page's structured `review.md` is **opt-in**, for audit/compliance or once a tool consumes it, and is **not** written into a pristine code repo by default. The contract below is what such a structured review MUST satisfy *when you do keep one* (or in a co-located repo); a durable verdict outcome can also be contributed back to the spec repo as a linked PR.
 
 ## Purpose and epistemic stance
 
@@ -16,14 +16,14 @@ Three discipline lines define what `review.md` is and is not:
 
 ## Filename and placement
 
-`review.md` is a **working artifact**: its filename MUST NOT carry the `.swarm.` infix and uses a plain `.md` extension. The infix is the sole discriminator a conformant tool uses to decide what to parse or emit:
+`review.md` is a **working artifact**: its filename MUST NOT carry the spec.md convention and uses a plain `.md` extension. The infix is the sole discriminator a conformant tool uses to decide what to parse or emit:
 
 | Class | Rule | This artifact |
 | --- | --- | --- |
-| Swarm-format | filename carries the `.swarm.` infix before its final extension (e.g. `auth.swarm.md`, `auth.swarm.ir.json`); parsed or emitted against the SOL grammar or the structured-form / plan schemas | not this artifact |
-| Working artifact | filename has **no** `.swarm.` infix and uses plain `.md`; governed by an artifact contract, not the SOL grammar, though it MAY embed SOL blocks (here, `VERDICT`) as quoted data | **`review.md`** |
+| Swarm-format | filename carries the spec.md convention before its final extension (e.g. `auth.md`, `auth.ir.json`); parsed or emitted against the SOL grammar or the structured-form / plan schemas | not this artifact |
+| Working artifact | filename has **no** `spec.md` naming and uses plain `.md`; governed by an artifact contract, not the SOL grammar, though it MAY embed SOL blocks (here, `VERDICT`) as quoted data | **`review.md`** |
 
-The only human-authored `.swarm.` artifact is the source spec, `*.swarm.md`; emitted Swarm artifacts carry the `*.swarm.*` shape (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`). A review is neither — it is hand- or agent-populated structured markdown that *quotes* `VERDICT` blocks as data.
+The only human-authored `.` artifact is the source spec, `*.md`; emitted Swarm artifacts carry the `*.md` shape  (e.g. `*.ir.json`, `*.trace.md`). A review is neither — it is hand- or agent-populated structured markdown that *quotes* `VERDICT` blocks as data.
 
 When a structured `review.md` is kept, it is **execution scratch** — gitignored or created lazily, recreatable from the sources and the recorded evidence, and compacted into the durable ledger (or back to the spec repo as a linked PR) on completion. It is **not** a source artifact: nothing in the desired-truth obligation store (the committed source-docs) is a review, and nothing in durable recall is a review. The companion observed-state satisfaction status it informs is derived state; the review that produced the judgment stays in the execution scratch.
 
@@ -38,7 +38,7 @@ A conformant `review.md` MUST carry YAML frontmatter and the following sections,
 | `type` | `review` (names the artifact class). |
 | `id` | the review's stable id (e.g. `{slug}-review`). |
 | `source_trace` | the `trace.md` whose claims this review adjudicates. |
-| `source_spec` | the `*.swarm.md` source whose obligations are being judged. |
+| `source_spec` | the `*.md` source whose obligations are being judged. |
 | `reviewed_output` | the output / change set under review. |
 | `pass` | `review`. |
 | `profile` | the heuristic profile applied to the step (e.g. `skeptic`). |
@@ -125,14 +125,14 @@ What a review MUST reject as a non-proof (never `PASS`): schema-valid output (sh
 
 ## Copyable template
 
-The copyable skeleton is `starter-kit/.agents/templates/review.md`. That template is the starting point you copy and fill; **this page is its contract** — it states what each section means and which rules a built `review.md` MUST satisfy. A built review MUST NOT leave a `VERDICT` core or a lifecycle field as a `{{...}}` placeholder; an empty status cell in a built matrix is treated as `UNVERIFIED`.
+The copyable skeleton is `starter-kit/.agents/templates/review.md`. That template is the starting point you copy and fill; **this page is its contract** — it states what each section means and which rules a built `review.md` MUST satisfy. A built review MUST NOT leave a `VERDICT` core or a lifecycle field as a `{{..}}` placeholder; an empty status cell in a built matrix is treated as `UNVERIFIED`.
 
 ## Related
 
-- [docs/passes/review.md](../passes/review.md) — the `review` step that produces this artifact, including the `CONTRADICTED` resolution protocol and the model-judge discipline.
-- [docs/passes/verify.md](../passes/verify.md) — the step that records the verification evidence the verdicts adjudicate.
-- [docs/passes/promote.md](../passes/promote.md) — the step that consumes the merge-gate result and advances a passing change set.
+- [docs/passes/review.md](./passes/review.md) — the `review` step that produces this artifact, including the `CONTRADICTED` resolution protocol and the model-judge discipline.
+- [docs/passes/verify.md](./passes/verify.md) — the step that records the verification evidence the verdicts adjudicate.
+- [docs/passes/promote.md](./passes/promote.md) — the step that consumes the merge-gate result and advances a passing change set.
 - [docs/artifacts/trace.md](./trace.md) — the implementation-claims artifact whose claims a review adjudicates (the `source_trace`).
 - [docs/artifacts/spec.md](./spec.md) — the source spec whose obligations a review judges (the `source_spec`).
-- [docs/adrs/0035-seven-value-verdict-model.md](../adrs/0035-seven-value-verdict-model.md) — the decision establishing the 4-core + 3-lifecycle verdict taxonomy and the merge-gate predicate.
-- [docs/model/source-artifacts.md](../model/source-artifacts.md) — the `.swarm.` infix partition and the tiered artifact set this artifact sits in.
+- [docs/adrs/0035-seven-value-verdict-model.md](./adrs/0035-seven-value-verdict-model.md) — the decision establishing the 4-core + 3-lifecycle verdict taxonomy and the merge-gate predicate.
+- [docs/model/source-artifacts.md](./model/source-artifacts.md) — the spec.md convention partition and the tiered artifact set this artifact sits in.

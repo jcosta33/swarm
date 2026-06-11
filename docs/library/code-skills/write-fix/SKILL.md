@@ -282,5 +282,5 @@ block where a check produces output:
   block, an iteration trail (the verbal-feedback loop the next attempt reads), a
   progress checklist, and a self-review hard gate demanding the pre-patch and
   post-patch reproduction output. Copy it into your project's task-file location,
-  substitute the `{{...}}` placeholders from the consuming repo's `AGENTS.md`
+  substitute the `{{..}}` placeholders from the consuming repo's `AGENTS.md`
   command slots, and fill it as you work.

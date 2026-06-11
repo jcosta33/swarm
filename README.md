@@ -13,7 +13,7 @@ This repository is **markdown only**. Nothing here runs: every "tool" Swarm desc
 a checker, a CLI — is a *contract a future tool could build against*, never code this repo ships.
 
 - **The spec is the source.** Requirements are written as **SOL** obligations (the Swarm Obligation Language)
-  inside ordinary `*.swarm.md` files — e.g. `WHEN the request fails THE client MUST retry once VERIFY BY
+  inside ordinary `*.md` files — e.g. `WHEN the request fails THE client MUST retry once VERIFY BY
   test:cmdTest:retry`. Plain Markdown around them carries the explanation.
 - **Agents do the work.** An agent takes a spec through a short set of **steps** — write it, sharpen it, plan
   it, implement it, prove it, review it, fold the learnings back — and the bar to merge is simple: **every
@@ -27,7 +27,7 @@ Intent flows from rough inputs to durable knowledge through nine ordered steps:
 author → lint → improve → lower → decompose → implement → verify → review → promote
 ```
 
-Research, audits, and bug reports become a `*.swarm.md` spec; it's sharpened and turned into a structured
+Research, audits, and bug reports become a `*.md` spec; it's sharpened and turned into a structured
 form and a plan; the plan yields bounded work packets; an agent implements each and records what it did;
 verification and review judge it against the spec's obligations; durable discoveries fold back into memory.
 

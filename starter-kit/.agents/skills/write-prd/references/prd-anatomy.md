@@ -1,6 +1,6 @@
 # PRD anatomy — section-by-section stance rules
 
-A lookup aid for `write-prd`. It restates the `prd.md` artifact contract for convenience; the Swarm artifact contract is authoritative on any disagreement. Every rule below defends one boundary: a `prd.md` asserts **intent** (what outcome is wanted and why) and is **non-authoritative until authored** into a `spec.swarm.md`. It carries no obligations of its own.
+A lookup aid for `write-prd`. It restates the `prd.md` artifact contract for convenience; the Swarm artifact contract is authoritative on any disagreement. Every rule below defends one boundary: a `prd.md` asserts **intent** (what outcome is wanted and why) and is **non-authoritative until authored** into a `spec.md`. It carries no obligations of its own.
 
 ## Frontmatter
 
@@ -41,7 +41,7 @@ Each row is the seed of a future observable check. When the PRD promotes, a metr
 
 ## Filename and placement
 
-- A `prd.md` is a **working artifact**: plain `.md`, and its filename **MUST NOT** contain the `.swarm.` infix. That infix marks Swarm-visible files (the one human-authored source spec is `*.swarm.md`; emitted artifacts take `*.swarm.*` names). A PRD is neither — it is a hand-authored source that *feeds* a spec, never parsed or emitted by Swarm.
+- A `prd.md` is a **working artifact**: plain `.md`, and its filename **MUST NOT** contain the spec.md convention. That infix marks Swarm-visible files (the one human-authored source spec is `*.md`; emitted artifacts take `*.md` names). A PRD is neither — it is a hand-authored source that *feeds* a spec, never parsed or emitted by Swarm.
 - In an adopted project it is a **durable source** and lives in its feature folder `specs/<feature>/`, beside the spec it scopes and that feature.s other supporting docs.
 - It is **never** gitignored execution scratch and **never** durable recall (`.agents/memory/`); desired-state source belongs in the feature folder `specs/<feature>/`.
 

@@ -4,7 +4,7 @@ A **trace** is the artifact in which an implementation step *claims* which oblig
 
 Swarm ships **no runtime** (see the [artifacts README](README.md)). Every hash, verdict, and surface reference in a trace is a content-hash *contract* a future tool computes; today the trace is written by a human or an agent in markdown and re-checked by hand or by CI scaffolding that does not yet exist. Nothing in this page is automatically enforced.
 
-**Where a trace lives ([ADR-0050](../adrs/0050-swarm-is-a-spec-repo-discipline.md)).** In a **code repo**, the **PR is the default trace** — it names the obligation ids it satisfies, CI is the proof, and review is the verdict; this page's structured `trace.md` is **opt-in**, for audit/compliance or once a tool consumes it, and is **not** written into a pristine code repo by default. The contract below is what such a structured trace MUST satisfy *when you do keep one* (or in a co-located repo); a durable trace outcome can also be contributed back to the spec repo as a linked PR.
+**Where a trace lives ([ADR-0050](./adrs/0050-swarm-is-a-spec-repo-discipline.md)).** In a **code repo**, the **PR is the default trace** — it names the obligation ids it satisfies, CI is the proof, and review is the verdict; this page's structured `trace.md` is **opt-in**, for audit/compliance or once a tool consumes it, and is **not** written into a pristine code repo by default. The contract below is what such a structured trace MUST satisfy *when you do keep one* (or in a co-located repo); a durable trace outcome can also be contributed back to the spec repo as a linked PR.
 
 ## Purpose and epistemic stance
 
@@ -19,7 +19,7 @@ What a trace MUST do:
 What a trace MUST NOT do:
 
 - **It MUST NOT pronounce a verdict.** A `TRACE` records a `PASS`-shaped *claim* and a proof reference, but the authoritative judgment is a `VERDICT` block emitted by the `review` step into a [`review.md`](review.md), evaluated against the spec and the diff — never against the trace's self-report. A self-graded `PASS` in a trace is a claim awaiting review, not a discharged obligation.
-- **It MUST NOT carry obligation blocks.** A trace contains no `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` blocks of its own. It references obligation IDs that already exist in a `*.swarm.md` source spec; it does not author new intent. A discovery made while tracing is promoted out (see the promotion-items section), not encoded as a fresh obligation in the trace.
+- **It MUST NOT carry obligation blocks.** A trace contains no `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` blocks of its own. It references obligation IDs that already exist in a `*.md` source spec; it does not author new intent. A discovery made while tracing is promoted out (see the promotion-items section), not encoded as a fresh obligation in the trace.
 - **It MUST NOT re-bless a binding by re-stamping a hash.** Provenance hashes are recorded as the byproduct of a real proof run. Rewriting a recorded hash without re-running the bound proof manufactures a false `PASS` and is forbidden — drift is resolved by a genuine re-run, an obligation amendment, or a code fix, never by editing the trace's hash in place.
 - **It MUST NOT introduce a green build as discharge.** A passing `cmd*` is *shape*, not truth. The `PROOF` reference must point at the proof bound to the obligation's `VERIFY BY`, not merely at an aggregate green suite; a bundled suite can pass while the patch is wrong.
 
@@ -27,14 +27,14 @@ A `TRACE` block embedded in a trace is **quoted SOL data** — it MUST obey the 
 
 ## Filename and placement
 
-The `.swarm.` infix discriminates **Swarm-format** files (parsed or emitted — they carry `.swarm.` before the final extension) from **working artifacts** (plain `.md`, governed by an artifact contract rather than the SOL grammar). The trace straddles this line in a specific way:
+The `spec.md` naming discriminates **Swarm-format** files (parsed or emitted — they carry `.` before the final extension) from **working artifacts** (plain `.md`, governed by an artifact contract rather than the SOL grammar). The trace straddles this line in a specific way:
 
 | Form | Filename | Class | When |
 | --- | --- | --- | --- |
 | Copyable skeleton | `trace.md` | working (plain) | The shipped template — the uninstantiated form. |
-| Built instance | `trace.md` or `*.swarm.trace.md` | working / Swarm-format | A trace produced for a specific built spec; the `*.swarm.trace.md` name is permitted when the instance is tracked as a Swarm-emitted artifact alongside the spec it traces. |
+| Built instance | `trace.md` or `*.trace.md` | working / Swarm-format | A trace produced for a specific built spec; the `*.trace.md` name is permitted when the instance is tracked as a Swarm-emitted artifact alongside the spec it traces. |
 
-The template itself is the only *plain* form; a built instance MAY take the `*.swarm.trace.md` name so a future tool can select traces by the stable, greppable infix without inspecting content. The hashes a trace records live in the markdown trace and/or the emitted structured form (`*.swarm.ir.json`); both are contract shapes today, computed by no shipped tool.
+The template itself is the only *plain* form; a built instance MAY take the `*.trace.md` name so a future tool can select traces by the stable, greppable infix without inspecting content. The hashes a trace records live in the markdown trace and/or the emitted structured form (`*.ir.json`); both are contract shapes today, computed by no shipped tool.
 
 In a **code repo**, the PR is the default trace (above), so no structured trace file is written by default. When you *do* keep a structured `trace.md` (audit/compliance, or once a tool consumes it), it is an **execution packet** — generated/derived from a source spec and a task, recreatable from them — and is execution scratch, gitignored or created lazily by a future tool:
 
@@ -53,7 +53,7 @@ A trace is never a durable source-doc: it asserts no durable intent. It is a der
 | `type: trace` | Fixes the artifact class. Required. |
 | `id` | Stable identifier for this trace (conventionally `{{slug}}-trace`). Required. |
 | `source_task` | Path to the `task.md` step frame this trace was produced under (e.g. `{{slug}}.task.md`). Required. |
-| `source_spec` | The `*.swarm.md` source spec whose obligations this trace claims against (e.g. `{{spec-id}}.swarm.md`). Required. |
+| `source_spec` | The `*.md` source spec whose obligations this trace claims against (e.g. `{{spec-id}}.md`). Required. |
 | `created` | Recording timestamp. This is where the "when" of the trace lives — the provenance fields below carry *content state*, never a timestamp. Required. |
 
 ### Body sections (in order)
@@ -72,7 +72,7 @@ Every binding's **last `PASS`** records exactly this closed seven-field set — 
 
 | Field | Meaning |
 | --- | --- |
-| `source_hash` | Content hash of the obligation source — the exact bytes of the obligation block in the `*.swarm.md` spec — at the time of the `PASS`. A change here means *intent moved*. |
+| `source_hash` | Content hash of the obligation source — the exact bytes of the obligation block in the `*.md` spec — at the time of the `PASS`. A change here means *intent moved*. |
 | `per_surface_hash[]` | One `{surface, hash, exercised}` entry per declared `WRITES` surface **and** per `READS` surface the proof actually exercised. `exercised: true` iff the proof executed or analysed that surface; the exercised subset is the proof's evidence path. A change to a participating (exercised) surface means *code moved*. |
 | `adapter` | The `cmd*` slot the proof resolved through. A rebind/retarget/removal of this adapter is itself a drift condition. |
 | `verdict` | The core verdict recorded — `PASS` for any drift-trackable binding. |
@@ -82,21 +82,21 @@ Every binding's **last `PASS`** records exactly this closed seven-field set — 
 
 Two optional adjuncts MAY extend a verdict's provenance without altering this base — `oracle_adequacy` (when oracle adequacy is recorded) and `judge` (when a manual/judge-rendered verdict is recorded). They are optional extensions on the same record, not separate schemas.
 
-**By-hand hashes are tool-emitted placeholders, not trusted digests.** `source_hash` and the `per_surface_hash[]` entries are computed by a tool at emission (Invariant 1: NO RUNTIME — Swarm ships no hasher). When a `PASS` is recorded **by hand**, the author MUST record a **documented placeholder** — `pending:tool`, or a reference a tool can resolve later (a git blob/commit ref) — rather than a fabricated `sha256:…`; a hand-written digest is **untrusted** until a tool recomputes it, and the staleness check that compares these hashes is a future-tool contract, not a guarantee a by-hand run provides. This is the same honesty as `provenance.tool_version: null` in the [structured form](../passes/lower.md).
+**By-hand hashes are tool-emitted placeholders, not trusted digests.** `source_hash` and the `per_surface_hash[]` entries are computed by a tool at emission (Invariant 1: NO RUNTIME — Swarm ships no hasher). When a `PASS` is recorded **by hand**, the author MUST record a **documented placeholder** — `pending:tool`, or a reference a tool can resolve later (a git blob/commit ref) — rather than a fabricated `sha256:…`; a hand-written digest is **untrusted** until a tool recomputes it, and the staleness check that compares these hashes is a future-tool contract, not a guarantee a by-hand run provides. This is the same honesty as `provenance.tool_version: null` in the [structured form](./passes/lower.md).
 
 **Why provenance is load-bearing.** A `PASS` is a statement about a moment: the obligation said X, the code did Y, the proof confirmed Y satisfies X. A prior `PASS` becomes `STALE` (a lifecycle decorator, recorded at review time, not claimed here) when **any** of four conditions holds: (a) the obligation `source_hash` changed; (b) a declared write surface in `per_surface_hash[]` changed; (c) an exercised `READS` surface on the evidence path changed; or (d) the bound `adapter` changed. `STALE` blocks the merge gate until reconciled — by re-running the proof, amending the obligation, or fixing the code. Recording the provenance is what makes all four detectable without a runtime; omitting a field blinds the check. (A surface the proof never exercised — `exercised: false` — does not participate in freshness on that ground alone, so an unrelated lockfile bump does not falsely mark an obligation stale; an in-place behavioral edit to an exercised surface does, regardless of that surface's policy attribute.)
 
 ## Copyable template
 
-The copyable skeleton is the **code-side** template at **`docs/library/code-skills/templates/trace.md`** (it ships with the code-skills reference, not the authoring starter kit — a trace is implement-side). Copy that file to start a new trace; this page is its contract. A shipped, uninstantiated template MAY leave `{{...}}` placeholders, but a *built* trace MUST NOT leave a binding clause as a `{{...}}` placeholder, and an unfilled `VERIFY BY`/`PROOF` clause in a built trace is a `SOL-V001` defect.
+The copyable skeleton is the **code-side** template at **`docs/library/code-skills/templates/trace.md`** (it ships with the code-skills reference, not the authoring starter kit — a trace is implement-side). Copy that file to start a new trace; this page is its contract. A shipped, uninstantiated template MAY leave `{{..}}` placeholders, but a *built* trace MUST NOT leave a binding clause as a `{{..}}` placeholder, and an unfilled `VERIFY BY`/`PROOF` clause in a built trace is a `SOL-V001` defect.
 
 ## Related
 
-- [`spec.md`](spec.md) — the `*.swarm.md` source spec that owns the obligations a trace claims against; the trace's `source_spec` points back to it.
+- [`spec.md`](spec.md) — the `*.md` source spec that owns the obligations a trace claims against; the trace's `source_spec` points back to it.
 - [`task.md`](task.md) — the structured step frame a trace is produced under; the trace's `source_task` points back to it, and its assigned obligations bound the trace's scope.
 - [`review.md`](review.md) — the verdict record that *judges* this trace, emitting one `VERDICT` per required binding and recording any `STALE`/`WAIVED`/`CONTRADICTED` lifecycle decorator.
 - [`finding.md`](finding.md) — where a durable discovery from a trace's promotion-items table lands.
 - [`adr.md`](adr.md) — where a discovery that is an immutable decision lands.
-- [implement step](../passes/implement.md) — the step that produces a trace (records `TRACE` claims and runs bound proofs to gather evidence).
-- [verify step](../passes/verify.md) — re-runs the bound proofs deterministically over the trace's claims.
-- [review step](../passes/review.md) — consumes the trace and emits the authoritative verdicts.
+- [implement step](./passes/implement.md) — the step that produces a trace (records `TRACE` claims and runs bound proofs to gather evidence).
+- [verify step](./passes/verify.md) — re-runs the bound proofs deterministically over the trace's claims.
+- [review step](./passes/review.md) — consumes the trace and emits the authoritative verdicts.

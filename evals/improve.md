@@ -1,11 +1,11 @@
 # `improve` — step-output rubric
 
-> The output-quality predicate for the `improve` step: a candidate normalized `spec.swarm.md` MUST change no obligation's intent, drop no id/modality/binding, attribute every edit to one of the ten closed improve operations, and resolve (not silently delete) each blocking lint code. Each predicate is a boolean a reviewer decides by diffing the linted input spec against the improved output — no runtime.
+> The output-quality predicate for the `improve` step: a candidate normalized `spec.md` MUST change no obligation's intent, drop no id/modality/binding, attribute every edit to one of the ten closed improve operations, and resolve (not silently delete) each blocking lint code. Each predicate is a boolean a reviewer decides by diffing the linted input spec against the improved output — no runtime.
 
 `improve` is the `NORMALIZE`-phase step, run only after `lint`. It is the **only** step permitted to rewrite the spec, and every edit MUST be strictly semantics-preserving (R-IMPROVE). Its rubric grades whether the rewrite stayed inside the closed operation set and preserved every obligation's meaning — intent change routes to amendment, never to `improve`.
 
-**Input artifact:** the linted `spec.swarm.md` + the `lint` report.
-**Output artifact:** the normalized `spec.swarm.md` + the spec-improvement report.
+**Input artifact:** the linted `spec.md` + the `lint` report.
+**Output artifact:** the normalized `spec.md` + the spec-improvement report.
 
 ## Output-grading predicates
 
@@ -31,6 +31,6 @@ The suite scores one cross-step predicate at the `improve` output:
 
 ## Related
 
-- [The `improve` step guide](../docs/passes/improve.md) — the ten operations, the R-IMPROVE rule (I1/I5), and the twelve-category semantic-diff this rubric grades against.
-- [The distillation-loss budget](../docs/reference/distillation-loss-budget.md) — the no-distillation-loss discipline I2 enforces.
-- [The flow graph](../docs/reference/cheatsheet.md) — the closed set of exactly ten improve operations I3 checks membership against.
+- [The `improve` step guide](./docs/passes/improve.md) — the ten operations, the R-IMPROVE rule (I1/I5), and the twelve-category semantic-diff this rubric grades against.
+- [The distillation-loss budget](./docs/reference/distillation-loss-budget.md) — the no-distillation-loss discipline I2 enforces.
+- [The flow graph](./docs/reference/cheatsheet.md) — the closed set of exactly ten improve operations I3 checks membership against.

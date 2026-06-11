@@ -3,8 +3,8 @@ type: task
 id: {{slug}}
 status: active # active | blocked | done | abandoned (done is terminal)
 task_kind: feature # feature | fix | refactor | rewrite | migration | upgrade | performance | testing | documentation | spec-writing | research-writing | audit-writing | bug-report-writing | review | orchestration | integration | deepen-audit
-source: # <path to the source doc / spec.swarm.md this pass lowers from>
-assigned_obligations: # <list of obligation IDs assigned to this pass: AC-001, REQ-002, ...>
+source: # <path to the source doc / spec.md this pass lowers from>
+assigned_obligations: # <list of obligation IDs assigned to this pass: AC-001, REQ-002, ..>
 constraints: # <list of C- IDs this pass must preserve>
 invariants: # <list of I- IDs this pass must preserve>
 interfaces: # <list of IF- IDs in this pass's contract>

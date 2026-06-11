@@ -12,13 +12,13 @@ Like everything in Swarm, a pass guide has **no runtime**: it is text a human, a
 
 This is the load-bearing constraint of the whole pass-guide layer. A pass guide MUST NOT define a block type, a modal, a clause keyword, a verdict value, a proof type, a lint code, or any structured-form field. Those live exclusively in the language reference. A guide MAY cite, link to, or quote that reference, but the citation is **non-authoritative delivery** — the authoritative text is the reference itself.
 
-The reason is adherence: meaning that lived in a lazily-loaded, optional guide would make the meaning of a spec depend on whether that guide happened to load. So a correctly written `*.swarm.md` file MUST be understandable to a strong model **without any guide loaded**, because it uses the controlled obligation language and stable formal blocks. The guide tells you how to *work*; the spec already tells you what the work *means*.
+The reason is adherence: meaning that lived in a lazily-loaded, optional guide would make the meaning of a spec depend on whether that guide happened to load. So a correctly written `*.md` file MUST be understandable to a strong model **without any guide loaded**, because it uses the controlled obligation language and stable formal blocks. The guide tells you how to *work*; the spec already tells you what the work *means*.
 
 A conformant repo confirms, by regression check, that no pass guide, profile, fragment, or `AGENTS.md` section defines modality, authority order, or verification semantics.
 
 ## How procedural modules map onto the nine steps
 
-The pass-guide layer organizes the framework's procedural modules — each a self-contained recipe a model loads to do a unit of work [[SKILLBP]](../research/sources.md#SKILLBP) — under a discipline that keeps any one module from quietly owning semantics. Every procedural module is exactly one of three things: a **pass guide** (one per pass), a **cross-cutting fragment** (shared procedure), or a **profile** (a cognitive stance, documented separately).
+The pass-guide layer organizes the framework's procedural modules — each a self-contained recipe a model loads to do a unit of work [[SKILLBP]](./research/sources.md#SKILLBP) — under a discipline that keeps any one module from quietly owning semantics. Every procedural module is exactly one of three things: a **pass guide** (one per pass), a **cross-cutting fragment** (shared procedure), or a **profile** (a cognitive stance, documented separately).
 
 The mapping is **many-modules-to-one-pass**: a single pass MAY carry more than one guide. The `implement` pass, for instance, carries one guide per implementation kind.
 
@@ -67,7 +67,7 @@ Two procedural disciplines apply across multiple passes, so they ship as **fragm
 
 | Fragment | Discipline it carries | Passes that compose it |
 |---|---|---|
-| `empirical-proof` | the proof / `VERIFY BY` discipline — every completion claim maps to an independent, re-runnable proof; "tests passed" with no pasted output is not a proof [[REFLEXION]](../research/sources.md#REFLEXION) | `verify`, `review` |
+| `empirical-proof` | the proof / `VERIFY BY` discipline — every completion claim maps to an independent, re-runnable proof; "tests passed" with no pasted output is not a proof [[REFLEXION]](./research/sources.md#REFLEXION) | `verify`, `review` |
 | `distillation-discipline` | the loss-budget discipline — what MUST be preserved and what MAY be dropped when meaning crosses an artifact boundary | `lower`, `decompose`, `promote` |
 
 Neither fragment defines semantics. `empirical-proof` does not define the proof taxonomy or the verdict model — it carries the *procedure* for applying the proof discipline the language reference owns. `distillation-discipline` does not define the loss-budget table — it carries the *procedure* for distilling accountably (making each boundary crossing's loss visible, via a `Preserved / Dropped / Still-uncertain` statement) against the budget the reference owns.
@@ -78,7 +78,7 @@ Neither fragment defines semantics. `empirical-proof` does not define the proof 
 
 A pass guide is **lazily loaded** — never always-on. The canonical way it activates is by being **named in the task** that frames the pass:
 
-- A `task.md` SHOULD name, in its frontmatter or assignment block, the pass guide(s) and profile(s) it activates for the pass it frames. When named, the agent **MUST load exactly those, and SHOULD NOT load others** — because always-on density harms adherence and cost [[LOSTMID]](../research/sources.md#LOSTMID).
+- A `task.md` SHOULD name, in its frontmatter or assignment block, the pass guide(s) and profile(s) it activates for the pass it frames. When named, the agent **MUST load exactly those, and SHOULD NOT load others** — because always-on density harms adherence and cost [[LOSTMID]](./research/sources.md#LOSTMID).
 - When no launcher and no explicit naming is present, an agent MAY fall back to matching a guide's self-activating `description` field against the task. This is a **degraded mode**, retained for the launcher-less case (a task dropped into an arbitrary agent CLI with no router) — not the contract.
 - A pass guide MUST NOT be always-loaded. There is no standing gatekeeper that pre-loads guides; that would itself be an always-loaded skill (forbidden) and would not be guaranteed present on a consumer's machine.
 
@@ -147,20 +147,20 @@ Skip for <out-of-scope task_kind 1> or <out-of-scope task_kind 2>.
 - **Do not … directly** — block the bypass: the path the agent takes when it decides *not* to load the guide.
 - **Skip for …** — name the *task kinds* this guide is not for, never a sibling guide's name. Naming task kinds keeps the fallback working even when a consumer vendored only this guide and not its neighbour, and it prevents directive saturation when several guides overlap on a trigger.
 
-The directive form is an authoring heuristic for this fallback path, not an obligation: when the task names the guide, naming wins and the `description` is bypassed. The third-person, concrete `description` form follows the official skill-authoring guidance [[SKILLBP]](../research/sources.md#SKILLBP) and the Open Agent Skills `description` field [[SKILLSPEC]](../research/sources.md#SKILLSPEC). The directional, preliminary evidence that directive descriptions activate more reliably than passive *"Use when …"* phrasings is recorded under [[ACTIVATION-BLOG]](../research/sources.md#ACTIVATION-BLOG) (non-peer-reviewed; preliminary).
+The directive form is an authoring heuristic for this fallback path, not an obligation: when the task names the guide, naming wins and the `description` is bypassed. The third-person, concrete `description` form follows the official skill-authoring guidance [[SKILLBP]](./research/sources.md#SKILLBP) and the Open Agent Skills `description` field [[SKILLSPEC]](./research/sources.md#SKILLSPEC). The directional, preliminary evidence that directive descriptions activate more reliably than passive *"Use when …"* phrasings is recorded under [[ACTIVATION-BLOG]](./research/sources.md#ACTIVATION-BLOG) (non-peer-reviewed; preliminary).
 
 ### The body skeleton
 
 A guide body satisfies the contract sections, and within them follows a stable shape so the rules actually fire once the guide loads:
 
-- **Numbered rules, each with a one-line rationale** — `1. <Rule>` … `N. <Rule>`, every rule paired with one or two sentences of *why*. The rationale is the "explain-the-why" discipline [[SKILLBP]](../research/sources.md#SKILLBP): a bare imperative works only for the cases the author imagined, while the rationale lets the agent extend the rule to a case the author never anticipated.
+- **Numbered rules, each with a one-line rationale** — `1. <Rule>` … `N. <Rule>`, every rule paired with one or two sentences of *why*. The rationale is the "explain-the-why" discipline [[SKILLBP]](./research/sources.md#SKILLBP): a bare imperative works only for the cases the author imagined, while the rationale lets the agent extend the rule to a case the author never anticipated.
 - **An `## Anti-patterns` section** — concrete failure modes with their corrections, not just rules. Without negative examples the agent has no prior for the edge cases that miss the happy path, and it tends to invent a fix that is often wrong.
-- **References exactly one hop away** — material the guide cites sits one level deep; a referenced file does not itself link to another referenced file. This is progressive disclosure: cheap metadata is always present, the body loads when the pass is engaged, and deeper material loads only when the procedure reaches for it [[SKILLSPEC]](../research/sources.md#SKILLSPEC). Chained references get partial-read and silently dropped [[SKILLBP]](../research/sources.md#SKILLBP), so the hop limit is structural, not stylistic.
-- **A target length aligned to the density cap** — keep the body under the ~500-line authoring ceiling [[SKILLBP]](../research/sources.md#SKILLBP) and well under the length the AGENTS.md bootloader's density cap allows, so that nothing load-bearing sits in the low-attention middle of a long context [[LOSTMID]](../research/sources.md#LOSTMID). These are two budgets for two surfaces: the ~500-line ceiling governs a *lazily-loaded* guide (paid only when a task names it), while the bootloader's cap governs the *always-on* `AGENTS.md` (paid every turn) — size each to its own surface, never the other's. When a body grows past the practical target, the question is "what moves one hop out to a referenced file?", not "can the body be longer?".
+- **References exactly one hop away** — material the guide cites sits one level deep; a referenced file does not itself link to another referenced file. This is progressive disclosure: cheap metadata is always present, the body loads when the pass is engaged, and deeper material loads only when the procedure reaches for it [[SKILLSPEC]](./research/sources.md#SKILLSPEC). Chained references get partial-read and silently dropped [[SKILLBP]](./research/sources.md#SKILLBP), so the hop limit is structural, not stylistic.
+- **A target length aligned to the density cap** — keep the body under the ~500-line authoring ceiling [[SKILLBP]](./research/sources.md#SKILLBP) and well under the length the AGENTS.md bootloader's density cap allows, so that nothing load-bearing sits in the low-attention middle of a long context [[LOSTMID]](./research/sources.md#LOSTMID). These are two budgets for two surfaces: the ~500-line ceiling governs a *lazily-loaded* guide (paid only when a task names it), while the bootloader's cap governs the *always-on* `AGENTS.md` (paid every turn) — size each to its own surface, never the other's. When a body grows past the practical target, the question is "what moves one hop out to a referenced file?", not "can the body be longer?".
 
 ## The installed guides
 
-Guides **split by role** ([ADR-0051](../adrs/0051-complete-the-spec-repo-pivot.md)). The **starter kit** (a spec/docs repo) ships the **authoring** guides under `starter-kit/.agents/skills/`: the six analysis pass guides, the six author guides, the two cross-cutting fragments, and the six authoring `persona-*` profiles. The **code-implementation** guides — the nine per-kind `implement` guides, the seven code `persona-*` profiles, and the optional `implement-and-verify` skill — are **framework reference in `docs/library/code-skills/`**, since a docs repo never runs `implement`. Each is a self-contained `SKILL.md` carrying the contract above, plus a self-activating `description`.
+Guides **split by role** ([ADR-0051](./adrs/0051-complete-the-spec-repo-pivot.md)). The **starter kit** (a spec/docs repo) ships the **authoring** guides under `starter-kit/.agents/skills/`: the six analysis pass guides, the six author guides, the two cross-cutting fragments, and the six authoring `persona-*` profiles. The **code-implementation** guides — the nine per-kind `implement` guides, the seven code `persona-*` profiles, and the optional `implement-and-verify` skill — are **framework reference in `docs/library/code-skills/`**, since a docs repo never runs `implement`. Each is a self-contained `SKILL.md` carrying the contract above, plus a self-activating `description`.
 
 **Ships in the starter kit (`starter-kit/.agents/skills/`) — the authoring kit:**
 
@@ -190,10 +190,10 @@ These directories sit under a `skills/` path for cross-tool compatibility; in Sw
 
 ## Related
 
-- [How Swarm works](../model/how-swarm-works.md) — the nine steps and seven phases a guide runs against, and the per-pass guide/fragment packaging (ADR-0042).
-- [The `lint` pass](../passes/lint.md), [the `decompose` pass](../passes/decompose.md), [the `implement` pass](../passes/implement.md), [the `review` pass](../passes/review.md), and [the `promote` pass](../passes/promote.md) — the contracts the dedicated pass guides and the per-`task_kind` implement guides perform.
-- [The `verify` pass](../passes/verify.md) — the proof model and verdict vocabulary the `empirical-proof` fragment applies but never defines.
-- [The `task.md` artifact](../artifacts/task.md) — where a task names the pass guides and profiles to load.
-- [SOL](../language/SOL.md) and [the errors reference](../language/errors.md) — the authoritative homes of the meaning a pass guide MUST NOT own.
-- [The distillation loss budget](../reference/distillation-loss-budget.md) — the budget the `distillation-discipline` fragment applies across boundary-crossing passes.
-- [The glossary](../reference/glossary.md) — canonical definitions of *pass guide*, *profile*, *pass*, and *phase*.
+- [How Swarm works](./model/how-swarm-works.md) — the nine steps and seven phases a guide runs against, and the per-pass guide/fragment packaging (ADR-0042).
+- [The `lint` pass](./passes/lint.md), [the `decompose` pass](./passes/decompose.md), [the `implement` pass](./passes/implement.md), [the `review` pass](./passes/review.md), and [the `promote` pass](./passes/promote.md) — the contracts the dedicated pass guides and the per-`task_kind` implement guides perform.
+- [The `verify` pass](./passes/verify.md) — the proof model and verdict vocabulary the `empirical-proof` fragment applies but never defines.
+- [The `task.md` artifact](./artifacts/task.md) — where a task names the pass guides and profiles to load.
+- [SOL](./language/SOL.md) and [the errors reference](./language/errors.md) — the authoritative homes of the meaning a pass guide MUST NOT own.
+- [The distillation loss budget](./reference/distillation-loss-budget.md) — the budget the `distillation-discipline` fragment applies across boundary-crossing passes.
+- [The glossary](./reference/glossary.md) — canonical definitions of *pass guide*, *profile*, *pass*, and *phase*.

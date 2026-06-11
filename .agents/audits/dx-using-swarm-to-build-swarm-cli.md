@@ -84,7 +84,7 @@ title: DX of using Swarm to build swarm-cli (dogfooding findings)
 
 ## §3.5 From the `swarm lint` build (the dogfood starts eating itself)
 
-- **Milestone — F1's circularity begins to close.** `swarm lint` v1 now lints `*.swarm.md` specs (the
+- **Milestone — F1's circularity begins to close.** `swarm lint` v1 now lints `*.md` specs (the
   block-level `SOL-S` layer) — so the toolchain can finally **self-validate its own specs** for the
   structural layer, instead of only by hand. Dogfooded clean on specs 002 & 005, `SOL-S005` on a malformed
   REQ. A virtuous-cycle moment: the thing being built starts checking the things that build it.

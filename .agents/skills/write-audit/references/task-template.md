@@ -7,7 +7,7 @@
 - Stance: Auditor
 - Created: {{createdAt}}
 - Status: active
-- Deliverable: `audit.md` (plain `.md`, never `*.swarm.md`) at `<your-audits-dir>/{{slug}}.md`
+- Deliverable: `audit.md` (plain `.md`, never `*.md`) at `<your-audits-dir>/{{slug}}.md`
 
 ---
 
@@ -67,7 +67,7 @@ What area, goal, or initiative this audit covers and why it is being audited now
 ## Deliverable
 
 > Copy everything between this line and `--- END DELIVERABLE ---` into `<your-audits-dir>/{{slug}}.md`
-> at session close. The file is a plain `.md` working artifact — never name it `*.swarm.md`.
+> at session close. The file is a plain `.md` working artifact — never name it `*.md`.
 >
 > ⚠️ **ADVERSARIAL READING — ALWAYS.** Do not trust that existing code works as intended. Assume the
 > codebase is hiding its flaws. The audit is honest observation, not narrative validation.
@@ -87,7 +87,7 @@ updated: {{createdAt}}
 > Stance: **observation-only**. This audit records what *is* — present-state risk, debt, drift,
 > duplication, unsafe patterns. It does NOT prescribe a fix inline and authors NO
 > `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` obligation blocks. Obligations come into existence only
-> when this audit promotes to a `spec.swarm.md` via the author step. Until then this is
+> when this audit promotes to a `spec.md` via the author step. Until then this is
 > non-authoritative evidence.
 
 ### Goal
@@ -115,7 +115,7 @@ severity. State the fact, never the fix.
 - **Observation:** <what is true today>
 - **Severity reasoning (if contestable):** <blast-radius rationale>
 
-#### O2 — ...
+#### O2 — ..
 
 ### ## Risks
 
@@ -123,11 +123,11 @@ Things that could go wrong but were NOT observed firing yet. Each names the fail
 trigger — not the remedy.
 
 - **R1** [SEVERITY] — <failure mode> — **fires when:** <condition>
-- **R2** ...
+- **R2** ..
 
 ### ## Recommended obligations
 
-Candidate obligations a downstream `author` step would promote into a `spec.swarm.md`, in **plain
+Candidate obligations a downstream `author` step would promote into a `spec.md`, in **plain
 prose** — what the spec SHOULD require. Do NOT write SOL obligation blocks here.
 
 - <candidate obligation a future spec should carry>

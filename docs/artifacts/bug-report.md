@@ -11,20 +11,20 @@ This stance exists because diagnosis and remedy use different proofs and differe
 What a bug-report MUST NOT do:
 
 - It MUST NOT prescribe an implementation. A bug-report names the cause; it does not state the patch, the diff, the design of the remedy, or "the function should return X instead of null." The remedy is a downstream decision owned by the **fix task** the report promotes into. A bug-report that dictates the fix has crossed from diagnosis into intent and broken its stance.
-- It MUST NOT carry its own obligation blocks. A bug-report MUST NOT author `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` blocks. It references the *existing* obligation the defect violates; it declares no new intended behavior of its own force. If the defect reveals that **no** existing obligation covers the broken behavior, that gap is itself a finding the promoted fix task must reconcile — the bug-report records the gap, it does not author the missing obligation. The fix task reconciles it by **authoring the covering obligation first** (a spec amendment), because an uncovered change cannot clear the merge gate by vacuity ([`review` gate, clause (c)](../passes/review.md); [ADR-0055](../adrs/0055-close-the-gate-soft-control-gaps.md)).
-- It MUST NOT assert intended behavior. Stating what the system *should* do is intent and belongs to a `spec.swarm.md`. A bug-report states what the system *does* (Actual) against what an existing obligation already requires (Expected); the delta is the defect, not a new requirement.
+- It MUST NOT carry its own obligation blocks. A bug-report MUST NOT author `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` blocks. It references the *existing* obligation the defect violates; it declares no new intended behavior of its own force. If the defect reveals that **no** existing obligation covers the broken behavior, that gap is itself a finding the promoted fix task must reconcile — the bug-report records the gap, it does not author the missing obligation. The fix task reconciles it by **authoring the covering obligation first** (a spec amendment), because an uncovered change cannot clear the merge gate by vacuity ([`review` gate, clause (c)](./passes/review.md); [ADR-0055](./adrs/0055-close-the-gate-soft-control-gaps.md)).
+- It MUST NOT assert intended behavior. Stating what the system *should* do is intent and belongs to a `spec.md`. A bug-report states what the system *does* (Actual) against what an existing obligation already requires (Expected); the delta is the defect, not a new requirement.
 
 Nothing enforces this stance at runtime ([Swarm ships no runtime](README.md)); it is held by the distillation-loss and source-authority discipline, where a diagnosis-only artifact MUST NOT silently override a higher-authority spec. A conformant repository MUST NOT ship a tool whose job is to police artifact composition.
 
 ## Filename & placement
 
-A bug-report is a **working artifact**, not a Swarm-format source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
+A bug-report is a **working artifact**, not a Swarm-format source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `spec.md` naming before the final extension:
 
-- The human-authored, Swarm-format spec is `*.swarm.md` — the only hand-written file that carries the infix.
-- Emitted, contract-shaped outputs are `*.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`).
-- Working artifacts — including this one — are plain `.md` with **no** `.swarm.` infix.
+- The human-authored, Swarm-format spec is `*.md` — the only hand-written file that carries the infix.
+- Emitted, contract-shaped outputs are `*.md`  (e.g. `*.ir.json`, `*.trace.md`).
+- Working artifacts — including this one — are plain `.md` with **no** `spec.md` naming.
 
-Therefore the file is named `bug-report.md` (or a descriptive `<topic>.bug-report.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.swarm.md`; doing so would mark a diagnosis as a Swarm-format source spec and is a placement defect. A conformant tool treats the missing infix as sufficient proof not to parse the file as a spec.
+Therefore the file is named `bug-report.md` (or a descriptive `<topic>.bug-report.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.md`; doing so would mark a diagnosis as a Swarm-format source spec and is a placement defect. A conformant tool treats the missing infix as sufficient proof not to parse the file as a spec.
 
 In an adopted project, a bug-report is **durable source material** — a `type: bug-report` document committed to the spec repo:
 

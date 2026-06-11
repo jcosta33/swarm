@@ -12,14 +12,14 @@ Each row is a **closed set**: the conformance contract forbids adding, removing,
 
 | Closed set | Count | Members (in canonical order) | Acceptance check | Reference |
 | --- | --- | --- | --- | --- |
-| Block types | **7** | `REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT` | A10 | [SOL](../language/SOL.md) |
-| Modals | **5** | `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY` | A11 | [SOL](../language/SOL.md) |
+| Block types | **7** | `REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT` | A10 | [SOL](./language/SOL.md) |
+| Modals | **5** | `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY` | A11 | [SOL](./language/SOL.md) |
 | Verdicts | **7** (4 core + 3 lifecycle) | core: `PASS`, `FAIL`, `BLOCKED`, `UNVERIFIED` · lifecycle: `WAIVED`, `STALE`, `CONTRADICTED` | A12 | [proof types](proof-types.md) |
 | Proof types | **9** | `static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor` | A13 | [proof types](proof-types.md) |
 | Phases | **7** | `PARSE`, `NORMALIZE`, `LOWER`, `EXECUTE`, `VERIFY`, `REVIEW`, `PROMOTE` | A14 | (this page, §Phases and steps) |
 | Steps | **9** | `author`, `lint`, `improve`, `lower`, `decompose`, `implement`, `verify`, `review`, `promote` | A14 | (this page, §Phases and steps) |
 | Improve operations | **10** | `NORMALIZE`, `ATOMIZE`, `CONCRETIZE`, `QUANTIFY`, `BIND`, `SCOPE`, `CLARIFY`, `DECONFLICT`, `COMPRESS`, `PROMOTE` | A15 | (this page) |
-| Lint layers | **5** (S/P/M/V/O) | `S` SYNTAX, `P` PROSE, `M` SEMANTIC, `V` VERIFICATION, `O` ORCHESTRATION | A16 | [errors](../language/errors.md) |
+| Lint layers | **5** (S/P/M/V/O) | `S` SYNTAX, `P` PROSE, `M` SEMANTIC, `V` VERIFICATION, `O` ORCHESTRATION | A16 | [errors](./language/errors.md) |
 
 Notes that prevent miscounting:
 
@@ -48,7 +48,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 
 | Pass | Phase(s) | Lint layer(s) it owns | Note |
 | --- | --- | --- | --- |
-| `author` | entry (pre-`PARSE`) | — | First Swarm-visible artifact (`spec.swarm.md`); not itself analyzable. |
+| `author` | entry (pre-`PARSE`) | — | First Swarm-visible artifact (`spec.md`); not itself analyzable. |
 | `lint` | `PARSE` + `NORMALIZE` | S, P, M, V, O | Non-mutating; the only pass that straddles two phases (well-formedness + smell detection). |
 | `improve` | `NORMALIZE` | answers the codes mapped to the 10 improve operations | Runs only after `lint`; strictly semantics-preserving (R-IMPROVE). |
 | `lower` | `LOWER` | O | Emits the structured form (the obligations) and the two derived graphs; needs a lint-clean, approved spec. |
@@ -58,7 +58,7 @@ author -> lint -> improve -> lower -> decompose -> implement -> verify -> review
 | `review` | `REVIEW` | M, V | Judges claims, applies lifecycle decorators, computes the merge gate. |
 | `promote` | `PROMOTE` | — | Moves durable discoveries into provenance-anchored artifacts. |
 
-Of the nine steps, the six analysis steps — `lint`, `improve`, `lower`, `decompose`, `review`, `promote` — each ship a **dedicated pass guide**; `implement` is served by **nine per-`task_kind` implement guides**, `author` by **six author guides**, and `verify` by the `empirical-proof` cross-cutting fragment (ADR-0042/0051). Every pass now has a guide, but a guide is an optional aid, not a conformance gate — the pass contract is the binding artifact. Pass guides are SOFT control: they MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning [[SKILLBP]](../research/sources.md#SKILLBP). The authoring guides ship in the starter kit; the implement-side guides are `docs/library/code-skills/` reference (ADR-0051).
+Of the nine steps, the six analysis steps — `lint`, `improve`, `lower`, `decompose`, `review`, `promote` — each ship a **dedicated pass guide**; `implement` is served by **nine per-`task_kind` implement guides**, `author` by **six author guides**, and `verify` by the `empirical-proof` cross-cutting fragment (ADR-0042/0051). Every pass now has a guide, but a guide is an optional aid, not a conformance gate — the pass contract is the binding artifact. Pass guides are SOFT control: they MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning [[SKILLBP]](./research/sources.md#SKILLBP). The authoring guides ship in the starter kit; the implement-side guides are `docs/library/code-skills/` reference (ADR-0051).
 
 ## The proof-type × phase default-suite matrix
 
@@ -138,13 +138,13 @@ A reconciliation caveat: only the **counts** are frozen, not every row of the de
 
 ## Artifact homes (where everything lives)
 
-An artifact is homed by **scope**, not by type ([ADR-0052](../adrs/0052-per-feature-spec-folders.md)): a
+An artifact is homed by **scope**, not by type ([ADR-0052](./adrs/0052-per-feature-spec-folders.md)): a
 feature is the unit of organization, and feature-scoped artifacts co-locate with the spec they serve. One
 table, so "where does X go?" is answerable in one place.
 
 | Artifact | Scope | Home |
 | --- | --- | --- |
-| `spec.swarm.md` | feature | `specs/<feature>/spec.swarm.md` |
+| `spec.md` | feature | `specs/<feature>/spec.md` |
 | `audit` · `research` · `bug-report` · `prd` · `rfc` · `threat-model` | feature | `specs/<feature>/` — co-located beside the spec |
 | `adr` | project-wide | `decisions/` — sequentially numbered, one per file |
 | `finding` | durable recall | `.agents/memory/findings/<slug>.md` |
@@ -152,13 +152,13 @@ table, so "where does X go?" is answerable in one place.
 | `task` · `trace` · `review` · `status` · `task-orchestration` | execution scratch | gitignored (`.agents/tasks/`) or the linked PR — a *kept* review may land in `specs/<feature>/` |
 
 The asymmetry — `specs/` is per-feature folders, `decisions/` is flat numbered files — is deliberate: an ADR
-is the one genuinely project-wide artifact, not bound to a single feature. The `.swarm.` infix marks the
-**Swarm-format** files (the spec + emitted `*.swarm.*`); everything else is a plain-`.md` working artifact.
+is the one genuinely project-wide artifact, not bound to a single feature. The `spec.md` naming marks the
+**Swarm-format** files (the spec + emitted `*.md`); everything else is a plain-`.md` working artifact.
 
 ## Related
 
-- [SOL](../language/SOL.md) — the block-type and modal semantics behind their counts here.
+- [SOL](./language/SOL.md) — the block-type and modal semantics behind their counts here.
 - [proof types](proof-types.md) — the `VERIFY BY` binding grammar, adapter resolution, proof-type → `cmd*` mapping, and verdict mechanics.
-- [errors](../language/errors.md) — the five lint layers and the `SOL-<LAYER>NNN` code catalogue.
+- [errors](./language/errors.md) — the five lint layers and the `SOL-<LAYER>NNN` code catalogue.
 - [drift and staleness](drift-and-staleness.md) — how a prior `PASS` becomes `STALE` and the maturity ladder.
 - [structured form](structured-form.md) — where the obligations and the two derived graphs emitted by `lower` are defined.

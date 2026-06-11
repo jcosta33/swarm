@@ -14,7 +14,7 @@ The `implement` step **produces the change for the assigned obligations only, re
 |---|---|
 | Phase | **`EXECUTE`** — "Code, docs, and tests are produced against the lowered work packets" |
 | Input artifact | `task.md` (the lowered work packet for one step) |
-| Output artifacts | code/docs/tests changes + `trace.md` (`*.swarm.trace.md` when emitted) |
+| Output artifacts | code/docs/tests changes + `trace.md` (`*.trace.md` when emitted) |
 | Nature of the phase | **Heuristic** (the deterministic re-check is the [`verify` step](verify.md)) |
 | Typical carrier profile | **by task kind**: Janitor, Migrator, Performance-Surgeon, Builder, Test-Author, Documentarian |
 | Lint layer | — (`implement` emits no lint codes; its TRACE claims feed `verify`/`review`) |
@@ -23,7 +23,7 @@ The `implement` step **produces the change for the assigned obligations only, re
 
 ## Where it sits in the flow
 
-The seven **phases** are `PARSE -> NORMALIZE -> LOWER -> EXECUTE -> VERIFY -> REVIEW -> PROMOTE`. `implement` is the single step mapped to the **`EXECUTE`** phase. It runs after `decompose` (which partitions the structured form into write-disjoint `task.md` packets) and before `verify` (which re-runs every bound proof deterministically).
+The seven **phases** are `PARSE -> NORMALIZE -> LOWER -> EXECUTE -> VERIFY -> REVIEW -> PROMOTE`implement` is the single step mapped to the **`EXECUTE`** phase. It runs after `decompose` (which partitions the structured form into write-disjoint `task.md` packets) and before `verify` (which re-runs every bound proof deterministically).
 
 The partial order is mandatory: for a single obligation the step order MUST be respected — an obligation cannot be `verify`-ed before it is `implement`-ed, nor `implement`-ed before it is `lower`-ed. A launcher MAY interleave steps across multiple specs and MAY run write-disjoint `implement` packets in parallel, but it MUST NOT reorder this partial order for one obligation.
 
@@ -36,10 +36,10 @@ Two contract notes bear on `implement`'s position:
 
 Decide *where* the work happens before touching code. It is a binary (a frame `isolation:` field overrides it; it is orthogonal to `parallel_group`):
 
-- **A code task implementing a spec or audit-remediation** (it has a `source:` `*.swarm.md` or audit-derived spec) → a **worktree + branch off the base**, named for what it implements: `swarm/<spec-slug>` for a whole spec, `swarm/<spec-slug>/<task-slug>` for one obligation or a fan-out worker (one grammar; `base:` records the merge target, default `main` — or the dev's HEAD when handed off mid-branch). *A spec is implemented off the base, never on it.*
+- **A code task implementing a spec or audit-remediation** (it has a `source:` `*.md` or audit-derived spec) → a **worktree + branch off the base**, named for what it implements: `swarm/<spec-slug>` for a whole spec, `swarm/<spec-slug>/<task-slug>` for one obligation or a fan-out worker (one grammar; `base:` records the merge target, default `main` — or the dev's HEAD when handed off mid-branch). *A spec is implemented off the base, never on it.*
 - **Anything else** — a quick ad-hoc edit with no spec, a doc/source-only authoring task, a read-only review → **in-place** on the current branch. No ceremony; the absence of a source artifact is the signal.
 
-Merge + cleanup reuse the orchestration lifecycle at worker-count 1: a lone worktree clears the same merge gate (the cross-worker disjointness condition is vacuous for one writer), merges to `base`, and the worktree is removed (by hand today — the closing session + the `persona-janitor` stance; an in-flight worktree is tracked as execution scratch, gitignored or created lazily by a future tool). NO RUNTIME: nothing creates the worktree or enforces the rule — it is a decision an agent (or a future launcher) applies. Full model: [ADR-0046](../adrs/0046-isolation-axis-model.md).
+Merge + cleanup reuse the orchestration lifecycle at worker-count 1: a lone worktree clears the same merge gate (the cross-worker disjointness condition is vacuous for one writer), merges to `base`, and the worktree is removed (by hand today — the closing session + the `persona-janitor` stance; an in-flight worktree is tracked as execution scratch, gitignored or created lazily by a future tool). NO RUNTIME: nothing creates the worktree or enforces the rule — it is a decision an agent (or a future launcher) applies. Full model: [ADR-0046](./adrs/0046-isolation-axis-model.md).
 
 ## The COVERAGE gate guards entry into `implement`
 
@@ -56,7 +56,7 @@ The diagnostics this gate aggregates:
 | Obligation assigned to two `implement` packets | `SOL-O008` (double-owned obligation) | O (orchestration) | **BLOCKING** | re-partition so exactly one packet owns it |
 | TRACE/VERDICT target id not in `nodes[]` | `SOL-M003` (unbound cross-reference) | M (semantic) | surfaced at `review` | bind the reference to a real node, or drop the claim |
 
-The gate is the **structural complement of the [distillation-loss rule](../reference/distillation-loss-budget.md)**: distillation-loss forbids *dropping* an obligation during structuring; the COVERAGE gate forbids *stranding* one afterward. Together they make the lowered work a bijection over obligations — nothing lost in structuring, nothing left uncovered or pointed at a phantom. Like every Swarm gate it is a contract **checkable today by review and enforced by a future tool**: today the `decompose` carrier (Lead Engineer) verifies it by hand against the structured form; a future tool computes it mechanically from `nodes[]`, `edges[]`, and `plan.packets[]`. A valid repository MUST NOT claim it is enforced by shipped tooling.
+The gate is the **structural complement of the [distillation-loss rule](./reference/distillation-loss-budget.md)**: distillation-loss forbids *dropping* an obligation during structuring; the COVERAGE gate forbids *stranding* one afterward. Together they make the lowered work a bijection over obligations — nothing lost in structuring, nothing left uncovered or pointed at a phantom. Like every Swarm gate it is a contract **checkable today by review and enforced by a future tool**: today the `decompose` carrier (Lead Engineer) verifies it by hand against the structured form; a future tool computes it mechanically from `nodes[]`, `edges[]`, and `plan.packets[]`. A valid repository MUST NOT claim it is enforced by shipped tooling.
 
 ## The owned-path containment rule (G7)
 
@@ -68,13 +68,13 @@ An owned path that touches a file outside any assigned obligation's declared wri
 
 ## `implement` ships as nine per-kind step guides
 
-`implement` is not served by a single guide. Because its carrier profile is selected **by task kind**, not fixed, Swarm ships **nine per-kind implement guides** under `../library/code-skills/`, each a `SKILL.md` (ADR-0042): `write-feature`, `write-fix`, `write-refactor`, `write-rewrite`, `write-migration` (covering migration + upgrade), `write-performance`, `write-testing`, `write-documentation`, plus the narrow `fix-flaky-test` (under `task_kind: fix`). The rationale: `implement` runs on nearly every obligation that reaches code, so each task kind benefits from its own written procedure tuned to that kind's discipline. A step guide is SOFT control (Invariant 2): it MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning — those live only in SOL and the structured form.
+`implement` is not served by a single guide. Because its carrier profile is selected **by task kind**, not fixed, Swarm ships **nine per-kind implement guides** under `./library/code-skills/`, each a `SKILL.md` (ADR-0042): `write-feature`, `write-fix`, `write-refactor`, `write-rewrite`, `write-migration` (covering migration + upgrade), `write-performance`, `write-testing`, `write-documentation`, plus the narrow `fix-flaky-test` (under `task_kind: fix`). The rationale: `implement` runs on nearly every obligation that reaches code, so each task kind benefits from its own written procedure tuned to that kind's discipline. A step guide is SOFT control (Invariant 2): it MUST NOT define SOL/APS semantics, modality, authority order, or verification meaning — those live only in SOL and the structured form.
 
 ## The input: the `task.md` step frame
 
 A `task.md` is a *step frame and execution companion*: the lowered work packet for one step over assigned source. Its frontmatter carries the full field set the structuring step needs to prove disjointness, and its body sections bound the work.
 
-**Frontmatter** (MUST carry the full set): `type: task`, `id`, `status` (`active | blocked | done | abandoned`; `done` is terminal), `task_kind` (enum), `source`, `assigned_obligations`, `constraints`, `invariants`, `interfaces`, `write_surfaces`, `verification_bindings`, the coordination fields `parallel_group` and `blocked_by`, `produces` (the artifact paths this step emits under `generated/` — e.g. the `trace.md` it writes; `[]` when the step emits no durable artifact), plus the optional `pass`, `pass_guides`, and `profile` the task activates, and the optional isolation frame fields `isolation` (`worktree+branch | in-place`) and `base` ([ADR-0046](../adrs/0046-isolation-axis-model.md); MAY be omitted to let the rule decide — see the `Isolation` section above).
+**Frontmatter** (MUST carry the full set): `type: task`, `id`, `status` (`active | blocked | done | abandoned`; `done` is terminal), `task_kind` (enum), `source`, `assigned_obligations`, `constraints`, `invariants`, `interfaces`, `write_surfaces`, `verification_bindings`, the coordination fields `parallel_group` and `blocked_by`, `produces` (the artifact paths this step emits under `generated/` — e.g. the `trace.md` it writes; `[]` when the step emits no durable artifact), plus the optional `pass`, `pass_guides`, and `profile` the task activates, and the optional isolation frame fields `isolation` (`worktree+branch | in-place`) and `base` ([ADR-0046](./adrs/0046-isolation-axis-model.md); MAY be omitted to let the rule decide — see the `Isolation` section above).
 
 > **`write_surfaces` MUST be a subset of the assigned obligations' `WRITES` surfaces** — an owned path outside a declared write surface is the `SOL-O005` defect above (G7).
 
@@ -98,7 +98,7 @@ The default `## Scope > Out` list is itself a boundary statement of the step: *d
 
 ## The output: the `trace.md` claim contract
 
-`implement` emits a `trace.md` that records implementation *claims* against obligations and binds them to *evidence* — externalising the run's intermediate work into a durable, inspectable artifact rather than leaving it in the agent's context [[SCRATCHPAD]](../research/sources.md#SCRATCHPAD). Its core payload is one or more `TRACE` blocks (`IMPLEMENTS` / `PRESERVES` / `CHANGED` / `PROOF`) plus the drift-provenance fields the staleness join depends on. A valid `trace.md` MUST contain:
+`implement` emits a `trace.md` that records implementation *claims* against obligations and binds them to *evidence* — externalising the run's intermediate work into a durable, inspectable artifact rather than leaving it in the agent's context [[SCRATCHPAD]](./research/sources.md#SCRATCHPAD). Its core payload is one or more `TRACE` blocks (`IMPLEMENTS` / `PRESERVES` / `CHANGED` / `PROOF`) plus the drift-provenance fields the staleness join depends on. A valid `trace.md` MUST contain:
 
 | Section | Meaning |
 |---|---|
@@ -113,7 +113,7 @@ How a TRACE block records the claim:
 
 - `IMPLEMENTS` lists the `REQ` ids the change satisfies; `PRESERVES` lists the `CONSTRAINT`/`INVARIANT` ids it must not violate; `CHANGED` names the modified surfaces (the basis for staleness detection); each `PROOF` line names a verification reference plus its observed `proof_result` — `passed | failed | blocked | unverified`.
 - The lowercase `proof_result` is the *observed run outcome*; it maps **1:1** to the uppercase VERDICT core value at the `verify`/`review` step: `passed -> PASS`, `failed -> FAIL`, `blocked -> BLOCKED`, `unverified -> UNVERIFIED`. The verdict has **7 values total — 4 core** (`PASS`/`FAIL`/`BLOCKED`/`UNVERIFIED`) **+ 3 lifecycle** (`WAIVED`/`STALE`/`CONTRADICTED`) — but `implement` only ever produces the core observation; the lifecycle decorators are applied later at `review`.
-- A TRACE that claims `IMPLEMENTS` **MUST carry at least one `PROOF` line** — the grammar makes `PROOF` mandatory in a trace body, so a no-`PROOF` trace is a structural parse error (`SOL-S014`), not a missing-evidence lint. A `PROOF` line MUST reference real output: an unqualified "tests passed" is not admissible [[REFLEXION]](../research/sources.md#REFLEXION).
+- A TRACE that claims `IMPLEMENTS` **MUST carry at least one `PROOF` line** — the grammar makes `PROOF` mandatory in a trace body, so a no-`PROOF` trace is a structural parse error (`SOL-S014`), not a missing-evidence lint. A `PROOF` line MUST reference real output: an unqualified "tests passed" is not admissible [[REFLEXION]](./research/sources.md#REFLEXION).
 - A TRACE whose `IMPLEMENTS`/`PRESERVES` names an unknown obligation is `SOL-M003` (unbound cross-reference) — the same orphan-target condition the COVERAGE gate guards against.
 
 In the structured form, these claims become `implements` and `preserves` edges in the single relationship store `edges[]` — the input the downstream `verify` and `review` steps join against the obligations.
@@ -137,7 +137,7 @@ The step frame and the trace contract together fence the change:
 | `rewrite` | **Two-surface verification.** A rewrite *deliberately* changes some behaviour, so unintended changes hide where intentional ones are permitted. Two surfaces must both be proven: the **delta** (the behaviour that was meant to change) and the **preserved surface** (everything else). | The delta is proven against its acceptance checks (each changed behaviour bound to a `test`/`command`/`manual` proof); the non-delta is proven by the same equivalence check `refactor` demands. The delta proves the intended change was built; preservation proves nothing else moved. |
 | `migration` | **Wave-planning.** The implementation moves from API A to API B while the surface stays put; the failure modes are the permanent half-migration and the phantom completion (old-API callsites surviving in dynamic dispatch, registries, generated code, reflection). Plan the waves up front; migrate each file deliberately, never with a bulk codemod that silently breaks the one unusual callsite. | A callsite inventory taken up front, per-wave verification (validate + test green at every wave, never accumulating drift to the end), and a `git grep` of the old API driven to zero across the *whole* codebase — plus an explicit audit beyond grep for the references a text search cannot reach. Every shim carries a verifiable removable-when criterion. |
 | `performance` | **Measure-first.** Optimisation of a *measured* bottleneck under a *stated* numeric target — never opportunistic tinkering, never a faster wrong answer. The discipline is numbers over vibes and correctness over speed. | A baseline measured *before* touching code, then a target measured under the **same protocol** — identical warmup, sample count, aggregate, hardware, environment — or the comparison is meaningless. Every change is benchmarked individually and the full suite runs after each, because a speedup that broke correctness is still a defect. |
-| `fix` (flaky test) | **Reproduce-the-flake-first.** Non-deterministic failure is almost always a *real* signal about timing, ordering, shared state, or environmental coupling. The single most tempting non-fix — re-run until green, then ship the bug — is exactly what the discipline forbids; masking the flake (sleeps, widened assertions, quarantine-as-resolution) suppresses the signal instead of removing the cause. | Reproduce the flake *before* claiming to understand it (loop the test until it fires), root-cause it in production code or test setup rather than the assertion, then prove the fix by loop-running and pasting the pass/fail summary — every run passes, or it is not fixed. Swarm's `fix-flaky-test` step guide (`../library/code-skills/fix-flaky-test/SKILL.md`, under `task_kind: fix`) carries this as a narrow `implement` guide. |
+| `fix` (flaky test) | **Reproduce-the-flake-first.** Non-deterministic failure is almost always a *real* signal about timing, ordering, shared state, or environmental coupling. The single most tempting non-fix — re-run until green, then ship the bug — is exactly what the discipline forbids; masking the flake (sleeps, widened assertions, quarantine-as-resolution) suppresses the signal instead of removing the cause. | Reproduce the flake *before* claiming to understand it (loop the test until it fires), root-cause it in production code or test setup rather than the assertion, then prove the fix by loop-running and pasting the pass/fail summary — every run passes, or it is not fixed. Swarm's `fix-flaky-test` step guide (`./library/code-skills/fix-flaky-test/SKILL.md`, under `task_kind: fix`) carries this as a narrow `implement` guide. |
 
 ## Related
 
@@ -145,10 +145,10 @@ The step frame and the trace contract together fence the change:
 - [`verify` step](verify.md) — the profile-independent step that turns `implement`'s TRACE `PROOF` evidence into a core verdict.
 - [`review` step](review.md) — judges `## Unassigned changes`, resolves promotion items, and applies the three lifecycle verdict decorators (`WAIVED` / `STALE` / `CONTRADICTED`).
 - [`promote` step](promote.md) — closes out the `## Promotion queue` discoveries before a task is allowed to close.
-- [SOL language reference](../language/SOL.md) — the TRACE block grammar, `IMPLEMENTS`/`PRESERVES`/`CHANGED`/`PROOF`, and the lint codes referenced here.
-- [`errors.md`](../language/errors.md) — the lint codes (`SOL-O005` / `SOL-O007` / `SOL-O008` / `SOL-M003` / `SOL-S014`) this step's gate and trace contract reference.
-- [`task.md` artifact](../artifacts/task.md) — the `task.md` step-frame contract: frontmatter field set, `task_kind` enum, and the eight body sections.
-- [`trace.md` artifact](../artifacts/trace.md) — the `trace.md` claim-contract: sections, per-binding provenance fields, and TRACE block structure.
+- [SOL language reference](./language/SOL.md) — the TRACE block grammar, `IMPLEMENTS`/`PRESERVES`/`CHANGED`/`PROOF`, and the lint codes referenced here.
+- [`errors.md`](./language/errors.md) — the lint codes (`SOL-O005` / `SOL-O007` / `SOL-O008` / `SOL-M003` / `SOL-S014`) this step's gate and trace contract reference.
+- [`task.md` artifact](./artifacts/task.md) — the `task.md` step-frame contract: frontmatter field set, `task_kind` enum, and the eight body sections.
+- [`trace.md` artifact](./artifacts/trace.md) — the `trace.md` claim-contract: sections, per-binding provenance fields, and TRACE block structure.
 - The **nine per-kind implement guides** — `write-feature`, `write-fix`, `write-refactor`, `write-rewrite`, `write-migration`, `write-performance`, `write-testing`, `write-documentation`, and the narrow `fix-flaky-test` — each a standalone procedure for one `task_kind` (SOFT control).
 - The carrier-profile stances selected by task kind — `persona-janitor`, `persona-builder`, `persona-researcher` (and the other persona stances) — pick which discipline runs.
 - The `empirical-proof` fragment — the no-fabricated-evidence discipline behind the `PROOF`-line rule.

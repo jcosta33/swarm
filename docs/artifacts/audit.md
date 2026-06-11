@@ -1,6 +1,6 @@
 # `audit.md`
 
-An audit is an observation-only source artifact: it records present-state risk, debt, drift, duplication, or unsafe patterns as they exist *today*, grounds each observation in evidence, and feeds the obligations only by promoting INTO a `spec.swarm.md`. It is a parent of a spec, never a spec itself, and it carries no obligations of its own.
+An audit is an observation-only source artifact: it records present-state risk, debt, drift, duplication, or unsafe patterns as they exist *today*, grounds each observation in evidence, and feeds the obligations only by promoting INTO a `spec.md`. It is a parent of a spec, never a spec itself, and it carries no obligations of its own.
 
 ## Purpose & epistemic stance
 
@@ -8,7 +8,7 @@ An audit asserts one kind of knowledge: **what is true now**. Its stance is **ob
 
 What an audit MUST NOT do:
 
-- It MUST NOT carry its own obligation blocks. An `audit.md` MUST NOT author `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` blocks. Observed risk has no obligation force until it is **promoted into a `spec.swarm.md`** by the author step; only there does it acquire binding force as SOL obligations. An audit that writes its own obligation blocks would let an observation be read as an approved contract and bypass authoring — the failure mode the observation-only stance exists to prevent.
+- It MUST NOT carry its own obligation blocks. An `audit.md` MUST NOT author `REQ`, `CONSTRAINT`, `INVARIANT`, or `INTERFACE` blocks. Observed risk has no obligation force until it is **promoted into a `spec.md`** by the author step; only there does it acquire binding force as SOL obligations. An audit that writes its own obligation blocks would let an observation be read as an approved contract and bypass authoring — the failure mode the observation-only stance exists to prevent.
 - It MUST NOT prescribe a fix inline. An audit names what *is* and the risk it carries; it does not state the remedy. The remedy is a downstream decision that the author step (for a spec change) or a fix task (for a defect) owns. Recommending *candidate obligations a future spec should carry* — in plain prose — is permitted and expected; writing those obligations as SOL blocks here is not.
 - It MUST NOT assert intended behavior. Stating what the system *should* do is intent; that belongs to a spec (or a PRD that promotes to one), not to an observation of the current state.
 
@@ -18,13 +18,13 @@ Two named specializations reuse this exact template, frontmatter, and stance and
 
 ## Filename & placement
 
-An audit is a **working artifact**, not a Swarm-format source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `.swarm.` infix before the final extension:
+An audit is a **working artifact**, not a Swarm-format source. Swarm partitions every Swarm-tracked file by whether its name carries the literal `spec.md` naming before the final extension:
 
-- The human-authored, Swarm-format spec is `*.swarm.md` — the only hand-written file that carries the infix.
-- Emitted, contract-shaped outputs are `*.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.trace.md`).
-- Working artifacts — including this one — are plain `.md` with **no** `.swarm.` infix.
+- The human-authored, Swarm-format spec is `*.md` — the only hand-written file that carries the infix.
+- Emitted, contract-shaped outputs are `*.md`  (e.g. `*.ir.json`, `*.trace.md`).
+- Working artifacts — including this one — are plain `.md` with **no** `spec.md` naming.
 
-Therefore the file is named `audit.md` (or a descriptive `<topic>.audit.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.swarm.md`; doing so would mark an observation as a Swarm-format source spec and is a placement defect.
+Therefore the file is named `audit.md` (or a descriptive `<topic>.audit.md` / `<topic>.md` in a folder that scopes it). It MUST NOT be named `*.md`; doing so would mark an observation as a Swarm-format source spec and is a placement defect.
 
 In an adopted project, an audit is **desired-side durable source material** — a `type: audit` document committed to the spec repo:
 
@@ -55,11 +55,11 @@ A specialization MAY set `type: benchmark` or `type: cleanup`, but parses exactl
 | --- | --- | --- |
 | `# Audit: <title>` + stance note | The title, then a one-line reminder that this is observation-only and authors no obligation blocks. | Sets the reader's frame; the note is part of the contract. |
 | `## Scope` | What was inspected and what was deliberately left out — the code paths, artifacts, or surfaces under audit and the boundary of the observation. State both **In scope** and **Out of scope**. | Bounds the observation; an unstated boundary makes the audit unfalsifiable. |
-| `## Observations` | What is true *today*, each item citing the evidence that grounds it (`file:line`, command output, grep result, or other observable). | Present state only. State the fact, never the fix. Each observation MUST be evidence-cited — an ungrounded, fact-shaped claim is a defect; an explicit claim→support structure is itself a primary quality axis of an agent's report [[REPORTLOGIC]](../research/sources.md#REPORTLOGIC). |
+| `## Observations` | What is true *today*, each item citing the evidence that grounds it (`file:line`, command output, grep result, or other observable). | Present state only. State the fact, never the fix. Each observation MUST be evidence-cited — an ungrounded, fact-shaped claim is a defect; an explicit claim→support structure is itself a primary quality axis of an agent's report [[REPORTLOGIC]](./research/sources.md#REPORTLOGIC). |
 | `## Risks` | Things that could go wrong but were **not** observed firing yet, each with the conditions under which they would fire. | Still observation, not prescription. Name the failure mode and its trigger, not the remedy. |
-| `## Recommended obligations` | Candidate obligations a downstream author step would promote into a `spec.swarm.md`, described in **plain prose** — what the spec SHOULD require. | MUST NOT be written as SOL obligation blocks. The author step emits the blocks on promotion; this section only nominates them. |
+| `## Recommended obligations` | Candidate obligations a downstream author step would promote into a `spec.md`, described in **plain prose** — what the spec SHOULD require. | MUST NOT be written as SOL obligation blocks. The author step emits the blocks on promotion; this section only nominates them. |
 
-Promotion target: an audit promotes to a `spec.swarm.md` via the author step (its `## Recommended obligations` seed the spec's `REQ`/`CONSTRAINT`/`INVARIANT` blocks). It may also feed a `finding.md` (a single durable fact extracted from an observation) or a refactor task, but it never becomes code directly.
+Promotion target: an audit promotes to a `spec.md` via the author step (its `## Recommended obligations` seed the spec's `REQ`/`CONSTRAINT`/`INVARIANT` blocks). It may also feed a `finding.md` (a single durable fact extracted from an observation) or a refactor task, but it never becomes code directly.
 
 ## Severity calibration
 
@@ -87,8 +87,8 @@ That template is the skeleton you copy to start a new audit; **this page is its 
 
 - [`finding.md`](finding.md) — a single durable, evidenced fact; an audit observation may be extracted into one.
 - [`bug-report.md`](bug-report.md) — the sibling diagnosis-only source artifact; where an audit observes standing risk, a bug-report diagnoses a reproduced defect and promotes into a fix task.
-- [`spec.swarm.md`](spec.md) — the obligation-bearing source an audit promotes INTO; the only place observed risk acquires obligation force.
+- [`spec.md`](spec.md) — the obligation-bearing source an audit promotes INTO; the only place observed risk acquires obligation force.
 - [`research.md`](research.md) / [`prd.md`](prd.md) / [`rfc.md`](rfc.md) — the other parents of a spec, each with its own preserved epistemic stance.
-- [The `author` step](../passes/author.md) — the step that promotes an audit's recommended obligations into a spec's SOL blocks.
-- [The `promote` step](../passes/promote.md) — routes durable discovery (including findings extracted from audits) into memory and sources.
-- [Source artifacts and the `.swarm.` infix partition](../model/source-artifacts.md) — the full artifact set, the two-class partition, and the conformance tiers this artifact sits in.
+- [The `author` step](./passes/author.md) — the step that promotes an audit's recommended obligations into a spec's SOL blocks.
+- [The `promote` step](./passes/promote.md) — routes durable discovery (including findings extracted from audits) into memory and sources.
+- [Source artifacts and the spec.md convention partition](./model/source-artifacts.md) — the full artifact set, the two-class partition, and the conformance tiers this artifact sits in.

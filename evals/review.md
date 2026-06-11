@@ -4,7 +4,7 @@
 
 `review` is the `REVIEW`-phase step, run under the `skeptic` profile. It judges trace claims, applies the lifecycle decorators (`WAIVED`/`STALE`/`CONTRADICTED`), and computes the merge gate. Its rubric grades whether the review is **complete, evidence-correct, sceptically independent, and gate-honest**.
 
-**Input artifact:** the source `spec.swarm.md`, the diff, and the `trace.md` proof evidence.
+**Input artifact:** the source `spec.md`, the diff, and the `trace.md` proof evidence.
 **Output artifact:** the `review.md` (per-obligation verdicts + the merge-gate result).
 
 ## Output-grading predicates
@@ -34,6 +34,6 @@ The suite scores three cross-step predicates at the `review` output:
 
 ## Related
 
-- [The `review` step guide](../docs/passes/review.md) — the skeptic-profile contract, the decorator conditions (R2), and the merge-gate rule (R5) this rubric grades.
-- [The flow graph](../docs/reference/cheatsheet.md) — the 7-value verdict model (4 core + 3 lifecycle) R2 checks against.
-- [Drift and staleness](../docs/reference/drift-and-staleness.md) — the four staleness conditions the drift-detection predicate scores.
+- [The `review` step guide](./docs/passes/review.md) — the skeptic-profile contract, the decorator conditions (R2), and the merge-gate rule (R5) this rubric grades.
+- [The flow graph](./docs/reference/cheatsheet.md) — the 7-value verdict model (4 core + 3 lifecycle) R2 checks against.
+- [Drift and staleness](./docs/reference/drift-and-staleness.md) — the four staleness conditions the drift-detection predicate scores.

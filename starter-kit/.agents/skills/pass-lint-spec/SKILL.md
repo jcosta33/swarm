@@ -4,7 +4,7 @@ name: pass-lint-spec
 pass: lint
 profile: skeptic
 description: >-
-  Run the `lint` pass on a `spec.swarm.md`: detect S/P/M defects, emit the
+  Run the `lint` pass on a `spec.md`: detect S/P/M defects, emit the
   six-field diagnostic record, decide blocking status and CLARIFY gate —
   without changing a character of the spec. ALWAYS apply when a task names the
   `lint` pass, a spec is checked before a downstream pass, or a pre-`lower`
@@ -27,13 +27,13 @@ The per-code defect text, the code→`improve`-op map, the worked diagnostic rec
 
 ## Purpose
 
-Read one `spec.swarm.md` and emit a **lint report** — diagnostic records plus an overall blocking status — *without changing the spec*. `lint` catches defects before any work is committed (the `lint` step). You only *detect and name* defects; repair is the `improve` step (the `improve` step), triggered by the codes you emit. Naming the repair in `suggest` is detection; *applying* it is not.
+Read one `spec.md` and emit a **lint report** — diagnostic records plus an overall blocking status — *without changing the spec*. `lint` catches defects before any work is committed (the `lint` step). You only *detect and name* defects; repair is the `improve` step (the `improve` step), triggered by the codes you emit. Naming the repair in `suggest` is detection; *applying* it is not.
 
 Run it with the **Skeptic** stance (the `skeptic` profile): assume each obligation is under-specified until its actor, modality, object, and proof are present and observable; never wave a clause through because it "reads fine." *Why:* a defect that changes what gets built is cheapest to catch here, before generation; under-specification is the most severe defect class, and a clause that reads fine to a generous reader is exactly the one that hands a coder a guess.
 
 ## Consumes
 
-- One `spec.swarm.md` (the surface artifact; prose + SOL blocks).
+- One `spec.md` (the surface artifact; prose + SOL blocks).
 - The language reference for codes and record shape — for lookup, never to redefine.
 - Optionally, a project `swarm.config.json`/`.yaml` (or the `lint:` section of `.agents/swarm.config.yaml`) carrying severity overrides and waivers (see the SOL error catalogue), and `memory/glossary.md` for term resolution (`SOL-P006`/`SOL-P057`).
 
@@ -101,7 +101,7 @@ Failure modes seen on real lint runs, each with the correction:
 
 Before closing the step, confirm — and where a step would otherwise leave no visible trace, write the trace into the report:
 
-- [ ] **Non-mutating.** The `spec.swarm.md` is byte-for-byte unchanged. (A diff is the proof; if you ran a project static-analysis slot, paste its real output — "passed" without output is not proof.)
+- [ ] **Non-mutating.** The `spec.md` is byte-for-byte unchanged. (A diff is the proof; if you ran a project static-analysis slot, paste its real output — "passed" without output is not proof.)
 - [ ] **Codes are unified and real.** Every emitted code is a `SOL-<LAYER><NNN>` from the catalogue in the SOL error catalogue; no `APS-*`, no flat `SOL###`, no `SOL-L###`, no invented code, no `note`.
 - [ ] **Record shape is complete.** Every diagnostic has all six fields; `suggest` names an `improve` op (the `improve` step) or a concrete fix, or is `null`.
 - [ ] **Severities follow the spec.** Defaults are as the SOL error catalogue defines; any demotion carries a complete waiver record; any promotion is a recorded strict-mode override.

@@ -2,7 +2,7 @@
 type: review
 id: {{slug}}-review
 source_trace: {{slug}}-trace
-source_spec: {{spec-id}}.swarm.md
+source_spec: {{spec-id}}.md
 reviewed_output: <the output / change set under review>
 pass: review
 profile: skeptic

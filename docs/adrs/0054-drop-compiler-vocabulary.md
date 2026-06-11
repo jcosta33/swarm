@@ -27,7 +27,7 @@ adopters "Swarm is not a compiler" while the artifact catalogue they copy verbat
 Remove the residual compiler vocabulary **completely** from reader-facing content (the immutable ADR bodies
 keep theirs as history):
 
-- **Artifact class label: "compiler-visible" → "Swarm-format".** The `.swarm.` infix marks Swarm's parse/emit
+- **Artifact class label: "compiler-visible" → "Swarm-format".** The `spec.md` naming marks Swarm's parse/emit
   format; a *conformant tool* (never Swarm itself) parses or emits it. ("Swarm-parsed" phrasing → "parsed",
   for the same NO-RUNTIME reason.)
 - **Structured-form provenance fields: `compiler_version` → `tool_version`, `compiled_at` → `emitted_at`.**
@@ -38,7 +38,7 @@ keep theirs as history):
   approved spec can be lowered into tasks deterministically.
 - **Incidental "compile" metaphors:** "must compile" → "must lower cleanly"; "lint/compile findings" → "lint
   findings"; "compiled into tasks/the graph" → "lowered into …".
-- **KEPT (not Swarm-as-compiler roleplay):** the `lower` step name, the `*.swarm.ir.json` / `*.swarm.plan.json`
+- **KEPT (not Swarm-as-compiler roleplay):** the `lower` step name, the `*.ir.json` / `*.plan.json`
   reserved filenames, and genuine references to *other* ecosystems' compilers (the C# `LangVersion` analogy in
   `versioning.md`; the adopter's own code compiler in the code-migration skills).
 
@@ -53,7 +53,7 @@ field names.
 | --- | --- |
 | Keep "compiler-visible" / `compiler_version` as precise *internal* terms (the earlier de-cosplay's choice) | The skeptic audit showed they read as "Swarm is a compiler" on the most-copied contract pages, undercutting ADR-0053 §4 and contradicting NO RUNTIME. "Internal" terms that ship in the artifact catalogue an adopter copies are not internal. |
 | Rename the reader-facing label but keep the schema field | `compiler_version` is the *same* roleplay, in the contract instance an adopter copies verbatim. Half-honest is the dishonesty the audit flagged. |
-| Rename the `*.swarm.ir.json` filename too | Out of scope: the filename is a stable reserved contract name (kept by the prior de-cosplay) and contains no "compiler" token. |
+| Rename the `*.ir.json` filename too | Out of scope: the filename is a stable reserved contract name (kept by the prior de-cosplay) and contains no "compiler" token. |
 
 ## Consequences
 

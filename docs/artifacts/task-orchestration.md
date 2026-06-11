@@ -28,13 +28,13 @@ This stance is held by the write-surface discipline, not by any runtime tool: th
 
 ## Filename & placement
 
-`task-orchestration.md` is a **working artifact**, not a Swarm-format source. Its filename therefore MUST NOT carry the `.swarm.` infix; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
+`task-orchestration.md` is a **working artifact**, not a Swarm-format source. Its filename therefore MUST NOT carry the spec.md convention; it uses a plain `.md` extension. The infix is the sole discriminator for "does Swarm parse or emit this":
 
 | Class | Rule | This artifact |
 | --- | --- | --- |
-| Swarm-format spec | The human-authored spec is `*.swarm.md`. | No — a coordination record is not a source spec. |
-| Emitted Swarm output | Emitted artifacts carry `.swarm.*` (e.g. `*.swarm.ir.json`, `*.swarm.plan.json`, `*.swarm.trace.md`). | No — a coordination record is not a Swarm-emitted output. |
-| **Working artifact** | Plain `.md`, **no** `.swarm.` infix (e.g. `task-orchestration.md`). | **Yes** — it is a human/agent-authored coordination record. |
+| Swarm-format spec | The human-authored spec is `*.md`. | No — a coordination record is not a source spec. |
+| Emitted Swarm output | Emitted artifacts carry `.*`  (e.g. `*.ir.json`, `*.plan.json`, `*.trace.md`). | No — a coordination record is not a Swarm-emitted output. |
+| **Working artifact** | Plain `.md`, **no** `spec.md` naming (e.g. `task-orchestration.md`). | **Yes** — it is a human/agent-authored coordination record. |
 
 A `task-orchestration.md` MAY embed SOL surface keywords (the `WRITES`-projected OWNED paths, the preserved constraints/invariants) as **quoted data**; embedding them does not make the file a SOL source, and a conformant tool MUST NOT parse a plain `task-orchestration.md` as a spec.
 
@@ -59,7 +59,7 @@ YAML frontmatter delimited by `---`, with at minimum:
 | --- | --- |
 | `type: task-orchestration` | Names the artifact class. Required. |
 | `id` | A stable slug identifying this coordination run (conventionally `{{spec-slug}}-orchestration`). Required. |
-| `source` | Path to the `spec.swarm.md` whose obligations the workers cover. Required. |
+| `source` | Path to the `spec.md` whose obligations the workers cover. Required. |
 | `parallel_group` | The coordination group this run schedules; ties the workers to the disjointness proof. Required. |
 | `created` | Creation timestamp. Required. |
 
@@ -84,13 +84,13 @@ The worker tracker is a table with one row per worker. Two columns are load-bear
 | Column | Meaning |
 | --- | --- |
 | `Worker` | The worker's slug. |
-| `Source doc` | The `spec.swarm.md` this worker's obligations are drawn from. |
+| `Source doc` | The `spec.md` this worker's obligations are drawn from. |
 | `Task kind` | The kind that parameterizes the worker's step (e.g. `implement`). |
 | `Profile` | The carrier profile the worker runs under. |
 | `OWNED paths` | The worker's owned write surfaces; a subset of its obligations' declared `WRITES` (else `SOL-O005`). |
 | `FORBIDDEN paths` | The union of every other worker's OWNED paths. |
 | `Hand-off (deliverable / acceptance bar)` | A one-line summary of the hand-off contract (full form below). |
-| `Branch` | The worker's branch (one worktree per task; conventionally `swarm/<spec-slug>/<task-slug>`). A **single** task implementing a whole spec collapses this to `swarm/<spec-slug>`; the two-level form is for one obligation or a fan-out worker — one grammar reconciles both (the per-task isolation rule, including the `base:` it forks from, is the `implement` step [Isolation](../passes/implement.md) section, ADR-0046). |
+| `Branch` | The worker's branch (one worktree per task; conventionally `swarm/<spec-slug>/<task-slug>`). A **single** task implementing a whole spec collapses this to `swarm/<spec-slug>`; the two-level form is for one obligation or a fan-out worker — one grammar reconciles both (the per-task isolation rule, including the `base:` it forks from, is the `implement` step [Isolation](./passes/implement.md) section, ADR-0046). |
 | `Status` | One of `not-started`, `in-progress`, `stalled`, `awaiting-review`, `kicked-back`, `merged`, `abandoned`. |
 | `Last progress` | The liveness marker — updated each time the lead checks the worker. |
 | `Last verdict` | The latest review verdict for the worker, or `—`. |
@@ -134,7 +134,7 @@ A worker the coordination record tracks is one **task**, and it moves through fo
 
 | Phase | What is read | What is produced | Where |
 | --- | --- | --- | --- |
-| **1. Creation** | the source spec (`spec.swarm.md`) | the structuring chain source spec → structured form → task graph → generated task frame | task frame as gitignored execution scratch (`<task-slug>.task.md`) |
+| **1. Creation** | the source spec (`spec.md`) | the structuring chain source spec → structured form → task graph → generated task frame | task frame as gitignored execution scratch (`<task-slug>.task.md`) |
 | **2. Execution** | the task frame + the source spec | the toolchain prepares the task frame, a worktree, a branch, the agent startup context (the `## Parent contract` carried verbatim into the child task), the verification matrix, and the promotion queue | worktree at `.worktrees/swarm/<spec-slug>/<task-slug>`, branch `swarm/<spec-slug>/<task-slug>` |
 | **3. Completion** | the worktree diff + proof evidence | the worker emits a **trace**; review emits a **review** with one verdict per required `VERIFY BY` binding | trace and review as execution scratch (or, in a code repo, the PR itself) |
 | **4. Reconciliation** | the trace + review | compact trace/review into the ledger; drain the promotion queue; update the status read-model; remove or archive the scratch files; remove the worktree | durable ledger entry (or a linked PR back to the spec repo) and updated status, worktree removed |
@@ -176,14 +176,14 @@ The contract shape the lead emits and updates (the worker partition structured f
 ---
 type: task-orchestration
 id: {{spec-slug}}-orchestration
-source: specs/<feature>/spec.swarm.md
+source: specs/<feature>/spec.md
 parallel_group: {{group}}
 created: {{createdAt}}
 ---
 
 # Orchestration: {{title}}
 
-Recorded coordination contract for a parallel run over `specs/<feature>/spec.swarm.md`.
+Recorded coordination contract for a parallel run over `specs/<feature>/spec.md`.
 Generated by the decompose step and updated as the run proceeds — not a runtime, and never a
 home for authored intent. The authoritative obligations live in the spec; each worker's OWNED
 set is structured from its assigned obligations' WRITES surfaces.
@@ -192,8 +192,8 @@ set is structured from its assigned obligations' WRITES surfaces.
 
 | Worker | Source doc | Task kind | Profile | OWNED paths | FORBIDDEN paths | Hand-off (deliverable / acceptance bar) | Branch | Status | Last progress | Last verdict |
 | ------ | ---------- | --------- | ------- | ----------- | --------------- | --------------------------------------- | ------ | ------ | ------------- | ------------ |
-| auth-client | auth-refresh.swarm.md | implement | builder | src/auth/client/** | src/auth/server/**, migrations/** | refresh-on-expiry works; AC-014 PASS | swarm/auth-refresh/auth-client | in-progress | 2026-05-31 grafted token store | — |
-| auth-server | auth-refresh.swarm.md | implement | builder | src/auth/server/** | src/auth/client/**, migrations/** | issuer rotation; AC-021 PASS | swarm/auth-refresh/auth-server | awaiting-review | 2026-05-31 endpoint done | PASS |
+| auth-client | auth-refresh.md | implement | builder | src/auth/client/** | src/auth/server/**, migrations/** | refresh-on-expiry works; AC-014 PASS | swarm/auth-refresh/auth-client | in-progress | 2026-05-31 grafted token store | — |
+| auth-server | auth-refresh.md | implement | builder | src/auth/server/** | src/auth/client/**, migrations/** | issuer rotation; AC-021 PASS | swarm/auth-refresh/auth-server | awaiting-review | 2026-05-31 endpoint done | PASS |
 
 ## Decisions
 
@@ -216,7 +216,7 @@ And the `## Parent contract` each child task carries verbatim:
 
 - Objective: implement refresh-on-expiry in the auth client.
 - Expected deliverable: branch `swarm/auth-refresh/auth-client` with AC-014 implemented.
-- Acceptance bar: AC-014 reaches VERDICT PASS (VERIFY BY test:cmdTest:...).
+- Acceptance bar: AC-014 reaches VERDICT PASS (VERIFY BY test:cmdTest:..).
 - Boundaries:
   - OWNED: `src/auth/client/**`
   - FORBIDDEN: `src/auth/server/**`, `migrations/**`
@@ -225,10 +225,10 @@ And the `## Parent contract` each child task carries verbatim:
 
 ## Copyable template
 
-**There is no copyable skeleton for this artifact.** A coordination record is not started from a blank template you fill in — it is *generated* by the lead during the decompose step and updated as the parallel run proceeds, and it is gitignored execution scratch (`task-orchestration.md`), created lazily by a future tool. The worker partition is structured from the obligations' declared `WRITES` surfaces; the hand-offs, liveness, decisions, and merge log are recorded as the run unfolds. The observed shape above is the **contract** every generated coordination record MUST satisfy; this page is that contract. Do not hand-author it as intent, and do not introduce a `task-orchestration.swarm.md` form — it is generated execution material, never a Swarm-format source.
+**There is no copyable skeleton for this artifact.** A coordination record is not started from a blank template you fill in — it is *generated* by the lead during the decompose step and updated as the parallel run proceeds, and it is gitignored execution scratch (`task-orchestration.md`), created lazily by a future tool. The worker partition is structured from the obligations' declared `WRITES` surfaces; the hand-offs, liveness, decisions, and merge log are recorded as the run unfolds. The observed shape above is the **contract** every generated coordination record MUST satisfy; this page is that contract. Do not hand-author it as intent, and do not introduce a `task-orchestration.md` form — it is generated execution material, never a Swarm-format source.
 
 ## Related
 
-- [The `decompose` step](../passes/decompose.md) — the step that *produces* a coordination record: it partitions the obligations into write-disjoint workers, projects each worker's OWNED paths from its obligations' `WRITES` surfaces, and computes the merge order from the `DEPENDS ON` DAG.
+- [The `decompose` step](./passes/decompose.md) — the step that *produces* a coordination record: it partitions the obligations into write-disjoint workers, projects each worker's OWNED paths from its obligations' `WRITES` surfaces, and computes the merge order from the `DEPENDS ON` DAG.
 - [`task.md`](task.md) — the per-worker child frame the lead spawns from the tracker; it carries the worker's hand-off verbatim as its `## Parent contract`, and its `write_surfaces` are the OWNED set this record assigns.
-- [The `review` step](../passes/review.md) — the step that emits the per-task verdicts the merge gate reads; a missing review, or a `FAIL` / `UNVERIFIED` verdict on assigned work, blocks the per-task merge.
+- [The `review` step](./passes/review.md) — the step that emits the per-task verdicts the merge gate reads; a missing review, or a `FAIL` / `UNVERIFIED` verdict on assigned work, blocks the per-task merge.

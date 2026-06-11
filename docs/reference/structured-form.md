@@ -1,10 +1,10 @@
 # The Structured Form and Plan JSON Schemas
 
-> Swarm's reference for the two emitted JSON contracts: the **structured form** of a spec (`*.swarm.ir.json`) — the typed obligations a tool reasons over — and the **plan** (`*.swarm.plan.json`) — its schedulable projection into work packets. This page reproduces both JSON Schemas in full, names every required field, and pins the three version fields the envelopes carry.
+> Swarm's reference for the two emitted JSON contracts: the **structured form** of a spec (`*.ir.json`) — the typed obligations a tool reasons over — and the **plan** (`*.plan.json`) — its schedulable projection into work packets. This page reproduces both JSON Schemas in full, names every required field, and pins the three version fields the envelopes carry.
 
-A Swarm specification is human-authored as controlled markdown (`*.swarm.md`); the **structured (JSON) form** is the typed, machine-checkable form of that same content. Where the surface is English-shaped UPPERCASE space-separated keywords (`VERIFY BY`, `DEPENDS ON`, `WRITES`), the structured form is `snake_case` JSON (`verify_by`, `depends_on`, `writes`): one document re-expressing every obligation, relationship, diagnostic, and provenance fact of one source file. The **plan** takes those obligations and groups the work needed to discharge them into schedulable **work packets**. Where the structured form answers *"what must hold and how do the obligations relate,"* the plan answers *"what units of work exist, in what order, on which surfaces, and which are safe to run at the same time."*
+A Swarm specification is human-authored as controlled markdown (`*.md`); the **structured (JSON) form** is the typed, machine-checkable form of that same content. Where the surface is English-shaped UPPERCASE space-separated keywords (`VERIFY BY`, `DEPENDS ON`, `WRITES`), the structured form is `snake_case` JSON (`verify_by`, `depends_on`, `writes`): one document re-expressing every obligation, relationship, diagnostic, and provenance fact of one source file. The **plan** takes those obligations and groups the work needed to discharge them into schedulable **work packets**. Where the structured form answers *"what must hold and how do the obligations relate,"* the plan answers *"what units of work exist, in what order, on which surfaces, and which are safe to run at the same time."*
 
-Both are **emitted contracts, not running code**. Swarm is markdown-only and has NO RUNTIME: this is a spec format plus the agents that build from it, and it ships **no emitter, no parser, no validator, and no scheduler** that produces or consumes these files. The JSON Schemas below are versioned, inert data — the shape a *future* tool MUST honor so any producer and any consumer interoperate. `*.swarm.ir.json` and `*.swarm.plan.json` are reserved, documented filenames, never artifacts a shipped process writes. This is why `provenance.tool_version` is **`null` today**: there is no emitter to stamp a tool version. A valid repository MUST carry these schemas verbatim and MUST frame any structured-form or plan instance as "the contract a future tool emits and a future launcher consumes," never as the output of shipped tooling.
+Both are **emitted contracts, not running code**. Swarm is markdown-only and has NO RUNTIME: this is a spec format plus the agents that build from it, and it ships **no emitter, no parser, no validator, and no scheduler** that produces or consumes these files. The JSON Schemas below are versioned, inert data — the shape a *future* tool MUST honor so any producer and any consumer interoperate. `*.ir.json` and `*.plan.json` are reserved, documented filenames, never artifacts a shipped process writes. This is why `provenance.tool_version` is **`null` today**: there is no emitter to stamp a tool version. A valid repository MUST carry these schemas verbatim and MUST frame any structured-form or plan instance as "the contract a future tool emits and a future launcher consumes," never as the output of shipped tooling.
 
 > Design rationale: binding downstream analysis to a typed structured form rather than to free-form prose is what makes the obligations mechanically checkable — topological sort over dependencies, cycle detection, write-surface conflict detection, the traceability join, merge-gate evaluation, and drift recomputation all read the structured form, not the markdown. This is the surface-vs-structured-form layering: a human authors the surface, a tool reasons over the structured form.
 
@@ -27,9 +27,9 @@ A SOL structured-form document MUST be a single JSON object with **exactly five 
 | Key | JSON type | Cardinality | Purpose |
 |---|---|---|---|
 | `meta` | object | exactly 1 | Spec-level identity, language discriminator, version, status, ownership, imports. |
-| `nodes` | array of node objects | 0..n | The merged obligation records — one per surface block. |
-| `edges` | array of edge objects | 0..n | The typed relationships between nodes — the single source of relationship truth. |
-| `diagnostics` | array of diagnostic objects | 0..n | SARIF-shaped lint findings keyed to the unified `SOL-<LAYER><NNN>` taxonomy. |
+| `nodes` | array of node objects | 0.n | The merged obligation records — one per surface block. |
+| `edges` | array of edge objects | 0.n | The typed relationships between nodes — the single source of relationship truth. |
+| `diagnostics` | array of diagnostic objects | 0.n | SARIF-shaped lint findings keyed to the unified `SOL-<LAYER><NNN>` taxonomy. |
 | `provenance` | object | exactly 1 | Emission facts: source hash, tool version, emit timestamp. |
 
 A valid structured-form document MUST contain all five keys. An empty spec (no blocks) still emits `nodes: []`, `edges: []`, `diagnostics: []` and fully-populated `meta` and `provenance`. No additional top-level keys are permitted in SOL/0.1; unknown top-level keys MUST be rejected by a validating consumer.
@@ -46,7 +46,7 @@ A valid structured-form document MUST contain all five keys. An empty spec (no b
   "version": "0.1.0",
   "status": "draft",
   "owners": ["@auth-platform"],
-  "imports": ["shared/security.swarm.md"]
+  "imports": ["shared/security.md"]
 }
 ```
 
@@ -55,10 +55,10 @@ A valid structured-form document MUST contain all five keys. An empty spec (no b
 | `id` | string | MUST | Stable spec identifier (slug); matches the surface frontmatter `id`, e.g. `auth-refresh`. |
 | `title` | string | SHOULD | Human-readable spec title. |
 | `language` | string | MUST | The SOL language discriminator, exactly **`SOL/0.1`** for this version. Answers "which grammar / blocks / modals / lint codes." Never merged with `version`. |
-| `version` | string | MUST | The **spec content** version — the SemVer of the authored `*.swarm.md` source (e.g. `0.1.0`). Pattern `^[0-9]+\.[0-9]+\.[0-9]+$`. Distinct from `language`. |
+| `version` | string | MUST | The **spec content** version — the SemVer of the authored `*.md` source (e.g. `0.1.0`). Pattern `^[0-9]+\.[0-9]+\.[0-9]+$`. Distinct from `language`. |
 | `status` | string | MUST | Spec lifecycle state; one of `draft`, `review`, `approved`, `superseded`. |
 | `owners` | array of string | SHOULD (MAY be empty) | Accountable maintainers (handles). |
-| `imports` | array of string | SHOULD (MAY be empty) | Relative paths to imported `*.swarm.md` specs whose nodes are in scope for cross-spec reference resolution. |
+| `imports` | array of string | SHOULD (MAY be empty) | Relative paths to imported `*.md` specs whose nodes are in scope for cross-spec reference resolution. |
 
 ### 1.2 `nodes[]` — the merged obligation record
 
@@ -69,7 +69,7 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 | `id` | string | MUST | Structured-form node id. MAY be namespaced as `<KIND>.<spec>.<surface-id>` (e.g. `REQ.auth-refresh.AC-001`); the short surface id (`AC-001`) MUST be recoverable from it. |
 | `kind` | string | MUST | One of `REQ`, `CONSTRAINT`, `INVARIANT`, `INTERFACE`, `QUESTION`, `TRACE`, `VERDICT`. |
 | `authority` | string | MUST for obligation kinds | The resolved domain-authority rank governing this node (e.g. `security`, `architecture`, `product`), structured from the obligation's `DOMAIN` clause or the spec frontmatter. MAY be absent/`null` for `QUESTION`/`TRACE`. |
-| `modality` | string \| null | MUST for `REQ`/`CONSTRAINT`/`INVARIANT` | The binding modal: one of `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY`. `null` for kinds that carry no modal (`INTERFACE`, `QUESTION`, `TRACE`, `VERDICT`). Mirrors `clauses.modal`. |
+| `modality` | string \| null | MUST for `REQ`/`CONSTRAINT`/`INVARIANT` | The binding modal: one of `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT`, `MAY`null` for kinds that carry no modal (`INTERFACE`, `QUESTION`, `TRACE`, `VERDICT`). Mirrors `clauses.modal`. |
 | `clauses` | object | MUST | The structured decomposition of the control sentence (§1.2.1). |
 | `owner` | string \| null | SHOULD | The accountable owner — structured from `OWNED BY`. |
 | `risk` | string \| null | MAY | One of `low`, `medium`, `high`, `critical` — structured from `RISK`. |
@@ -90,7 +90,7 @@ Each element of `nodes[]` is one **merged obligation record**: the fully normali
 |---|---|---|---|
 | `where` | `WHERE <expr>` | string \| null | Precondition / state qualifier; opaque text in v0.1. |
 | `while` | `WHILE <expr>` | string \| null | Sustained-state qualifier; opaque text. |
-| `trigger` | `WHEN` / `IF [THEN] <expr>` | object \| null | `{ "kw": "WHEN" \| "IF" \| null, "expr": <string \| null> }`. `THEN` is sugar after `IF` only and is not represented as data. |
+| `trigger` | `WHEN` / `IF [THEN] <expr>` | object \| null | `{ "kw": "WHEN" \| "IF" \| null, "expr": <string \| null> }`THEN` is sugar after `IF` only and is not represented as data. |
 | `subject` | `THE <actor>` | string \| null | The bound actor. |
 | `modal` | `<MODAL>` | string \| null | The binding modal (mirrors top-level `modality`). |
 | `predicate` | `<response>` | string \| null | The required behaviour; opaque text. |
@@ -121,12 +121,12 @@ Each surface `VERIFY BY <type>:<adapter>:<artifact>[#selector]` clause normalize
 #### 1.2.3 `source{}`
 
 ```json
-{ "file": "auth-refresh.swarm.md", "line_start": 18, "line_end": 27, "content_hash": "sha256:9f2c…" }
+{ "file": "auth-refresh.md", "line_start": 18, "line_end": 27, "content_hash": "sha256:9f2c…" }
 ```
 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
-| `file` | string | MUST | Relative path to the originating `*.swarm.md`. |
+| `file` | string | MUST | Relative path to the originating `*.md`. |
 | `line_start` | integer (≥1) | MUST | First line of the block (1-based). |
 | `line_end` | integer (≥1) | MUST | Last line of the block. |
 | `content_hash` | string | MUST | Content hash of the block's source text (e.g. `sha256:…`); the obligation-source hash the drift model joins against (drives `STALE` detection). **Tool-emitted** (Invariant 1: no shipped hasher) — a by-hand run records a documented placeholder (`pending:tool` or a git blob/commit ref), never a fabricated digest, and a hand-written hash is untrusted until a tool recomputes it. |
@@ -173,7 +173,7 @@ Each diagnostic is a SARIF-shaped finding keyed to the unified `SOL-<LAYER><NNN>
   "code": "SOL-V001",
   "level": "error",
   "node": "REQ.auth-refresh.AC-002",
-  "source": { "file": "auth-refresh.swarm.md", "line_start": 31, "line_end": 33 },
+  "source": { "file": "auth-refresh.md", "line_start": 31, "line_end": 33 },
   "message": "Obligation has no VERIFY BY binding; no verification path."
 }
 ```
@@ -197,7 +197,7 @@ Diagnostics live only in `diagnostics[]`; they are never folded into node `statu
 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
-| `hash` | string | MUST | Content hash of the whole source `*.swarm.md` at emission. |
+| `hash` | string | MUST | Content hash of the whole source `*.md` at emission. |
 | `tool_version` | string \| null | MUST (MAY be `null`) | The emitting tool's version — the third version axis. **`null` today**, because no emitter ships. |
 | `emitted_at` | string \| null | MUST (MAY be `null`) | ISO-8601 timestamp of emission; `null` until a tool emits. |
 
@@ -219,7 +219,7 @@ These three values drift independently and MUST remain three fields.
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://swarm.dev/schema/0.1/swarm.ir.json",
-  "title": "Swarm structured-form envelope (*.swarm.ir.json)",
+  "title": "Swarm structured-form envelope (*.ir.json)",
   "type": "object",
   "additionalProperties": false,
   "required": ["meta", "nodes", "edges", "diagnostics", "provenance"],
@@ -235,7 +235,7 @@ These three values drift independently and MUST remain three fields.
         "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$", "description": "Spec content SemVer; never merged with language" },
         "status":  { "enum": ["draft", "review", "approved", "superseded"] },
         "owners":  { "type": "array", "items": { "type": "string" }, "default": [] },
-        "imports": { "type": "array", "items": { "type": "string", "description": "Path to an imported *.swarm.md" }, "default": [] }
+        "imports": { "type": "array", "items": { "type": "string", "description": "Path to an imported *.md" }, "default": [] }
       }
     },
 
@@ -355,7 +355,7 @@ These three values drift independently and MUST remain three fields.
       "additionalProperties": false,
       "required": ["hash", "tool_version", "emitted_at"],
       "properties": {
-        "hash":             { "type": "string", "description": "Hash of the source *.swarm.md this structured form was emitted from" },
+        "hash":             { "type": "string", "description": "Hash of the source *.md this structured form was emitted from" },
         "tool_version": { "type": ["string", "null"], "description": "Tool version; null until a tool exists; never merged with meta.language or meta.version" },
         "emitted_at":      { "type": ["string", "null"], "format": "date-time" }
       }
@@ -377,7 +377,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
     "version": "0.1.0",
     "status": "draft",
     "owners": ["@auth-platform"],
-    "imports": ["shared/security.swarm.md"]
+    "imports": ["shared/security.md"]
   },
   "nodes": [
     {
@@ -401,7 +401,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
         { "type": "property", "adapter": "cmdTest", "ref": "web/tests/auth-refresh.properties.ts", "selector": "no_unbounded_retry", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 18, "line_end": 29, "content_hash": "sha256:9f1c…" },
+      "source": { "file": "auth-refresh.md", "line_start": 18, "line_end": 29, "content_hash": "sha256:9f1c…" },
       "provenance": []
     },
     {
@@ -413,7 +413,7 @@ A minimal 3-node graph: one `REQ` (verified by a test and a property), one `INTE
         { "type": "contract", "adapter": "cmdValidate", "ref": "openapi/auth.yaml", "selector": "POST /token/refresh", "gate": "required" }
       ],
       "status": "UNVERIFIED",
-      "source": { "file": "auth-refresh.swarm.md", "line_start": 31, "line_end": 38, "content_hash": "sha256:2ab7…" },
+      "source": { "file": "auth-refresh.md", "line_start": 31, "line_end": 38, "content_hash": "sha256:2ab7…" },
       "provenance": []
     }
   ],
@@ -458,8 +458,8 @@ A SOL plan document MUST be a single JSON object with **exactly four top-level k
 | Key | JSON type | Cardinality | Purpose |
 |---|---|---|---|
 | `meta` | object | exactly 1 | Plan-level identity, the spec / structured form it derives from, the three version fields. |
-| `packets` | array of work-packet objects | 0..n | The schedulable work units (§2.2). |
-| `edges` | array of edge objects | 0..n | Inter-packet relationships — the same single-source-of-relationship-truth rule as the structured form. |
+| `packets` | array of work-packet objects | 0.n | The schedulable work units (§2.2). |
+| `edges` | array of edge objects | 0.n | Inter-packet relationships — the same single-source-of-relationship-truth rule as the structured form. |
 | `provenance` | object | exactly 1 | Emission facts; same shape as the structured form's `provenance`. |
 
 The plan reuses the structured form's discipline: relationships between packets live only in `edges[]` (never duplicated as packet scalars), and the three version fields stay distinct. The plan carries `writes[]` (write surfaces) and **never a `locks` field** — a lock group is a named coarse write `SURFACE`, so lock-set analysis *is* write-set analysis at surface granularity.
@@ -469,7 +469,7 @@ The plan reuses the structured form's discipline: relationships between packets 
 ```json
 {
   "id": "auth-refresh",
-  "derived_from": "auth-refresh.swarm.ir.json",
+  "derived_from": "auth-refresh.ir.json",
   "language": "SOL/0.1",
   "version": "0.1.0",
   "max_parallel": null
@@ -479,7 +479,7 @@ The plan reuses the structured form's discipline: relationships between packets 
 | Field | JSON type | Required | Meaning |
 |---|---|---|---|
 | `id` | string | MUST | Spec/plan identifier; matches `meta.id` of the source structured form. |
-| `derived_from` | string | MUST | Path to the `*.swarm.ir.json` this plan was derived from. |
+| `derived_from` | string | MUST | Path to the `*.ir.json` this plan was derived from. |
 | `language` | string | MUST | The SOL discriminator (`SOL/0.1`); same axis as the structured form's `meta.language`. |
 | `version` | string | MUST | The spec content version this plan reflects. Pattern `^[0-9]+\.[0-9]+\.[0-9]+$`. |
 | `max_parallel` | integer \| null | MAY (defaults `null`) | An advisory parallelism hint for a launcher; `null` = unspecified. Swarm computes *safety* (§2.3); concurrency *limits* are a launcher policy. |
@@ -494,7 +494,7 @@ A **work packet** is one schedulable unit: a single step applied (under an optio
   "pass": "implement",
   "profile": "default",
   "inputs":  ["REQ.auth-refresh.AC-001"],
-  "outputs": ["web/src/http/client.ts", "auth-refresh.swarm.trace.md"],
+  "outputs": ["web/src/http/client.ts", "auth-refresh.trace.md"],
   "writes":  ["web.http.client"],
   "reads":   ["api.auth.session-store"],
   "depends_on": ["WP-001"],
@@ -510,7 +510,7 @@ A **work packet** is one schedulable unit: a single step applied (under an optio
 | `pass` | string | MUST | The step this packet runs: one of the 9 steps `author`, `lint`, `improve`, `lower`, `decompose`, `implement`, `verify`, `review`, `promote`. |
 | `profile` | string \| null | MAY (defaults `null`) | The heuristic profile parameterizing the step (e.g. `skeptic` on `review`, `lead-engineer` on `decompose`). `null` = the step's default profile. |
 | `inputs` | array of string | MUST | The node ids (obligations / questions / traces) this packet consumes. |
-| `outputs` | array of string | MUST | The artifacts this packet is expected to produce (code paths, `*.swarm.trace.md`, `review.md`, `finding.md`, …). |
+| `outputs` | array of string | MUST | The artifacts this packet is expected to produce (code paths, `*.trace.md`, `review.md`, `finding.md`, …). |
 | `writes` | array of string | MUST (MAY be empty) | The **write surfaces** this packet modifies — `SURFACE` ids, derived from the `writes` scope sets of its `inputs`. Every write surface here MUST be a subset of its obligations' declared `WRITES`. No `locks` field. |
 | `reads` | array of string | MUST (MAY be empty) | The read surfaces this packet touches. |
 | `depends_on` | array of string | MUST (MAY be empty) | Packet ids that MUST complete before this packet; the merge-order partial order. Each entry MUST also appear as a `depends_on` edge. |
@@ -536,7 +536,7 @@ A packet's `merge_safe` MUST be `false` if it has any unresolved `conflicts_with
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://swarm.dev/schema/0.1/swarm.plan.json",
-  "title": "Swarm plan envelope (*.swarm.plan.json)",
+  "title": "Swarm plan envelope (*.plan.json)",
   "type": "object",
   "additionalProperties": false,
   "required": ["meta", "packets", "edges", "provenance"],
@@ -547,7 +547,7 @@ A packet's `merge_safe` MUST be `false` if it has any unresolved `conflicts_with
       "required": ["id", "derived_from", "language", "version"],
       "properties": {
         "id":           { "type": "string", "description": "Plan id (slug); typically the source spec id." },
-        "derived_from": { "type": "string", "description": "The *.swarm.ir.json / spec id this plan was derived from." },
+        "derived_from": { "type": "string", "description": "The *.ir.json / spec id this plan was derived from." },
         "max_parallel": { "type": ["integer", "null"], "default": null, "description": "Advisory parallelism hint for a launcher." },
         "language":     { "const": "SOL/0.1", "description": "SOL language discriminator; never merged with version." },
         "version":      { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$", "description": "Spec content SemVer; never merged with language." }
@@ -610,7 +610,7 @@ For the auth-refresh spec (one `INTERFACE`, one `REQ` depending on it, one `INVA
 
 ```json
 {
-  "meta": { "id": "auth-refresh", "derived_from": "auth-refresh.swarm.ir.json",
+  "meta": { "id": "auth-refresh", "derived_from": "auth-refresh.ir.json",
             "language": "SOL/0.1", "version": "0.1.0", "max_parallel": null },
   "packets": [
     { "id": "WP-001", "pass": "implement", "profile": "default",
@@ -622,7 +622,7 @@ For the auth-refresh spec (one `INTERFACE`, one `REQ` depending on it, one `INVA
       "writes": ["web.http.client"], "reads": ["api.auth.contract"],
       "depends_on": ["WP-001"], "lane": "agent-a", "batch": 1, "merge_safe": true },
     { "id": "WP-003", "pass": "verify", "profile": "default",
-      "inputs": ["INVARIANT.auth-refresh.I-001"], "outputs": ["auth-refresh.swarm.trace.md"],
+      "inputs": ["INVARIANT.auth-refresh.I-001"], "outputs": ["auth-refresh.trace.md"],
       "writes": ["web.http.tests"], "reads": ["web.http.client"],
       "depends_on": ["WP-002"], "lane": "agent-b", "batch": 2, "merge_safe": true }
   ],
@@ -644,10 +644,10 @@ A document is a valid SOL/0.1 plan iff it: (1) has exactly the four top-level ke
 
 ## Related
 
-- [docs/model/how-swarm-works.md](../model/how-swarm-works.md) — the seven phases / nine steps that emit and consume the structured form and the plan; the `lower` and `decompose` steps that produce them.
-- [docs/language/versioning.md](../language/versioning.md) — the two version axes and the three version fields (`meta.language`, `meta.version`, `provenance.tool_version`) these envelopes carry.
-- [docs/language/SOL.md](../language/SOL.md) — the surface language: the 7 block types, 5 modals, and clause grammar these JSON fields are the structured form of.
-- [docs/language/errors.md](../language/errors.md) — the `SOL-<LAYER><NNN>` lint catalogue the `diagnostics[]` array carries.
+- [docs/model/how-swarm-works.md](./model/how-swarm-works.md) — the seven phases / nine steps that emit and consume the structured form and the plan; the `lower` and `decompose` steps that produce them.
+- [docs/language/versioning.md](./language/versioning.md) — the two version axes and the three version fields (`meta.language`, `meta.version`, `provenance.tool_version`) these envelopes carry.
+- [docs/language/SOL.md](./language/SOL.md) — the surface language: the 7 block types, 5 modals, and clause grammar these JSON fields are the structured form of.
+- [docs/language/errors.md](./language/errors.md) — the `SOL-<LAYER><NNN>` lint catalogue the `diagnostics[]` array carries.
 - [docs/reference/proof-types.md](./proof-types.md) — the 9 closed proof types and the `VERIFY BY <type>:<adapter>:<artifact>` binding the `verify_by[]` array normalizes.
 - [docs/reference/cheatsheet.md](./cheatsheet.md) — the canonical counts (7 kinds, 5 modals, 9 proof types, 7 edge types, 9 steps) the closed enumerations in these schemas MUST match.
-- [docs/model/conformance.md](../model/conformance.md) — which artifacts a valid repository MUST carry, including these schemas verbatim.
+- [docs/model/conformance.md](./model/conformance.md) — which artifacts a valid repository MUST carry, including these schemas verbatim.

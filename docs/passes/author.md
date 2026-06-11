@@ -1,6 +1,6 @@
 # The `author` step
 
-> Swarm's reference for the `author` step: how human intent enters the flow as `spec.swarm.md`, and how the epistemic stance of each source parent is preserved when it is authored in.
+> Swarm's reference for the `author` step: how human intent enters the flow as `spec.md`, and how the epistemic stance of each source parent is preserved when it is authored in.
 
 `author` is the first of the **nine steps** of the Swarm flow (`author -> lint -> improve -> lower -> decompose -> implement -> verify -> review -> promote`). This page is the reference for that single step.
 
@@ -13,14 +13,14 @@ The `author` step **captures human intent as SOL obligations and APS prose**, pr
 | Aspect | Value |
 |---|---|
 | Phase(s) | **entry** — pre-`PARSE` |
-| Input artifacts | chat, `research.md`, `audit.md`, `bug-report.md`, prior `spec.swarm.md` |
-| Output artifact | `spec.swarm.md` (draft: prose + SOL blocks) |
+| Input artifacts | chat, `research.md`, `audit.md`, `bug-report.md`, prior `spec.md` |
+| Output artifact | `spec.md` (draft: prose + SOL blocks) |
 | Typical carrier profile | Architect (spec), Surveyor/Researcher (research), Auditor (audit), Bug Hunter (bug-report) |
 | Lint layer | — (produces the input to `lint`; emits no lint codes itself) |
 
 ## Where it sits in the flow
 
-The seven **phases** are `PARSE -> NORMALIZE -> LOWER -> EXECUTE -> VERIFY -> REVIEW -> PROMOTE`. `author` is deliberately **outside** that phase taxonomy: it is the *entry step* that runs **before `PARSE`**, because its output (`spec.swarm.md`, written to the feature folder `specs/<feature>/` beside any source docs it normalized) is the first artifact Swarm can analyze.
+The seven **phases** are `PARSE -> NORMALIZE -> LOWER -> EXECUTE -> VERIFY -> REVIEW -> PROMOTE`author` is deliberately **outside** that phase taxonomy: it is the *entry step* that runs **before `PARSE`**, because its output (`spec.md`, written to the feature folder `specs/<feature>/` beside any source docs it normalized) is the first artifact Swarm can analyze.
 
 Two contract notes follow from this position:
 
@@ -35,19 +35,19 @@ The shipped stdlib guide set (ADR-0042) is: a dedicated step guide for each of t
 
 ## Authoring is parent-normalization: epistemic stances are preserved
 
-`author` is the step through which a spec's recognized **parents** normalize into `spec.swarm.md`. The recognized parents are PRD, research, RFC, ADR, audit, bug-report, finding, use-case/examples, NFR/SLO, and interface sources (OpenAPI / GraphQL / DB schema).
+`author` is the step through which a spec's recognized **parents** normalize into `spec.md`. The recognized parents are PRD, research, RFC, ADR, audit, bug-report, finding, use-case/examples, NFR/SLO, and interface sources (OpenAPI / GraphQL / DB schema).
 
 Each parent carries an **epistemic stance** — what kind of knowledge it is allowed to assert — and that stance is **normative**: it MUST be preserved when the parent is promoted into a spec (or, for a bug-report, into a fix task). The `author` step is where most of this normalization happens (the rows below marked "via `author`"):
 
 | Parent artifact | Epistemic stance | Promotes to |
 |---|---|---|
-| `spec.swarm.md` | **intent** — declares required behavior as SOL obligations | (is the authority; lowers to tasks) |
-| `audit.md` | **observation-only** — describes present state and risk; asserts no new intended behavior | a `spec.swarm.md` (via `author`) |
+| `spec.md` | **intent** — declares required behavior as SOL obligations | (is the authority; lowers to tasks) |
+| `audit.md` | **observation-only** — describes present state and risk; asserts no new intended behavior | a `spec.md` (via `author`) |
 | `bug-report.md` | **diagnosis-only** — reproduces and root-causes a defect; prescribes no fix | a **fix task** (`implement`) |
-| `research.md` | **inquiry** — surveys options and evidence; commits to no decision | a `spec.swarm.md` (via `author`) |
-| `prd.md` | **intent** — states desired product outcomes; non-authoritative until authored | a `spec.swarm.md` (via `author`) |
-| `rfc.md` | **proposal** — proposes a design/approach; commits nothing until accepted | a `spec.swarm.md` (via `author`) or an `adr.md` |
-| `use-case.md` / examples | **scenario** — illustrates desired behavior by example | `REQ`/`INTERFACE` blocks in a `spec.swarm.md` (via `author`) |
+| `research.md` | **inquiry** — surveys options and evidence; commits to no decision | a `spec.md` (via `author`) |
+| `prd.md` | **intent** — states desired product outcomes; non-authoritative until authored | a `spec.md` (via `author`) |
+| `rfc.md` | **proposal** — proposes a design/approach; commits nothing until accepted | a `spec.md` (via `author`) or an `adr.md` |
+| `use-case.md` / examples | **scenario** — illustrates desired behavior by example | `REQ`/`INTERFACE` blocks in a `spec.md` (via `author`) |
 | `nfr.md` / SLOs | **quality attribute** — states non-functional targets | `CONSTRAINT`/`INVARIANT` blocks + verification rows (via `author`) |
 | interface source (OpenAPI/GraphQL/DB schema) | **boundary shape** — declares an interface contract | `INTERFACE` blocks (via `author`) |
 | `finding.md` | **evidence** — one durable, evidenced project fact | governs as Axis-A rank 3 once accepted |
@@ -56,14 +56,14 @@ Each parent carries an **epistemic stance** — what kind of knowledge it is all
 ### The stance invariants `author` must honor
 
 - An `audit.md` MUST NOT contain `REQ`/`CONSTRAINT`/`INVARIANT` obligation blocks of its own intent. Observed risk has obligation force only **after** it is promoted *into* a spec — and that promotion is the `author` step. (This is the epistemic-stance invariant of the kept ADR 0007.)
-- A `bug-report.md` MUST NOT prescribe an implementation. Its diagnosis promotes *into* a **fix task** (an `implement`-step input), not into a fix it dictates. (Kept ADR 0001.) **Populating the fix task:** the task's `assigned_obligations` are read from the report's `## Affected obligations` (the existing violated obligation), its `write_surfaces`/`verification_bindings` from the obligation's declared `WRITES` / `VERIFY BY` — `author` carries the *references* forward, it does not invent obligations. Where the report records that **no** obligation covers the broken behavior, the fix task's **first** assigned obligation is the spec amendment that authors the covering obligation; an uncovered change otherwise cannot clear the merge gate by vacuity ([`review` gate, clause (c)](review.md); [ADR-0055](../adrs/0055-close-the-gate-soft-control-gaps.md)).
-- More generally, `author` must not let a lower-stance parent smuggle higher-stance content across the boundary: an observation, an inquiry, or a proposal becomes binding **intent** only when authored into a `spec.swarm.md`, where SOL obligations carry that force.
+- A `bug-report.md` MUST NOT prescribe an implementation. Its diagnosis promotes *into* a **fix task** (an `implement`-step input), not into a fix it dictates. (Kept ADR 0001.) **Populating the fix task:** the task's `assigned_obligations` are read from the report's `## Affected obligations` (the existing violated obligation), its `write_surfaces`/`verification_bindings` from the obligation's declared `WRITES` / `VERIFY BY` — `author` carries the *references* forward, it does not invent obligations. Where the report records that **no** obligation covers the broken behavior, the fix task's **first** assigned obligation is the spec amendment that authors the covering obligation; an uncovered change otherwise cannot clear the merge gate by vacuity ([`review` gate, clause (c)](review.md); [ADR-0055](./adrs/0055-close-the-gate-soft-control-gaps.md)).
+- More generally, `author` must not let a lower-stance parent smuggle higher-stance content across the boundary: an observation, an inquiry, or a proposal becomes binding **intent** only when authored into a `spec.md`, where SOL obligations carry that force.
 
-Authoring writes the one human-authored analyzable artifact, `spec.swarm.md`: the `.swarm.` infix marks it as such. Every other parent in the table above is plain `.md` (a working artifact); `author` MUST NOT introduce per-parent `.swarm.*` names for audit / research / bug-report / finding / adr.
+Authoring writes the one human-authored analyzable artifact, `spec.md`: the spec.md convention marks it as such. Every other parent in the table above is plain `.md` (a working artifact); `author` MUST NOT introduce per-parent `.*` names for audit / research / bug-report / finding / adr.
 
 ## What gates the boundary — but not via `author`
 
-`author` itself emits no lint codes and runs no gate; it produces the draft that the rest of the flow analyzes. The disciplines that *guard* the content `author` produces live downstream and are referenced here only for orientation: forbidden compositions (e.g. a file that is both a spec and an audit) are enforced not by `author` and not by a gatekeeper skill, but by the [distillation loss budget](../reference/distillation-loss-budget.md) and [source authority](../model/source-authority.md). Re-introducing a composition-policing skill is forbidden, because such a skill would be a semantic owner and soft control presented as enforcement (Invariant 2).
+`author` itself emits no lint codes and runs no gate; it produces the draft that the rest of the flow analyzes. The disciplines that *guard* the content `author` produces live downstream and are referenced here only for orientation: forbidden compositions (e.g. a file that is both a spec and an audit) are enforced not by `author` and not by a gatekeeper skill, but by the [distillation loss budget](./reference/distillation-loss-budget.md) and [source authority](./model/source-authority.md). Re-introducing a composition-policing skill is forbidden, because such a skill would be a semantic owner and soft control presented as enforcement (Invariant 2).
 
 ## Related
 
@@ -71,8 +71,8 @@ Authoring writes the one human-authored analyzable artifact, `spec.swarm.md`: th
 - [`improve`](improve.md) — the only step permitted to rewrite the spec, and only semantics-preservingly.
 - [`lower`](lower.md) and [`decompose`](decompose.md) — how the authored spec is structured into the structured form and then into tasks.
 - [`verify`](verify.md) — served by the `empirical-proof` cross-cutting fragment rather than a dedicated step guide.
-- [SOL](../language/SOL.md) — the obligation language `author` writes into `spec.swarm.md`.
-- [`spec.swarm.md`](../artifacts/spec.md) — the one human-authored analyzable artifact `author` produces.
-- [`audit.md`](../artifacts/audit.md), [`research.md`](../artifacts/research.md), [`bug-report.md`](../artifacts/bug-report.md) — recognized parents `author` normalizes, each carrying the epistemic stance the table above pins.
+- [SOL](./language/SOL.md) — the obligation language `author` writes into `spec.md`.
+- [`spec.md`](./artifacts/spec.md) — the one human-authored analyzable artifact `author` produces.
+- [`audit.md`](./artifacts/audit.md), [`research.md`](./artifacts/research.md), [`bug-report.md`](./artifacts/bug-report.md) — recognized parents `author` normalizes, each carrying the epistemic stance the table above pins.
 - The `write-spec`/`write-audit`/`write-research`/`write-bug-report`/`write-prd`/`write-rfc` author guides — the six author-guide carriers that serve this step, one per recognized parent.
 - The Architect and Surveyor/Researcher personas — typical carrier profiles for the `author` step.

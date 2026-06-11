@@ -1,6 +1,6 @@
 # Principles
 
-> Swarm's reference for the load-bearing invariants and standing principles of the framework: the tiebreakers that decide cases when two design choices collide. The installable files that carry these principles into an adopted project ship under [`starter-kit/`](../starter-kit/). For what Swarm *is* in one paragraph — the spec is the source of truth, agents build from it, nothing runs — read the [root README](../README.md).
+> Swarm's reference for the load-bearing invariants and standing principles of the framework: the tiebreakers that decide cases when two design choices collide. The installable files that carry these principles into an adopted project ship under [`starter-kit/`](./starter-kit/). For what Swarm *is* in one paragraph — the spec is the source of truth, agents build from it, nothing runs — read the [root README](./README.md).
 
 Everything below holds in *every* part of the framework — no construct may contradict an invariant.
 
@@ -32,7 +32,7 @@ Prose, SOL, APS, pass guides, profiles, and `AGENTS.md` are **soft control** —
 
 ### 3. SURFACE vs STRUCTURED-FORM layering
 
-Swarm has two layers: a **human surface** — English-shaped UPPERCASE space-separated keywords inside `*.swarm.md` — and a **machine JSON layer** of snake_case fields (the structured form). The surface is authored; the structured form is emitted.
+Swarm has two layers: a **human surface** — English-shaped UPPERCASE space-separated keywords inside `*.md` — and a **machine JSON layer** of snake_case fields (the structured form). The surface is authored; the structured form is emitted.
 
 - **Rationale.** The surface optimizes for human readability and model comprehension; the structured form optimizes for deterministic analysis. Conflating them produces fragile syntax.
 - **Consequence.** Surface keywords are space-separated uppercase (`VERIFY BY`, `DEPENDS ON`, `OWNED BY`, `WRITES`, `READS`, `AFFECTS`); structured-form fields are snake_case (`verify_by`, `depends_on`, `writes`, `reads`, `affects`); surface ids are short (`AC-001`), structured-form node ids may be namespaced (`REQ.<spec>.AC-001`).

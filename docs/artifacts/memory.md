@@ -10,24 +10,24 @@ What it MUST do:
 
 - Link into the Tier-2 evidence store — `finding.md`, `adr.md`, `memory/patterns/*.md` — and let an agent decide, cheaply, which of those to open.
 - Carry, on **every** entry, a `Load when` condition: the trigger that tells a future agent the entry is relevant to its current task. This is the load-when discipline, and it is normative.
-- Stay small enough to remain in the always-loaded recall budget [[LOSTMID]](../research/sources.md#LOSTMID). The index is read first on tasks that may depend on prior work; the verbose bodies are read lazily, only when a `Load when` matches — because context is a finite resource and a task should load only the durable knowledge it names [[CTXENG]](../research/sources.md#CTXENG).
+- Stay small enough to remain in the always-loaded recall budget [[LOSTMID]](./research/sources.md#LOSTMID). The index is read first on tasks that may depend on prior work; the verbose bodies are read lazily, only when a `Load when` matches — because context is a finite resource and a task should load only the durable knowledge it names [[CTXENG]](./research/sources.md#CTXENG).
 
 What it MUST NOT do:
 
 - It MUST NOT duplicate or restate the body of any Tier-2 artifact. A summary line here is a pointer, not a copy; if a reader needs the claim, they follow the link. A conformant recall tool MAY treat a divergence between an index summary line and the linked artifact as advisory drift, never as a second source of truth.
-- It MUST NOT carry its own obligation blocks. The index is a working artifact (recall routing), not intent: it holds no `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` and weakens no obligation. A discovery that *is* intended behavior promotes into a `spec.swarm.md`, not into this map; the index only gains a row when that discovery also lands as an indexable durable fact.
+- It MUST NOT carry its own obligation blocks. The index is a working artifact (recall routing), not intent: it holds no `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` and weakens no obligation. A discovery that *is* intended behavior promotes into a `spec.md`, not into this map; the index only gains a row when that discovery also lands as an indexable durable fact.
 - It MUST NOT retain an entry that cannot name when it matters. An entry without a usable `Load when` is dead weight against the recall budget and MUST be removed. "Says when to load each entry" is the whole contract; an entry that fails it is not an index row.
 
 Two adjacent files complete Tier-1 but are governed by their own contracts, not this one. `memory/glossary.md` holds term definitions (one word, one meaning); `memory/INDEX.md` holds the recall map only — do not mix definitions into the index. Retired or contradicted knowledge is not silently deleted: it is recorded in the index's stale/superseded table with its replacement, so the recall chain stays auditable.
 
 ## Filename and placement
 
-`memory/INDEX.md` is a **working artifact**: a human/agent recall map, not a Swarm input. By the `.swarm.` infix rule that partitions every Swarm-tracked file, it is therefore a plain `.md` file and MUST NOT carry the `.swarm.` infix:
+`memory/INDEX.md` is a **working artifact**: a human/agent recall map, not a Swarm input. By the spec.md convention rule that partitions every Swarm-tracked file, it is therefore a plain `.md` file and MUST NOT carry the spec.md convention:
 
 | Class | Infix | This artifact |
 | --- | --- | --- |
-| Human-authored Swarm-format spec | `*.swarm.md` | no — the index is not a SOL source |
-| Emitted Swarm artifact | `*.swarm.*` (e.g. `*.swarm.ir.json`) | no — the index is not emitted by Swarm |
+| Human-authored Swarm-format spec | `*.md` | no — the index is not a SOL source |
+| Emitted Swarm artifact | `*.md`  (e.g. `*.ir.json`) | no — the index is not emitted by Swarm |
 | Working artifact | plain `.md`, no infix | **yes** — `memory/INDEX.md` |
 
 A conformant tool keys off the infix as the sole discriminator for "do I parse this as SOL," so the plain name is load-bearing: it marks the index as a contracted Markdown artifact, never a SOL source.
@@ -80,5 +80,5 @@ That template is the skeleton you copy into a new project (it installs as the re
 
 - [`finding.md`](finding.md) — a single durable, provenance-anchored project fact; the Tier-2 artifact a `## Durable findings` row links to.
 - [`adr.md`](adr.md) — an immutable architecture/product decision; the Tier-2 artifact a `## Decisions` row links to.
-- [The `promote` step](../passes/promote.md) — the step that earns a discovery its durability and writes (advances, retracts, supersedes) the index's rows; the producer of this artifact.
-- [The `review` step](../passes/review.md) — surfaces the discoveries and verdicts that the `promote` step turns into indexed memory.
+- [The `promote` step](./passes/promote.md) — the step that earns a discovery its durability and writes (advances, retracts, supersedes) the index's rows; the producer of this artifact.
+- [The `review` step](./passes/review.md) — surfaces the discoveries and verdicts that the `promote` step turns into indexed memory.

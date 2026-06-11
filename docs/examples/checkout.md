@@ -112,7 +112,7 @@ In the structured form, the atomized `AC-010`/`AC-013`/`AC-014` are three indepe
 
 `decompose` is the stage that would have **halted** on the authored spec: the safe-parallelism predicate requires any two parallel packets have pairwise-disjoint write surfaces, and the original `AC-011`/`AC-012` shared `db/orders`. The cleared structured form decomposes into two packets:
 
-- **`checkout-submit`** owns `api/src/checkout/submit.ts` + `db/orders`, covering `AC-010`, `AC-013`, `AC-014`, `AC-011`, preserving `I-010`. Its `source` is `specs/checkout/spec.swarm.md`.
+- **`checkout-submit`** owns `api/src/checkout/submit.ts` + `db/orders`, covering `AC-010`, `AC-013`, `AC-014`, `AC-011`, preserving `I-010`. Its `source` is `specs/checkout/spec.md`.
 - **`checkout-inventory`** owns the disjoint surface `db/inventory`, covers `AC-012`, and carries `blocked_by: [checkout-submit]` (the lowered form of the `AC-012 DEPENDS ON AC-011` edge). Its single binding is `test:cmdTest:api/tests/inventory.spec.ts#writes-ledger`.
 
 Disjoint `WRITES` plus explicit ordering satisfy the safe-parallelism predicate — the `SOL-O001` the authored source tripped is cleared, not merely re-marked. (Each packet's owned paths MUST be a subset of its obligations' `WRITES`, or it is the hard error `SOL-O005`, owned-path-outside-write-surface — the same two-tier rule `auth-refresh` shows.)
@@ -208,6 +208,6 @@ That closes the loop: a draft spec with one bundled obligation, a parallel write
 
 - [Walkthrough: `auth-refresh`](./auth-refresh.md) — the full eight-stage walkthrough this page is a delta against; the canonical single-packet positive run.
 - [Walkthrough: `payment-5xx`](./payment-5xx.md) — the contradiction case: a production `monitor` proof disagrees with a green harness test at the merge gate.
-- [Golden corpus](../reference/golden-corpus.md) — `checkout` is the positive (`must-pass`) fixture this walkthrough draws from; the authored source trips `SOL-P004` (bundled obligation) and `SOL-O001` (parallel write-surface conflict).
-- Step references, in flow order: [`author`](../passes/author.md), [`lint`](../passes/lint.md), [`improve`](../passes/improve.md), [`lower`](../passes/lower.md), [`decompose`](../passes/decompose.md), [`implement`](../passes/implement.md), [`verify`](../passes/verify.md), [`review`](../passes/review.md), [`promote`](../passes/promote.md)
-- Artifact references for each stage's output: [`spec`](../artifacts/spec.md), [`task`](../artifacts/task.md), [`trace`](../artifacts/trace.md), [`review`](../artifacts/review.md), [`finding`](../artifacts/finding.md), [`memory`](../artifacts/memory.md)
+- [Golden corpus](./reference/golden-corpus.md) — `checkout` is the positive (`must-pass`) fixture this walkthrough draws from; the authored source trips `SOL-P004` (bundled obligation) and `SOL-O001` (parallel write-surface conflict).
+- Step references, in flow order: [`author`](./passes/author.md), [`lint`](./passes/lint.md), [`improve`](./passes/improve.md), [`lower`](./passes/lower.md), [`decompose`](./passes/decompose.md), [`implement`](./passes/implement.md), [`verify`](./passes/verify.md), [`review`](./passes/review.md), [`promote`](./passes/promote.md)
+- Artifact references for each stage's output: [`spec`](./artifacts/spec.md), [`task`](./artifacts/task.md), [`trace`](./artifacts/trace.md), [`review`](./artifacts/review.md), [`finding`](./artifacts/finding.md), [`memory`](./artifacts/memory.md)

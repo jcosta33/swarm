@@ -32,6 +32,6 @@ The suite scores two cross-step predicates at the `promote` output:
 
 ## Related
 
-- [The promotion protocol](../docs/reference/promotion-protocol.md) — the routing rules (P1/P3) and the mandatory provenance fields (P2) this rubric grades.
-- [Source authority](../docs/model/source-authority.md) — the stance/authority order P3 enforces.
-- [Drift and staleness](../docs/reference/drift-and-staleness.md) — the memory-drift condition the drift-detection predicate scores here.
+- [The promotion protocol](./docs/reference/promotion-protocol.md) — the routing rules (P1/P3) and the mandatory provenance fields (P2) this rubric grades.
+- [Source authority](./docs/model/source-authority.md) — the stance/authority order P3 enforces.
+- [Drift and staleness](./docs/reference/drift-and-staleness.md) — the memory-drift condition the drift-detection predicate scores here.

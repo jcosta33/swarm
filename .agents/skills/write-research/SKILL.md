@@ -97,10 +97,10 @@ These MUST NOT appear in the artifact you deliver:
 
 - **Any obligation block.** A `research.md` MUST NOT author `REQ` / `CONSTRAINT` / `INVARIANT` /
   `INTERFACE` blocks. Surveyed evidence has no obligation force until *promoted into a
-  `spec.swarm.md`* by the `author` step; writing obligation blocks here lets an inquiry be read as an
+  `spec.md`* by the `author` step; writing obligation blocks here lets an inquiry be read as an
   approved contract and bypass authoring — exactly what the inquiry stance prevents.
-- **A `.swarm.` infix on the filename.** A research artifact is a plain `.md` working source-doc, not
-  a Swarm-visible spec; the missing infix is the proof it is not parsed as SOL. `*.swarm.md` would
+- **A `spec.md` naming on the filename.** A research artifact is a plain `.md` working source-doc, not
+  a Swarm-visible spec; the missing infix is the proof it is not parsed as SOL. `*.md` would
   mis-class it as the one human-authored spec.
 - **Opinion presented as a finding.** A `## Findings` claim without a citation is opinion. "Best
   practice" / "common practice" without a cited primary source is opinion in a costume.
@@ -223,12 +223,12 @@ table into the file converts that silent gap into a marker the next reviewer can
   on; a product-behaviour claim read off the docs instead of exercised.
 - **In `## Recommendation`:** "it depends" without saying on what; "further investigation needed"
   without naming the investigation (that is a named open `Q-NNN`); an obligation block of any kind.
-- **In the filename:** a `.swarm.` infix — a research artifact is plain `.md`.
+- **In the filename:** a `spec.md` naming — a research artifact is plain `.md`.
 
 ## Anti-patterns
 
 - ❌ Authoring `REQ`/`CONSTRAINT`/`INVARIANT`/`INTERFACE` blocks in the research → survey the
-  evidence; obligation force is acquired only when the artifact promotes into a `spec.swarm.md`.
+  evidence; obligation force is acquired only when the artifact promotes into a `spec.md`.
 - ❌ Opinion presented as a finding → every `## Findings` claim cites a source, or it is `[unconfirmed]`.
 - ❌ Settling an open question by asserting a decision → record it as an open `Q-NNN`; let the author
   step adjudicate.
@@ -243,7 +243,7 @@ table into the file converts that silent gap into a marker the next reviewer can
   claimed as distinct.
 - ❌ Research with no decision-informing question → write `## Question` first; if it will not state
   concisely, the scope is unclear.
-- ❌ A `.swarm.md` filename → plain `.md`; the missing infix is what keeps it from being parsed as a
+- ❌ A `.md` filename → plain `.md`; the missing infix is what keeps it from being parsed as a
   spec.
 
 ## Bundled resources

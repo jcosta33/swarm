@@ -338,6 +338,6 @@ guide does not redefine them.
   the measurement protocol, a progress checklist, and a self-review hard gate
   covering baseline-and-target proof, protocol identity, correctness
   preservation, conditions, and the readability trade. Copy it into your
-  project's task-file location, substitute the `{{...}}` placeholders from the
+  project's task-file location, substitute the `{{..}}` placeholders from the
   consuming repo's `AGENTS.md` command slots (`{{cmdTest}}`, `{{cmdValidate}}`,
   the benchmark command), and fill it in as you work.

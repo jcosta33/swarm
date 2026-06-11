@@ -16,7 +16,7 @@ layer     = "S" | "P" | "M" | "V" | "O";
 number    = digit, digit, digit;          (* zero-padded, 3 digits *)
 ```
 
-One prefix (`SOL-`), exactly **five layers** (S/P/M/V/O), a three-digit number. There is a single code prefix: `SOL-`. `APS-` is **retired as a code prefix** — "APS" survives only as the *name* of the controlled-prose standard (the Agent Prose Semantics rules, see [APS](APS.md)) and MUST NOT appear in any code; prose violations surface as `SOL-P` codes. Each layer is a 100-block, **append-only with tombstoning**: a retired code keeps its row marked `TOMBSTONED`, carries a `superseded-by` pointer where one exists, and its number is never reissued. The rationale is a single greppable namespace that stays stable across versions — numbers are never recycled, so a code always means one thing.
+One prefix (`SOL-`), exactly **five layers** (S/P/M/V/O), a three-digit number. There is a single code prefix: `SOL-`APS-` is **retired as a code prefix** — "APS" survives only as the *name* of the controlled-prose standard (the Agent Prose Semantics rules, see [APS](APS.md)) and MUST NOT appear in any code; prose violations surface as `SOL-P` codes. Each layer is a 100-block, **append-only with tombstoning**: a retired code keeps its row marked `TOMBSTONED`, carries a `superseded-by` pointer where one exists, and its number is never reissued. The rationale is a single greppable namespace that stays stable across versions — numbers are never recycled, so a code always means one thing.
 
 ### The five layers
 
@@ -30,7 +30,7 @@ Each layer maps 1:1 to a phase/step. A code's letter tells you the phase it belo
 | VERIFICATION | `V` | Proof-binding: missing / stale / non-observable proof | `VERIFY` | merge gate |
 | ORCHESTRATION | `O` | Planning / parallelism: write-conflict, dep cycle, blocking `QUESTION` reaching structuring | `LOWER` (raised by the lower / decompose steps, surfaced by the lint gate) | merge gate |
 
-The steps that raise each layer are described in [how Swarm works](../model/how-swarm-works.md): S/P/M fire during [lint](../passes/lint.md) and [improve](../passes/improve.md), V during [verify](../passes/verify.md), and O during [lower](../passes/lower.md) and [decompose](../passes/decompose.md).
+The steps that raise each layer are described in [how Swarm works](./model/how-swarm-works.md): S/P/M fire during [lint](./passes/lint.md) and [improve](./passes/improve.md), V during [verify](./passes/verify.md), and O during [lower](./passes/lower.md) and [decompose](./passes/decompose.md).
 
 ### The diagnostic record
 
@@ -41,7 +41,7 @@ Every emitted diagnostic is the **checker-emit / SARIF-authoring** record:
   "code": "SOL-P005",
   "severity": "BLOCKING",
   "layer": "P",
-  "span": { "file": "auth.swarm.md", "block": "AC-001", "line": 12, "col": 9 },
+  "span": { "file": "auth.md", "block": "AC-001", "line": 12, "col": 9 },
   "message": "vague-quality word 'fast' with no same-line observable criterion",
   "suggest": "CONCRETIZE or QUANTIFY: bind a measurable threshold on the same line"
 }
@@ -54,7 +54,7 @@ Every emitted diagnostic is the **checker-emit / SARIF-authoring** record:
 | `layer` | enum | `S` \| `P` \| `M` \| `V` \| `O` — redundant with the code's letter; carried explicitly for filtering, and MUST equal it. |
 | `span` | object | Source location `{ file, block, line, col }`, at minimum `{ file, block }`; `line`/`col` SHOULD be present when available. |
 | `message` | string | One-line human-readable defect statement. |
-| `suggest` | string \| null | The named repair: a closed [improve op](../passes/improve.md) or a concrete fix; `null` if none. MUST name a closed op wherever one applies — never an open-ended rewrite. |
+| `suggest` | string \| null | The named repair: a closed [improve op](./passes/improve.md) or a concrete fix; `null` if none. MUST name a closed op wherever one applies — never an open-ended rewrite. |
 
 #### SARIF structuring (span → source location, severity → level)
 
@@ -116,7 +116,7 @@ A `swarm.config` MUST NOT redefine, rename, invent, or re-layer codes; it MUST N
 
 The **waiver-record fields** are all required: `code`; `scope` (a code applies repo-wide, an obligation id/glob narrows it); `to` (`warning` or `off`); `authority`; `reason`; `expiry` (ISO date); and `recorded_at` (ISO date). `to: warning` lowers the diagnostic's structured-form `level` to `warning`; `to: off` is **not** a structured-form `level` — it suppresses the diagnostic, which is omitted entirely from the structured-form `diagnostics[]` array. A waiver with any required field missing is invalid and the demotion does not take effect.
 
-A waiver **auto-expires** at its `expiry` date *and* on the next change to the waived obligation's source content-hash, whichever comes first — preventing zombie waivers that outlive the text they excused. On expiry the code returns to its default severity. A severity demotion at the lint layer is distinct from a `WAIVED` [verdict](../passes/verify.md) at the verification layer: the former silences a *diagnostic*, the latter accepts a *failing proof* — both require the same authority + reason + expiry discipline.
+A waiver **auto-expires** at its `expiry` date *and* on the next change to the waived obligation's source content-hash, whichever comes first — preventing zombie waivers that outlive the text they excused. On expiry the code returns to its default severity. A severity demotion at the lint layer is distinct from a `WAIVED` [verdict](./passes/verify.md) at the verification layer: the former silences a *diagnostic*, the latter accepts a *failing proof* — both require the same authority + reason + expiry discipline.
 
 The rationale: one config, two legal moves — strict-up freely, blocking-down only on the record — keeps every relaxation of the defaults auditable, time-boxed, and attributable.
 
@@ -124,7 +124,7 @@ The rationale: one config, two legal moves — strict-up freely, blocking-down o
 
 ## 3. The full catalogue
 
-Every v0.1 code, by layer, with `{code, severity, layer, message, resolves-by}`. "Resolves by" names a closed [improve op](../passes/improve.md) where one applies, otherwise a direct edit. Block types, modals, clauses, and metadata fields are defined in [SOL](SOL.md); the high-risk-word rules in [APS](APS.md); proof types in the [proof-type reference](../reference/proof-types.md).
+Every v0.1 code, by layer, with `{code, severity, layer, message, resolves-by}`. "Resolves by" names a closed [improve op](./passes/improve.md) where one applies, otherwise a direct edit. Block types, modals, clauses, and metadata fields are defined in [SOL](SOL.md); the high-risk-word rules in [APS](APS.md); proof types in the [proof-type reference](./reference/proof-types.md).
 
 ### 3.1 Layer S — SYNTAX (fire at `PARSE`; all BLOCKING)
 
@@ -142,13 +142,13 @@ A malformed block cannot be parsed into a node, so every S code is BLOCKING and 
 | `SOL-S008` | BLOCKING | S | non-control-first-line: a trailing metadata clause (`DEPENDS ON`/`WRITES`/…) or free prose appears before the block's control content (leading EARS condition or `THE <actor> <MODAL>` clause). A leading condition clause is control content and does not trip this. | Edit: lead with the condition/actor clause; move metadata to the trailing block. |
 | `SOL-S010` | BLOCKING | S | unknown-metadata-field: a trailing metadata field is outside the closed set (`DEPENDS ON`/`TOUCHES`/`WRITES`/`READS`/`AFFECTS`/`RISK`/`DOMAIN`). | Edit: use a valid field or move the text to commentary. |
 | `SOL-S011` | BLOCKING | S | missing-obligation-id: a header is present but carries no `*_id` after the block type (type recognized, id absent). | Edit: add a valid `PREFIX-NNN` id after the block type. |
-| `SOL-S012` | BLOCKING | S | required-section-missing: a `spec.swarm.md` is missing a required top-level section from its ordered set (e.g. `## Intent`, `## Non-goals`, `## Obligations`), or carries them out of order. Document-level companion of the per-obligation `SOL-O004`. | Edit: add the missing `## ` section heading (or reorder) per the [spec layout](../artifacts/spec.md). |
+| `SOL-S012` | BLOCKING | S | required-section-missing: a `spec.md` is missing a required top-level section from its ordered set (e.g. `## Intent`, `## Non-goals`, `## Obligations`), or carries them out of order. Document-level companion of the per-obligation `SOL-O004`. | Edit: add the missing `## ` section heading (or reorder) per the [spec layout](./artifacts/spec.md). |
 | `SOL-S013` | BLOCKING | S | untrusted-source-character: an agent-read artifact contains a zero-width, bidirectional-control, other non-printing, or homoglyph-suspect codepoint in obligation/instruction bytes — a hidden-instruction injection vector. | Edit: strip the offending codepoints or re-author in printable characters. |
 | `SOL-S014` | BLOCKING | S | missing-required-clause: a block omits a clause its grammar makes mandatory — e.g. a `TRACE` with `IMPLEMENTS` but no `PROOF` line. | Edit: add the required clause (for `TRACE`, at least one `PROOF` line). |
 
 ### 3.2 Layer P — PROSE (fire at `NORMALIZE`; `001–049` BLOCKING, `050–099` ADVISORY)
 
-P-layer rules are single-obligation-local; each maps to a closed [improve op](../passes/improve.md), never an open rewrite. The `001–049` / `050–099` split is normative for the P layer only.
+P-layer rules are single-obligation-local; each maps to a closed [improve op](./passes/improve.md), never an open rewrite. The `001–049` / `050–099` split is normative for the P layer only.
 
 | Code | Severity | Layer | Message (short name + defect) | Resolves by |
 |---|---|---|---|---|
@@ -181,11 +181,11 @@ A broken reference or contradiction changes what is built, so every M code is BL
 | `SOL-M001` | BLOCKING | M | actor/object-incompleteness: a referenced actor, object, or surface is unresolved across the spec / imports (also catches cross-spec id collision). | `BIND` / `CONCRETIZE`: resolve or declare the referent. |
 | `SOL-M002` | BLOCKING | M | contradiction: two obligations share a **contradiction key** (normalized actor + trigger/state + the `affects[]` ∪ `writes[]` surface set, case-folded/whitespace-collapsed exact match) and carry **opposed modalities** (positive vs negative force, or `MUST NOT` vs `MAY`). **Exact-key match only in v0.1**; paraphrase/entailment contradiction is out of scope. | `DECONFLICT`. |
 | `SOL-M003` | BLOCKING | M | unbound-cross-reference: a `DEPENDS ON` / `IMPLEMENTS` / `PRESERVES` reference names an id that does not exist. | `BIND`: fix the reference. |
-| `SOL-M004` | BLOCKING | M | authority-conflict: a lower-authority block attempts to weaken a higher-authority obligation (see [source authority](../model/source-authority.md)). | `DECONFLICT` / amendment. |
+| `SOL-M004` | BLOCKING | M | authority-conflict: a lower-authority block attempts to weaken a higher-authority obligation (see [source authority](./model/source-authority.md)). | `DECONFLICT` / amendment. |
 
 ### 3.4 Layer V — VERIFICATION (fire at `VERIFY`; gate the merge gate)
 
-The subject is the `VERIFY BY <type>:<adapter>:<artifact>[#selector]` binding (see [verify](../passes/verify.md) and the [proof-type reference](../reference/proof-types.md)). Most are BLOCKING; `SOL-V003` and `SOL-V011` are ADVISORY by default and promote under strict mode.
+The subject is the `VERIFY BY <type>:<adapter>:<artifact>[#selector]` binding (see [verify](./passes/verify.md) and the [proof-type reference](./reference/proof-types.md)). Most are BLOCKING; `SOL-V003` and `SOL-V011` are ADVISORY by default and promote under strict mode.
 
 | Code | Severity | Layer | Message (short name + defect) | Resolves by |
 |---|---|---|---|---|
@@ -193,17 +193,17 @@ The subject is the `VERIFY BY <type>:<adapter>:<artifact>[#selector]` binding (s
 | `SOL-V002` | BLOCKING | V | proof-not-executable: the bound adapter does not resolve through `AGENTS.md` > Commands, or the artifact is missing. | `BIND`: point at a resolvable cmd* adapter. |
 | `SOL-V003` | ADVISORY / BLOCKING | V | non-observable-proof: the bound proof is non-observable (e.g. an INVARIANT bound only to a non-observable unit `test`). ADVISORY by default; BLOCKING under strict mode. | `BIND`: prefer `property`/`model`/`static` for INVARIANT; `contract` for INTERFACE. |
 | `SOL-V004` | BLOCKING | V | stale-proof: a prior `PASS` whose evidence no longer matches the current source content-hash, a changed write surface, a changed proof-exercised read surface, or a rebound adapter; surfaces as the `STALE` verdict. | 3-way reconcile (re-run / amend / fix code) — never a silent re-bless. |
-| `SOL-V005` | BLOCKING | V | bad-verdict-value: a `VERDICT` core value is not one of `PASS`/`FAIL`/`BLOCKED`/`UNVERIFIED`, OR a lifecycle decorator is missing its mandatory fields (WAIVED→authority+reason+expiry; STALE→prior-verdict ref+changed-surface; CONTRADICTED→two conflicting evidence refs). | Edit: use a valid verdict line (see [verify](../passes/verify.md)). |
+| `SOL-V005` | BLOCKING | V | bad-verdict-value: a `VERDICT` core value is not one of `PASS`/`FAIL`/`BLOCKED`/`UNVERIFIED`, OR a lifecycle decorator is missing its mandatory fields (WAIVED→authority+reason+expiry; STALE→prior-verdict ref+changed-surface; CONTRADICTED→two conflicting evidence refs). | Edit: use a valid verdict line (see [verify](./passes/verify.md)). |
 | `SOL-V006` | BLOCKING | V | interface-without-contract: an `INTERFACE` whose `VERIFY BY` proof_type is not `contract`. | `BIND`: use `contract:` as the proof type for INTERFACE bindings. |
 | `SOL-V007` | BLOCKING | V | invalid-lifecycle-decoration: a lifecycle decorator applied to the wrong core value (e.g. `WAIVED` on a `PASS`/`BLOCKED`, or `STALE` on anything other than a prior `PASS`). | Edit: remove or correct the lifecycle decorator. |
 | `SOL-V008` | BLOCKING | V | missing-verdict-at-merge-gate: a required `VERIFY BY` binding has no `VERDICT` at the merge gate (counts as `UNVERIFIED`). | `BIND`: run the proof and record a verdict, or `WAIVE`. |
-| `SOL-V009` | BLOCKING | V | unknown-proof-type: a `verify_ref` whose `proof_type` is outside the closed 9-set (`static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor`). | Edit: use one of the nine canonical [proof types](../reference/proof-types.md). |
+| `SOL-V009` | BLOCKING | V | unknown-proof-type: a `verify_ref` whose `proof_type` is outside the closed 9-set (`static`, `test`, `contract`, `property`, `model`, `perf`, `security`, `manual`, `monitor`). | Edit: use one of the nine canonical [proof types](./reference/proof-types.md). |
 | `SOL-V010` | BLOCKING | V | missing-human-authority: a high-oversight-band obligation carries a `manual`/`WAIVED` verdict with no named human authority. | Edit: record the human authority on the `manual @ REVIEW` verdict / waiver. |
 | `SOL-V011` | ADVISORY / BLOCKING | V | oracle-adequacy-unrecorded: a proof does not record what it exercised relative to the obligation predicate where one is required. ADVISORY by default; BLOCKING in strict mode for `RISK high`/`critical`. | Edit: add the `oracle_adequacy` record. |
 
 ### 3.5 Layer O — ORCHESTRATION (fire at `LOWER`; gate plan emission and the merge gate)
 
-These guard safe parallelism (see [lower](../passes/lower.md) and [task orchestration](../artifacts/task-orchestration.md)) and the coverage gates (see [decompose](../passes/decompose.md)). `SOL-O004` and `SOL-O006` are ADVISORY; the rest are BLOCKING.
+These guard safe parallelism (see [lower](./passes/lower.md) and [task orchestration](./artifacts/task-orchestration.md)) and the coverage gates (see [decompose](./passes/decompose.md)). `SOL-O004` and `SOL-O006` are ADVISORY; the rest are BLOCKING.
 
 | Code | Severity | Layer | Message (short name + defect) | Resolves by |
 |---|---|---|---|---|
@@ -228,7 +228,7 @@ The principal ADVISORY prose set is `SOL-P050`–`SOL-P058`.
 
 ## 5. Improve-op ↔ lint-code map
 
-The closed **10-op [improve set](../passes/improve.md)** is the canonical detect→repair wiring. Each op is strictly semantics-preserving; any intent change routes to amendment/review, never improve. `PROMOTE` carries no lint code (it routes through the promotion protocol — see the [promotion-protocol reference](../reference/promotion-protocol.md)).
+The closed **10-op [improve set](./passes/improve.md)** is the canonical detect→repair wiring. Each op is strictly semantics-preserving; any intent change routes to amendment/review, never improve. `PROMOTE` carries no lint code (it routes through the promotion protocol — see the [promotion-protocol reference](./reference/promotion-protocol.md)).
 
 | Improve op | Resolves codes |
 |---|---|
@@ -241,7 +241,7 @@ The closed **10-op [improve set](../passes/improve.md)** is the canonical detect
 | `CLARIFY` | `SOL-P008`, `SOL-P007`, `SOL-O003` |
 | `DECONFLICT` | `SOL-M002`, `SOL-M004`, `SOL-O006` |
 | `COMPRESS` | `SOL-P054`, `SOL-P055`, `SOL-O006` |
-| `PROMOTE` | (no lint code — routes through the [promotion protocol](../reference/promotion-protocol.md)) |
+| `PROMOTE` | (no lint code — routes through the [promotion protocol](./reference/promotion-protocol.md)) |
 
 ---
 
@@ -343,9 +343,9 @@ A handful of prior codes change *layer* in v0.1 because their concern moved to a
 
 ## 7. Conformance
 
-A conformant `lint-spec` checker (a contract, never shipped code) MUST: (1) emit only `SOL-<LAYER><NNN>` codes; (2) emit the diagnostic record shape defined above; (3) apply the default severities here, overridable only through the recorded `swarm.config` waiver schema; (4) never reuse a tombstoned number; (5) name a closed [improve op](../passes/improve.md) in `suggest` wherever one applies. The [conformance model](../model/conformance.md) sets the wider contract these obligations sit inside.
+A conformant `lint-spec` checker (a contract, never shipped code) MUST: (1) emit only `SOL-<LAYER><NNN>` codes; (2) emit the diagnostic record shape defined above; (3) apply the default severities here, overridable only through the recorded `swarm.config` waiver schema; (4) never reuse a tombstoned number; (5) name a closed [improve op](./passes/improve.md) in `suggest` wherever one applies. The [conformance model](./model/conformance.md) sets the wider contract these obligations sit inside.
 
-A curated good/bad golden corpus makes the `SOL-P` rules' precision and recall measurable. The target is an aspirational ≥0.90 precision / ≥0.85 recall — set deliberately above the field-measured ceiling for lightweight automated requirement-smell detection (roughly 59% precision / 82% recall, with high variation [[SMELLS]](../research/sources.md#SMELLS)), and a design goal, not an achieved result.
+A curated good/bad golden corpus makes the `SOL-P` rules' precision and recall measurable. The target is an aspirational ≥0.90 precision / ≥0.85 recall — set deliberately above the field-measured ceiling for lightweight automated requirement-smell detection (roughly 59% precision / 82% recall, with high variation [[SMELLS]](./research/sources.md#SMELLS)), and a design goal, not an achieved result.
 
 Two scope limits hold in v0.1, by design: `SOL-M002` contradiction fires on **exact-key match only** — paraphrase/entailment contradiction is out of scope and may at most surface as an advisory judge-rendered diagnostic; and the structured-form `level: note` value has **no surface producer**, reserved for a future emitter.
 
@@ -355,9 +355,9 @@ Two scope limits hold in v0.1, by design: `SOL-M002` contradiction fires on **ex
 
 - [SOL](SOL.md) — the obligation language: the 7 block types, 5 modals, clauses, and metadata fields these codes check.
 - [APS](APS.md) — the controlled-prose standard: the high-risk-word catalogue and the same-line-observable rule behind the `SOL-P` codes.
-- [lint](../passes/lint.md) and [improve](../passes/improve.md) — the steps that raise S/P/M codes and the closed repair ops.
-- [verify](../passes/verify.md) and [proof types](../reference/proof-types.md) — the merge gate and the `VERIFY BY` bindings the V codes check.
-- [lower](../passes/lower.md), [decompose](../passes/decompose.md), and [task orchestration](../artifacts/task-orchestration.md) — the planning surfaces the O codes guard.
-- [how Swarm works](../model/how-swarm-works.md) — how each layer maps 1:1 to a phase.
-- [conformance](../model/conformance.md) — the contract a `lint-spec` checker is graded against.
-- [source authority](../model/source-authority.md) — the authority order behind `SOL-M004`.
+- [lint](./passes/lint.md) and [improve](./passes/improve.md) — the steps that raise S/P/M codes and the closed repair ops.
+- [verify](./passes/verify.md) and [proof types](./reference/proof-types.md) — the merge gate and the `VERIFY BY` bindings the V codes check.
+- [lower](./passes/lower.md), [decompose](./passes/decompose.md), and [task orchestration](./artifacts/task-orchestration.md) — the planning surfaces the O codes guard.
+- [how Swarm works](./model/how-swarm-works.md) — how each layer maps 1:1 to a phase.
+- [conformance](./model/conformance.md) — the contract a `lint-spec` checker is graded against.
+- [source authority](./model/source-authority.md) — the authority order behind `SOL-M004`.

@@ -4,7 +4,7 @@
 
 APS (Agent Prose Semantics) is the controlled-prose standard for every word of natural-language prose that surrounds, introduces, or accompanies SOL blocks in a Swarm spec or working artifact. SOL is the obligation language; **APS is the standard for everything that is *not* a SOL block**.
 
-Swarm is markdown-only and has no runtime. Every "linter," "parser," or "checker" named here is a **contract** that a future tool builds against — not shipped code. APS defines what such a tool must accept, flag, or reject; it never executes anything itself. The [lint pass](../passes/lint.md) is where these prose checks are run against an artifact.
+Swarm is markdown-only and has no runtime. Every "linter," "parser," or "checker" named here is a **contract** that a future tool builds against — not shipped code. APS defines what such a tool must accept, flag, or reject; it never executes anything itself. The [lint pass](./passes/lint.md) is where these prose checks are run against an artifact.
 
 ## 1. Doctrine: prose is a non-authoritative delivery layer
 
@@ -160,7 +160,7 @@ APS exists because of a **durable mechanism**, not a transient capability ceilin
 
 1. **Format and order sensitivity** — meaning-preserving reformatting alone can swing few-shot accuracy substantially, and the same input shape that works well for one model need not transfer to another; example and prompt ordering can independently swing results between near-best and near-random. Controlled, predictable prose shape reduces this variance.
 2. **Multi-turn decay** — reliability falls as work is spread across many conversational turns, because early loose assumptions compound; stable artifacts beat accumulating chat.
-3. **Context rot / lost-in-the-middle** — relevant content buried in the middle of long inputs is used markedly less reliably than content at the beginning or end of the context [[LOSTMID]](../research/sources.md#LOSTMID); low-entropy prose keeps the load-bearing signal legible.
+3. **Context rot / lost-in-the-middle** — relevant content buried in the middle of long inputs is used markedly less reliably than content at the beginning or end of the context [[LOSTMID]](./research/sources.md#LOSTMID); low-entropy prose keeps the load-bearing signal legible.
 4. **Minimize always-on density to protect adherence and control cost** — every always-loaded normative line competes for adherence and is paid for on every turn; APS removes non-load-bearing words so the surviving instructions are followed and cheap.
 5. **Requirement ambiguity degrades generated code** — ambiguous task descriptions measurably lower the share of generated code that passes its tests, and outright contradictory descriptions degrade it further; the defect originates in the requirement, not the model. APS lints buried ambiguity (`SOL-P008`) and lifts it into a `QUESTION` before structuring, removing the defect at its source.
 
@@ -174,4 +174,4 @@ No fixed "accuracy at N instructions" figure may be cited as a capability ceilin
 - [errors](errors.md) — the full S/P/M/V/O lint taxonomy and per-code definitions, including every `SOL-P` code mapped here.
 - [grammar](grammar.md) — SOL block grammar and the typed structured form that load-bearing meaning is structured into.
 - [versioning](versioning.md) — how the high-risk catalogue's "closed for v0.1" set and its project extensions evolve.
-- [lint pass](../passes/lint.md) — the pass that runs these prose checks against an artifact and emits the `SOL-P` diagnostics.
+- [lint pass](./passes/lint.md) — the pass that runs these prose checks against an artifact and emits the `SOL-P` diagnostics.

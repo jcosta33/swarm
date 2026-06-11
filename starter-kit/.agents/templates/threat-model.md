@@ -11,7 +11,7 @@ id: {{slug}}
   CONDITIONAL source-doc (security extension). Stance: threat OBSERVATION, not intent.
   This file holds NO obligation blocks (no REQ/CONSTRAINT/INVARIANT/INTERFACE). A modelled
   threat becomes binding only after an `author` pass restates it as a CONSTRAINT/INVARIANT
-  with its own id, modality, and a (typically `security`) VERIFY BY. Plain `.md`, no `.swarm.` infix.
+  with its own id, modality, and a (typically `security`) VERIFY BY. Plain `.md`, no `spec.md` naming.
 -->
 
 ## Scope

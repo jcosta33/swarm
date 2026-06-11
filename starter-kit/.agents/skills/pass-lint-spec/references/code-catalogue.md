@@ -14,7 +14,7 @@ A code is BLOCKING iff its defect changes **what gets built** — the obligation
 | `SOL-S003` | Actor clause (`THE <actor> …`) with no modal verb. |
 | `SOL-S005` | ID prefix does not match block type (e.g. `REQ C-001:`). |
 | `SOL-S006` | `SHOULD` / `SHOULD NOT` used without an accompanying `BECAUSE` or `EXCEPT`. |
-| `SOL-S012` | A `spec.swarm.md` missing a required top-level section, or sections out of mandated order (document-level companion of `SOL-O004`). |
+| `SOL-S012` | A `spec.md` missing a required top-level section, or sections out of mandated order (document-level companion of `SOL-O004`). |
 
 ### P layer — controlled prose, the blocking set `SOL-P001`–`SOL-P008` (`NORMALIZE`)
 
@@ -89,7 +89,7 @@ A single valid `{ code, severity, layer, span, message, suggest }` record (shape
   "code": "SOL-P005",
   "severity": "BLOCKING",
   "layer": "P",
-  "span": { "file": "auth-refresh.swarm.md", "block": "AC-001", "line": 22, "col": 9 },
+  "span": { "file": "auth-refresh.md", "block": "AC-001", "line": 22, "col": 9 },
   "message": "Vague-quality word 'gracefully' in a binding clause with no same-line observable criterion.",
   "suggest": "CONCRETIZE: replace with actor+action+object, or bind a VERIFY BY target."
 }

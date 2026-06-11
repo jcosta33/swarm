@@ -105,7 +105,7 @@ invites confusion. **Watch:** every closed-set count and code definition reconci
 
 ### 8. Non-spec entry paths + stance laundering at the un-analyzable `author` step — fixable-defect / design-tension
 
-The `author` step is described as producing a `spec.swarm.md`, but a `bug-report` promotes into a **fix
+The `author` step is described as producing a `spec.md`, but a `bug-report` promotes into a **fix
 task** instead (`docs/passes/author.md:46`) — the hop is *named* but the task-population mechanism
 (`assigned_obligations`/`write_surfaces`/`verification_bindings`) is under-specified vs the
 spec→`lower`→`decompose` path that normally fills them. And the source-doc **stance boundaries**
@@ -159,7 +159,7 @@ hollow drift · 6. Hand-computed, single-spec parallel safety · 7. `SOL-M001` (
 The six **fixable-defect** aspects now have contract fixes; the four **design-tensions** (#1, #2, #6, #10)
 remain watch-items **by design** (a deliberate consequence of Invariant 1 — they are not "fixed").
 
-- **#3 adequacy advisory, #4 empty-set gate, #8 uncovered-bug seam** → [ADR-0055](../../docs/adrs/0055-close-the-gate-soft-control-gaps.md):
+- **#3 adequacy advisory, #4 empty-set gate, #8 uncovered-bug seam** → [ADR-0055](././docs/adrs/0055-close-the-gate-soft-control-gaps.md):
   the merge-gate predicate now (a) does not pass by vacuity on an empty in-scope set, (b) blocks on an
   inadequate oracle for `RISK high|critical` (`SOL-V011` BLOCKING there, advisory for `low|medium`), and
   (c) routes an uncovered bug through a spec amendment as the fix task's first obligation.
