@@ -68,9 +68,9 @@ All matched files use Prettier code style!
 ```text
 $ ./node_modules/.bin/wxt build
 exit 0
-✔ Built extension in 2.457 s
+✔ Built extension in 2.645 s
 Σ Total size: 9.58 MB
-✔ Finished in 2.524 s
+✔ Finished in 2.761 s
 ```
 
 Blocked evidence:

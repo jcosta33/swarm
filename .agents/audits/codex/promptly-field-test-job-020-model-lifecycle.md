@@ -19,6 +19,9 @@ UX. It does not propose or implement Swarm framework changes.
 Promptly now has a typed model runtime status protocol, background-owned model
 status, and popup controls for load, reload, and unload.
 
+Review follow-up: Promptly commit `df0b4cd` records the fix for the
+raw-progress completion finding from the adversarial review.
+
 Promptly artifacts:
 
 - `/Users/josecosta/dev/promptly-docs/change-plans/020-promptly-ux-field-test.md`
@@ -63,15 +66,15 @@ All matched files use Prettier code style!
 ```text
 $ ./node_modules/.bin/wxt build
 exit 0
-✔ Built extension in 2.457 s
+✔ Built extension in 2.645 s
 Σ Total size: 9.58 MB
-✔ Finished in 2.524 s
+✔ Finished in 2.761 s
 ```
 
 Blocked evidence:
 
 ```text
-$ pnpm exec prettier --check .
+$ pnpm build
 exit 1
 [ERR_PNPM_IGNORED_BUILDS] Ignored build scripts: esbuild@0.25.2, spawn-sync@1.0.15, unrs-resolver@1.7.2
 ```

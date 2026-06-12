@@ -46,6 +46,8 @@ The official commands requested in the plan were blocked by pnpm ignored build
 scripts:
 
 ```text
+$ pnpm build
+exit 1
 [ERR_PNPM_IGNORED_BUILDS] Ignored build scripts: esbuild@0.25.2, spawn-sync@1.0.15, unrs-resolver@1.7.2
 ```
 
