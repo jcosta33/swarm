@@ -3,7 +3,8 @@
 ## What this repo is
 
 This repo **is** the Swarm framework — *a lightweight spec and review workflow for teams using
-coding agents*, shipped as markdown: docs, templates, and a starter kit. It ships **no runtime**:
+coding agents*, shipped as markdown: the docs and the checks contract (the copy-whole starter
+kit ships as the sibling `swarm-starter-kit` template repo). It ships **no runtime**:
 anything described as checkable names its checker (the reference implementation in progress is
 `swarm-cli`, a sibling repo); everything else is convention or review checklist, and says so.
 

@@ -69,7 +69,7 @@ agent PR reviewed by exception — is
 
 ## Where files live
 
-- **This repo** — the framework: docs, templates, a starter kit.
+- **This repo** — the framework: the docs and the checks contract. The ready-to-copy workspace (templates + guides) is [jcosta33/swarm-starter-kit](https://github.com/jcosta33/swarm-starter-kit).
 - **Your workspace** — specs, tasks, reviews, findings: a dedicated repo or the same tree in your project ([where files live](docs/03-where-files-live.md)).
 - **Your code repos** — stay clean. The PR links its review packet; that's all.
 

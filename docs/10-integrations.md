@@ -8,9 +8,11 @@ workspace. Neither requires tooling.
 
 ## Where the agent guides go
 
-The starter kit ships three agent guides — `write-spec`, `implement-task`, `review-output` — each
-a folder with a `SKILL.md` inside. A `SKILL.md` is ordinary markdown with a short description
-header, so agent CLIs can auto-discover it and humans can just read it. Where to copy them:
+The starter kit ships its agent guides at `.agents/skills/` — the core loop (`write-spec`,
+`implement-task`, `review-output`) plus the workspace authoring guides
+([the index](reference/agent-guides.md)) — each a folder with a `SKILL.md` inside. A `SKILL.md`
+is ordinary markdown with a short description header, so agent CLIs can auto-discover it and
+humans can just read it. Where to copy them:
 
 | Agent CLI                          | Where the guides go                                                                      |
 | ---------------------------------- | ---------------------------------------------------------------------------------------- |

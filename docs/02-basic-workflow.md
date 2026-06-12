@@ -106,7 +106,7 @@ _Spec amend_ means: find the spec the bug contradicts and amend it if the bug re
 most bugs don't need a new spec. A bug with **no covering spec** at all takes the
 arrives-as-code path in [08-reviewing-output.md](08-reviewing-output.md). Performance work runs
 the Bug or Refactor flow with a numeric target and baseline-first discipline (the
-write-performance guide in the implementation library). _Audit_ and _Research_ are advanced
+`write-performance` guide in [the swarm-skills catalog](https://github.com/jcosta33/swarm-skills)). _Audit_ and _Research_ are advanced
 artifacts; see [reference/artifact-formats.md](reference/artifact-formats.md).
 
 ## When to skip steps
