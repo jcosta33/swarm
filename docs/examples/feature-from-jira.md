@@ -172,8 +172,9 @@ Implement or preserve:
    counts as unverified.
 4. Before finishing, re-read your own diff as a skeptic: what would a
    reviewer flag?
-5. Leave a summary: changed files, commands run with output, and anything
-   learned worth saving as a finding.
+5. Fill `## Run summary` below — changed files, one line per Verify command
+   citing its pasted output above, out-of-scope edits, blocked questions —
+   and drop anything durable in `## Findings`.
 
 ## Findings
 
@@ -183,9 +184,16 @@ Implement or preserve:
 ## Step 4 — Run: the agent works, then reports
 
 Hand the packet to any coding agent — [Running agents](../07-running-agents.md) covers the
-mechanics. The run ends with the agent's summary, left in the PR description.
+mechanics. The run ends with the agent filling the packet's own `## Run summary`
+section — and dropping the durable discovery in `## Findings`:
 
 ```markdown
+## Findings
+
+- Refresh responses can arrive concurrently from multiple tabs — the
+  single-flight guard is load-bearing; candidate for Close
+  (FINDING-REFRESH-SINGLE-FLIGHT).
+
 ## Run summary — TASK-AUTH-REFRESH
 
 Changed files:
@@ -232,6 +240,7 @@ type: review
 id: REVIEW-AUTH-REFRESH
 task: TASK-AUTH-REFRESH
 pr: https://github.com/acme/shop-web/pull/412
+reviewer: mara@acme (the agent's session implemented; Mara reviews)
 status: needs-human
 ---
 

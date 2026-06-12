@@ -296,17 +296,19 @@ Implement or preserve:
 2. Stay inside this task's scope; if a requirement can't be met as written, stop and say why.
 3. Run every Verify item and paste the real output — a claim without output is unverified.
 4. Before finishing, re-read your own diff as a skeptic: what would a reviewer flag?
-5. Leave a summary: changed files, commands run with output, anything worth a finding.
+5. Fill `## Run summary` below — changed files, per-command results citing the Verify
+   pastes, out-of-scope edits, blocked questions — and drop durables in `## Findings`.
 
 ## Findings
 
-<!-- Anything durable discovered during the task — moved to findings/ at Close. -->
+- The three TTL copies disagreed in *units* (ms vs seconds) — they agreed by
+  luck; durable gotcha, candidate for Close.
 ```
 
 ## Step 4 — The run: a 41-file PR
 
 The agent works in its own worktree and opens PR `#482`: **41 files changed, +1,816 −1,204**.
-Its run summary ends:
+The packet's `## Run summary` section ends:
 
 ```text
 Created src/sessions/ (store.ts, errors.ts, index.ts) and switched all of
@@ -387,8 +389,9 @@ and passes; `webhooks/session-lookup` output is pasted; `retry.ts` is reverted.
 ```
 
 Two rules carried this packet, both checklist-level (the reviewer inspects them; nothing in
-this repo enforces them): **a Pass needs pasted output or a CI link**, and **an empty
-Evidence cell means Unverified, never Pass**. Note that CI was green and AC-004 still failed —
+this repo enforces them): **a Pass needs pasted output, a CI link, or — for a manual Verify
+method — a named human's recorded observation**, and **an empty Evidence cell means
+Unverified, never Pass**. Note that CI was green and AC-004 still failed —
 the integration job doesn't run on draft PRs, and the deleted module took an expired-session
 test down with it. "CI green" and "requirements verified" are different claims.
 
@@ -547,6 +550,12 @@ and here it was: the spec gains `AC-009`, and future tasks scope it directly. Fi
 
 Waves 2 and 3 repeat steps 3–8 against the same change plan — each one PR, each leaving the
 codebase green.
+
+One boundary worth naming: this PR's implementer worked from the maintainer's own packet and
+pasted output on demand. A drive-by PR with no packet and a silent author runs the same
+review post-hoc — intake the code-shaped work, write the spec as an acceptance bar, produce
+all evidence yourself: the arrives-as-code flow in
+[Reviewing agent output](../08-reviewing-output.md).
 
 ## What the reviewer actually read
 

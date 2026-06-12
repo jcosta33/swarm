@@ -170,8 +170,9 @@ Implement or preserve:
    counts as unverified.
 4. Before finishing, re-read your own diff as a skeptic: what would a
    reviewer flag?
-5. Leave a summary: changed files, commands run with output, and anything
-   learned worth saving as a finding.
+5. Fill `## Run summary` below — changed files, one line per Verify command
+   citing its pasted output above, out-of-scope edits, blocked questions —
+   and drop anything durable in `## Findings`.
 
 ## Findings
 
@@ -180,10 +181,17 @@ Implement or preserve:
 
 ## Step 4 — Run: red, then green
 
-The agent's run summary. The red run is load-bearing: it proves the new test can fail — that
-it actually reproduces PAY-88 — before the fix makes it pass.
+The agent fills the packet's `## Run summary` section (and `## Findings`). The red run is
+load-bearing: it proves the new test can fail — that it actually reproduces PAY-88 — before
+the fix makes it pass.
 
 ```markdown
+## Findings
+
+- Idempotency keys were minted per capture *attempt*, not per charge — the
+  durable lesson behind PAY-88; candidate for Close
+  (FINDING-5XX-RETRY-IDEMPOTENCY).
+
 ## Run summary — TASK-PAYMENT-RETRY-KEY
 
 Changed files:
@@ -234,6 +242,7 @@ type: review
 id: REVIEW-PAYMENT-RETRY-KEY
 task: TASK-PAYMENT-RETRY-KEY
 pr: https://github.com/acme/payments/pull/233
+reviewer: priya@flowpay (human; the agent implemented)
 status: pass
 ---
 
