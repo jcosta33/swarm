@@ -95,8 +95,9 @@ listing an exception or having nothing to list:
 ## Read like a skeptic
 
 When a branch warrants more than the packet — high risk, large diff, low trust — the
-`adversarial-review` guide (`starter-kit/advanced/`) runs the deep form: re-run validation
-yourself, walk six adversarial questions, search the callers of everything that changed.
+`adversarial-review` guide ([the swarm-skills catalog](https://github.com/jcosta33/swarm-skills))
+runs the deep form: re-run validation yourself, walk six adversarial questions, search the
+callers of everything that changed.
 
 The reviewer's stance is refute-by-default: a claim is unproven until evidence forces you to
 accept it. In practice —

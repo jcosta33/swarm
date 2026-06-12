@@ -41,11 +41,11 @@ Then:
 Team defaults, stated once: whoever owns the change writes the spec; who reviews is whoever
 did not write the diff — the implementing agent's session never fills its own review packet.
 
-Optional, when you need them: copy pieces of `starter-kit/advanced/` — templates are used
-in place; guides are copied into `.agents/skills/` (their references are
-workspace-root-relative, so they read correctly from either home). The full inventory is in
-`starter-kit/advanced/README.md`. The advanced audit template is the recommended first taste
-for brownfield teams.
+Optional, when you need them: copy templates from `starter-kit/advanced/` (used in place;
+the inventory is in `starter-kit/advanced/README.md`) and install optional agent guides from
+[the swarm-skills catalog](https://github.com/jcosta33/swarm-skills) into `.agents/skills/`
+(`npx skills add jcosta33/swarm-skills --list`, or copy the folders). The advanced audit
+template is the recommended first taste for brownfield teams.
 
 ## 2. Agent-assisted adoption
 

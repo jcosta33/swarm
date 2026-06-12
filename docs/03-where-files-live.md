@@ -27,7 +27,7 @@ your-workspace/
   change-plans/          # appears when structural work needs it
   decisions/             # project decisions, numbered (0001-, 0002-, …)
   templates/             # the kit templates you copied in
-  advanced/              # optional templates, guides, cards — copy pieces when needed
+  advanced/              # optional templates and reference cards — copy pieces when needed
   examples/              # one worked chain — read it, then delete it
   status.md              # the hand-edited workboard
   .agents/               # agent tooling — guides live in .agents/skills/

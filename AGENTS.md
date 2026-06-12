@@ -13,16 +13,22 @@ anything described as checkable names its checker (the reference implementation 
   `ADOPTING.md`, `adrs/` (the decision ledger), `research/sources.md` (the evidence bibliography).
 - `starter-kit/` — a complete workspace adopters copy whole (ADR-0069): `AGENTS.md` + symlinks,
   `.agents/skills/` (3 core guides; `.claude/skills` symlink), `templates/` (8), seeded flow
-  folders, `status.md`, `examples/`, `decisions/`, `advanced/` (optional tier).
+  folders, `status.md`, `examples/`, `decisions/`, `advanced/` (optional templates + reference
+  cards; optional guides live in the swarm-skills sibling repo).
 - `checks/` — the checks contract as data (`checks.yaml`) + fixtures (test data for
-  `docs/reference/checks.md`; swarm-cli's oracle). `.agents/` — this repo's own dev tooling,
-  audits, and plans.
+  `docs/reference/checks.md`; swarm-cli's oracle). `.agents/` — a small dev-skills subset
+  (see `.agents/SKILLS-MANIFEST.md`).
+
+## Swarm workspace
+
+Swarm workspace: `../swarm-hq` (the family's multi-repo workspace). Specs, tasks, reviews,
+findings, audits, and the board for changes to this repo live there — read the task packet you
+are given. Accepted framework decisions still land here, in `docs/adrs/`.
 
 ## Startup
 
 1. Read the current task/request first; load only the skill or reference it names.
-2. Treat the ADRs (`docs/adrs/`) as the recorded intent; the build brief
-   (`.agents/plans/build-brief.md`) carries voice/vocabulary rules for doc work.
+2. Treat the ADRs (`docs/adrs/`) as the recorded intent for every format and vocabulary rule.
 3. Map every completion claim to evidence — paste real output; a claim without it is unverified.
 4. Adversarial self-review before declaring done (ADR-0056): re-read your own diff as a skeptic;
    never self-issue a review verdict.
@@ -48,23 +54,22 @@ anything described as checkable names its checker (the reference implementation 
   source are labeled design rationale. Web-verify before adding to `sources.md`.
 - **Single-sourcing.** Formats are frozen in ADRs 0058/0060/0061/0067/0068 and shipped at
   `starter-kit/templates/` — everything else links, never restates. A rule lands in `docs/`
-  first; kit guides and dev skills derive from it (propagation matrix:
-  `.agents/audits/repositioning-propagation.md`).
+  first; the kit, the swarm-skills catalog, and the dev skills derive from it.
 
 ## Pointers
 
-- Decisions: `docs/adrs/README.md` (0001–0071; 0057–0071 are the current architecture)
-- Plans: `.agents/plans/practical-swarm-repositioning-plan.md` (+ inputs/, validation survey)
-- Dev skills (curated subset for working on this repo): `.agents/skills/` — see
+- Decisions: `docs/adrs/README.md` (0001–0074; 0057–0074 are the current architecture)
+- Workspace (specs, audits, plans, board): `../swarm-hq`
+- Dev skills (the small subset for working on this repo): `.agents/skills/` — see
   `.agents/SKILLS-MANIFEST.md`
+- Optional guide catalog: `../swarm-skills` (github.com/jcosta33/swarm-skills)
 - Evidence: `docs/research/sources.md` (verified / caveated / rejected — never cite rejected)
-- Outstanding: swarm-cli resync + cold re-adoption (Increments 10–11) — see the propagation matrix
 
 ## Commands
 
 | Slot | Command | Resolves |
 |---|---|---|
-| — | (none) | markdown-only repo; coherence is checked by the gates in the propagation matrix |
+| — | (none) | markdown-only repo; coherence is checked by review (the swarm-hq workspace cuts and reviews the tasks) |
 
 ## Workflow
 

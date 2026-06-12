@@ -67,8 +67,9 @@ Optional on any given task: Pull/intake · Inventory · Change Plan · a new spe
 covered bug fix · a board row for trivial work (each has a stated skip rule in
 [the workflow](02-basic-workflow.md)). Advanced — exists, not part of the first path:
 audit and research artifacts, the granular lifecycle, the richer result vocabulary, the
-memory model, the deep adversarial-review guide, everything in `starter-kit/advanced/`,
-and the entire CLI (future). The core you actually start with: spec, task, review, finding.
+memory model, the optional templates in `starter-kit/advanced/`, the guide catalog in
+[swarm-skills](https://github.com/jcosta33/swarm-skills), and the entire CLI (future). The
+core you actually start with: spec, task, review, finding.
 
 ## What Swarm does not promise
 

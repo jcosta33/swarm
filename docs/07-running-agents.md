@@ -70,9 +70,9 @@ the worktree still exists and re-running a command costs seconds. Later, it's
 archaeology. When the agent cannot write the workspace — a dedicated workspace
 repo, a sandboxed runner — it emits the summary at the end of its run and the
 runner or human relays it into the task packet at handoff. For per-kind depth
-(a fix, a refactor, a migration, performance work), load the matching guide
-from `docs/library/code-skills/` in the Swarm repo on top of the kit's
-implement-task.
+(a fix, a refactor, a migration, performance work), install the matching guide
+from [the swarm-skills catalog](https://github.com/jcosta33/swarm-skills) on
+top of the kit's implement-task.
 
 ## Self-review before handoff
 

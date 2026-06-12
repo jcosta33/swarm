@@ -23,8 +23,8 @@ decisions/           your ADR ledger, seeded with 0001-adopt-swarm
 status.md            the hand-edited workboard
 examples/            one worked chain (ticket → spec → task → review → finding) —
                      read it, then delete it
-advanced/            optional templates, guides, and reference cards — copy pieces into
-                     .agents/skills/ (guides) or use in place (templates) when needed
+advanced/            optional templates and reference cards — use in place when needed
+                     (optional agent guides install from the swarm-skills catalog)
 .gitignore.additions lines for your CODE repos (this workspace commits its artifacts)
 ```
 
@@ -37,6 +37,8 @@ After copying:
 3. Write one spec for your next non-trivial change: `specs/<feature>/spec.md`. Run the loop.
 
 `advanced/` is optional — copy pieces when the work needs them. The audit template is the
-recommended first taste for brownfield codebases.
+recommended first taste for brownfield codebases. Optional agent guides (audits, research,
+change plans, per-change-shape implementation depth) install from the swarm-skills catalog:
+`npx skills add jcosta33/swarm-skills --list`.
 
 Full instructions: `docs/ADOPTING.md` in the Swarm repo. Worked examples: `docs/examples/`.

@@ -111,4 +111,5 @@ the diff existed.
 - [Writing specs](04-writing-specs.md) — the behavior side of the division table.
 - Deeper planning technique — equivalence checks beyond a green suite, behavior-delta tables
   for rewrites, baseline/target measurement for performance work — lives in the
-  `write-change-plan` agent guide in the kit's advanced tier.
+  `write-change-plan` agent guide in
+  [the swarm-skills catalog](https://github.com/jcosta33/swarm-skills).

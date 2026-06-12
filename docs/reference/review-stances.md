@@ -56,29 +56,29 @@ Breadth-first inventory: what prevails across many examples — market, UX, and 
 surveys. Prevents pattern claims built on one example. Demands at least three named instances per
 asserted pattern and a hard line between observation and claim; refuses inferring behavior from
 marketing copy and closing on a recommendation no spec could transcribe. The one stance that does
-not fold cleanly into any single guide; ships standalone at `starter-kit/advanced/persona-surveyor/`.
+not fold cleanly into any single guide; ships standalone as `persona-surveyor` in
+[the swarm-skills catalog](https://github.com/jcosta33/swarm-skills).
 
 ### Auditor — folded into the `write-audit` guide
 
 Observation, not prescription. Prevents audits that editorialize or quietly fix. Demands a
 file-and-line reference per finding and severity calibrated by blast radius, not a flat list;
 refuses prescribing fixes inline and asserting a structural claim nobody grepped for. Ships inside
-`starter-kit/advanced/write-audit/`.
+the catalog's `write-audit`.
 
 ### Researcher — folded into the `write-research` guide
 
 Depth inquiry against primary sources, committing to no decision. Prevents research that hardens
 into a recommendation or lets a claim outrun its evidence. Demands checkable primary sources and a
 visible seam between what was observed and what is asserted; refuses citing a blog post without its
-primary source. Ships inside `starter-kit/advanced/write-research/`.
+primary source. Ships inside the catalog's `write-research`.
 
 ### Documentarian — folded into the documentation guide
 
 Human-facing docs for a reader with one question who has not read the code. Prevents docs that
 drift from the system they describe. Demands one documentation frame held throughout, every example
 run as written, and every behavior claim traceable to source; refuses hedging ("should", "might")
-where the system has one actual behavior. Ships with the code-skills library
-(`docs/library/code-skills/`).
+where the system has one actual behavior. Ships with the catalog's `write-documentation`.
 
 ## Judge independence
 

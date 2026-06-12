@@ -14,7 +14,7 @@ procedure; the templates carry shape; this page is the index.
 | `implement-task` | executing a task packet — stay in scope, run every Verify item, paste real output, self-review the diff before handoff |
 | `review-output` | filling a review packet — refute by default, re-run checks, evidence rules, route the exception triggers |
 
-## Advanced (ship in `starter-kit/advanced/`, copy when needed)
+## Advanced (install from [the swarm-skills catalog](https://github.com/jcosta33/swarm-skills) when needed)
 
 | Guide | Use when |
 |---|---|
@@ -29,11 +29,12 @@ procedure; the templates carry shape; this page is the index.
 | `save-findings` | the Close step — routing durable discoveries to findings |
 | `adversarial-review` | a deep, hostile re-review of an agent branch — beyond the packet: re-run validation yourself, six adversarial questions, caller search |
 
-## Implementation guides (library, for code-side depth)
+## Implementation guides (for code-side depth)
 
-`docs/library/code-skills/` carries long-form execution guides per change shape
+The same catalog carries long-form execution guides per change shape
 (feature, fix, refactor, rewrite, migration, performance, testing, documentation,
-flaky tests) plus `implement-task` in long form. Optional — copy what your team uses.
+flaky tests) plus `implement-task` in long form. Optional — install what your team uses
+(`npx skills add jcosta33/swarm-skills --list`, or copy the folders).
 
 ## Authoring your own guide
 
