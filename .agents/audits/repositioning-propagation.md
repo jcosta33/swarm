@@ -104,3 +104,26 @@ recorded in the review file.
 post-friction-fix gates: user-tier tokens 0 · labels 0 problems · links 0 · citations 0
 sources.md: REDEFO re-sectioned; retained-uncited-entries note added
 ```
+
+## ADRs 0069–0071 — the scaffolding restructure (2026-06-12)
+
+Owner-directed; decisions in `docs/adrs/006{9,70,71}-*.md`. Path renames mean the historical
+matrix rows and gate evidence above reference **pre-rename paths** — that is the record, not
+drift:
+
+| Change | Old surface | New surface | Status |
+|---|---|---|---|
+| Kit reshaped to a copy-whole workspace | `starter-kit/agent/` (staging dir) | kit root `AGENTS.md` + `.agents/skills/` + `.claude/skills` symlink; seeded flow folders; root `status.md` | done @ "starter-kit/: reshape…" |
+| Checks vocabulary at tree level | `conformance/`, `conformance.yaml` | `checks/`, `checks/checks.yaml` (v0.3.0) | done @ "checks/: rename…" |
+| Step bars are product reference | `evals/` (8 files, island) | `docs/reference/step-bars.md` (one page; P/S/T/R/V/C ids kept; 3 live inbound links) | done @ "step-bars: …" |
+
+Reference sweeps: `starter-kit/agent` → `.agents/skills` (7 live files), `conformance` →
+`checks` (7 live files; ADR bodies keep historical names), evals inbound = 0 before deletion
+(verified — it was an island). Root bootloader `AGENTS.md` repo map rewritten; ADOPTING,
+root README get-started, docs/03 tree, docs/10 per-tool table, kit README rewritten.
+
+**Outstanding register update:** the swarm-cli resync (Increment 10, owner-deferred) now
+additionally covers: the workspace-shaped kit (copy-whole adoption + `.agents/skills/` home),
+the `checks/checks.yaml` path + v0.3.0, and `step-bars.md` replacing `evals/` as the
+step-quality reference. The template-repo split/mirror is deferred to public launch per
+ADR-0069 §4.

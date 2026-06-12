@@ -8,13 +8,15 @@ anything described as checkable names its checker (the reference implementation 
 `swarm-cli`, a sibling repo); everything else is convention or review checklist, and says so.
 
 - `docs/` — the product: a numbered happy path (`01`–`10`), `reference/` (the deep layer:
-  structured requirements, checks, artifact formats, advanced lifecycle, future CLI, memory),
-  `examples/` (three flagship walkthroughs; `large-pr-review.md` is the demo), `ADOPTING.md`,
-  `adrs/` (the decision ledger), `research/sources.md` (the evidence bibliography).
-- `starter-kit/` — what adopters copy: `templates/` (8), `agent/` (bootloader + 3 guides),
-  `examples/`, `decisions/`, `advanced/` (optional tier).
-- `conformance/` — checks fixtures (test data for `docs/reference/checks.md`; swarm-cli's oracle).
-- `evals/` — per-step output rubrics. `.agents/` — this repo's own dev tooling, audits, and plans.
+  structured requirements, checks, step bars, artifact formats, advanced lifecycle, future CLI,
+  memory), `examples/` (three flagship walkthroughs; `large-pr-review.md` is the demo),
+  `ADOPTING.md`, `adrs/` (the decision ledger), `research/sources.md` (the evidence bibliography).
+- `starter-kit/` — a complete workspace adopters copy whole (ADR-0069): `AGENTS.md` + symlinks,
+  `.agents/skills/` (3 core guides; `.claude/skills` symlink), `templates/` (8), seeded flow
+  folders, `status.md`, `examples/`, `decisions/`, `advanced/` (optional tier).
+- `checks/` — the checks contract as data (`checks.yaml`) + fixtures (test data for
+  `docs/reference/checks.md`; swarm-cli's oracle). `.agents/` — this repo's own dev tooling,
+  audits, and plans.
 
 ## Startup
 
@@ -38,7 +40,7 @@ anything described as checkable names its checker (the reference implementation 
   may also use the precise internal terms (pass, obligation, proof, verdict, SOL codes);
   `docs/reference/glossary.md` maps both directions.
 - **No counts ceremony.** Closed-set cardinalities live in exactly two places:
-  `conformance/README.md` (producer reconciliation note) and the cheatsheet appendix.
+  `checks/README.md` (producer reconciliation note) and the cheatsheet appendix.
   Everywhere else lists values, never counts.
 - **Citations are contextual.** Every load-bearing empirical claim cites a verified entry
   inline — the `[[KEY]]` form linking the matching anchor in `docs/research/sources.md` — and the citation moves with the claim.
@@ -51,7 +53,7 @@ anything described as checkable names its checker (the reference implementation 
 
 ## Pointers
 
-- Decisions: `docs/adrs/README.md` (0001–0068; 0057–0068 are the current architecture)
+- Decisions: `docs/adrs/README.md` (0001–0071; 0057–0071 are the current architecture)
 - Plans: `.agents/plans/practical-swarm-repositioning-plan.md` (+ inputs/, validation survey)
 - Dev skills (curated subset for working on this repo): `.agents/skills/` — see
   `.agents/SKILLS-MANIFEST.md`
