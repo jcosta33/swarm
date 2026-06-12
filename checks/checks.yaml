@@ -1,4 +1,4 @@
-# conformance.yaml — the checks contract as data. Inert: nothing in this
+# checks.yaml — the checks contract as data. Inert: nothing in this
 # repository runs it.
 #
 # This file is the machine-readable shadow of docs/reference/checks.md (the
@@ -13,7 +13,7 @@
 #   warning     a checker should flag it; teams may treat any warning as
 #               blocking by policy
 
-version: 0.2.1   # contract version of this file; bump on any rule change
+version: 0.3.0   # contract version of this file; bump on any rule change
 
 # --- Spec form selector -------------------------------------------------------
 # The default spec form is plain structured markdown. A spec opts into the

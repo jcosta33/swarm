@@ -10,7 +10,7 @@ test suite runs against these files — and a reviewer working by hand can use t
 same way: apply the checks, compare against the pinned expectation.
 
 **Nothing in this directory runs.** It is data, not a runner: Swarm ships the contract
-([`conformance.yaml`](./conformance.yaml)) and the fixtures that test it, never the checker.
+([`checks.yaml`](./checks.yaml)) and the fixtures that test it, never the checker.
 
 ## When is a workspace valid?
 
@@ -35,7 +35,7 @@ flag the mechanical parts:
 
 | Path | Holds |
 |---|---|
-| [`conformance.yaml`](./conformance.yaml) | The checks contract as data: spec-form selector, core check list with severities, task and review packet schemas, the evidence rules, advisory command slots, placeholder namespaces. |
+| [`checks.yaml`](./checks.yaml) | The checks contract as data: spec-form selector, core check list with severities, task and review packet schemas, the evidence rules, advisory command slots, placeholder namespaces. |
 | [`fixtures/conformant-task.md`](./fixtures/conformant-task.md) | A task packet that passes every task check — the positive oracle. |
 | [`fixtures/violations.md`](./fixtures/violations.md) | One minimal negative fixture per violation class, each with the check it trips and the expected report. |
 | `fixtures/auth-refresh/` · `fixtures/payment-5xx/` · `fixtures/checkout/` | Three end-to-end domains: the spec in both forms (the equivalence pair), a task packet, a review packet, a finding, and an `EXPECTED.md` pinning what a checker must report at each artifact. |
@@ -88,16 +88,16 @@ places — and the fixtures that exercise it — in the same commit.
 
 Reconciliation duties this note carries:
 
-- The core check IDs and severities in [`conformance.yaml`](./conformance.yaml) match
+- The core check IDs and severities in [`checks.yaml`](./checks.yaml) match
   [the checks reference](../docs/reference/checks.md) row for row.
-- The task and review section lists in [`conformance.yaml`](./conformance.yaml) match
+- The task and review section lists in [`checks.yaml`](./checks.yaml) match
   the templates at `starter-kit/templates/` heading for heading.
 - Every fixture's pinned expectation agrees with both; a fixture that disagrees means
   the contract, the prose, or the fixture is wrong — find out which before shipping.
 
 ## How a checker uses this directory
 
-1. Read the rules from [`conformance.yaml`](./conformance.yaml) (or implement
+1. Read the rules from [`checks.yaml`](./checks.yaml) (or implement
    [the checks reference](../docs/reference/checks.md) directly — they must agree).
 2. Run over [`fixtures/conformant-task.md`](./fixtures/conformant-task.md): the expected
    report is empty.

@@ -3,7 +3,7 @@
 *Advanced design note — internal rationale; not needed to use Swarm.*
 
 One minimal negative fixture per violation class. Each snippet must be flagged by a
-checker applying [`../conformance.yaml`](../conformance.yaml) — or by a reviewer applying
+checker applying [`../checks.yaml`](../checks.yaml) — or by a reviewer applying
 [the checks reference](../../docs/reference/checks.md) by hand — with exactly the named
 check at the named severity. A checker that stays silent on any of these is wrong; so is
 one that reports a different check. Inert fixture data — nothing here runs.

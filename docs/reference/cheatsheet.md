@@ -137,7 +137,7 @@ or a CI link; `no-open-critical` — nothing closes with an open blocking questi
 This appendix exists for producers of Swarm tooling and documentation, not for adopters.
 The closed sets have exact sizes that tooling and fixtures reconcile against — the same
 eight rows, with their member lists, live in
-[`conformance/README.md`](../../conformance/README.md): block types (SOL form) 5 ·
+[`checks/README.md`](../../checks/README.md): block types (SOL form) 5 ·
 strength words 5 · review results 7 (4 core + 3 lifecycle) · verification methods 9 ·
 loop steps 6 (+ 2 conditional) · lifecycle steps (advanced) 9 · improve operations 10 ·
 check layers 5 (S/P/M/V/O). These registry rows — the counts with their member lists —

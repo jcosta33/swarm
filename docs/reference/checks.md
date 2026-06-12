@@ -207,7 +207,7 @@ covers that step in full.
 ## How core checks map to SOL codes
 
 One requirement record underlies both spec forms, so a core check and its SOL codes are the same
-question asked of two surfaces — never two different rules. The fixtures under `conformance/` in
+question asked of two surfaces — never two different rules. The fixtures under `checks/` in
 the Swarm repo include simple/SOL equivalence pairs that pin this.
 
 | Core check                    | SOL form                                       |
@@ -255,4 +255,4 @@ Teams may promote any warning to blocking by policy. Going the other way — acc
 - [Writing specs](../04-writing-specs.md) — the happy-path guide the core checks back.
 - [Reviewing output](../08-reviewing-output.md) — where the packet checks and the trigger checklist live.
 - [Artifact formats](artifact-formats.md) — every template this page's checks apply to.
-- `conformance/` (Swarm repo) — the checks fixtures: expected results per check, the test data swarm-cli runs against.
+- `checks/` (Swarm repo) — the checks fixtures: expected results per check, the test data swarm-cli runs against.

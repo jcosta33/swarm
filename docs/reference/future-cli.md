@@ -164,7 +164,7 @@ These are deliberately not in the set. Each has a reason, not just a backlog pos
 | `compile` | Swarm is not a compiler; nothing is generated from a spec. |
 | `lower` / `decompose` | splitting a spec into tasks is judgment work; the discipline lives in [advanced-lifecycle.md](advanced-lifecycle.md), not a command |
 | `graph` | dependency/coverage visualization — a luxury after the basics work |
-| `conformance` | a fixture-running checker beyond `spec check`; the fixtures already serve as swarm-cli's test data |
+| `checks` | a fixture-running checker beyond `spec check`; the fixtures already serve as swarm-cli's test data |
 | `promote` | finding routing stays a prompt inside `close`, not its own engine |
 | `trace validate` | checking an agent's run summary against the actual diff folds into `review` drafting first |
 
