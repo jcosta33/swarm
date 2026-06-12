@@ -46,6 +46,8 @@ Each predicate must hold. Any single failing predicate fails the step.
 - **Result consistent with evidence** — V2 and V4 are its expressions here.
 - **Drift surfaced** — a requirement the code no longer matches, or behavior the spec never
   asked for, is named in a row or a Human attention entry — never silently re-blessed.
+- **Re-parses clean** — the packet reads as `type: review` with the template's frontmatter and
+  sections, and every coverage row carries a result from the four-value enum.
 
 ## Not graded here
 

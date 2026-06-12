@@ -34,7 +34,7 @@ Run each against the spec (full catalogue with IDs and severities:
 | C001 | Every requirement ID (`AC-NNN`) appears exactly once in the file                       | hard error |
 | C002 | No other file claims the same frontmatter `id:`; no requirement ID reused across specs | hard error |
 | C003 | Every requirement carries a `Verify with:` line                                        | hard error |
-| C004 | Each requirement states exactly one strength word (must / must not / should / may)     | warning    |
+| C004 | Each requirement states exactly one strength word (must / must not / should / should not / may) | warning |
 | C005 | Non-goals section present and non-empty                                                | warning    |
 | C006 | Open questions section present (even if "none")                                        | warning    |
 | C007 | No `TBD`, `TODO`, `???`, or unresolved open question at `status: ready`                | hard error |

@@ -71,7 +71,7 @@ is a Blocker. When a call is contestable, record the reasoning inline so a revie
 
 ### 7. Recommend requirements in prose — never write them
 
-The template's recommended-requirements section describes, in plain prose, what a future spec
+The template's candidate-requirements section describes, in plain prose, what a future spec
 should require. Write what the spec should carry, not how to change the code. Do not write
 AC items or SOL blocks (`../sol-reference.md`) — a requirement acquires force only when someone
 lifts it into a spec, and an audit that writes requirements lets an observation be read as an

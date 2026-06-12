@@ -69,7 +69,7 @@ until then they are review checklist items.
    requirements — split them so each can pass or fail on its own.
 4. **Name the actor.** "The client must…", "The API must…" — never "it should" or a passive
    "errors are logged" that leaves the doer unknown.
-5. **One binding word per requirement** — must, must not, should, or may — and mean it: a
+5. **One binding word per requirement** — must, must not, should, should not, or may — and mean it: a
    "should" hands the agent a decision; make sure that's intended.
 6. **Order requirements by importance.** Agents weight earlier instructions more — put the
    requirement you would block the merge over first.

@@ -22,7 +22,7 @@
 - Specs: `specs/<feature>/spec.md` · tasks: `tasks/` · reviews: `reviews/` ·
   findings: `findings/` · intake: `intake/` · inventories: `inventory/` ·
   change plans: `change-plans/` · decisions: `decisions/` · board: `status.md`
-- Templates for every artifact: `templates/`
+- Templates for the core artifacts: `templates/` (ADR shape: `advanced/adr.md`)
 - {{For code repos: "Swarm workspace: <path-or-url>"}}
 
 ## Project facts

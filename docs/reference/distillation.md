@@ -31,7 +31,7 @@ flag a task packet missing a requirement ID its source spec declares.
 | Must survive | Why |
 |---|---|
 | The requirement ID | The traceability key; lose it and nothing maps back. |
-| Its strength word (must / must not / should / may) | The strength *is* the binding force. |
+| Its strength word (must / must not / should / should not / may) | The strength *is* the binding force. |
 | Its `Verify with:` line | A requirement with no verification path reviews as Unverified. |
 | Its scope — owner, affected areas, do-not-change bounds | Dropping a bound silently widens the work. |
 | Constraints, non-goals, unresolved open questions | These limit the build; a dropped non-goal is scope creep with no fingerprints. |

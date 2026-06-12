@@ -70,8 +70,8 @@ archaeology.
 
 ## Self-review before handoff
 
-The final instruction in every task: before finishing, the agent re-reads its
-own diff as a skeptic — _what would a reviewer flag?_ This catches the cheap
+Before leaving its summary — the packet's last instruction — the agent re-reads its
+own diff as a skeptic: _what would a reviewer flag?_ This catches the cheap
 stuff early: scope creep, leftover debug code, a requirement satisfied in
 letter but not in spirit.
 

@@ -10,7 +10,8 @@ agent/        the bootloader (AGENTS.md + CLAUDE.md/GEMINI.md symlinks) and thre
 examples/     one compact worked feature: ticket → spec → task → review → finding
 decisions/    the seed ADR ledger for your workspace
 advanced/     optional: audit/bug/research/adr/rfc/prd/threat-model templates,
-              their guides, and the SOL + checks reference cards
+              focused guides for the optional work, and the SOL + checks
+              reference cards
 .gitignore.additions   lines for code repos (the workspace commits its artifacts)
 ```
 

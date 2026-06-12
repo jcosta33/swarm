@@ -39,8 +39,8 @@ to SOL (or back) keeps every id — references from tasks, reviews, and findings
 
 **3. Shared strength words.** The strength scale is one enum across both surfaces. Plain form
 uses one lowercase binding word per requirement sentence (_must_, _must not_, _should_,
-_may_); SOL uses the same words uppercase, as explicit tokens (plus `SHOULD NOT` as the
-negative of _should_). See [Strength words](#strength-words).
+_should not_, _may_); SOL uses the same words uppercase, as explicit tokens. See
+[Strength words](#strength-words).
 
 **4. One verification field, two precisions.** Plain `Verify with: <ref>` is an _unresolved
 note_ — a pointer the reviewer chases; if the named test or command does not exist yet, the

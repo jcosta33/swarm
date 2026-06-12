@@ -119,7 +119,7 @@ catalogue are in [checks](checks.md).
 | C001 | `unique-ids` — every requirement ID appears exactly once                   | hard error |
 | C002 | `duplicate-id` — no other file claims the same `id:`                       | hard error |
 | C003 | `verify-with` — every requirement carries a `Verify with:` line            | hard error |
-| C004 | `one-strength-word` — exactly one of must / must not / should / may        | warning    |
+| C004 | `one-strength-word` — exactly one of must / must not / should / should not / may | warning |
 | C005 | `non-goals-present` — a non-empty Non-goals section exists                 | warning    |
 | C006 | `open-questions-present` — an Open questions section exists                | warning    |
 | C007 | `no-tbd-at-ready` — no `TBD`/`TODO`/unresolved question at `status: ready` | hard error |
@@ -140,8 +140,10 @@ eight rows, with their member lists, live in
 [`conformance/README.md`](../../conformance/README.md): block types (SOL form) 5 ·
 strength words 5 · review results 7 (4 core + 3 lifecycle) · verification methods 9 ·
 loop steps 6 (+ 2 conditional) · lifecycle steps (advanced) 9 · improve operations 10 ·
-check layers 5 (S/P/M/V/O). These counts appear in exactly two places — here and there —
-and nowhere else; a change to any set updates both, and the fixtures, in one commit.
+check layers 5 (S/P/M/V/O). These registry rows — the counts with their member lists —
+live in exactly two places: here and there. A change to any set updates both, and the
+fixtures, in one commit. (The numeral-bearing model names — the six-step loop, the
+nine-step lifecycle — are names, not registry copies.)
 
 ## Related
 

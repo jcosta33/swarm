@@ -12,7 +12,7 @@
 | C001 | `unique-ids` — every requirement ID appears exactly once in the file | hard error | toolable |
 | C002 | `duplicate-id` — no other file claims the same `id:`; no requirement ID reused across specs | hard error | toolable |
 | C003 | `verify-with` — every requirement carries a `Verify with:` (SOL: `VERIFY BY`) line | hard error | toolable |
-| C004 | `one-strength-word` — exactly one of must / must not / should / may per requirement | warning | toolable |
+| C004 | `one-strength-word` — exactly one of must / must not / should / should not / may per requirement | warning | toolable |
 | C005 | `non-goals-present` — a non-empty Non-goals section exists | warning | toolable |
 | C006 | `open-questions-present` — an Open questions section exists (even "none") | warning | toolable |
 | C007 | `no-tbd-at-ready` — no `TBD`/`TODO`/unresolved question at `status: ready` | hard error | toolable |

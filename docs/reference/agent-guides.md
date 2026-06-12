@@ -53,7 +53,7 @@ own:
   loaded on demand [[SKILLBP]](../research/sources.md#SKILLBP).
 - **Number the rules and attach the why.** A rule without its one-line rationale gets traded
   away under pressure. Add a Refuses table (temptation → do instead) — it catches the failure
-  modes prose rules miss, and every kit guide carries one.
+  modes prose rules miss; the kit's core guides all carry one.
 - **Make verification steps force output.** A step that says "verify X" invites a claim; a
   step that says "paste the output of X" produces evidence. End with a self-review gate the
   agent answers in writing.

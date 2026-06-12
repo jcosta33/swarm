@@ -53,7 +53,7 @@ is, as it stood when the incident happened.
 type: spec
 id: SPEC-PAYMENT-RETRY
 title: Bounded retry on processor 5xx
-status: done
+status: ready
 owner: payments
 sources:
   - intake/JIRA-097.md
@@ -98,7 +98,7 @@ Verify with: `npx vitest run server/tests/payment-fail.spec.ts`
 The check comes back uncomfortable: the code violates neither requirement — the bug lives
 in what the spec never said. Nothing requires a retry to reuse the original idempotency
 key, so the spec is amended in place with one new requirement (existing IDs keep their
-numbers; the spec's status goes back to `ready` until the fix lands):
+numbers; on the workboard, the spec's row moves back from `done` until the fix lands):
 
 ```markdown
 ### AC-003 — One idempotency key per charge

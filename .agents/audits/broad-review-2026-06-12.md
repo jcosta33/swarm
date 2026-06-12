@@ -338,3 +338,39 @@ Disposition choices worth recording:
 Gap from the original run closed separately: the `find:self-claims` lens died on an API error
 mid-run; it was re-run as its own find→adversarial-verify sweep after these fixes landed (results
 recorded below if any survived).
+
+## Self-claims sweep (2026-06-12, follow-up run)
+
+The re-run found **16 confirmed failures (all minor) and refuted 1**; all 16 fixed in the
+follow-up commit. The themes:
+
+- **Strength-word enum drift (six sites).** The canonical five-word enum (must, must not,
+  should, should not, may — checks.md C004, the count registry, sol-reference) had decayed to
+  four words ("should not" dropped) in cheatsheet C004, distillation's must-survive table,
+  structured-requirements' shared-enum paragraph, docs/04 rule 5, and both kit echo sites
+  (checks-reference, spec-check). All six now carry five.
+- **Guide overpromises (three sites).** starter-kit/README and ADOPTING promised "their
+  guides" for templates that have none (adr, threat-model); the kit AGENTS.md claimed
+  "Templates for every artifact" while templates/ has no ADR shape. All scoped to what ships.
+- **Example-internal contradictions.** bug-fix's spec frontmatter carried the board-only
+  `status: done` (→ `ready`, narrative re-worded to the workboard); large-pr-review's
+  exception aggregate undercounted (3 → 4 end to end: the second packet's finding candidate
+  is an exception by the framework's own trigger list).
+- **Registry-claim absolutism.** "These counts appear in exactly two places … and nowhere
+  else" was falsifiable as written (docs/02's "Swarm's workflow is six steps"); both registry
+  homes now scope the claim to registry rows and exempt numeral-bearing model names. This
+  adjudicates the confirmed-vs-refuted split both verifiers reached on the same line.
+- **Smaller drifts.** docs/07 called the skeptic re-read "the final instruction" (it is 4 of
+  5); the kit write-audit guide named a nonexistent "recommended-requirements" section
+  (template says Candidate requirements; the dev copy was already right);
+  evals/review.md now restates "Re-parses clean" as the README table promises; the
+  agent-guides authoring section (added this morning) overclaimed "every kit guide carries"
+  a Refuses table (now scoped to the core guides).
+- **Closed the negative-oracle gap.** violations.md promised one negative fixture per
+  violation class but covered 7 of the contract's 15 rule classes; V8–V15 added (C002,
+  C004–C006, C008–C011) so every class has a negative oracle, including the three hard
+  errors that had none (C002, C009, C010).
+
+Refuted: the broad reading of the cheatsheet two-places claim as banning every numbered
+phrase (the model names are mandated by ADR-0057); resolved by the scoping fix above rather
+than by scrubbing names.

@@ -12,7 +12,7 @@ Inventory → Change Plan → Task → Run → Review → Close
 
 Every artifact below sits in the workspace in the shipped template shapes
 ([`starter-kit/templates/`](../../starter-kit/templates/)). The punchline up front: the
-reviewer read eighteen table rows and three exception items across two packets, spot-checked
+reviewer read eighteen table rows and four exception items across two packets, spot-checked
 one green row by hand, and opened three files out of 41 — the three the packet pointed at.
 
 ## The scenario
@@ -551,8 +551,8 @@ codebase green.
 ## What the reviewer actually read
 
 For a 41-file, ±3,000-line PR, the human review consumed: **nine coverage rows** plus **three
-exception items** in the first packet, nine more rows in the second's all-green table —
-eighteen rows and three exceptions end to end; **three files opened**, all on the packet's pointers (the `throw` site, the
+exception items** in the first packet, nine more rows and one exception item (the finding
+candidate) in the second — eighteen rows and four exception items end to end; **three files opened**, all on the packet's pointers (the `throw` site, the
 409 mapping, the out-of-scope `retry.ts` diff); and **one green row re-run by hand**. The
 other 38 files were never read line by line — they were _accounted for_: every behavior that
 mattered had a named row, every row had evidence or was called Unverified to its face, and

@@ -38,7 +38,8 @@ your project repo for a co-located setup ([where files live](03-where-files-live
    non-trivial change.
 
 Optional, when you need them: copy pieces of `starter-kit/advanced/` (audit,
-research, bug, ADR, RFC, PRD templates and their guides). The advanced audit
+research, bug, ADR, RFC, PRD templates, plus guides for the audit, research,
+bug, RFC, and PRD work). The advanced audit
 template is the recommended first taste for brownfield teams.
 
 ## 2. Agent-assisted adoption

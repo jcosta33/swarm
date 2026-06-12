@@ -69,10 +69,11 @@ different check behavior, these pairs are the fixtures that catch it.
 ## Reference values (reconciliation) — producer note
 
 This section is for maintainers of Swarm and of tools that consume it. The closed sets
-below have exact sizes, and those sizes appear in exactly two places: **here** and the
-appendix of [the cheatsheet](../docs/reference/cheatsheet.md). Adopter-facing pages list
-values, never counts. A change to any set updates both places — and the fixtures that
-exercise it — in the same commit.
+below have exact sizes, and those sizes are registered in exactly two places: **here** and
+the appendix of [the cheatsheet](../docs/reference/cheatsheet.md). Adopter-facing pages list
+values rather than counting them (a numeral-bearing model name — the six-step loop, the
+nine-step lifecycle — is a name, not a registry copy). A change to any set updates both
+places — and the fixtures that exercise it — in the same commit.
 
 | Closed set | Count | Values |
 |---|---|---|
