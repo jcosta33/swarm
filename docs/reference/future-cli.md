@@ -1,17 +1,22 @@
 # The future `swarm` CLI
 
-*Future automation — a contract for tooling that does not exist yet; nothing on this page runs today.*
+*Future automation — a **suggestive** sketch of tooling that does not exist yet; nothing on this page runs today.*
 
-> **None of this exists yet.** There is no `swarm` binary in this repository, and the markdown
-> workflow never requires one. The reference implementation in progress is **swarm-cli**. This page
-> is the contract that implementation builds against — and the level tag for every rule on it is
-> the same: **toolable**, the tool being swarm-cli. Until that ships, everything below is
-> documentation of work you and your agent do by hand with the templates.
+> **None of this exists yet, and this page is not the design of record.** There is no `swarm`
+> binary in this repository, and the markdown workflow never requires one. The reference
+> implementation in progress is **swarm-cli**, and its **design is
+> [ADR-0077](../adrs/0077-swarm-cli-reconcile-only-harness.md)** — derived fresh from the field
+> research and Swarm's own principles. This page is an *illustrative surface* of that design, not a
+> binding contract: the command names and milestones below are one way to expose swarm-cli's
+> capability engines (**check · launch · reconcile · prepare**), to be re-derived per phase, not
+> inherited. The level tag for everything here is **toolable**, the tool being swarm-cli.
 
-A CLI earns its place by making each step of the loop — Pull → Spec → Task → Run → Review → Close —
-cheaper without taking it over. Every command below answers the same five questions: what does it
-read, what does it write, does it run an agent, what state changes, and what should you do next.
-A command that cannot answer all five does not belong in the set.
+swarm-cli is a **reconcile-only harness** (ADR-0077): it prepares, launches, and reconciles agent
+runs against declared intent; it never performs the coding loop. Each command earns its place by
+that test and by answering the same five questions — what it reads, what it writes, whether it runs
+an agent, what state changes, and what to do next — *and* by being a well-behaved standalone Unix
+part. A command that cannot answer all five, or that only makes sense inside the full loop, does
+not belong in the set.
 
 ## The command set
 

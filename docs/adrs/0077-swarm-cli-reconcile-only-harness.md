@@ -20,16 +20,29 @@ requires the CLI to both **supercharge Swarm** and be **useful standalone for an
 honoring the "parts individually usable, maximally valuable together" thesis. The owner also
 resolved the `ir.json` question (Option A, below).
 
+This design is derived **fresh** — from the field research and Swarm's own principles, not from
+prior takes. The pre-existing `docs/reference/future-cli.md` sketch and the SOL-era specs
+(001, 005–009) are **suggestive priors to mine, not a contract to inherit**: their command
+inventory, milestones, and SOL-parsing center are not assumed here. Where they still fit the fresh
+design they are kept; where they drag (a verb-per-loop-step organizing principle, SOL as the
+parsing center), they are dropped.
+
 ## Decision
 
 swarm-cli is **a reconcile-only harness for agentic work**: composable parts that *prepare*,
 *launch*, and *reconcile* agent runs — each useful standalone, all composed by the Swarm workspace
 into the loop. It never *performs* the coding loop. Each rule carries an honesty level (ADR-0063).
 
-1. **Three layers.** (a) A reconcile-only **core library** (parse markdown → internal structure,
-   checks runner, packet drafting, review reconciliation, derived status) the CLI thinly wraps,
-   importable by editors/CI/the MCP server without shelling out. (b) **Standalone primitives**
-   usable without adopting Swarm. (c) A **Swarm-aware composition layer** that supercharges the
+1. **Organizing principle: capability engines, not a verb per loop-step.** The design's spine is
+   four reconcile-only **capability engines** — **check** (parse a spec, verify executable
+   criteria, compute coverage/drift), **launch** (worktree + adapter + run record + provenance),
+   **reconcile** (diff vs self-report → review draft, status, gated close), and **prepare**
+   (scaffold/intake/packet drafting, the lightest — a command only when it does more than copy a
+   template). The command *names* are a surface derived from these engines and the standalone-part
+   test, **re-derived per phase — never inherited** from the prior future-cli verb list. These
+   engines arrange as **three layers**: (a) a reconcile-only **core library** the CLI thinly wraps
+   (importable by editors/CI/the MCP server without shelling out); (b) **standalone primitives**
+   usable without adopting Swarm; (c) a **Swarm-aware composition layer** that supercharges the
    loop. *Level: convention (architecture).*
 2. **The Unix contract — every command is a well-behaved part.** `--json` output, meaningful exit
    codes (0 clean / 1 warnings / 2 error), stdout-for-data / stderr-for-messages, a
@@ -86,11 +99,13 @@ runtime** (crosses the boundary — adopt substrates, don't rebuild); **auto-dec
 
 ## Consequences
 
-Accepted. **Amends the `future-cli` contract**: adds the layered/standalone framing, the Unix
-contract, the canonical adapter event contract, the MCP server, hook generation, and the
-reconciliation/coverage/gated-close capabilities (all toolable, milestone-tagged); and **trims the
-reserved `*.ir.json`/`*.plan.json` schema** per Decision 6 — the run record stays (the
-reconciliation substrate), the frozen IR/plan schema goes, replaced by "swarm-cli parses the
+Accepted. **`future-cli.md` is reframed from "the contract" to a suggestive illustrative surface of
+this design** (it is a prior sketch, not the design of record — this ADR is): its header now points
+here, the layered/standalone framing, the Unix contract, the canonical adapter event contract, the
+MCP server, hook generation, and the reconciliation/coverage/gated-close capabilities are written
+in (all toolable, milestone-tagged), and the **reserved `*.ir.json`/`*.plan.json` schema is
+trimmed** per Decision 6 — the run record stays (the reconciliation substrate), the frozen IR/plan
+schema goes, replaced by "swarm-cli parses the
 markdown; optional `--json`." **Refines ADR-0054** (the structured form is now explicitly
 tool-internal, not a documented Swarm artifact) and **ADR-0072/0076** (the run record + Provenance
 line are the reconciliation substrate the run/review commands fill). **Re-baselines the SOL-era
@@ -102,7 +117,7 @@ tool-internal structure Decision 6 endorses — no artifact, kept.
 
 ## Propagation
 
-`docs/reference/future-cli.md` (amend + trim the IR/plan schema), `docs/reference/structured-requirements.md`
+`docs/reference/future-cli.md` (reframe to a suggestive surface of this design + write in the new capabilities + trim the IR/plan schema), `docs/reference/structured-requirements.md`
 + `docs/reference/advanced-lifecycle.md` (reword the "reserved machine format" phrasing to
 tool-internal/`--json`), ledger row, RFC → accepted + its `spec.ir.json` references softened,
 swarm-hq board + the SOL-era spec dispositions. No swarm-cli code change in this decision (the
