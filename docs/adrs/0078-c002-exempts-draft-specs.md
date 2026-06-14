@@ -1,0 +1,50 @@
+---
+type: adr
+id: adr-0078
+status: accepted
+created: 2026-06-14
+updated: 2026-06-14
+---
+
+# ADR-0078 — C002 (duplicate-id) exempts draft specs from cross-spec requirement-id reuse
+
+## Context
+
+C002 (`duplicate-id`, hard error) has two clauses: no two files claim the same frontmatter `id:`,
+and **no requirement ID is reused across specs** — the second clause makes a bare `AC-001` an
+unambiguous workspace-wide reference. Dogfooding the reference CLI (swarm-cli) against the real
+starter kit surfaced a tension the contract did not resolve: `swarm new spec <slug>` scaffolds a
+**draft** spec carrying the stub requirement `AC-001` (matching the kit's spec template). Scaffolding
+two specs and running `swarm check` before editing them therefore reds the whole workspace —
+`requirement id AC-001 is reused across 2 specs` — through no fault of the author, who has not yet
+written any real requirements.
+
+The check was correct against the contract as written; the contract had simply not said how the
+globally-unique-id rule interacts with the natural "every spec starts at `AC-001`" scaffolding
+convention. The framework already gates a sibling rule on lifecycle: **C007 (`no-tbd-at-ready`)
+enforces only at `status: ready`** — a draft may carry `TBD`/`???` placeholders because it is not a
+finalized claim.
+
+## Decision
+
+**Cross-spec requirement-id uniqueness (C002's second clause) applies to `ready` specs only.** A
+draft spec's requirement ids are not collected into the workspace-wide uniqueness set, so two fresh
+draft scaffolds (or any drafts sharing a stub `AC-001`) do not collide. This mirrors C007's
+`ready`-only gate: a draft's stub ids are work-in-progress, not committed claims.
+
+The first clause is unchanged — **frontmatter `id:` uniqueness still applies to every file** (a
+duplicate `SPEC-x` is ambiguous regardless of lifecycle). The rule's id, name (`duplicate-id`), and
+severity (hard error) are unchanged, so `checks.yaml` and the contract version are unchanged; only
+the prose semantics in `reference/checks.md` are clarified.
+
+## Consequences
+
+- A draft scaffold checks clean immediately; the author writes real, workspace-unique ids before
+  flipping a spec to `ready`, at which point C002 enforces uniqueness against all other ready specs.
+- The honesty bar holds: `reference/checks.md` now states the `ready`-only scope, and the reference
+  implementation (`swarm-cli` `Core/checkWorkspace`) collects requirement ids for the cross-spec
+  check only from `status: ready` specs.
+- This does not relax uniqueness for finalized work — two `ready` specs reusing `AC-001` still fail
+  C002 — and it does not resolve the deeper, separate question of whether requirement ids should be
+  globally unique or spec-scoped for ready specs; that remains the contract's current choice
+  (globally unique), left to a future decision if revisited.
