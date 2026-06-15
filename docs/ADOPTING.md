@@ -96,6 +96,15 @@ enforces it; that's the point of keeping the workspace authoritative).
 
 ## Upgrading
 
-Re-copy `templates/` and `.agents/skills/` from a newer kit checkout. Your specs, tasks,
-reviews, findings, decisions, board, and `AGENTS.md` are yours — the kit never touches
-them.
+You adopted the kit by copying it whole, so there is no automatic upgrade — and that is the
+point: nothing reaches into your repo. Instead, **watch and re-copy**. Each kit release records
+what changed in its [CHANGELOG](https://github.com/jcosta33/swarm-starter-kit/blob/main/CHANGELOG.md)
+under [semantic versioning](https://semver.org), so you can see whether a bump is a safe addition
+(minor/patch) or a layout change you'd reconcile (major) before pulling anything.
+
+Re-copy `templates/`, `.agents/skills/`, and `hooks/` from a newer kit checkout. Your specs,
+tasks, reviews, findings, decisions, board, and `AGENTS.md` are yours — the kit never touches
+them, so re-copying the kit-owned files is safe unless you have customized one (the CHANGELOG
+flags those). The same model holds for the [swarm-skills
+catalog](https://github.com/jcosta33/swarm-skills) (`npx skills`) and
+[swarm-cli](https://github.com/jcosta33/swarm-cli): pin to a release, re-pull when you choose.
