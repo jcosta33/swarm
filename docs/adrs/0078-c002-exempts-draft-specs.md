@@ -27,10 +27,13 @@ finalized claim.
 
 ## Decision
 
-**Cross-spec requirement-id uniqueness (C002's second clause) applies to `ready` specs only.** A
-draft spec's requirement ids are not collected into the workspace-wide uniqueness set, so two fresh
-draft scaffolds (or any drafts sharing a stub `AC-001`) do not collide. This mirrors C007's
-`ready`-only gate: a draft's stub ids are work-in-progress, not committed claims.
+**Cross-spec requirement-id uniqueness (C002's second clause) exempts `draft` specs only; it applies
+to every non-draft spec (ready, done, …).** A draft spec's requirement ids are not collected into the
+workspace-wide uniqueness set, so two fresh draft scaffolds (or any drafts sharing a stub `AC-001`) do
+not collide — but the moment a spec leaves `draft`, its ids are finalized claims that must be unique.
+(Gating on `=== 'ready'` would have been too broad, silently exempting `done`/`review-ready` specs
+whose ids are finalized.) The carve-out is narrower than but analogous to C007's `ready`-only gate: a
+draft's stub ids are work-in-progress, not committed claims.
 
 The first clause is unchanged — **frontmatter `id:` uniqueness still applies to every file** (a
 duplicate `SPEC-x` is ambiguous regardless of lifecycle). The rule's id, name (`duplicate-id`), and
@@ -40,11 +43,12 @@ the prose semantics in `reference/checks.md` are clarified.
 ## Consequences
 
 - A draft scaffold checks clean immediately; the author writes real, workspace-unique ids before
-  flipping a spec to `ready`, at which point C002 enforces uniqueness against all other ready specs.
-- The honesty bar holds: `reference/checks.md` now states the `ready`-only scope, and the reference
+  flipping a spec out of `draft`, at which point C002 enforces uniqueness against all other non-draft
+  specs.
+- The honesty bar holds: `reference/checks.md` now states the non-draft scope, and the reference
   implementation (`swarm-cli` `Core/checkWorkspace`) collects requirement ids for the cross-spec
-  check only from `status: ready` specs.
-- This does not relax uniqueness for finalized work — two `ready` specs reusing `AC-001` still fail
+  check from every spec whose `status` is not `draft`.
+- This does not relax uniqueness for finalized work — two non-draft specs reusing `AC-001` still fail
   C002 — and it does not resolve the deeper, separate question of whether requirement ids should be
-  globally unique or spec-scoped for ready specs; that remains the contract's current choice
+  globally unique or spec-scoped for non-draft specs; that remains the contract's current choice
   (globally unique), left to a future decision if revisited.
