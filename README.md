@@ -73,15 +73,33 @@ agent PR reviewed by exception — is
 - **Your workspace** — specs, tasks, reviews, findings: a dedicated repo or the same tree in your project ([where files live](docs/03-where-files-live.md)).
 - **Your code repos** — stay clean. The PR links its review packet; that's all.
 
+## Which repo do I want?
+
+Swarm is a small family of repos. Where you go depends on what you're doing:
+
+| You want to… | Go to |
+|---|---|
+| **start using Swarm** — get a working workspace | [swarm-starter-kit](https://github.com/jcosta33/swarm-starter-kit) — copy it whole, fill `AGENTS.md`, run the loop |
+| **understand the method** — formats, the checks contract, the decision ledger | **this repo** — `docs/` (the numbered happy path), `docs/reference/`, `docs/adrs/` |
+| **run the checks / wire the gate** — `swarm check` as a command | [swarm-cli](https://github.com/jcosta33/swarm-cli) — the reference CLI (optional) |
+| **add optional skills** — review personas, code-depth guides | [swarm-skills](https://github.com/jcosta33/swarm-skills) — `npx skills add jcosta33/swarm-skills` |
+
+Most people start at the kit and never need to read this repo cover to cover.
+
 ## What works today, what comes later
 
 **Today** (markdown + your agent, nothing to install): the templates, specs, task
-packets, review packets, findings, the worked examples.
+packets, review packets, findings, the worked examples. Swarm itself needs no runtime.
 
-**Later** (a CLI, in progress as `swarm-cli`): `swarm pull`, `swarm spec check`,
-`swarm task new`, `swarm worktree create`, `swarm review`, `swarm status` — the
-quality-of-life automation around the same files.
-The contract: [docs/reference/future-cli.md](docs/reference/future-cli.md).
+**Toolable today** (optional — the reference CLI, [swarm-cli](https://github.com/jcosta33/swarm-cli)):
+`swarm check` runs the [checks contract](docs/reference/checks.md) over your specs and reviews, and
+the kit's [hooks](https://github.com/jcosta33/swarm-starter-kit/tree/main/hooks) wire it into your
+commit and pull-request gates — so the review side gets *teeth* without anyone installing a runtime to
+use Swarm. `swarm new`, `swarm worktree`, and `swarm status` scaffold and prepare the loop's mechanics.
+
+**In progress** (the rest of `swarm-cli`): `swarm review` — reconcile a finished run against its spec —
+and the wider automation around the same files.
+The command contract: [docs/reference/future-cli.md](docs/reference/future-cli.md).
 
 Swarm does **not** promise deterministic generation, automatic correctness, formal
 verification, compiling software from specs, or the end of PR review — it promises

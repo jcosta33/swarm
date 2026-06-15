@@ -61,8 +61,8 @@ What each part is for:
 
 All advisory — they make requirements checkable, and a reviewer can inspect each one, but
 nothing blocks you. The full list of common mistakes to check for lives in
-[`reference/checks.md`](reference/checks.md); a future `swarm spec check` should flag them —
-until then they are review checklist items.
+[`reference/checks.md`](reference/checks.md); the optional reference CLI's `swarm check` flags the
+toolable ones, and the rest stay review checklist items.
 
 1. **Give every requirement a `Verify with:` line.** It is the highest-value line in the file —
    a runnable check outperforms prose plans as task input (preliminary evidence)

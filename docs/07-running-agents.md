@@ -66,9 +66,9 @@ Why this hygiene pays for itself:
   your main checkout never knew.
 
 This is a convention — nothing in this repo enforces it; an agent told to
-edit in place will edit in place. (Future CLI: `swarm worktree create` and
-`swarm run` will set up the branch and launch the agent — today you run the
-git command and your agent CLI yourself.)
+edit in place will edit in place. (The optional reference CLI's `swarm worktree`
+sets up the isolated branch and checkout for you; you still launch your own
+agent CLI inside it — swarm-cli prepares the loop, it does not run your agent.)
 
 ## The honest ceiling on parallelism
 

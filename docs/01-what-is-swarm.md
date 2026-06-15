@@ -81,10 +81,17 @@ core you actually start with: spec, task, review, finding.
   mathematical proof of the program.
 - **No end of PR review.** The review packet directs human attention; it does not dismiss it.
 
-And one meta-promise kept everywhere: everything in Swarm is a convention or a review checklist
-item — nothing in this repo runs or enforces anything. Where a check could be automated, the docs
-say so and name the tool (swarm-cli's `swarm spec check`); the list of checks lives in
-[reference/checks.md](reference/checks.md).
+And one meta-promise kept everywhere — **every rule says how strongly it is held**, on a four-level
+honesty scale, so a "MUST" never hides whether anything actually checks it:
+
+- **convention** — a practice the docs recommend; nothing checks it.
+- **checklist** — a check a human applies at review time, by reading.
+- **toolable** — a check a tool *could* run mechanically; the docs name the command (swarm-cli's `swarm check`).
+- **enforced** — a shipped tool runs it and blocks. Nothing in *this* repo enforces anything — it is
+  markdown. The optional [swarm-cli](https://github.com/jcosta33/swarm-cli) makes the toolable checks
+  runnable, and the kit's gate can enforce them in your CI.
+
+The list of checks, each carrying its level, lives in [reference/checks.md](reference/checks.md).
 
 ## The failure modes it positions against
 
