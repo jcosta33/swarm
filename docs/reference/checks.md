@@ -54,6 +54,7 @@ anything blocks today.
 | C009 | `broken-source-link`     | Every workspace file path or cross-reference ID named in `sources:` or in a requirement resolves to something that exists. External tracker IDs (a bare `JIRA-123`) are exempt — naming them at all is C008 territory.                                                                                                                                     | hard error       |
 | C010 | `preserves-refs-resolve` | Every entry in a change plan's `preserves:` frontmatter and its Behavioral-preservation-guarantees table resolves to a real requirement ID (or is an explicit `PG-NNN` plan-local guarantee). | hard error       |
 | C011 | `waves-present`          | A change plan whose `kind` is `migration`, `rewrite`, or `schema-change` has a non-empty Transformation waves section, each wave naming its verify step. | warning          |
+| C012 | `coverage`               | A review packet's coverage table reconciles against its source spec, keyed on the task packet's declared `scope`: every in-scope requirement id has a coverage row (an in-scope id with no row is **uncovered**), and every coverage row names an id present in the source spec (a row naming an absent id is **orphan**). Scope-guarded to **non-draft** source specs (a `draft`'s ids are work-in-progress, mirroring C002's draft exemption); when `scope` disagrees with the spec's id set, that divergence is itself surfaced as a fact, not silently resolved. Recorded under [ADR-0079](../adrs/0079-c012-coverage-check.md). | warning          |
 
 One semantic note on C003: a `Verify with:` line whose target does not exist yet is **not** a spec
 defect — it is an unresolved note, and the requirement reviews as **Unverified** until the target
@@ -243,7 +244,7 @@ what to fix first, not as anything blocking.
 | Severity   | Checks                                                                                                                                                 |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Hard error | C001, C002, C003, C007, C009, C010 · all `SOL-S` codes · SOL-P001–P008 · all `SOL-M` codes · SOL-V001/V002 and V004–V010 · SOL-O001/O002/O003/O005/O007/O008 |
-| Warning    | C004, C005, C006, C008, C011 · SOL-P050–P058 · SOL-V003, SOL-V011 · SOL-O004, SOL-O006                                                                       |
+| Warning    | C004, C005, C006, C008, C011, C012 · SOL-P050–P058 · SOL-V003, SOL-V011 · SOL-O004, SOL-O006                                                                       |
 
 One position-sensitive case: SOL-P056 (comparative, no baseline) is a hard error inside a
 requirement line and a warning in surrounding commentary — commentary may be loose; a requirement

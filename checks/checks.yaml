@@ -16,7 +16,7 @@
 #   warning     a checker should flag it; teams may treat any warning as
 #               blocking by policy
 
-version: 0.4.1   # contract version of this file; bump on any rule change
+version: 0.5.0   # contract version of this file; bump on any rule change
 
 # --- Spec form selector -------------------------------------------------------
 # The default spec form is plain structured markdown. A spec opts into the
@@ -30,7 +30,8 @@ spec_form:
 
 # --- Core checks ---------------------------------------------------------------
 # Mirrors the "Core checks" table in docs/reference/checks.md, row for row.
-# C001–C009 key on the spec (either form); C010–C011 key on the change plan.
+# C001–C009 key on the spec (either form); C010–C011 key on the change plan;
+# C012 keys on the review packet's coverage table against its source spec.
 # IDs are stable; the prose reference defines each rule in full — this list
 # pins id, name, and severity so a checker and the fixtures can cite them.
 core_checks:
@@ -45,6 +46,7 @@ core_checks:
   - { id: C009, name: broken-source-link,     severity: hard-error }   # workspace refs only; bare tracker ids exempt
   - { id: C010, name: preserves-refs-resolve, severity: hard-error }   # change plan: preserves: + guarantee-table ids resolve (PG-NNN = plan-local)
   - { id: C011, name: waves-present,          severity: warning    }   # change plan: kind in {migration, rewrite, schema-change} => non-empty waves, each naming a verify step
+  - { id: C012, name: coverage,               severity: warning    }   # review packet: in-scope ids covered, no orphan rows; non-draft source spec only (ADR-0079)
 
 # --- The task packet -----------------------------------------------------------
 # Keyed to the kit's templates/task.md (swarm-starter-kit repo): a well-formed task presents every
@@ -128,6 +130,19 @@ review_file:
         delegated task (v0.4.1). The mechanical part a checker can flag: a
         changed file outside the task's Affected areas that no Human attention
         entry mentions.
+    - id: coverage                # C012; ADR-0079
+      applies_to: Requirement coverage
+      severity: warning
+      rule: >-
+        Keyed on the task packet's declared `scope` as the in-scope id set:
+        every in-scope requirement id has a coverage row (an in-scope id with
+        no row reads uncovered), and every coverage row names an id present in
+        the source spec (a row naming an id absent from the source spec reads
+        orphan). Scope-guarded to non-draft source specs — a review whose
+        source spec is still `draft` is exempt (its requirement ids are
+        work-in-progress, mirroring C002's draft exemption). When `scope`
+        disagrees with the spec's id set, that divergence is itself surfaced as
+        a fact, not silently resolved.
 
 # --- Command slots (advisory) ----------------------------------------------------
 # Adapter slots a Verify item or `Verify with:` line may name instead of a

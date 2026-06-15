@@ -127,6 +127,7 @@ catalogue are in [checks](checks.md).
 | C009 | `broken-source-link` — every named source resolves                         | hard error |
 | C010 | `preserves-refs-resolve` — change plan only: every preserved id resolves   | hard error |
 | C011 | `waves-present` — change plan only: migration/rewrite/schema-change has waves | warning |
+| C012 | `coverage` — review packet only: in-scope ids covered, no orphan rows (non-draft spec) | warning |
 
 Packet checks (checklist level): `non-empty-paste` — a completion claim binds to pasted output
 or a CI link; `no-open-critical` — nothing closes with an open blocking question;
