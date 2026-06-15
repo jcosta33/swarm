@@ -104,6 +104,12 @@ and "nothing broke" needs pasted output like any other Pass — see
 reviewer's starting exception list, written by the person who knew where the risk was before
 the diff existed.
 
+**Platform hazards belong in Review focus too.** When the change leans on an external platform — a
+quota, a permission boundary, a rate limit, a runtime or sandbox constraint — name those hazards
+there, and bind the ones that must hold as preservation guarantees or spec requirements with a
+runnable check (the runtime-proof evidence rule in [Reviewing output](08-reviewing-output.md), per
+[ADR-0076](adrs/0076-worker-provenance-and-adoption-conventions.md)'s runtime-isolation caution).
+
 ## Next
 
 - [Creating tasks](06-creating-tasks.md) — a task may implement a spec, execute a change-plan

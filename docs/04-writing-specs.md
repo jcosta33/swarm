@@ -37,6 +37,15 @@ already covers is a **bug report** (the kit's `advanced/bug.md`: reproduction + 
 a fix task — not a new feature spec. Reach for a fresh spec only when the behavior itself is new
 or changing.
 
+**The one-line test: does anyone have to _agree_ on the acceptance criteria before the work
+starts?** If a reviewer or a second party must sign off on *what counts as done*, write the spec —
+that agreement is what a spec is for. If the ACs are self-evident and only the implementer needs
+them — a small, well-understood net-new change — skip the spec and write a **thin task** that
+inlines its two or three ACs with their `Verify with:` lines; the work still gets reviewed, against
+the task's own ACs. The trade is deliberate: a self-attested thin task has no separate spec for
+`swarm check` to reconcile its coverage against, so keep the spec the moment that coverage check
+earns its keep (a wider change, an unfamiliar area, or a reviewer who wants the row-by-row table).
+
 ## The template
 
 The format is frozen in the kit — copy
@@ -93,6 +102,13 @@ toolable ones, and the rest stay review checklist items.
 10. **Celebrate "Dropped from sources".** Recording what you cut, and why, is where design
     rationale lives — the next person to pick up the ticket sees the decision instead of
     re-litigating it.
+11. **Research the platform's limits before the ACs.** For work against an external platform —
+    quota, permissions, rate limits, runtime or sandbox constraints — find the binding limits
+    *first*: lift an unknown one into **Open questions** (it keeps the spec out of `ready`), bind a
+    known one as a requirement with a `Verify with:` line, and record a deliberately-unhandled one
+    as a **Non-goal**. Discovering a quota wall *after* the ACs are written is the expensive path.
+    (Proving it works against the real platform at review is the runtime-proof rule in
+    [Reviewing output](08-reviewing-output.md), per [ADR-0076](adrs/0076-worker-provenance-and-adoption-conventions.md).)
 
 ## Why this much care
 

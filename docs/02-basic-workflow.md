@@ -121,6 +121,10 @@ design judgment)
 - **Skip Inventory** when you already know the territory. A single-file cleanup never needs one.
 - **Skip writing a new Spec** when an existing spec covers the behavior — a bug fix usually
   amends a spec rather than authoring one.
+- **Skip the Spec for a self-evident micro-feature** — a small net-new change whose acceptance
+  criteria are obvious and that no one has to *agree* on goes straight to a thin task that inlines
+  its two or three ACs (the one-line test in [Writing specs](04-writing-specs.md)). The review still
+  runs, against the task's own ACs.
 - **Skip Change Plan** for an obvious bug fix or a purely additive feature — it earns its keep
   only when existing behavior must provably survive a structural change.
 - **Skip Spec and Change Plan both** for a small cleanup — the task packet alone bounds it.
