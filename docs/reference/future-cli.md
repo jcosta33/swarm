@@ -1,15 +1,40 @@
-# The future `swarm` CLI
+# The `swarm` CLI — status and design
 
-*Future automation — a **suggestive** sketch of tooling that does not exist yet; nothing on this page runs today.*
+*The reference CLI (**swarm-cli**) is optional; the markdown workflow never requires it. Much of
+the surface below ships today — this page is the live status matrix, then the fuller design. The
+design of record is [ADR-0077](../adrs/0077-swarm-cli-reconcile-only-harness.md).*
 
-> **None of this exists yet, and this page is not the design of record.** There is no `swarm`
-> binary in this repository, and the markdown workflow never requires one. The reference
-> implementation in progress is **swarm-cli**, and its **design is
-> [ADR-0077](../adrs/0077-swarm-cli-reconcile-only-harness.md)** — derived fresh from the field
-> research and Swarm's own principles. This page is an *illustrative surface* of that design, not a
-> binding contract: the command names and milestones below are one way to expose swarm-cli's
-> capability engines (**check · launch · reconcile · prepare**), to be re-derived per phase, not
-> inherited. The level tag for everything here is **toolable**, the tool being swarm-cli.
+swarm-cli's honesty level is **toolable**: swarm-cli runs these checks, and they become **enforced**
+only in an adopting repo that wires the kit's commit/CI hooks — the team's gate enforces, never
+"Swarm enforcing."
+
+## What ships today
+
+The authoritative, drift-checked source is swarm-cli's own command catalogue (where
+*advertised == dispatchable* is a tested invariant); this matrix tracks it.
+
+| Command | Status | What it does |
+|---|---|---|
+| `swarm init` | shipped | scaffold the workspace from the starter kit (conflict-safe) |
+| `swarm check [file]` | shipped | run the checks contract over one spec or the whole workspace; exit 0 clean / 1 warnings / 2 blocking |
+| `swarm new <task\|spec>` | shipped | cut a task packet from a spec, or scaffold a new spec |
+| `swarm worktree` | shipped | create / list / remove / prune isolated task worktrees |
+| `swarm status` | shipped | print the workspace board — specs, tasks, reviews, gaps |
+| `swarm review <task>` | shipped | reconcile a finished run (diff ↔ self-report ↔ spec); surfaces facts, never a verdict |
+| `swarm pull` · `swarm run` · `swarm close` | planned | intake snapshot · launch an agent on a task · close-out (findings, board, cleanup) |
+
+| Check | Status |
+|---|---|
+| C001 unique-ids · C003 verify-with · C004 one-strength-word · C005 non-goals · C006 open-questions · C007 no-tbd-at-ready · C008 sources-named · C009 broken-source-link | shipped |
+| C002 duplicate-id · C012 coverage | shipped |
+| review-packet evidence rules — a Pass needs evidence, an empty cell reads Unverified, no open-critical at terminal, out-of-scope edits route to human attention (`swarm review`) | shipped |
+| C010 preserves-refs-resolve · C011 waves-present (change plan) | planned |
+| `format: sol` routing | partial — the plain two-tier form is parsed and checked; a `format: sol` spec is read as plain today, and the strict SOL parser is a follow-up |
+| prose writing-rules watchlist | advisory — flagged for review, never blocking (bounded precision) |
+
+The design sketch below describes the fuller envisioned surface; the shipped CLI consolidates some
+of it (e.g. `swarm new <task|spec>` covers spec/task creation, `swarm check` covers spec checking).
+Treat the matrix above as the status of record.
 
 swarm-cli is a **reconcile-only harness** (ADR-0077): it prepares, launches, and reconciles agent
 runs against declared intent; it never performs the coding loop. Each command earns its place by

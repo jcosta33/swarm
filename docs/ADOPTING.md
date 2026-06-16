@@ -74,10 +74,11 @@ Hand your coding agent this prompt:
 > the gitignore additions to my code repos. This is additive — do not delete or
 > overwrite my files; stop and ask on any conflict.
 
-## 3. Future CLI adoption
+## 3. CLI adoption
 
-`swarm init` will do the above mechanically. It does not exist yet — the contract
-is [reference/future-cli.md](reference/future-cli.md).
+`swarm init` does the above mechanically — it scaffolds the workspace into a new or existing repo,
+conflict-safe. The reference CLI is optional (the markdown workflow never requires it); what ships
+today vs. later is the [capability matrix](reference/future-cli.md).
 
 ## Code repos
 

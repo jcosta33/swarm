@@ -7,8 +7,10 @@ This page is Swarm's check catalogue, in four parts: the **core checks** every s
 watchlist**, and the **SOL check catalogue** for specs that opt into structured requirements
 (`format: sol`). Reviewers use it as a checklist; tools build against it.
 
-Reference implementation: **`swarm spec check` in swarm-cli**. Wherever this page says a check is
-_toolable_, that is the tool meant.
+Reference implementation: **`swarm check` in swarm-cli**. Wherever this page says a check is
+_toolable_, that is the tool meant. This page is the contract — what a correct checker reports;
+which parts the reference CLI ships today, and the still-partial `format: sol` routing, are tracked
+in the [capability matrix](future-cli.md).
 
 ## The honesty legend
 
@@ -19,14 +21,14 @@ of four levels — read them literally:
 | -------------- | ------------------------------------------------------------------------- |
 | **convention** | Expected practice. Nothing enforces it.                                   |
 | **checklist**  | A reviewer is expected to inspect it during review.                       |
-| **toolable**   | A tool can check it mechanically — here, `swarm spec check` in swarm-cli. |
+| **toolable**   | A tool can check it mechanically — here, `swarm check` in swarm-cli. |
 | **enforced**   | A shipped tool actually rejects violations. **Today, nothing qualifies.** |
 
 Approved phrasings, used throughout Swarm's docs:
 
 > "This is a convention — nothing in this repository enforces it."
 >
-> "A future `swarm spec check` should flag this; until then, treat it as a review checklist item."
+> "A future `swarm check` should flag this; until then, treat it as a review checklist item."
 
 A team may adopt any check as blocking _by policy_ — that is the team's gate, not Swarm's.
 
@@ -36,7 +38,7 @@ These apply to every spec, whether it uses plain `### AC-NNN` requirements or SO
 forms encode the same requirement record, so each check means the same thing in both — the
 [C ↔ SOL mapping](#how-core-checks-map-to-sol-codes) below shows the correspondence.
 
-**Level: checklist today; toolable — `swarm spec check` implements exactly this table.**
+**Level: checklist today; toolable — `swarm check` implements exactly this table.**
 The _Checker severity_ column is the contract for that tool (see
 [the severity split](#the-severity-split-the-swarm-spec-check-contract)), not a claim that
 anything blocks today.
@@ -67,13 +69,13 @@ The whole bar, nothing more: a workspace is valid when **(a)** it has a populate
 and **(c)** at least one spec satisfies the core checks above. "Populated" means filled: an
 unfilled `{{placeholder}}` left in a *live* `AGENTS.md` or board is a clause-(a) checklist failure,
 not a valid workspace (the templates keep their placeholders; the live files must not). This is a
-convention — nothing in this repository enforces it; `swarm spec check` can verify clause (c), and
+convention — nothing in this repository enforces it; `swarm check` can verify clause (c), and
 a future `swarm init`/`swarm check` should flag a leftover placeholder (toolable, not shipped).
 
 ## Task and review packet checks
 
 These guard the evidence chain from agent run to merge decision. **Level: checklist** — review is
-expected to inspect each one; `swarm spec check`'s packet mode can flag the mechanical parts
+expected to inspect each one; `swarm check`'s packet mode can flag the mechanical parts
 (empty Evidence cells, terminal status with open questions). At convention level, the reviewer also spot-checks at least one green row's evidence by hand — structured packets invite rubber-stamping.
 
 - **`non-empty-paste`** — a completion claim binds to pasted output or a CI link, never a bare
@@ -123,7 +125,7 @@ When a spec opts into [structured requirements](structured-requirements.md) with
 its blocks have enough shape for finer-grained checks. Each `SOL-XNNN` code below names one
 common mistake, what to look for, and the fix.
 
-**Level: every code below is checklist today and toolable — `swarm spec check` reports these
+**Level: every code below is checklist today and toolable — `swarm check` reports these
 codes for `format: sol` files. None is enforced.** Codes are stable identifiers: cite them in
 review comments ("SOL-P005 on AC-003") so a fix is unambiguous.
 
@@ -229,7 +231,7 @@ the Swarm repo include simple/SOL equivalence pairs that pin this.
 The writing-rules watchlist corresponds to SOL-P005 (watchlist word, no same-line criterion),
 SOL-P056 (comparative, no baseline), and SOL-P004 (bundling connectives).
 
-## The severity split: the `swarm spec check` contract
+## The severity split: the `swarm check` contract
 
 Every check on this page maps to one of two severities. This is the contract the reference
 implementation builds against — until that tool is in front of you, read the split as advice on

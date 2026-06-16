@@ -95,11 +95,12 @@ packets, review packets, findings, the worked examples. Swarm itself needs no ru
 `swarm check` runs the [checks contract](docs/reference/checks.md) over your specs and reviews, and
 the kit's [hooks](https://github.com/jcosta33/swarm-starter-kit/tree/main/hooks) wire it into your
 commit and pull-request gates — so the review side gets *teeth* without anyone installing a runtime to
-use Swarm. `swarm new`, `swarm worktree`, and `swarm status` scaffold and prepare the loop's mechanics.
+use Swarm. `swarm init`, `swarm new`, `swarm worktree`, and `swarm status` scaffold and prepare the
+loop's mechanics, and `swarm review` reconciles a finished run against its spec and diff — surfacing
+facts (omitted edits, out-of-scope changes, unbacked claims), never a verdict.
 
-**In progress** (the rest of `swarm-cli`): `swarm review` — reconcile a finished run against its spec —
-and the wider automation around the same files.
-The command contract: [docs/reference/future-cli.md](docs/reference/future-cli.md).
+**Planned** (the rest of `swarm-cli`): `swarm pull`, `swarm run`, and `swarm close`.
+What ships today vs. later — the capability matrix: [docs/reference/future-cli.md](docs/reference/future-cli.md).
 
 Swarm does **not** promise deterministic generation, automatic correctness, formal
 verification, compiling software from specs, or the end of PR review — it promises

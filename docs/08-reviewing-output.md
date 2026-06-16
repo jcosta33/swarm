@@ -40,8 +40,30 @@ filled example lives in [`examples/`](examples/). Walking through it:
 A packet should fit on one page. If it doesn't, the task was probably too big — that is
 feedback for [task splitting](06-creating-tasks.md), not a reason to write a longer packet.
 
-(Future CLI: `swarm review` will draft this packet — today you, or a fresh agent session that
-did not write the diff, fill the template.)
+(`swarm review` drafts this packet — it reconciles the finished run against the diff and the spec
+and surfaces the facts; the result is still decided by you, or a fresh agent session that did not
+write the diff.)
+
+## Review packet invariants
+
+Every non-trivial agent run ends in a review packet before it counts as review-ready. A sound
+packet holds to five invariants — a quick checklist before you trust one:
+
+- [ ] **One row per scoped requirement.** Every requirement (and preservation guarantee) in the
+  task's scope has exactly one coverage row — an in-scope id with no row can neither pass nor route
+  to a human.
+- [ ] **Empty evidence means Unverified, never Pass.** A Pass needs pasted output, a CI link, or a
+  named human's recorded observation; a blank Evidence cell reads Unverified whatever the prose says.
+- [ ] **Out-of-scope edits become Human-attention rows.** A changed file outside the task's Affected
+  areas is surfaced, not merged quietly.
+- [ ] **The implementer never issues its own result.** Whoever wrote the diff does not fill the
+  verdict — a fresh agent session or a human does. Self-review yields fixes, never a result.
+- [ ] **The packet is the durable record.** The PR or comment may summarize it, but the packet — not
+  the PR thread — is what survives as the record of what was verified against the spec.
+
+These are checklist-level (a reviewer inspects them) and toolable: `swarm check` flags the
+mechanical ones (empty evidence, coverage, out-of-scope edits) and `swarm review` drafts the packet
+and reconciles it against the diff. Nothing in this repo enforces them.
 
 ## The evidence rules
 
