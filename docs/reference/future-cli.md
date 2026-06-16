@@ -4,33 +4,44 @@
 the surface below ships today — this page is the live status matrix, then the fuller design. The
 design of record is [ADR-0077](../adrs/0077-swarm-cli-reconcile-only-harness.md).*
 
-swarm-cli's honesty level is **toolable**: swarm-cli runs these checks, and they become **enforced**
-only in an adopting repo that wires the kit's commit/CI hooks — the team's gate enforces, never
-"Swarm enforcing."
-
 ## What ships today
 
 The authoritative, drift-checked source is swarm-cli's own command catalogue (where
-*advertised == dispatchable* is a tested invariant); this matrix tracks it.
+*advertised == dispatchable* is a tested invariant); this matrix tracks it. Every check swarm-cli
+runs is **toolable** — it becomes **enforced** only in an adopting repo that wires the kit's
+commit/CI hooks, where the team's gate (or the agent CLI's hook runtime) enforces, never "Swarm
+enforcing."
 
-| Command | Status | What it does |
+| Command | Status | Enforcement level | What it does |
+|---|---|---|---|
+| `swarm init` | shipped | toolable | scaffold the workspace from the starter kit (conflict-safe) |
+| `swarm check [file]` | shipped | toolable | run the checks contract over one spec or the whole workspace; exit 0 clean / 1 warnings / 2 blocking |
+| `swarm new <task\|spec>` | shipped | toolable | cut a task packet from a spec, or scaffold a new spec |
+| `swarm worktree` | shipped | toolable | create / list / remove / prune isolated task worktrees |
+| `swarm status` | shipped | toolable | print the workspace board — specs, tasks, reviews, gaps; writes nothing |
+| `swarm review <task>` | shipped | toolable | reconcile a finished run (diff ↔ self-report ↔ spec); surfaces facts, never a verdict |
+| `swarm` (no command) | shipped | toolable | open an interactive dashboard that reaches every flow; every flow also has a scriptable direct form |
+| `swarm pull <ticket>` | planned | toolable | snapshot an external ticket into `intake/` |
+| `swarm review` — Verify→evidence match | planned | toolable | tie each scoped requirement to its named `Verify with:` command and surface whether it ran and passed |
+| `swarm review` — draft review packet | planned | toolable | write the review packet from the diff and task (empty Evidence reads Unverified, never Pass); still no verdict |
+| finding scaffold | planned | toolable | scaffold a durable finding from a closing task, without touching the board |
+| Swarm MCP server | planned | toolable | serve a task's scope, requirements, and checks over MCP to any MCP-capable agent |
+| per-adapter hook generation | planned | toolable | emit the agent CLI's own hook config wiring the task's write-set and `checks.yaml` into its hooks — enforcement is the agent CLI's, not Swarm's |
+| `swarm run <task> --agent` | planned | toolable | launch an external coding agent on the task; the agent performs the loop |
+| run record | planned | toolable | the machine form of a run summary `swarm run` writes and `swarm review` reads; markdown stays the only adopter-facing artifact |
+| `swarm close <task>` | planned | toolable | findings scaffold + cleanup ship; the board-mutating close is the parked non-goal below |
+| `compile` · `lower` / `decompose` | non-goal | — | Swarm generates no code from a spec, and splitting a spec into tasks is judgment work |
+| a board-mutating close (a `status.md`-mutating close) | non-goal | — | the board stays hand-edited; a CLI that writes the board would adjudicate the human-owned verdict (ADR-0077) |
+
+| Check | Status | Enforcement level |
 |---|---|---|
-| `swarm init` | shipped | scaffold the workspace from the starter kit (conflict-safe) |
-| `swarm check [file]` | shipped | run the checks contract over one spec or the whole workspace; exit 0 clean / 1 warnings / 2 blocking |
-| `swarm new <task\|spec>` | shipped | cut a task packet from a spec, or scaffold a new spec |
-| `swarm worktree` | shipped | create / list / remove / prune isolated task worktrees |
-| `swarm status` | shipped | print the workspace board — specs, tasks, reviews, gaps |
-| `swarm review <task>` | shipped | reconcile a finished run (diff ↔ self-report ↔ spec); surfaces facts, never a verdict |
-| `swarm pull` · `swarm run` · `swarm close` | planned | intake snapshot · launch an agent on a task · close-out (findings, board, cleanup) |
-
-| Check | Status |
-|---|---|
-| C001 unique-ids · C003 verify-with · C004 one-strength-word · C005 non-goals · C006 open-questions · C007 no-tbd-at-ready · C008 sources-named · C009 broken-source-link | shipped |
-| C002 duplicate-id · C012 coverage | shipped |
-| review-packet evidence rules — a Pass needs evidence, an empty cell reads Unverified, no open-critical at terminal, out-of-scope edits route to human attention (`swarm review`) | shipped |
-| C010 preserves-refs-resolve · C011 waves-present (change plan) | planned |
-| `format: sol` routing | partial — the plain two-tier form is parsed and checked; a `format: sol` spec is read as plain today, and the strict SOL parser is a follow-up |
-| prose writing-rules watchlist | advisory — flagged for review, never blocking (bounded precision) |
+| C001 unique-ids · C003 verify-with · C004 one-strength-word · C005 non-goals · C006 open-questions · C007 no-tbd-at-ready · C008 sources-named · C009 broken-source-link | shipped | toolable |
+| C002 duplicate-id · C012 coverage | shipped | toolable |
+| review-packet evidence rules — a Pass needs evidence, an empty cell reads Unverified, no open-critical at terminal, out-of-scope edits route to human attention (`swarm review`) | shipped | toolable |
+| C010 preserves-refs-resolve · C011 waves-present (change plan) | planned | toolable |
+| `format: sol` routing | partial — the plain two-tier form is parsed and checked; a `format: sol` spec is read as plain today, and the strict SOL parser is a follow-up | toolable |
+| prose writing-rules watchlist | advisory — flagged for review, never blocking (bounded precision) | checklist |
+| architecture enforcement (a dependency / module-boundary linter) | non-goal | — (a team binds its own tool via a `CONSTRAINT` + the `static` verify method) |
 
 The design sketch below describes the fuller envisioned surface; the shipped CLI consolidates some
 of it (e.g. `swarm new <task|spec>` covers spec/task creation, `swarm check` covers spec checking).
