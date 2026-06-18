@@ -77,8 +77,7 @@ execution convenience + agent adapters); the board-mutating `swarm close` is a *
 behind the open DECIDE #1.2 (ADR-0084), the board stays hand-edited. `swarm inventory new` and
 `swarm change new` are **envisioned** — the sketch shows the fuller brownfield surface, but no wave in
 the current program builds them. The supercharge layer (the MCP server, hook generation,
-the planned coverage/drift and Verify→evidence checks, per-task cost attribution) is **planned**
-too; see the matrix above for each item's status.
+per-task cost attribution) is **planned** too; see the matrix above for each item's status.
 
 ## Composable parts: standalone and Swarm-composed
 
@@ -121,7 +120,7 @@ and **reconciling the agent's self-report against the actual diff** (`review`).
 - **State change:** an empty directory becomes a workspace.
 - **Next:** `swarm pull` a ticket, or `swarm new spec` from the template.
 
-### `swarm pull <ticket>` — planned
+### `swarm pull <ticket>`
 
 - **Reads:** the external tracker (Jira, GitHub, Linear, …) through a configured connector.
 - **Writes:** one snapshot file, e.g. `intake/jira/JIRA-123.md` — the verbatim ticket text plus
@@ -266,12 +265,13 @@ These are deliberately not in the set. Each has a reason, not just a backlog pos
 | `compile` | Swarm is not a compiler; nothing is generated from a spec. |
 | `lower` / `decompose` | splitting a spec into tasks is judgment work; the discipline lives in [advanced-lifecycle.md](advanced-lifecycle.md), not a command |
 | `graph` | dependency/coverage visualization — a luxury after the basics work |
-| `checks` | a fixture-running checker beyond `swarm check`; the fixtures already serve as swarm-cli's test data || `trace validate` | checking an agent's run summary against the actual diff folds into `review` drafting first |
+| `checks` | a fixture-running checker beyond `swarm check`; the fixtures already serve as swarm-cli's test data |
+| `trace validate` | checking an agent's run summary against the actual diff folds into `review` drafting first |
 
 ## Example sequences
 
-These show the full envisioned loop. Shipped steps use their shipped names; `swarm pull`,
-`swarm run`, and `swarm close` are planned and `swarm inventory new` / `swarm change new` are
+These show the full envisioned loop. Shipped steps use their shipped names; `swarm run` and
+`swarm close` are planned and `swarm inventory new` / `swarm change new` are
 envisioned (no wave in the current program) — see the matrix and contracts above for each step's
 status.
 
