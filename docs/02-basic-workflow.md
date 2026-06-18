@@ -18,8 +18,8 @@ Every artifact below is a markdown file in your workspace — where each one liv
 Work usually originates in a tracker. Copy the ticket, issue, or page **verbatim** into an
 intake file — unedited, uninterpreted. The spec will interpret; the intake preserves what was
 actually asked, so when the upstream item changes or disappears, the spec keeps its anchor.
-Recommended whenever work originates in an external tool; never required. (Future CLI:
-`swarm pull` will capture this snapshot — today you copy-paste into the template.)
+Recommended whenever work originates in an external tool; never required. (The optional
+`swarm pull` captures this snapshot for you; by hand you copy-paste into the template.)
 
 Artifact: [intake](https://github.com/jcosta33/swarm-starter-kit/blob/main/templates/intake.md) → `intake/`.
 

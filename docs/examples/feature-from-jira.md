@@ -11,8 +11,8 @@ This page is [the basic workflow](../02-basic-workflow.md) with real content in 
 
 Work starts in Jira, so the first move is a snapshot: paste the ticket verbatim into
 `intake/` — the spec interprets; the intake preserves what was actually asked, so anyone
-can later check the interpretation against the original. (Future CLI: `swarm pull` will
-capture this snapshot — today you copy-paste.)
+can later check the interpretation against the original. (The optional `swarm pull` captures
+this snapshot for you; by hand you copy-paste.)
 
 **`intake/JIRA-123.md`**
 

@@ -43,8 +43,8 @@ Work usually starts in Jira, Linear, GitHub Issues, or Notion. **Pull** — the 
 
 That's the whole integration: a copy-paste. It buys you ticket → spec provenance — when the
 upstream ticket is later edited or deleted, your spec still anchors to what was asked. Intake is
-recommended whenever work originates in an external tool, never required. (Future CLI:
-`swarm pull` will capture a tracker item into `intake/` for you — today you or your agent
+recommended whenever work originates in an external tool, never required. (The optional
+`swarm pull` captures a tracker item into `intake/` for you; by hand you or your agent
 copy-pastes it.)
 
 ## The boundary

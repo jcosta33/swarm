@@ -326,8 +326,9 @@ pattern illustrated (small-N, preliminary) by [[EVIBOUND]](../research/sources.m
 The packet turns the PR into requirement coverage plus a short exception list. Because this
 task executes a change plan, it carries **both** tables: requirement coverage for the spec ids
 in scope, change-plan coverage for the plan's remaining guarantees and wave conditions.
-(Future CLI: `swarm review` will draft this packet — today you or your agent fills the
-template.) `reviews/checkout-sessions-w1.md`:
+(The optional `swarm review --write` drafts the requirement-coverage table for you — every
+row Unverified; the change-plan coverage table you or your agent still fills.)
+`reviews/checkout-sessions-w1.md`:
 
 ```markdown
 ---
