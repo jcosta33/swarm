@@ -23,9 +23,7 @@ enforcing."
 | `swarm` (no command) | shipped | toolable | open an interactive dashboard that reaches every flow; every flow also has a scriptable direct form |
 | `swarm pull <ticket>` | shipped | toolable | snapshot an external ticket into `intake/` (verbatim via `gh` where available, else a paste placeholder); never a spec |
 | `swarm promote <task>` | shipped | toolable | scaffold a candidate finding from a finished task (`from:` pre-filled); asserts no learning, writes no board |
-| `swarm review` — Verify→evidence match | planned | toolable | tie each scoped requirement to its named `Verify with:` command and surface whether it ran and passed |
 | `swarm review <task> --write` — draft review packet | shipped | toolable | write the draft review packet from the diff and task (every row Unverified, `status: draft`, never a Pass or a verdict; no-clobber); the read-only reconcile stays the default |
-| finding scaffold | planned | toolable | scaffold a durable finding from a closing task, without touching the board |
 | Swarm MCP server | planned | toolable | serve a task's scope, requirements, and checks over MCP to any MCP-capable agent |
 | per-adapter hook generation | planned | toolable | emit the agent CLI's own hook config wiring the task's write-set and `checks.yaml` into its hooks — enforcement is the agent CLI's, not Swarm's |
 | `swarm run <task> --agent` | planned | toolable | launch an external coding agent on the task; the agent performs the loop |
@@ -268,9 +266,7 @@ These are deliberately not in the set. Each has a reason, not just a backlog pos
 | `compile` | Swarm is not a compiler; nothing is generated from a spec. |
 | `lower` / `decompose` | splitting a spec into tasks is judgment work; the discipline lives in [advanced-lifecycle.md](advanced-lifecycle.md), not a command |
 | `graph` | dependency/coverage visualization — a luxury after the basics work |
-| `checks` | a fixture-running checker beyond `swarm check`; the fixtures already serve as swarm-cli's test data |
-| `promote` | finding routing stays a prompt inside `close`, not its own engine |
-| `trace validate` | checking an agent's run summary against the actual diff folds into `review` drafting first |
+| `checks` | a fixture-running checker beyond `swarm check`; the fixtures already serve as swarm-cli's test data || `trace validate` | checking an agent's run summary against the actual diff folds into `review` drafting first |
 
 ## Example sequences
 

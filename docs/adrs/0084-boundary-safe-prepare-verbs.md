@@ -56,7 +56,8 @@ is untouched.
 Accepted. `swarm pull` and `swarm promote` ship as prepare verbs that scaffold one new file each and
 mutate no board; the board-mutating close is parked behind a future ADR; a **boundary regression
 test** (no Core use-case writes `status.md`) makes the no-mutation property an invariant, not a
-convention. Refines ADR-0077 (narrows D1's "gated close"); does not re-open D8 (it reaffirms it).
+convention. Refines ADR-0077 (narrows the "gated close" clause wherever it appears — D1's reconcile
+list and D5's Supercharge list — to scaffold-only); does not re-open D8 (it reaffirms it).
 `future-cli.md`'s `pull`/`close`/`promote` rows converge accordingly (the CONT rider). The
 implementation is cut and reviewed from `swarm-hq` (SPEC-swarm-cli-m3-prepare). Negative: two more
 commands to maintain. Neutral: a team that wants board mutation must wait for (or propose) the
