@@ -194,7 +194,9 @@ section — and dropping the durable discovery in `## Findings`:
   single-flight guard is load-bearing; candidate for Close
   (FINDING-REFRESH-SINGLE-FLIGHT).
 
-## Run summary — TASK-AUTH-REFRESH
+## Run summary
+
+The run summary for TASK-AUTH-REFRESH.
 
 Changed files:
 

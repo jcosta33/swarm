@@ -64,8 +64,9 @@ acceptance). One honest rule, at checklist level: **a "verified" or "done" claim
 board links its review packet** — a board full of unlinked "done" rows is a wish list, not
 a status.
 
-The board is hand-edited and stays small. (Future CLI: `swarm status` will derive per-spec
-coverage from the review packets — today the board is the hand-kept summary.)
+The board is hand-edited and stays small. (`swarm status` prints the derived board today;
+deriving full per-spec requirement coverage from the review packets is the deferred coverage
+engine — today the board is the hand-kept summary.)
 
 ## When you outgrow this
 

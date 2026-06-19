@@ -30,6 +30,7 @@ The template is the format — this page only explains what each part is for:
 | Verify             | One runnable command per requirement                                                            |
 | Agent instructions | The standing rules every agent follows; they ship in the template — don't rewrite them per task |
 | Findings           | Anything durable discovered along the way, saved to `findings/` at Close                        |
+| Run summary        | The handoff digest filled at the end of the run — changed files, per-command results citing the Verify pastes, out-of-scope edits, blocked questions; it cites the Verify evidence, never re-pastes it |
 
 ## Sources and scope
 

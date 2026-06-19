@@ -309,7 +309,8 @@ it, the evidence link, and a staleness flag (the requirement text changed after 
 recorded). Everything in it derives from the spec and the review packets — it authors nothing
 and re-judges nothing, which is exactly why it should be machine-written.
 
-(Future CLI: `swarm status` will derive this table from `specs/` and `reviews/` — today the
+(`swarm status` ships today and prints the derived board; deriving *this* per-spec
+requirement-coverage table from `specs/` and `reviews/` is the deferred coverage engine — today the
 hand-edited workboard plus the review packets are the record, and assembling the table by hand
 for one spec is occasionally worth it before a large merge.) The contract lives in
 [future-cli.md](future-cli.md).

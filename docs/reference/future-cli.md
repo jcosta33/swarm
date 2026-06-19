@@ -134,21 +134,20 @@ and **reconciling the agent's self-report against the actual diff** (`review`).
 - **State change:** the upstream ticket has a stable, citable snapshot in the workspace.
 - **Next:** `swarm new spec --from` that snapshot.
 
-### `swarm new spec <slug> [--from <intake>] [--agent <name>]`
+### `swarm new spec <slug> [--from <intake>]`
 
 Spec and task creation are consolidated under one verb, `swarm new <task|spec>`; this is its spec form.
 
 - **Reads:** `templates/spec.md`; the intake snapshot when `--from` is given.
 - **Writes:** `specs/<slug>/spec.md` at `status: draft`, sources pre-filled.
-- **Runs an agent?** Only with `--agent`: an external agent CLI drafts the requirement text.
-  The output is still a draft — a human owns the spec before it is `ready`.
+- **Runs an agent?** No — it scaffolds the draft; filling the requirement text is a human's job.
 - **State change:** a spec exists and is linked to its source.
 - **Next:** fill in requirements and open questions, then `swarm check`.
 
 ### `swarm check [file]`
 
 - **Reads:** one spec — simple form or SOL form (`format: sol`).
-- **Writes:** nothing (optionally a report file with `--report`, or `--json` for a pipeline).
+- **Writes:** nothing (optionally `--json` for a pipeline).
   Prints findings under the two-way split from [checks.md](checks.md): hard errors (a checker
   must reject) and warnings (a checker should flag). Exit codes: `0` clean, `1` warnings, `2` hard
   errors — so it drops into pre-commit/CI as a standalone linter.
@@ -240,9 +239,11 @@ The task form of `swarm new <task|spec>`.
 ### `swarm status`
 
 - **Reads:** every spec, task, review, and finding in the workspace.
-- **Writes:** nothing. It prints the derived read-model — per-spec coverage, tasks without
-  review packets, open questions. The committed `status.md` board stays hand-edited; this
-  command is how a machine answers the same questions without anyone maintaining a table.
+- **Writes:** nothing. It prints the derived artifact-level board — per-spec tasks and their
+  review status, review-ready tasks with no review packet, and the needs-human list. (Full
+  per-requirement coverage is the deferred M3 coverage engine, not this command.) The committed
+  `status.md` board stays hand-edited; this command is how a machine answers the same questions
+  without anyone maintaining a table.
 - **Runs an agent?** No.
 - **State change:** none.
 - **Next:** whatever the board shows red.

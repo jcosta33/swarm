@@ -19,8 +19,9 @@ For drift to be detectable later, a Pass needs to pin what it actually looked at
 - the **verify command** the evidence came from.
 
 **Honesty first:** these hashes are tool-emitted placeholders today — nothing in this repo
-computes one. This is a toolable contract: a future `swarm status` (swarm-cli) can recompute
-staleness from recorded hashes and mark the board's `stale?` column. Until then the working
+computes one. This is a toolable contract: `swarm status` ships today (it prints the derived
+board), but recomputing staleness from recorded hashes to mark the board's `stale?` column is a
+future capability. Until then the working
 rule is simpler: when the spec or the touched code has changed since the review, re-run the
 verify command before trusting the old Pass.
 

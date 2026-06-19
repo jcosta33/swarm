@@ -2,7 +2,7 @@
 
 *Works today — plain markdown plus your agent; no Swarm tooling required.*
 
-The bug shape of the loop: **Pull → Spec check → Task → Run → Review → Close**. A bug is a
+The bug shape of the loop: **Pull → Spec amend → Task → Run → Review → Close**. A bug is a
 disagreement between the code and the spec — or, as here, a place where the spec was
 silent. Every artifact appears in its frozen template shape
 ([`templates/`](https://github.com/jcosta33/swarm-starter-kit/tree/main/templates/)).
@@ -41,7 +41,7 @@ Note the two keys. The retry minted a NEW idempotency key, so the processor
 saw two independent charges. Refund issued; we need this to be impossible.
 ```
 
-## Step 2 — Spec check: what did the spec actually require?
+## Step 2 — Spec amend: what did the spec actually require?
 
 A bug fix starts at the spec, not the code. The payments service already has one — here it
 is, as it stood when the incident happened.
@@ -192,7 +192,9 @@ the fix makes it pass.
   durable lesson behind PAY-88; candidate for Close
   (FINDING-5XX-RETRY-IDEMPOTENCY).
 
-## Run summary — TASK-PAYMENT-RETRY-KEY
+## Run summary
+
+The run summary for TASK-PAYMENT-RETRY-KEY.
 
 Changed files:
 
