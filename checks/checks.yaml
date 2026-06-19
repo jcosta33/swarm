@@ -16,7 +16,7 @@
 #   warning     a checker should flag it; teams may treat any warning as
 #               blocking by policy
 
-version: 0.7.0   # contract version of this file; bump on any rule change
+version: 0.8.0   # contract version of this file; bump on any rule change
 
 # --- Spec form selector -------------------------------------------------------
 # The default spec form is plain structured markdown. A spec opts into the
@@ -30,10 +30,11 @@ spec_form:
 
 # --- Core checks ---------------------------------------------------------------
 # Mirrors the "Core checks" table in docs/reference/checks.md, row for row.
-# C001–C009 key on the spec (either form); C010–C011 key on the change plan;
+# C001–C009 + C015 key on the spec (either form); C010–C011 key on the change plan;
 # C012 keys on the review packet's coverage table against its source spec;
 # C013 keys on the review packet's structured verify blocks against its source spec;
 # C014 keys the changed files (the worktree diff, or the review packet's Changed files) against the task packet's Do-not-change entries.
+# C015 keys the spec's inline [[KEY]] citations against the <a id> anchors in the sources.md its frontmatter names.
 # IDs are stable; the prose reference defines each rule in full — this list
 # pins id, name, and severity so a checker and the fixtures can cite them.
 core_checks:
@@ -51,6 +52,7 @@ core_checks:
   - { id: C012, name: coverage,               severity: warning    }   # review packet: in-scope ids covered, no orphan rows; non-draft source spec only (ADR-0079)
   - { id: C013, name: verify-evidence-binding, severity: warning    }   # review packet: a verify block's cmd matches the requirement's named Verify command + result=pass; non-draft source spec only; structured-form mismatch hard-capable, ships at warning (ADR-0083)
   - { id: C014, name: do-not-change-touched,  severity: warning    }   # review packet: a Changed-files entry matches a task's Do-not-change entry (same matcher + {{placeholder}} skip as Affected areas); distinct from outsideScope; surfaced to Human attention (ADR-0086)
+  - { id: C015, name: citation-resolves,      severity: warning    }   # spec: an inline [[KEY]] citation resolves to a matching <a id="KEY"> anchor in the workspace's sources.md; skips when no sources.md is resolvable (no false-flag); v0 = dangling-anchor only (ADR-0087)
 
 # --- The task packet -----------------------------------------------------------
 # Keyed to the kit's templates/task.md (swarm-starter-kit repo): a well-formed task presents every

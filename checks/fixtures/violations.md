@@ -345,3 +345,36 @@ and whitespace, so the canon's own backtick-wrapped Verify-with form does **not*
 #16); only a genuine disagreement trips it. A block whose `cmd` matches and reads `result=pass` is
 consistent → no finding; a Pass row with only the free-form Evidence cell stays a warning, never
 machine-rejected. A consistency fact, never a verdict.
+
+---
+
+## V20 — a dangling inline citation (C015 `citation-resolves`, warning)
+
+A spec whose frontmatter `sources:` names the workspace `sources.md`, whose `AC-001` makes an
+empirical claim citing `[[FAROS2025]]` — a `[[KEY]]` whose key has no `<a id="FAROS2025">` anchor
+in that `sources.md`:
+
+```markdown
+---
+type: spec
+id: SPEC-citation-dangle
+status: ready
+sources:
+  - ../../docs/research/sources.md
+---
+
+### AC-001 — survey-grounded recommendation
+The reviewer must apply the survey's recommended ordering, per [[FAROS2025]].
+
+Verify with: a test.
+```
+
+…in a workspace whose `docs/research/sources.md` declares anchors for `GOOGLESA`, `MAST`,
+`SMELLS`, … but **no** `<a id="FAROS2025">`.
+
+**Expected:** flagged — `[[FAROS2025]]` resolves to no `<a id>` anchor in the named `sources.md`.
+This is the "citations are contextual" discipline made toolable: a load-bearing claim must cite a
+verified entry whose anchor exists. Skip-guarded — a spec that names no resolvable `sources.md`, or
+cites nothing, is never flagged; the dangle fires only when a `sources.md` is resolvable **and** a
+`[[KEY]]` has no matching anchor (v0 = dangling-anchor only). A `[[KEY]]` that resolves (e.g.
+`[[GOOGLESA]]` above) is consistent → no finding. Surfaces a fact, never a verdict.
