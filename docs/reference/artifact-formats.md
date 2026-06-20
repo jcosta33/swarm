@@ -138,12 +138,13 @@ The load-bearing rules:
 - **Open decisions frames a fork, not a finding** (convention; ADR-0089): include it only when the
   work closes with a decision the human must make — the orchestrator is deep in another agent's
   context and the agent that did the work is the one still holding this one's. Each open decision
-  carries: the decision · 2–4 comparable options (the case _for and against_) · a recommendation +
-  a brief why · the context/impact the human may not hold · what it blocks. The section **routes**
-  the decision — it presents and recommends, the human decides (a fact, never a verdict
-  [[OVERTRUST-CFF]](../research/sources.md#OVERTRUST-CFF) [[EVALAI]](../research/sources.md#EVALAI)).
-  Keep the "why" short and verification-oriented (how sure · what would change it · what it blocks),
-  not a persuasion essay; list options, never tally them; skip the whole section when nothing is open.
+  carries: the decision · 2–4 comparable options — the case _for and against_, not a lone
+  recommendation [[EVALAI]](../research/sources.md#EVALAI) · a recommendation + a brief why · the
+  context/impact the human may not hold · what it blocks. The section **routes** the decision — it
+  presents and recommends, the human decides (a fact, never a verdict — ADR-0077 Decision 8). Keep the
+  "why" short and verification-oriented (how sure · what would change it · what it blocks), not a
+  persuasion essay [[OVERTRUST-CFF]](../research/sources.md#OVERTRUST-CFF); list options, never tally
+  them; skip the whole section when nothing is open.
 - A review judges; it does not author. A gap it uncovers in what _should_ have been required
   becomes a spec amendment or a finding — never a requirement written into the review.
 

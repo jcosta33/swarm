@@ -39,8 +39,10 @@ sources. The findings, in short:
 - The "present evidence for and against the options, not a single recommendation" stance comes from a
   position paper [[EVALAI]](../research/sources.md#EVALAI) and is **contested** — a reasoned design
   stance, not a proven result. The 2026 recency check
-  [[PERSUASIONPARADOX]](../research/sources.md#PERSUASIONPARADOX) shows the over-reliance findings
-  replicate and intensify with capable LLMs.
+  [[PERSUASIONPARADOX]](../research/sources.md#PERSUASIONPARADOX) is **mixed and task-dependent** —
+  explanations hurt on visual reasoning but *helped* on language-based logical reasoning (the task class
+  closer to a developer's decision) — so it corroborates only weakly and is cited as preliminary, never
+  load-bearing.
 
 The review packet already **routes exceptions to human attention** (ADR-0060): unverified rows, scope
 drift, risky files. But an *open decision* is not an exception in the work — it is a fork the human
@@ -52,7 +54,8 @@ This ADR adds that home.
 1. **Adopt the decision handoff as a convention.** When a unit of work closes with a genuinely open
    decision the human must make, the closeout **frames** that decision rather than dumping bullets. The
    concrete home is an optional **`## Open decisions`** section in the review packet (extending
-   ADR-0060's section list, the ADR-0068 ripple precedent); the same convention applies to a task's
+   ADR-0060's section list — the ADR-0076 precedent, which added the optional `Task status` section to
+   that same list); the same convention applies to a task's
    `## Run summary` and to an agent's chat handoff. *Level: convention (ADR-0063) — nothing enforces it;
    review may inspect it.* It **routes a decision to the human — a fact, never a verdict** (ADR-0077
    Decision 8): the section presents and recommends; the human decides.
@@ -76,9 +79,14 @@ This ADR adds that home.
    because explanation alone does not cure over-trust and longer explanation can worsen it
    [[OVERTRUST-CFF]](../research/sources.md#OVERTRUST-CFF)
    [[OVERRELIANCE-REVIEW]](../research/sources.md#OVERRELIANCE-REVIEW)
-   [[PERSUASIONPARADOX]](../research/sources.md#PERSUASIONPARADOX). "What it blocks" is the light
-   cognitive forcing function. The recommendation is **on-demand / skippable** — present it, the human
-   may ignore it — **never a forced second opinion**, which would trade over-trust for under-trust.
+   [[PERSUASIONPARADOX]](../research/sources.md#PERSUASIONPARADOX). "What it blocks" is a lightweight,
+   forcing-function-*inspired* cue — but honestly, a static markdown section **cannot** implement an
+   interaction-level cognitive forcing function (the [[OVERTRUST-CFF]](../research/sources.md#OVERTRUST-CFF)
+   mechanisms — decide-before-seeing, withhold-until-requested, a brief wait — need a live interaction).
+   So the over-trust mitigation here rests on the **for-and-against framing** (itself contested,
+   Decision 6), not on a true CFF. The recommendation is **present-but-ignorable** — the human may skip
+   it — **never a forced second opinion**, which would trade over-trust for under-trust; a genuine
+   decide-before-seeing interaction is available only in the chat-handoff channel, not the persisted packet.
 
 5. **A convention this cycle — no check, no contract mint.** `## Open decisions` is prose; it surfaces a
    decision for a human, with no closed-value form a checker could reconcile (unlike C012–C015). So this
@@ -110,7 +118,8 @@ This ADR adds that home.
 
 Accepted: the review packet gains an **optional** `## Open decisions` section; `docs/reference/artifact-formats.md`
 and the kit's `templates/review.md` carry it; this **extends ADR-0060's** frozen review-packet section
-list (the ADR-0068 ripple precedent — the original set is not rewritten). It is **convention-level**:
+list (the ADR-0076 precedent — which added the optional `Task status` section the same way; the original
+set is not rewritten). It is **convention-level**:
 nothing is enforced, no check fires, no contract version moves. Honors ADR-0077 Decision 8 (a fact, never
 a verdict) and ADR-0063 (convention, never enforcement-claimed). Because the prescription rests on a
 contested position paper and adjacent evidence rather than a measured orchestration study, it is recorded
