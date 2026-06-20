@@ -315,6 +315,8 @@ These sources are **not peer-reviewed**; they ground market-gap observations and
 
 The skill-authoring literature attributes load-bearing figures to these arXiv ids. **Direct fetch (June 2026) found each id resolves to an unrelated paper.** They are recorded here so the fabrication is never re-introduced (per the kernel's reject discipline).
 
+> **Invariant (ADR-0090):** a Rejected entry MUST NOT carry an `<a id="…">` anchor. Because rejected entries are anchor-less by construction, any spec `[[KEY]]` citing one **dangles** and the C015 `citation-resolves` check ([ADR-0087](../adrs/0087-citation-anchor-check.md)) surfaces it — the high-precision safeguard that makes a separate "cited a Rejected source" tier check unnecessary (ADR-0090). Do not add an anchor to a rejected entry; doing so would silently make a forbidden citation resolve clean.
+
 | Circulating claim | Cited as | What the id actually is | Verdict |
 | --- | --- | --- | --- |
 | "21× degradation when file-based state externalization is removed" (InfiAgent) | arXiv:2511.10954 | *Kapitza-Dirac interference of Higgs waves in superconductors* (condensed-matter physics) | **REJECTED — misattributed; the 21× figure is unverifiable and MUST NOT be cited.** File-state externalization is instead grounded on [CTXENG] + [CCTASKS] + [SCRATCHPAD]. |
