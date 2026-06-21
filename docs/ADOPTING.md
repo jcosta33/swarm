@@ -80,6 +80,15 @@ Hand your coding agent this prompt:
 conflict-safe. The reference CLI is optional (the markdown workflow never requires it); what ships
 today vs. later is the [capability matrix](reference/future-cli.md).
 
+It auto-detects its layout by directory emptiness: an **empty** dir (a fresh `git init` with no
+committed files counts as empty) gets the full **workspace** layout — `templates/`, `specs/`, `tasks/`,
+`reviews/`, `intake/`, the skills; a **non-empty** dir gets the thin **footprint** layout (just a pointer
+`AGENTS.md` + `.gitignore`), on the assumption it is a *code* repo pointing at a separate workspace. So
+when you want the **full workspace inside an existing/non-empty repo** (a co-located workspace, or
+adopting into a docs repo), pass `--workspace` explicitly: `swarm init --from <kit> --workspace`. `swarm
+init` announces the layout it chose; re-running with `--workspace` over a prior footprint init upgrades
+the pointer `AGENTS.md` to the full one (backing the stub up).
+
 ## Code repos
 
 A code repo that implements against your specs needs **nothing**. At most:

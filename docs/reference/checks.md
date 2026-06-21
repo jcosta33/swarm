@@ -69,12 +69,13 @@ One semantic note on C003: a `Verify with:` line whose target does not exist yet
 defect — it is an unresolved note, and the requirement reviews as **Unverified** until the target
 exists and its output is pasted. The check asks that the line _be there_, not that it already pass.
 
-One note on C009: a **relative** path named in `sources:` or a requirement resolves **relative to the
-spec file's own directory**, not the workspace root. A spec at `specs/checkout/spec.md` that names its
-ticket reaches a root-level `intake/` file as `../../intake/CHK-1.md` (or co-locates the ticket in the
-spec folder as `ticket.md`); a bare workspace-root path like `intake/CHK-1.md` resolves from
-`specs/checkout/` and will not be found. Co-location is why the kit's worked example keeps its
-`ticket.md` beside the spec.
+One note on C009: a **relative** path named in `sources:` or a requirement resolves against **both** the
+spec file's own directory **and** the workspace root — a hit under either is a resolve, only a path under
+neither is a broken link. So a spec at `specs/checkout/spec.md` can name a root-level intake the natural
+way, `intake/CHK-1.md` (what `swarm pull` + `swarm new spec` scaffold — it resolves from the workspace
+root), OR co-locate its ticket beside the spec as `ticket.md` (it resolves from the spec dir). Both work;
+no `../../`-relative path is needed. The fixture `checks/fixtures/cross-folder-source/` pins the
+root-level-intake case so the worked example's co-located `ticket.md` no longer masks it.
 
 ### When is a workspace valid?
 
