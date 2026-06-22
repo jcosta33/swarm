@@ -10,7 +10,7 @@ updated: 2026-06-22
 
 ## Context
 
-The kit is adopted by copying it whole ([ADR-0075](./0075-starter-kit-is-a-template-repo.md)), so an
+The kit is adopted by copying it whole ([ADR-0075](./0075-starter-kit-template-repo.md)), so an
 adopter silently drifts from the latest kit. [ADR-0081](./0081-kit-provenance-stamp.md) shipped the
 `.agents/.swarm-version` provenance pin but **deferred** the staleness warning, on one honest ground:
 `swarm check` has no honest source for "latest" — a network fetch breaks its hermetic
