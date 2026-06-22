@@ -38,6 +38,10 @@ file from a finished task). They *prepare* a new file; they read or derive no bo
    reversal of this clause and **needs its own ADR** — it is not shipped by drift. This narrows
    ADR-0077 D1's enumerated "gated close" to scaffold-only. *Level: convention (the hard line), an
    invariant a boundary regression test asserts (no Core use-case writes `status.md`).*
+   **Reopen trigger:** write that ADR only on demonstrated **adopter demand for the review-gate
+   teeth** — generation-volume / convenience demand does not qualify (refuted; swarm-hq #1.2, and
+   the #9/#11 measure-first verdict). This trigger is the durable home for the #1.2 decision; the
+   GitHub feedback issue need not stay open as a separate tracker.
 
 No `checks.yaml` rule, no contract-version bump — the prepare verbs touch no check; the drift-guard
 is untouched.

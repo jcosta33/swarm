@@ -125,8 +125,8 @@ task — but a one-line Scope, one Verify command, and an empty "Do not change"
 is a complete packet, not a lazy one.
 
 **The thin path — scale the artifact set to the risk.** The smallest work earns the smallest
-record. A reproduced defect rides the [bug-fix shape](examples/bug-fix.md) — a spec *check* (amend
-the existing spec, don't author a new one) plus a regression test that runs red first — and a
+record. A reproduced defect rides the [bug-fix shape](examples/bug-fix.md) — a spec *check* that
+yields a one-line amendment to the existing spec (not a new spec) plus a regression test that runs red first — and a
 one-line mechanical cleanup is the one-Scope task above. A separate spec, an
 [inventory, or a change plan](05-brownfield-and-change-plans.md) is **earned by risk or spread**,
 not written by default. The test is always the same: write exactly enough that a reviewer can map
