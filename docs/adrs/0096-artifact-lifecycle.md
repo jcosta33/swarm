@@ -20,7 +20,7 @@ practice.
   ~180 days)," disposed of when no longer needed ([[NARAGRS52]] — not a hard cutoff). The
   records lifecycle is appraisal → a **retention schedule** → disposition (retain / transfer /
   archive / destroy) ([[ISO15489]]). CI/run artifacts are ephemeral by industry default — GitHub
-  Actions retains them **90 days**, GitLab **30** ([[GHRETENTION]]).
+  Actions retains them **90 days**, GitLab **30** ([[GHRETENTION]], [[GLRETENTION]]).
 - **Decisions supersede, never rewrite.** ADRs are numbered sequentially with no reuse, carry a
   **status**, and a reversed decision is *kept and marked superseded with a pointer to its
   replacement* — not altered or deleted ([[NYGARDADR]]); the `NNNN-title.md` + status pattern scales
@@ -41,12 +41,14 @@ layer.
    **Durable records** — decisions (ADRs), specs of record, saved findings — persist for the repo's
    life and **supersede-not-delete**. **Transitory output** — review packets, `swarm check` output,
    run logs — ages out: keep it in git history (the default archive) or an `archive/` directory, with
-   a retention window in the **30–90-day band** (anchored to GitHub 90 / GitLab 30 [[GHRETENTION]],
-   not an invented number). *Level: convention.* ([[NARAGRS52]], [[ISO15489]])
+   a retention window in the **30–90-day band** (anchored to GitHub 90 [[GHRETENTION]] / GitLab 30
+   [[GLRETENTION]], not an invented number). *Level: convention.* ([[NARAGRS52]], [[ISO15489]])
 
 2. **Status lifecycle + supersede pointer on decisions and specs** (convention, with a named toolable).
-   Status is `proposed | accepted | deprecated | superseded-by-NNNN`; the artifact is kept and only
-   its status changes; numbers are sequential and never reused ([[NYGARDADR]], [[MADR]]). A
+   Status is `proposed | accepted | deprecated | superseded` with a `superseded_by: NNNN` pointer
+   (swarm's ADR frontmatter already carries this two-field form; the conceptual single-token is
+   "superseded-by-NNNN"); the artifact is kept and only its status changes; numbers are sequential
+   and never reused ([[NYGARDADR]], [[MADR]]). A
    **`swarm check` is *specified* (toolable, in the spirit of C015): every `superseded_by` pointer
    resolves to an existing artifact, and the index lists it** — *named here, not shipped; the swarm-cli
    agent mints the contract entry + implementation* (no `checks.yaml` change lands with this ADR, to
@@ -82,5 +84,6 @@ layer.
 
 `docs/03-where-files-live.md` (the durable/ephemeral + retention + lifecycle + freshness + index
 rules), `docs/research/sources.md` (the seven entries above), and the starter kit (an `archive/`
-convention + `status`/`supersedes` columns in the board). The `superseded_by`-resolves /
+convention + a board note on the supersede lifecycle / board-as-index — the kit board's `State`
+column carries status; the `superseded_by` pointer lives in the artifact's frontmatter). The `superseded_by`-resolves /
 index-lists `swarm check` is the toolable follow-up (swarm-hq #61 §B), not shipped by this ADR.

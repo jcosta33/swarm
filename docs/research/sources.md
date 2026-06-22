@@ -219,6 +219,9 @@ These were already verified by the framework's bibliography elsewhere; the entri
 <a id="GHRETENTION"></a>
 **[GHRETENTION] GitHub Actions artifact & log retention.** GitHub Docs, accessed June 2026. Workflow artifacts and logs are **retained 90 days by default** — configurable 1–90 days for public repos, up to 400 for private. <https://docs.github.com/en/organizations/managing-organization-settings/configuring-the-retention-period-for-github-actions-artifacts-and-logs-in-your-organization> — *primary-official.* Grounds: CI/run artifacts are ephemeral by industry default — the anchor for the review/run retention window (ADR-0096).
 
+<a id="GLRETENTION"></a>
+**[GLRETENTION] GitLab CI/CD job artifacts — default expiry.** GitLab Docs, accessed June 2026. Job artifacts **expire 30 days** after creation by default (overridable per job via `expire_in`, or kept indefinitely with `expire_in: never`). <https://docs.gitlab.com/ci/jobs/job_artifacts/> — *primary-official.* Grounds: with GitHub's 90-day default ([[GHRETENTION]]), brackets the 30–90-day transitory-retention band (ADR-0096).
+
 <a id="SWEGBOOKDOCS"></a>
 **[SWEGBOOKDOCS] Software Engineering at Google, ch. 10 "Documentation".** Manshreck (eds. Winters, Manshreck, Wright), O'Reilly, 2020. "Documents without owners become stale"; freshness metadata can "send email reminders when the document hasn't been touched in, for example, three months"; at scale a **dominant failure mode is duplication, not just absence** (the GooWiki / Borg case — 7–10 overlapping Borg-setup docs, no owner). <https://abseil.io/resources/swe-book/html/ch10.html> — *practitioner-credible (industry book, not peer-reviewed); the 3-month figure is an example, not a rule.* Grounds: named ownership + freshness review + consolidate-to-canonical for durable specs (ADR-0096).
 

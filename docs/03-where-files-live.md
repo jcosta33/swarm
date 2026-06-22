@@ -120,7 +120,7 @@ days") [[NARAGRS52]](research/sources.md#NARAGRS52). Split the workspace that wa
   evidence *of a moment*; once the task is closed and the durable record (the finding, the merged
   PR) captures what mattered, the rest belongs in **git history (the default archive)** or an
   `archive/` directory, on a **30–90-day retention window** — the band CI tools already use
-  (GitHub Actions 90 days, GitLab 30) [[GHRETENTION]](research/sources.md#GHRETENTION). Don't
+  (GitHub Actions 90 days [[GHRETENTION]](research/sources.md#GHRETENTION), GitLab 30 [[GLRETENTION]](research/sources.md#GLRETENTION)). Don't
   accumulate them in the live tree forever.
 
 Two conventions keep a large workspace navigable. **One canonical home per rule or decision** — the
