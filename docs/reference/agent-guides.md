@@ -33,11 +33,14 @@ The workspace authoring guides, beside them:
 
 ## Optional (install from [the swarm-skills catalog](https://github.com/jcosta33/swarm-skills) when needed)
 
-The catalog carries the conditioning stances — `persona-architect`, `persona-auditor`,
-`persona-challenger` (pressure-testing a live proposal before it is built), `persona-documentarian`,
-`persona-researcher`, `persona-skeptic`, `persona-surveyor` (breadth surveys across many examples),
-plus the standalone `empirical-proof` evidence discipline — and long-form execution guides per
-change shape (feature, fix, refactor,
+The catalog carries the **cross-cutting** conditioning stances — `persona-skeptic` (refute by
+default; the lever is the checks you re-run), `persona-challenger` (pressure-testing a live proposal
+before it is built), and `persona-surveyor` (breadth surveys across many examples) — plus the
+standalone `empirical-proof` evidence discipline. The authoring stances (architect, auditor,
+researcher, documentarian) are **not** shipped standalone: each lives folded into its work guide
+(`write-spec`/`write-audit`/`write-research`/`write-documentation`), its single source
+([ADR-0093](../adrs/0093-collapse-1to1-personas.md)). The catalog also carries long-form execution
+guides per change shape (feature, fix, refactor,
 rewrite, migration, performance, testing, documentation, flaky tests) plus
 `implement-task` in long form. Install what your team uses with
 `npx skills add jcosta33/swarm-skills` (add `--list` to preview without installing, or copy

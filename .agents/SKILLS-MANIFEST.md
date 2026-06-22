@@ -21,14 +21,14 @@ competing authority.
 | ----------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `implement-task`        | mirror of the kit's `.agents/skills/implement-task/` (swarm-starter-kit repo)                              | Tasks cut in the swarm-hq workspace are implemented in this repo; the implementing session loads the core guide here. |
 | `empirical-proof`       | the catalog's `empirical-proof` (repo-adapted copy)                                                        | The evidence rules in standalone form: a completion claim binds to pasted output; without it the result is Unverified, never Pass. |
-| `persona-documentarian` | the catalog's `persona-documentarian`                                                                      | The stance for the human-facing pages this repo ships: one frame throughout, every example run, every claim cited.    |
 
 ## Census — omitted, and why
 
 | Guide                                                                                  | Why not here                                                                                       |
 | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `write-spec`, `review-output`, and the workspace authoring guides (`write-audit`, `write-research`, `write-rfc`, …) | Authoring, review, and Close-step work runs from the swarm-hq workspace; its `.agents/skills/` carries them. |
-| The other personas and the per-change-shape implementation guides                       | They live in the swarm-skills catalog; install into whichever workspace needs them.                  |
+| The conditioning stances (now only the cross-cutting `persona-skeptic` / `persona-challenger` / `persona-surveyor`) and the per-change-shape implementation guides | They live in the swarm-skills catalog; install into whichever workspace needs them.                  |
+| The documentarian discipline (was a local `persona-documentarian` copy)                 | Folded into the catalog's `write-documentation`, its single source ([ADR-0093](../docs/adrs/0093-collapse-1to1-personas.md)); install that guide when writing this repo's human-facing pages. |
 
 Templates are not skills: the frozen formats ship in the kit repo's `templates/` and
 `advanced/` — link to them, never restate them.

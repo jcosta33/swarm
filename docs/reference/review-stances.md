@@ -30,9 +30,12 @@ independent reviewer).
 
 The carrier is incidental: a stance may ship as a standalone guide or be folded into the guide for
 the step it sharpens — what matters is that the seven sections are present and crisp. The kit's
-guides carry the folded forms; every stance also ships standalone as a `persona-*` skill in
-[the swarm-skills catalog](https://github.com/jcosta33/swarm-skills), for loading a posture
-without its host guide. This is a convention; nothing in this repo enforces it.
+guides carry the folded forms, and that fold is the **single source** for the stances that map to one
+kind of work — architect, auditor, researcher, documentarian no longer ship a standalone copy
+([ADR-0093](../adrs/0093-collapse-1to1-personas.md)). Only the **cross-cutting** stances — skeptic,
+challenger, surveyor — also ship standalone as a `persona-*` skill in
+[the swarm-skills catalog](https://github.com/jcosta33/swarm-skills), for loading a posture without
+its host guide. This is a convention; nothing in this repo enforces it.
 
 ## The stances
 
@@ -48,18 +51,29 @@ dressed as a "what". Ships inside the kit's `.agents/skills/write-spec/`.
 Refute by default: a completion claim is unproven until evidence forces the opposite conclusion.
 Prevents rubber-stamped reviews. Demands re-run checks and pasted output; refuses a worker's
 summary as proof, a green row with an empty evidence cell, and any softening of a finding to avoid
-blocking. Ships inside the kit's `.agents/skills/review-output/` — and, turned on one's own diff before
-handoff, it is the self-review posture the `implement-task` guide ends on (that yields fixes and a
-recorded critique, never a self-issued result).
+blocking. Ships inside the kit's `.agents/skills/review-output/`, and also standalone as
+`persona-skeptic` in the swarm-skills catalog — and, turned on one's own diff before handoff, it is
+the self-review posture the `implement-task` guide ends on (that yields fixes and a recorded critique,
+never a self-issued result).
 
 ### Surveyor — standalone
 
 Breadth-first inventory: what prevails across many examples — market, UX, and common-practice
 surveys. Prevents pattern claims built on one example. Demands at least three named instances per
 asserted pattern and a hard line between observation and claim; refuses inferring behavior from
-marketing copy and closing on a recommendation no spec could transcribe. The one stance that does
-not fold cleanly into any single guide; ships standalone as `persona-surveyor` in
+marketing copy and closing on a recommendation no spec could transcribe. Its breadth discipline does
+not fold cleanly into any single write-guide; ships standalone as `persona-surveyor` in
 [the swarm-skills catalog](https://github.com/jcosta33/swarm-skills).
+
+### Challenger — standalone
+
+Pressure-test a live proposal *before* it is committed. Prevents building on an unexamined assumption,
+or dismissing the rejected option as a strawman. Demands that every challenge ground in an external
+referent — a counterexample, a runnable check, a cited source, an observable consequence — never
+unaided second-guessing, and that the discarded alternative be steelmanned before the chosen one is
+attacked; refuses re-deciding the proposal here (pressure the idea; the call is a separate step). It
+precedes any single artifact, so it folds into no one guide; ships standalone as `persona-challenger`
+in [the swarm-skills catalog](https://github.com/jcosta33/swarm-skills).
 
 ### Auditor — folded into the `write-audit` guide
 

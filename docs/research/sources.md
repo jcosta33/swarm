@@ -78,6 +78,12 @@
 <a id="RELYORNOT"></a>
 **[RELYORNOT] To Rely or Not to Rely? Evaluating Interventions for Appropriate Reliance on Large Language Models.** Bo, Wan, Anderson. **Proc. 2025 CHI Conference on Human Factors in Computing Systems** (DOI 10.1145/3706598.3714097), arXiv:2412.15584. *Verified (June 2026, web search — arXiv + researchr bibtex for authorship).* Across the studied interventions, the aids **reduced over-reliance but generally did not improve *appropriate* reliance**, and people were *more* confident when over- or under-relying than when calibrated. Grounds: the honest ceiling on the decision-handoff convention — structured decision support reduces blind acceptance but is **not a proven cure** for miscalibrated trust; adopt it as a reasoned convention, not an established win.
 
+<a id="ZHENG-PERSONA"></a>
+**[ZHENG-PERSONA] When "A Helpful Assistant" Is Not Really Helpful: Personas in System Prompts Do Not Improve Performances.** Zheng, Pei, Jurgens, et al. **EMNLP 2024 (Findings)**, arXiv:2311.10054. *Verified (June 2026, deep-research direct fetch + 3-vote).* Across **162 roles, 4 LLM families, and 2,410 factual questions**, adding a persona to the system prompt did **not** systematically improve accuracy over a no-persona control, and the per-persona effect is **essentially random**. Grounds: a persona's *identity* is not a reliable lever on objective tasks — the value of a "stance" is its concrete directives, not the role label (the basis for collapsing the 1:1 authoring personas, ADR-0093).
+
+<a id="KONG-ROLEPLAY"></a>
+**[KONG-ROLEPLAY] Better Zero-Shot Reasoning with Role-Play Prompting.** Kong, Zhang, Wang, et al. **NAACL 2024**, arXiv:2308.07702. *Verified (June 2026, deep-research direct fetch + 3-vote).* Role-play prompting beat standard zero-shot across most of **twelve** reasoning benchmarks (e.g. Last-Letter **23.8%→84.2%**, AQuA **53.5%→63.8%**); the authors frame the gain as an implicit chain-of-thought trigger. Grounds: role *framing* helps via the task-relevant procedure it evokes — which can live in the work guide — not via the identity (ADR-0093).
+
 ## Verified — reused from the kernel bibliography
 
 These were already verified by the framework's bibliography elsewhere; the entries below restate them so this layer is self-contained.
