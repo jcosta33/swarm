@@ -101,6 +101,37 @@ and code surfaces at review time — a coverage row that no longer matches the c
 Unverified — and a spec known to lag reality is marked `stale` on the
 [status board](https://github.com/jcosta33/swarm-starter-kit/blob/main/templates/status.md) until someone amends it.
 
+## What lasts, and what ages out
+
+After hundreds of artifacts, not everything should live forever. Records management gives a clean
+test: a record is **durable** when it is evidence of a decision; it is **transitory** when it has
+short-term value and no decision rides on it (NARA's transitory bar is "generally less than ~180
+days") [[NARAGRS52]](research/sources.md#NARAGRS52). Split the workspace that way:
+
+- **Durable records — keep for the repo's life, supersede, never delete.** Decisions (ADRs),
+  specs of record, and saved findings. A reversed decision is *kept and marked superseded* with a
+  pointer to its replacement, sequentially numbered and never reused
+  [[NYGARDADR]](research/sources.md#NYGARDADR) [[MADR]](research/sources.md#MADR) — the same
+  status lifecycle (`proposed | accepted | deprecated | superseded-by-NNNN`) the ADR ledger already
+  uses. Each carries a **named owner**, because documents without owners go stale
+  [[SWEGBOOKDOCS]](research/sources.md#SWEGBOOKDOCS), and write-once rots — about 29% of popular
+  repos already carry an outdated reference [[DOCROT]](research/sources.md#DOCROT).
+- **Transitory output — let it age out.** Review packets, `swarm check` output, and run logs are
+  evidence *of a moment*; once the task is closed and the durable record (the finding, the merged
+  PR) captures what mattered, the rest belongs in **git history (the default archive)** or an
+  `archive/` directory, on a **30–90-day retention window** — the band CI tools already use
+  (GitHub Actions 90 days, GitLab 30) [[GHRETENTION]](research/sources.md#GHRETENTION). Don't
+  accumulate them in the live tree forever.
+
+Two conventions keep a large workspace navigable. **One canonical home per rule or decision** — the
+failure that bites at scale is *duplication*, not absence (Google's Borg had 7–10 overlapping
+setup docs, no owner) [[SWEGBOOKDOCS]](research/sources.md#SWEGBOOKDOCS), so "no canonical owner" is a
+reviewable defect. And the **board is the index**: a flat per-type folder plus `status.md` carrying
+`ID · title · status · superseded-by` keeps hundreds of artifacts findable by search over a flat
+list. All of this is convention — nothing enforces it; a `swarm check` that the `superseded_by`
+pointers resolve and the index lists them is a named, not-yet-shipped follow-up
+([ADR-0096](adrs/0096-artifact-lifecycle.md)).
+
 ## Next
 
 - [Basic workflow](02-basic-workflow.md) — the loop these folders serve.

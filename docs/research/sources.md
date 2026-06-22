@@ -123,6 +123,9 @@
 <a id="WEBAGENTILLUSION"></a>
 **[WEBAGENTILLUSION] An Illusion of Progress? Assessing the Current State of Web Agents.** Xue et al. (OSU-NLP). **COLM 2025**, arXiv:2504.01382. *Verified (June 2026, web — arXiv/OpenReview).* On Online-Mind2Web (300 realistic tasks, 136 sites, human-judged), the best agents reach ~61% (Operator) / 56% (Claude Computer Use 3.7) while **most cluster around ~30%** — driving live web UIs reliably is still limited. Grounds: an agent's app-run is unreliable → it is evidence for a human to judge, never an autonomous verdict (ADR-0095).
 
+<a id="DOCROT"></a>
+**[DOCROT] Detecting outdated code element references in software repository documentation.** Tan, Wagner, Treude. **Empirical Software Engineering 29:5, 2024**, DOI 10.1007/s10664-023-10397-6 (companion tool paper arXiv:2307.04291). *Verified (June 2026, web — OA journal PDF).* Across >3,000 GitHub projects (the 1,000 most-starred + Google's), **28.9% currently contain at least one outdated code-element reference**, and 82.3% were outdated at least once historically. *Scope: top-by-stars + Google repos — not generalizable to all docs.* Grounds: doc rot is measurable and common → durable artifacts need freshness + ownership, not write-once (ADR-0096).
+
 ## Verified — reused from the kernel bibliography
 
 These were already verified by the framework's bibliography elsewhere; the entries below restate them so this layer is self-contained.
@@ -200,6 +203,24 @@ These were already verified by the framework's bibliography elsewhere; the entri
 
 <a id="PLAYWRIGHTMCP"></a>
 **[PLAYWRIGHTMCP] Playwright MCP.** Microsoft (github.com/microsoft/playwright-mcp), accessed June 2026. Drives a browser via the **accessibility tree, not pixels** — "No vision models needed," deterministic, fast/lightweight. <https://github.com/microsoft/playwright-mcp> — *official project docs, not a measured study.* Grounds: prefer deterministic accessibility-tree tooling over pixel/vision when an agent captures app-run evidence (ADR-0095).
+
+<a id="NARAGRS52"></a>
+**[NARAGRS52] General Records Schedule 5.2: Transitory and Intermediary Records.** U.S. National Archives and Records Administration (NARA), Transmittal No. 34, June 2023. The durability test: a record is durable when it is required "to initiate, sustain, evaluate, or provide evidence of decision-making"; **transitory** records are "routine records of short-term value (generally less than 180 days)," disposed of "when no longer needed." <https://www.archives.gov/records-mgmt/grs/faqs-for-grs-5-2> — *primary-official (the issuing authority's schedule); "generally less than 180 days" is a typical bound, not a hard cutoff.* Grounds: the durable-vs-ephemeral split — decisions/specs/findings are durable, review/check/run output is transitory (ADR-0096).
+
+<a id="ISO15489"></a>
+**[ISO15489] ISO 15489-1:2016 — Records management — Concepts and principles.** International Organization for Standardization, 2016. The records lifecycle: (recurrent) **appraisal → disposition authorities**, each setting a **retention period** and a disposition action — destruction, transfer, or archive for permanent retention. <https://www.iso.org/standard/62542.html> — *primary-official (paywalled; cite the catalog page for identity, the substance is the clause text).* Grounds: artifacts carry a retention schedule and an explicit disposition, not indefinite accumulation (ADR-0096).
+
+<a id="NYGARDADR"></a>
+**[NYGARDADR] Documenting Architecture Decisions.** Nygard, 2011. ADRs "are numbered sequentially and monotonically; numbers will not be reused"; each carries a **status** (proposed | accepted | deprecated | superseded); a reversed decision is **kept and marked superseded** "with a reference to its replacement" — not altered or deleted. <https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions> — *primary-official (the post that originated the ADR pattern); "immutable" is later secondary framing, not Nygard's own word.* Grounds: supersede-not-delete + sequential numbering + a status field for durable decision records (ADR-0096).
+
+<a id="MADR"></a>
+**[MADR] Markdown Architectural Decision Records (MADR).** The `adr` GitHub organization, MADR 4.0.0, 2024. ADRs live in a `docs/decisions/` folder named `NNNN-title-with-dashes.md` (a consecutive number; "we assume that there won't be more than 9,999 ADRs in one repository"); the template carries a **status** field with example values (`proposed | rejected | accepted | deprecated | … | superseded by ADR-NNNN`). <https://adr.github.io/madr/> — *primary-official (the project's own docs); the status values are illustrative, not a closed set.* Grounds: the NNNN scheme + a status field scale to thousands of records (ADR-0096).
+
+<a id="GHRETENTION"></a>
+**[GHRETENTION] GitHub Actions artifact & log retention.** GitHub Docs, accessed June 2026. Workflow artifacts and logs are **retained 90 days by default** — configurable 1–90 days for public repos, up to 400 for private. <https://docs.github.com/en/organizations/managing-organization-settings/configuring-the-retention-period-for-github-actions-artifacts-and-logs-in-your-organization> — *primary-official.* Grounds: CI/run artifacts are ephemeral by industry default — the anchor for the review/run retention window (ADR-0096).
+
+<a id="SWEGBOOKDOCS"></a>
+**[SWEGBOOKDOCS] Software Engineering at Google, ch. 10 "Documentation".** Manshreck (eds. Winters, Manshreck, Wright), O'Reilly, 2020. "Documents without owners become stale"; freshness metadata can "send email reminders when the document hasn't been touched in, for example, three months"; at scale a **dominant failure mode is duplication, not just absence** (the GooWiki / Borg case — 7–10 overlapping Borg-setup docs, no owner). <https://abseil.io/resources/swe-book/html/ch10.html> — *practitioner-credible (industry book, not peer-reviewed); the 3-month figure is an example, not a rule.* Grounds: named ownership + freshness review + consolidate-to-canonical for durable specs (ADR-0096).
 
 ## Verified — peer-reviewed, no measured outcomes (vision/position; design rationale only)
 
