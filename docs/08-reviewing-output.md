@@ -20,6 +20,19 @@ You still open the diff — but you open it where the packet points, not at line
 covered by a passing result with real evidence has already been accounted for; your attention
 is spent on what the structure flags.
 
+## What review is for
+
+Most of what review catches is not broken behavior. About **three-quarters of the defects found in
+code review do not affect visible functionality** — they are *evolvability* defects (structure,
+readability, documentation) that tests and CI are blind to
+[[MANTYLA09]](research/sources.md#MANTYLA09); in modern review, defect comments are a minority while
+code-improvement comments dominate [[BACCHELLI13]](research/sources.md#BACCHELLI13). So review is
+**complementary to tests, not a slower substitute**: CI owns functional regressions, review owns the
+maintainability and design layer no suite can see — which is exactly why a human is still required
+for substantial changes. Treat evolvability findings (a confusing name, a leaky boundary, an
+undocumented contract) as first-class review output, not an afterthought to "did it pass."
+(Convention; [ADR-0095](adrs/0095-review-model-grounding.md).)
+
 ## The review packet
 
 The packet is one markdown file in `reviews/`, one per task, named after the task's slug. The format is frozen in the kit
@@ -95,6 +108,15 @@ them, and they are on the review checks in [`reference/checks.md`](reference/che
    a mock is a claim about the mock; the requirement is met only when the actual call, render, or
    permission is observed. Name the runtime the evidence came from — the live endpoint, a real
    browser, the target OS — so a Pass on integration-shaped work can't rest on a stubbed one.
+7. **An agent that runs the app produces evidence, not a verdict.** Driving the live app to exercise
+   a behavior is a distinct, valuable verifier — an LLM agent found 53 real bugs (35 fixed) this way
+   [[GPTDROID]](research/sources.md#GPTDROID) — but agents driving live UIs are unreliable (the best
+   reach ~61%, most ~30% [[WEBAGENTILLUSION]](research/sources.md#WEBAGENTILLUSION)), so an autonomous
+   run never *certifies* a change. The author-agent **attaches its run** (accessibility snapshot,
+   console, network) as the Evidence; an **independent reviewer re-runs the journey and judges** — the
+   no-self-result rule applies to app-runs too. Prefer deterministic accessibility-tree tooling
+   (Playwright-MCP style: structured data, "no vision models needed")
+   [[PLAYWRIGHTMCP]](research/sources.md#PLAYWRIGHTMCP) over pixel/vision, the flakier layer.
 
 A coverage row may also carry its evidence in a structured form: an optional fenced `verify` block, placed beside the row and keyed to the requirement id, that names the command and a pass signal — a machine-checkable form of the same evidence the free-form cell points at.
 
@@ -158,6 +180,27 @@ accept it. In practice —
 - if you authored the change, you don't decide its review result — self-review before
   finishing is good practice (the [task template](https://github.com/jcosta33/swarm-starter-kit/blob/main/templates/task.md) asks the
   agent for it), but it produces fixes, not approval.
+
+## Who reviews — independent, distinct-lens, and engaged
+
+- **The reviewer is not the author.** This is the desk-checking principle, not a measured effect: if
+  the author had seen the defect they would have fixed it, so an author reviewing only their own work
+  is the weakest possible review [[WIEGERS95]](research/sources.md#WIEGERS95). It reinforces the
+  no-self-result invariant (ADR-0056) — design rationale, not enforcement.
+- **Default to two independent reviewers, each with a distinct lens; add a third for risk.** Modern
+  review converged on about two reviewers, with little extra caught beyond
+  [[RIGBY13]](research/sources.md#RIGBY13). Give each a distinct, skeptical aim — e.g. **correctness**,
+  **maintainability + design**, **security + reproduction** — not two passes of the same read.
+  Escalate to a third lens for a high-risk or high-diffusion change (the diffusion signal from
+  [Brownfield & change plans](05-brownfield-and-change-plans.md)); agent reviewers are cheap, so a
+  third is easy to justify.
+- **Participation is the gate, not the sign-off.** A `Pass` requires evidence of *substantive
+  engagement* — a finding raised, a check re-run, a reasoned result — because lax participation, not
+  thin coverage, is what predicts post-release defects (up to five extra)
+  [[MCINTOSH14]](research/sources.md#MCINTOSH14). An empty-evidence `Pass` already reads `Unverified`
+  (the invariant above): that is the participation gate in mechanical form.
+
+Checklist level; nothing enforces reviewer count or lens assignment ([ADR-0095](adrs/0095-review-model-grounding.md)).
 
 ## Reviewing transformation work
 

@@ -105,6 +105,24 @@
 <a id="RIGBY13"></a>
 **[RIGBY13] Convergent Contemporary Software Peer Review Practices.** Rigby & Bird. **ESEC/FSE 2013, pp. 202–212**, DOI 10.1145/2491411.2491444. *Verified (June 2026, web — MSR author PDF, text-extracted).* Across drastically different projects, modern review **converged on small changes** — median *change* sizes of tens of lines (e.g. Android/AMD 44, Chrome 78; vs the prior-OSS Apache 25 / Linux 32 contrast and traditional inspection's 263). Grounds: small, self-contained units are the field-convergent norm a task should target (ADR-0094).
 
+<a id="MANTYLA09"></a>
+**[MANTYLA09] What Types of Defects Are Really Discovered in Code Reviews?** Mäntylä & Lassenius. **IEEE TSE 35(3):430–448, 2009**, DOI 10.1109/TSE.2008.71. *Verified (June 2026, web — Aalto repository PDF).* Of 759 classified review defects (388 industrial + 371 student), **roughly 75% do not affect visible functionality** — they are *evolvability* defects (documentation, structure, readability) that execution-based QA cannot detect (confirming Siy & Votta). Grounds: review's primary payload is the maintainability/design layer tests are blind to (ADR-0095).
+
+<a id="BACCHELLI13"></a>
+**[BACCHELLI13] Expectations, Outcomes, and Challenges of Modern Code Review.** Bacchelli & Bird. **ICSE 2013, pp. 712–721**, DOI 10.1109/ICSE.2013.6606617. *Verified (June 2026, web — author PDF).* Over 570 Microsoft review comments, **defect comments are a minority (~14%, 4th of nine categories)** while code-improvement comments dominate (~29%); review's outcomes are less about finding errors than expected and also deliver knowledge transfer and team awareness. Grounds: foreground evolvability/design findings as first-class; defect-catching is one outcome among several (ADR-0095).
+
+<a id="MCINTOSH14"></a>
+**[MCINTOSH14] The Impact of Code Review Coverage and Participation on Software Quality** (Qt, VTK, ITK). McIntosh, Kamei, Adams, Hassan. **MSR 2014, pp. 192–201**, DOI 10.1145/2597073.2597076. *Verified (June 2026, web — author/ACM).* Coverage and participation each independently bear on quality: low coverage is estimated to add up to **two** post-release defects, **low participation up to five** — "coverage alone does not guarantee" quality. Grounds: participation (substantive engagement), not a sign-off, is the gate (ADR-0095).
+
+<a id="GPTDROID"></a>
+**[GPTDROID] Make LLM a Testing Expert (GPTDroid): Human-like Mobile GUI Testing.** Liu, Chen, Wang, et al. **ICSE 2024, pp. 1222–1234**, DOI 10.1145/3597503.3639180 (arXiv:2310.15780). *Verified (June 2026, web — arXiv).* An LLM agent driving live Google Play apps found **53 new bugs, of which 35 were confirmed and fixed** by developers. Grounds: an agent exercising the running app surfaces real defects — valuable as *evidence*, judged by a human/independent reviewer (ADR-0095).
+
+<a id="ITKONEN14"></a>
+**[ITKONEN14] Are test cases needed? Replicated comparison of exploratory vs test-case-based testing.** Itkonen & Mäntylä. **Empirical Software Engineering 19(2):303–342, 2014**, DOI 10.1007/s10664-013-9266-8. *Verified (June 2026, web — Springer).* A replicated experiment (51 students, jEdit): **no statistically significant difference in defect-detection effectiveness** between exploratory and scripted testing (p=0.093); exploratory is more *efficient* (less design effort) and scripted yields more false positives. *Scope: a student experiment; non-significant ≠ proven equivalence.* Grounds: exercising the app (exploratory) is a legitimate verifier mode, not inferior to scripted (ADR-0095).
+
+<a id="WEBAGENTILLUSION"></a>
+**[WEBAGENTILLUSION] An Illusion of Progress? Assessing the Current State of Web Agents.** Xue et al. (OSU-NLP). **COLM 2025**, arXiv:2504.01382. *Verified (June 2026, web — arXiv/OpenReview).* On Online-Mind2Web (300 realistic tasks, 136 sites, human-judged), the best agents reach ~61% (Operator) / 56% (Claude Computer Use 3.7) while **most cluster around ~30%** — driving live web UIs reliably is still limited. Grounds: an agent's app-run is unreliable → it is evidence for a human to judge, never an autonomous verdict (ADR-0095).
+
 ## Verified — reused from the kernel bibliography
 
 These were already verified by the framework's bibliography elsewhere; the entries below restate them so this layer is self-contained.
@@ -180,6 +198,9 @@ These were already verified by the framework's bibliography elsewhere; the entri
 <a id="GOOGLESMALLCL"></a>
 **[GOOGLESMALLCL] Small CLs.** Google Engineering Practices — Code Review Developer Guide (living document, accessed June 2026). The right size for a change is **one self-contained change**; ~100 lines is usually reasonable and ~1000 usually too large (rules of thumb, the reviewer's judgment; a change spread across many files counts as larger). **Separate a refactor from a feature or bug-fix** into its own change (small cleanups like renaming a local variable MAY ride along). <https://google.github.io/eng-practices/review/developer/small-cls.html> — *official guidance, not a measured study.* Grounds: separate-refactor-from-behavior and small/self-contained units (ADR-0094).
 
+<a id="PLAYWRIGHTMCP"></a>
+**[PLAYWRIGHTMCP] Playwright MCP.** Microsoft (github.com/microsoft/playwright-mcp), accessed June 2026. Drives a browser via the **accessibility tree, not pixels** — "No vision models needed," deterministic, fast/lightweight. <https://github.com/microsoft/playwright-mcp> — *official project docs, not a measured study.* Grounds: prefer deterministic accessibility-tree tooling over pixel/vision when an agent captures app-run evidence (ADR-0095).
+
 ## Verified — peer-reviewed, no measured outcomes (vision/position; design rationale only)
 
 <a id="REDEFO"></a>
@@ -191,6 +212,9 @@ These were already verified by the framework's bibliography elsewhere; the entri
 ## Caveated — non-peer-reviewed (cite ONLY as preliminary; never load-bearing)
 
 Treated as the kernel treats its own non-peer-reviewed sources: usable to *illustrate* a direction, never to ground a `MUST`. Their headline statistics are single-author/blog measurements, not controlled peer-reviewed studies.
+
+<a id="WIEGERS95"></a>
+**[WIEGERS95] Improving Quality Through Software Inspections.** Wiegers. **Software Development magazine, April 1995** (author reprint, processimpact.com). *Verified (June 2026, web — author PDF).* The desk-checking principle: the author is a poor sole reviewer of their own work — "if the author was aware of defects, he probably would have corrected them already"; flags "a sense of unease when the author is the only person who has viewed a completed product." <https://www.processimpact.com/articles/inspects.pdf> — *practitioner / trade article, not peer-reviewed; cite as **design rationale only**, never as measured evidence.* Grounds: the cognitive rationale for reviewer ≠ author (reinforces ADR-0056), at design-rationale level (ADR-0095).
 
 <a id="ACTIVATION-BLOG"></a>
 **[ACTIVATION-BLOG] Why Claude Code Skills Don't Activate — And How to Fix It.** Seleznov, Medium, 2026. A self-published 650-trial measurement reporting directive descriptions activating far more reliably than passive ones (the "OR ≈ 20.6 / 100% activation" figures). **Non-peer-reviewed; the specific numbers are NOT load-bearing.** The *direction* (directive, exclusion-bearing descriptions help) is used only as illustration; the kernel's primary mechanism is "load what the task names" (§26.4), with description-match as the fallback.
