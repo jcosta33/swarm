@@ -1,55 +1,31 @@
-# The `swarm` CLI — status and design
+# The `swarm` CLI — design and boundary
 
-*The reference CLI (**swarm-cli**) is optional; the markdown workflow never requires it. Much of
-the surface below ships today — this page is the live status matrix, then the fuller design. The
-design of record is [ADR-0077](../adrs/0077-swarm-cli-reconcile-only-harness.md).*
+*The reference CLI (**swarm-cli**) is optional; the markdown workflow never requires it. This page is
+its **design of record** — why the CLI is shaped the way it is, and what it must never become
+([ADR-0077](../adrs/0077-swarm-cli-reconcile-only-harness.md)). It is not a status page: the live,
+drift-checked command set is swarm-cli's own command catalogue, where *advertised == dispatchable* is
+a tested invariant; per-command usage and flags live in the
+[swarm-cli README](https://github.com/jcosta33/swarm-cli#commands), and the checks it runs are
+[checks.md](checks.md). This page records the shape, not the surface.*
 
-## What ships today
+## The shipped surface
 
-The authoritative, drift-checked source is swarm-cli's own command catalogue (where
-*advertised == dispatchable* is a tested invariant); this matrix tracks it. Every check swarm-cli
-runs is **toolable** — it becomes **enforced** only in an adopting repo that wires the kit's
-commit/CI hooks, where the team's gate (or the agent CLI's hook runtime) enforces, never "Swarm
-enforcing."
+swarm-cli ships the prepare-and-reconcile loop with no agent execution of its own — pure file
+preparation and checking, useful on day one and testable without any model: **`init`** and
+**`update`** (scaffold the kit, then refresh the kit-owned guidance conflict-safely), **`check`** (the
+checks contract), **`new`** (spec, task, or change-plan), **`worktree`**, **`status`**, **`review`** (reconcile a
+run; `--write` drafts the packet), **`pull`** and **`promote`** (the two boundary-safe prepare verbs),
+**`run --agent`** (launch a prepared task and record the launch envelope — the agent performs the
+loop), **`show`**, and **`agents emit --codex`** (project the agent definitions to a second runner).
+The interactive dashboard (`swarm` with no command) reaches every flow, and the **`swarm-mcp`** server
+([ADR-0085](../adrs/0085-swarm-mcp-adapts-the-json-contract.md)) serves the same scope/requirements/
+checks data over MCP. The catalogue and the README carry the authoritative flags, exit codes, and
+per-command detail — this page does not restate them.
 
-| Command | Status | Enforcement level | What it does |
-|---|---|---|---|
-| `swarm init` | shipped | toolable | scaffold the workspace from the starter kit (conflict-safe) |
-| `swarm update [--check\|--write]` | shipped | toolable | `--check` reports whether the workspace drifted behind the kit (read-only); `--write` refreshes the kit-owned guidance (`templates/`, `.agents/skills/`, `advanced/`, `hooks/`) conflict-safely (`--on-conflict backup`/overwrite/skip), never the adopter's specs/board/AGENTS.md (ADR-0091) |
-| `swarm check [file]` | shipped | toolable | run the checks contract over one spec or the whole workspace; exit 0 clean / 1 warnings / 2 blocking |
-| `swarm new <task\|spec>` | shipped | toolable | cut a task packet from a spec, or scaffold a new spec |
-| `swarm worktree` | shipped | toolable | create / list / remove / prune isolated task worktrees |
-| `swarm status` | shipped | toolable | print the workspace board — specs, tasks, reviews, gaps; writes nothing |
-| `swarm review <task>` | shipped | toolable | reconcile a finished run (diff ↔ self-report ↔ spec); surfaces facts, never a verdict |
-| `swarm show <task\|spec\|review\|checks>` | shipped | toolable | project a parsed artifact as JSON — task, spec, review packet, or the checks contract; read-only, renders no verdict (feeds swarm-mcp) |
-| `swarm` (no command) | shipped | toolable | open an interactive dashboard that reaches every flow; every flow also has a scriptable direct form |
-| `swarm pull <ticket>` | shipped | toolable | snapshot an external ticket into `intake/` (verbatim via `gh` where available, else a paste placeholder); never a spec |
-| `swarm promote <task>` | shipped | toolable | scaffold a candidate finding from a finished task (`from:` pre-filled); asserts no learning, writes no board |
-| `swarm review <task> --write` — draft review packet | shipped | toolable | write the draft review packet from the diff and task (every row Unverified, `status: draft`, never a Pass or a verdict; no-clobber); the read-only reconcile stays the default |
-| Swarm MCP server (`swarm-mcp`) | shipped | toolable | an MCP stdio server (swarm-mcp v0.1.0) exposing a task's scope, requirements, and checks (read + reconcile facts) to any MCP-capable agent; shells out to the CLI `--json` contract ([ADR-0085](../adrs/0085-swarm-mcp-adapts-the-json-contract.md)) |
-| per-adapter hook generation | planned | toolable | emit the agent CLI's own hook config wiring the task's write-set and `checks.yaml` into its hooks — enforcement is the agent CLI's, not Swarm's |
-| `swarm run <task> --agent` | shipped | toolable | launch a prepared task on a configured agent in its worktree, record the launch envelope; the agent performs the loop |
-| `swarm agents emit --codex` | shipped | toolable | generate Codex `.codex/agents/*.toml` from the swarm-agents `agents/*.md` definitions (single-source reuse, no execution); only the prose discipline ports — tool-scoping + hooks are Claude-Code-only (ADR-0098) |
-| run record | partial | toolable | `swarm run` writes the launch envelope under `.swarm/work/` today; the full run-summary form (changed-files / commands) and `swarm review` reading it are deferred; markdown stays the only adopter-facing artifact |
-| `swarm close <task>` (board-mutating) | non-goal | — | parked (the open DECIDE #1.2 / ADR-0084) — the board stays hand-edited; the finding scaffold ships as `swarm promote` above |
-| `compile` · `lower` / `decompose` | non-goal | — | Swarm generates no code from a spec, and splitting a spec into tasks is judgment work |
-| a board-mutating close (a `status.md`-mutating close) | non-goal | — | the board stays hand-edited; a CLI that writes the board would adjudicate the human-owned verdict (ADR-0077) |
-
-| Check | Status | Enforcement level |
-|---|---|---|
-| C001 unique-ids · C003 verify-with · C004 one-strength-word · C005 non-goals · C006 open-questions · C007 no-tbd-at-ready · C008 sources-named · C009 broken-source-link | shipped | toolable |
-| C002 duplicate-id · C012 coverage · C013 verify-evidence-binding · C014 do-not-change-touched · C015 citation-resolves | shipped | toolable |
-| C016 pass-needs-evidence · C017 orphaned-reference — minted at contract 0.9.0 (ADR-0097); C016 BLOCKS an empty-Evidence Pass in the `swarm check <review>` gate path (hard error), the reconcile path surfaces it advisorily; C017 flags a bundled skill reference no `SKILL.md` names | shipped | toolable |
-| review-packet evidence rules — a Pass needs evidence (C016), an empty cell reads Unverified, no open-critical at terminal, out-of-scope edits route to human attention (`swarm review`) | shipped | toolable |
-| C010 preserves-refs-resolve · C011 waves-present (change plan) | shipped | toolable |
-| oversized-packet (size band) | specified-not-shipped — measured ~15% FP, deferred (ADR-0097); diff size surfaces as neutral info in `swarm review` instead | — |
-| `format: sol` routing | partial — the plain two-tier form is parsed and checked; a `format: sol` spec is read as plain today, and the strict SOL parser is a follow-up | toolable |
-| prose writing-rules watchlist | advisory — flagged for review, never blocking (bounded precision) | checklist |
-| architecture enforcement (a dependency / module-boundary linter) | non-goal | — (a team binds its own tool via a `CONSTRAINT` + the `static` verify method) |
-
-The design sketch below describes the fuller envisioned surface; the shipped CLI consolidates some
-of it (e.g. `swarm new <task|spec>` covers spec/task creation, `swarm check` covers spec checking).
-Treat the matrix above as the status of record.
+Every check is **toolable**: it becomes **enforced** only in an adopting repo that wires the kit's
+commit/CI hooks, where the team's gate (or the agent CLI's hook runtime) enforces — never "Swarm
+enforcing." The checks themselves (C001–C017, the review-packet evidence rules) are defined in
+[checks.md](checks.md).
 
 swarm-cli is a **reconcile-only harness** (ADR-0077): it prepares, launches, and reconciles agent
 runs against declared intent; it never performs the coding loop. Each command earns its place by
@@ -58,35 +34,27 @@ an agent, what state changes, and what to do next — *and* by being a well-beha
 part. A command that cannot answer all five, or that only makes sense inside the full loop, does
 not belong in the set.
 
-## The command set
+## Not in the set
 
-| Command | One line | Status |
-|---|---|---|
-| `swarm init` | scaffold a workspace from the starter kit | shipped |
-| `swarm update [--check\|--write]` | check kit drift (read-only), or refresh the kit-owned guidance conflict-safely | shipped |
-| `swarm check [file]` | check a spec against the checks catalogue, or render the workspace verdict | shipped |
-| `swarm new <task\|spec>` | scaffold a spec from the template, or cut a task packet from a spec | shipped |
-| `swarm worktree` | create / list / remove / prune the task's worktree and branch | shipped |
-| `swarm status` | print the derived workboard | shipped |
-| `swarm review <task>` | reconcile a finished run from the diff and the task | shipped |
-| `swarm show <task\|spec\|review\|checks>` | project a parsed artifact as JSON (read-only; feeds swarm-mcp) | shipped |
-| `swarm pull <ticket>` | snapshot an external ticket into `intake/` (verbatim where fetchable, never a spec) | shipped |
-| `swarm promote <task>` | scaffold a candidate finding from a finished task (`from:` pre-filled, no learning, no board) | shipped |
-| `swarm run <task> --agent <name>` | launch a prepared task on a configured agent in its worktree, record the launch | shipped |
-| `swarm agents emit --codex` | generate Codex TOML from the swarm-agents definitions (prose discipline ports; enforcement does not) | shipped |
-| `swarm close <task>` (board-mutating) | the finding scaffold ships as `swarm promote`; the board-mutating close is parked | non-goal |
-| `swarm inventory new <slug>` | start an inventory for brownfield work | envisioned (no wave in the current program) |
-| `swarm change new <slug>` | start a change plan | envisioned (no wave in the current program) |
+Three dispositions, each a decision rather than a backlog position:
 
-The shipped set needs no agent execution at all — pure file preparation and checking, useful on day
-one and testable without any model — and now includes the two boundary-safe prepare verbs `swarm pull`
-(intake snapshot) and `swarm promote` (a finding scaffold), plus the launch verb **`swarm run --agent`**
-(M1: launch a prepared task on a configured agent in its worktree and record the launch envelope; the
-agent-stream normalization is a follow-up). The board-mutating `swarm close` is a **non-goal** — parked
-behind the open DECIDE #1.2 (ADR-0084), the board stays hand-edited. `swarm inventory new` and
-`swarm change new` are **envisioned** — the sketch shows the fuller brownfield surface, but no wave in
-the current program builds them. Hook generation and per-task cost attribution are **planned** too (the
-MCP server already **shipped** as `swarm-mcp`, [ADR-0085](../adrs/0085-swarm-mcp-adapts-the-json-contract.md)); see the matrix above for each item's status.
+- **Non-goals — never built, by design.** A board-mutating close (a `status.md`-mutating `swarm
+  close`) — the board stays hand-edited; a CLI that writes it would adjudicate the human-owned verdict
+  ([ADR-0077](../adrs/0077-swarm-cli-reconcile-only-harness.md) / ADR-0084). `compile`,
+  `lower`/`decompose`, `graph` — Swarm generates no code from a spec and splits no spec into tasks
+  (judgment work). Architecture enforcement — a team binds its own linter via a `CONSTRAINT` + the
+  `static` verify method. The finding scaffold ships instead as the boundary-safe `swarm promote`.
+- **Deferred — specified, built on demonstrated demand, not to fill a roadmap.** `swarm inventory new`
+  (the brownfield inventory scaffold — change-plan scaffolding already ships as `swarm new
+  change-plan`), per-adapter hook generation (the
+  toolable→enforced bridge, below), the run-record `commands[]` field + `swarm review` reading it (the
+  launch envelope, the delegation-provenance block, and `changed_files` already ship — ADR-0088), the
+  strict `format: sol` parser (the plain two-tier form ships; a SOL spec is read as plain today), and
+  per-task cost attribution (a `swarm-*` plugin, not core). The evidence to date prioritizes the
+  review-gate reconcile over generation volume, so these wait for the demand that justifies them.
+- **Measured and dropped.** The oversized-packet size band — measured ~15% false-positive on real
+  task diffs, so the band is specified-not-shipped and the diff size surfaces as neutral info in
+  `swarm review` instead ([ADR-0097](../adrs/0097-mint-c016-c017-defer-oversized.md)).
 
 ## Composable parts: standalone and Swarm-composed
 
@@ -110,7 +78,7 @@ maximally valuable together*:
   read-model). `cost` and `notify` ship as `swarm-*` plugins, not core.
 - **The workspace composes them** into the loop: one command's `--json` output is the next's input
   (`swarm check`'s diagnostics → `swarm new`'s scope → `run`'s launch envelope → `review`'s coverage
-  rows → `close`'s gate). Each still runs alone.
+  rows → the human's by-hand close). Each still runs alone.
 
 The two capabilities Swarm owns that the field leaves open — both depending on the task packet's
 **declared scope** — are **deterministic coverage / executable-criteria checking** (`swarm check`)
@@ -169,23 +137,6 @@ Spec and task creation are consolidated under one verb, `swarm new <task|spec>`;
   gate in [checks.md](checks.md)).
 - **Next:** fix the gaps; `swarm new task` once clean.
 
-### `swarm inventory new <slug> [--agent <name>]` — envisioned (no wave in the current program)
-
-- **Reads:** `templates/inventory.md`; with `--agent`, the code area being mapped.
-- **Writes:** `inventory/<slug>.md`. An agent may draft the module/interface/behavior tables;
-  the draft is reviewed before a change plan trusts it.
-- **Runs an agent?** Optional, draft-only.
-- **State change:** the terrain for a structural change is mapped.
-- **Next:** `swarm change new`.
-
-### `swarm change new <slug>` — envisioned (no wave in the current program)
-
-- **Reads:** `templates/change-plan.md`; the inventory, audit, or spec it cites.
-- **Writes:** `change-plans/<slug>.md` with sources and preservation rows pre-linked.
-- **Runs an agent?** No.
-- **State change:** a planned transformation exists with preservation guarantees to review against.
-- **Next:** `swarm new task --from CHANGE-<slug>` per wave.
-
 ### `swarm new task --from <SPEC-id | CHANGE-id> [--scope AC-…]`
 
 The task form of `swarm new <task|spec>`.
@@ -240,7 +191,8 @@ The task form of `swarm new <task|spec>`.
   the review result (Pass / Fail / Unverified / Blocked) is a human decision, and an empty
   Evidence cell still reads Unverified, never Pass. The CLI routes exceptions; it never adjudicates.
 - **State change:** the diff has a review packet a human can inspect by exception.
-- **Next:** a human works the Human attention list; then `swarm close` (planned).
+- **Next:** a human works the Human attention list, then closes by hand — `swarm promote` scaffolds
+  any finding; the board edit is the human's (no board-mutating `swarm close`, see *Not in the set*).
 
 ### `swarm status`
 
@@ -254,60 +206,24 @@ The task form of `swarm new <task|spec>`.
 - **State change:** none.
 - **Next:** whatever the board shows red.
 
-### `swarm close <task>` — planned (the board-mutating close is a non-goal)
+## Example sequence (shipped commands only)
 
-- **Reads:** the task and its review packet.
-- **Writes:** prompts for findings (the Close rule: record anything durable before closing —
-  see [memory.md](memory.md) for what "resolved" means); removes the worktree and the
-  `.swarm/work/` record; optionally appends a ledger entry (below). The findings scaffold and
-  cleanup are the planned part; the board stays hand-edited — a `status.md`-mutating close is the
-  parked non-goal (per the matrix), since writing the board would adjudicate the human-owned verdict.
-- **Runs an agent?** No.
-- **State change:** the task is closed, its lessons saved, its scratch gone.
-- **Next:** done — or the follow-up task the review demanded.
-
-## Deferred verbs
-
-These are deliberately not in the set. Each has a reason, not just a backlog position.
-
-| Verb | Why deferred |
-|---|---|
-| `compile` | Swarm is not a compiler; nothing is generated from a spec. |
-| `lower` / `decompose` | splitting a spec into tasks is judgment work; the discipline lives in [advanced-lifecycle.md](advanced-lifecycle.md), not a command |
-| `graph` | dependency/coverage visualization — a luxury after the basics work |
-| `checks` | a fixture-running checker beyond `swarm check`; the fixtures already serve as swarm-cli's test data |
-| `trace validate` | checking an agent's run summary against the actual diff folds into `review` drafting first |
-
-## Example sequences
-
-These show the full envisioned loop. Shipped steps use their shipped names; `swarm close` is
-planned (the board-mutating close parked) and `swarm inventory new` / `swarm change new` are
-envisioned (no wave in the current program) — see the matrix and contracts above for each step's
-status.
+The loop end to end, using only what ships. The Close step is the human's: record any durable
+finding (`swarm promote` scaffolds one), then hand-edit the board and remove the worktree — there is
+no board-mutating `swarm close` (see *Not in the set*). The brownfield path (inventory → change plan →
+per-wave tasks) runs the same way by hand; its discipline is [advanced-lifecycle.md](advanced-lifecycle.md).
 
 ```text
-# Feature                                     # Bug
-swarm pull JIRA-123                           swarm pull GH-456
-swarm new spec checkout-discounts \           swarm check specs/payments/spec.md
-  --from intake/jira/JIRA-123.md              swarm new task --from SPEC-payments --scope AC-007
-swarm check specs/checkout-discounts/…        swarm worktree create TASK-payment-5xx
-swarm new task --from SPEC-checkout-discounts swarm run TASK-payment-5xx --agent opencode
-swarm worktree create TASK-checkout-discounts swarm review TASK-payment-5xx
-swarm run TASK-checkout-discounts \           swarm close TASK-payment-5xx
-  --agent claude
+# Feature                                       # Bug
+swarm pull JIRA-123                             swarm pull GH-456
+swarm new spec checkout-discounts \             swarm check specs/payments/spec.md
+  --from intake/jira/JIRA-123.md                swarm new task --from SPEC-payments --scope AC-007
+swarm check specs/checkout-discounts/…          swarm worktree create TASK-payment-5xx
+swarm new task --from SPEC-checkout-discounts   swarm run TASK-payment-5xx --agent opencode
+swarm worktree create TASK-checkout-discounts   swarm review TASK-payment-5xx
+swarm run TASK-checkout-discounts --agent claude  # human closes: promote a finding, edit the board
 swarm review TASK-checkout-discounts
-swarm close TASK-checkout-discounts
-```
-
-```text
-# Refactor (structural, behavior-preserving)  # Brownfield rewrite
-swarm inventory new billing-module            swarm inventory new legacy-auth
-swarm change new billing-split                # audit written by hand or agent
-swarm new task --from CHANGE-billing-split    swarm new spec auth-v2
-swarm worktree create TASK-billing-wave-1     swarm change new auth-cutover
-swarm run TASK-billing-wave-1 --agent codex   swarm new task --from CHANGE-auth-cutover   # per wave
-swarm review TASK-billing-wave-1              # …then worktree / run / review / close per task
-swarm close TASK-billing-wave-1
+# human closes: promote a finding, edit the board
 ```
 
 ## Local state in a code repo: the gitignored `.swarm/` directory
@@ -468,5 +384,5 @@ specs — only a surface explicitly marked `generated` is emitted, and only from
 - [checks.md](checks.md) — the catalogue `swarm check` implements, with the hard-error/warning split.
 - [structured-requirements.md](structured-requirements.md) — the requirement record swarm-cli parses a spec into (tool-internal; optional `--json`).
 - [advanced-lifecycle.md](advanced-lifecycle.md) — the full lifecycle behind the deferred `lower`/`decompose` verbs.
-- [memory.md](memory.md) — findings, promotion, and the ledger entry `swarm close` may append.
+- [memory.md](memory.md) — findings, promotion (`swarm promote`), and the Close-step discipline.
 - [artifact-formats.md](artifact-formats.md) — the markdown artifacts every command reads and writes.

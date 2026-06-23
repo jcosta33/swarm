@@ -24,8 +24,8 @@ The rule in one line: **Swarm core stays generic; product-specific predicates li
 a team owns.** A local script that emits Swarm-shaped evidence is welcome and idiomatic — what is
 forbidden is implying its predicate is part of Swarm core, or that Swarm enforces it. Swarm
 deliberately ships no domain-specific check; a team binds its own tool through a `Verify with:`
-command or a `CONSTRAINT` with the `static` verify method (see the non-goals in the
-[capability matrix](future-cli.md)).
+command or a `CONSTRAINT` with the `static` verify method (see *Not in the set* in the
+[CLI reference](future-cli.md)).
 
 ## Writing local checks without overclaiming
 

@@ -85,8 +85,9 @@ Hand your coding agent this prompt:
 ## 3. CLI adoption
 
 `swarm init` does the above mechanically — it scaffolds the workspace into a new or existing repo,
-conflict-safe. The reference CLI is optional (the markdown workflow never requires it); what ships
-today vs. later is the [capability matrix](reference/future-cli.md).
+conflict-safe. The reference CLI is optional (the markdown workflow never requires it); its design,
+boundary, and what is deliberately not in the set are in the [CLI reference](reference/future-cli.md)
+(the live command list is the CLI's own catalogue).
 
 It auto-detects its layout by directory emptiness: an **empty** dir (a fresh `git init` with no
 committed files counts as empty) gets the full **workspace** layout — `templates/`, `specs/`, `tasks/`,

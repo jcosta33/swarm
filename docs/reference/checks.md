@@ -8,9 +8,9 @@ watchlist**, and the **SOL check catalogue** for specs that opt into structured 
 (`format: sol`). Reviewers use it as a checklist; tools build against it.
 
 Reference implementation: **`swarm check` in swarm-cli**. Wherever this page says a check is
-_toolable_, that is the tool meant. This page is the contract — what a correct checker reports;
-which parts the reference CLI ships today, and the still-partial `format: sol` routing, are tracked
-in the [capability matrix](future-cli.md).
+_toolable_, that is the tool meant. This page is the contract — what a correct checker reports; the
+reference CLI's design + boundary (and the still-partial `format: sol` routing) is the
+[CLI reference](future-cli.md); its live command set is the CLI's own catalogue.
 
 ## The honesty legend
 

@@ -7,8 +7,9 @@ closing a task, record anything durable as a finding
 ([09-saving-findings.md](../09-saving-findings.md), template:
 [`finding.md`](https://github.com/jcosta33/swarm-starter-kit/blob/main/templates/finding.md)). For most teams that is the whole system.
 This page is for teams that outgrow it. Everything here is convention — nothing in this
-repository enforces it; the only named future check is swarm-cli's `swarm close` prompting for
-unresolved findings.
+repository enforces it; the finding scaffold ships as swarm-cli's `swarm promote`, and the Close
+gate (no item left `pending`) is a review-checklist item the human confirms by hand — a
+board-mutating `swarm close` is a non-goal.
 
 You have outgrown the core when grep stops being recall: dozens of findings nobody re-reads,
 agents re-deriving facts a finding already states, the same term meaning two things in two specs,
@@ -80,8 +81,9 @@ indexed home. Each discovery a task surfaces becomes a queue item and resolves t
 | `rolled-back` | promoted earlier, withdrawn later via a retraction entry |
 
 **The close gate: a task does not close while any item is `pending`.** This is a review
-checklist item — the reviewer checks the task's Findings section resolved every discovery —
-and toolable: a future `swarm close` (swarm-cli) prompts for unresolved items. Two corollaries:
+checklist item — the reviewer checks the task's Findings section resolved every discovery — that
+the human confirms before closing by hand (`swarm promote` scaffolds any finding; there is no
+board-mutating `swarm close`). Two corollaries:
 
 - **No silent drops.** "Keep it in the task only" is a real resolution — `rejected`, with the
   reason written down — never a quiet omission.
@@ -157,13 +159,13 @@ new entry referencing the one it amends, so the truth is the chain, not the late
 every field is **compacted from artifacts that already exist** (task packets, review packets,
 the promotion queue), so it introduces no new evidence. Once a task's load-bearing content is in
 the ledger, the task and review scratch may be archived or dropped; the committed findings,
-ledger, specs, and decisions are what a team never throws away. A future `swarm close`
-(swarm-cli) may append these entries automatically; today a team that wants a ledger writes the
-entry by hand at Close.
+ledger, specs, and decisions are what a team never throws away. A team that wants a ledger writes
+the entry by hand at Close — a board/ledger-mutating `swarm close` is a non-goal (it would
+adjudicate the human-owned verdict); `swarm promote` scaffolds the finding, the human records the rest.
 
 ## Related
 
 - [09-saving-findings.md](../09-saving-findings.md) — the core findings workflow this page extends.
 - [`finding.md`](https://github.com/jcosta33/swarm-starter-kit/blob/main/templates/finding.md) · [`status.md`](https://github.com/jcosta33/swarm-starter-kit/blob/main/templates/status.md) — the frozen formats; the board's Human attention list tracks findings pending acceptance.
-- [future-cli.md](future-cli.md) — the `swarm close` findings prompt and optional ledger entry.
+- [future-cli.md](future-cli.md) — the CLI's design + boundary (the finding scaffold ships as `swarm promote`; a board-mutating close is a non-goal).
 - [drift.md](drift.md) — the wider drift model the staleness signal belongs to.
