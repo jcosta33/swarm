@@ -11,9 +11,9 @@ updated: 2026-06-13
 ## Context
 
 ADR-0069 kept the kit inside this repo "until public launch" so format edits stayed one-repo
-commits; ADR-0074 split the producer workspace (corpus-hq) and the optional guides
+commits; ADR-0074 split the producer workspace (corpus-works) and the optional guides
 (corpus-skills) out, tiering all twelve advanced guides into the catalog. Two corrections from
-the owner followed. First, the kit split's precondition is gone: with the workspace in corpus-hq
+the owner followed. First, the kit split's precondition is gone: with the workspace in corpus-works
 cutting and reviewing every change, a format edit is already a reviewed cross-repo operation,
 and the family's repos exist. Second, ADR-0074's tier line was drawn in the wrong place: the
 workspace authoring guides (`write-audit`, `write-research`, `write-rfc`, `write-prd`,
@@ -56,11 +56,11 @@ stances + code depth in the catalog), ADR-0069 (the workspace shape stands; the
 defer-to-launch clause is executed; the kit-skill-surfacing note retires with the nested
 copy), ADR-0073 (the kit repo joins the governed family as derived content), and ADR-0074
 (Decision 2's tier line moves: workspace authoring guides are kit content, not catalog
-content). Cost accepted: a format change is a two-repo change, mitigated by corpus-hq review.
+content). Cost accepted: a format change is a two-repo change, mitigated by corpus-works review.
 
 ## Propagation
 
 AGENTS.md, README, docs/01/02/03/04/05/06/08/09/10, ADOPTING, examples ×3,
 reference/{artifact-formats, cheatsheet, memory, step-bars, review-stances, agent-guides,
 advanced-lifecycle}, checks/README, SKILLS-MANIFEST, ledger row; corpus-cli's scaffold resync;
-corpus-hq pointer updates.
+corpus-works pointer updates.

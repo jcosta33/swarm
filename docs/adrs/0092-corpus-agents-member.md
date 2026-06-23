@@ -18,7 +18,7 @@ updated: 2026-06-23
 
 ADR-0088 froze the delegation-provenance contract and shipped two producers; a `corpus-reviewer` probe
 and the producer-2 hook landed as experimental tenants in `corpus-starter-kit/advanced/.claude/`.
-corpus-hq #43 left the standalone `corpus-agents` repo on a **do-not-found hold**
+corpus-works #43 left the standalone `corpus-agents` repo on a **do-not-found hold**
 ([FINDING-delegation-provenance-measurement]) gated on (1) **≥2 _demonstrated_ runner projections** and
 (2) **measured per-role value**.
 
@@ -90,6 +90,6 @@ ADR-0088 remains the contract of record; only its producer-2 _destination_ is su
 
 `corpus/docs/adrs/README.md` (the index row) · `corpus-starter-kit/advanced/README.md` (redirect to
 `corpus-agents`; remove the promoted probe) · `../corpus-agents/` (the new member: agents, hooks,
-docs) · `corpus/CLAUDE.md` + `../corpus-hq/CLAUDE.md` (governed-repos list) · `../corpus-hq/status.md`
-(board) · the corpus-hq workspace cuts/reviews the build waves ([specs/corpus-agents/spec.md]). No
+docs) · `corpus/CLAUDE.md` + `../corpus-works/CLAUDE.md` (governed-repos list) · `../corpus-works/status.md`
+(board) · the corpus-works workspace cuts/reviews the build waves ([specs/corpus-agents/spec.md]). No
 `checks.yaml` change (convention-first).

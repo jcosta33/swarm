@@ -17,7 +17,7 @@ and **no requirement id is reused across specs** — the second clause was meant
 question of whether requirement ids should be globally unique or spec-scoped … left to a future
 decision if revisited."
 
-Dogfooding the reference CLI surfaced the answer. `corpus check` over the corpus-hq workspace is red
+Dogfooding the reference CLI surfaced the answer. `corpus check` over the corpus-works workspace is red
 with ~29 cross-spec C002 findings, because every spec naturally numbers its requirements from
 `AC-001` and the kit's `corpus new spec` scaffold mints `AC-001` for each new spec — so any two
 non-draft specs collide through no author fault, and the gate (the product's wedge) reds against its
@@ -52,7 +52,7 @@ the deletion of the cross-spec requirement-id pass in the reference implementati
 
 ## Consequences
 
-- `corpus check` greens against the corpus-hq dogfood workspace; the cross-spec C002 findings clear, and
+- `corpus check` greens against the corpus-works dogfood workspace; the cross-spec C002 findings clear, and
   every spec (and the `corpus new spec` scaffold) can number from `AC-001` without coordination.
 - A bare `AC-001` quoted without its spec is now ambiguous by design — readers and tools carry the
   source-spec binding, which tasks, reviews, and C012 already require. Cross-spec references use

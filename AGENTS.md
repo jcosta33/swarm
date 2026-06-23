@@ -22,7 +22,7 @@ anything described as checkable names its checker (the reference implementation 
 
 ## Corpus workspace
 
-Corpus workspace: `../corpus-hq` (the family's multi-repo workspace). Specs, tasks, reviews,
+Corpus workspace: `../corpus-works` (the family's multi-repo workspace). Specs, tasks, reviews,
 findings, audits, and the board for changes to this repo live there — read the task packet you
 are given. Accepted framework decisions still land here, in `docs/adrs/`.
 
@@ -57,12 +57,12 @@ are given. Accepted framework decisions still land here, in `docs/adrs/`.
   the kit repo's `templates/` (`../corpus-starter-kit`) — everything else links, never
   restates. A rule lands in `docs/` first; the kit repo, the corpus-skills catalog, and the
   dev skills derive from it (a format change is a two-repo change, cut and reviewed from
-  corpus-hq).
+  corpus-works).
 
 ## Pointers
 
 - Decisions: `docs/adrs/README.md` (0001–0098; 0057+ are the current architecture, 0094–0098 the latest)
-- Workspace (specs, audits, plans, board): `../corpus-hq`
+- Workspace (specs, audits, plans, board): `../corpus-works`
 - The starter kit: `../corpus-starter-kit` (github.com/jcosta33/corpus-starter-kit)
 - Optional guide catalog: `../corpus-skills` (github.com/jcosta33/corpus-skills)
 - Claude Code agent catalog: `../corpus-agents` (github.com/jcosta33/corpus-agents — ADR-0092;
@@ -75,7 +75,7 @@ are given. Accepted framework decisions still land here, in `docs/adrs/`.
 
 | Slot | Command | Resolves                                                                                                |
 | ---- | ------- | ------------------------------------------------------------------------------------------------------- |
-| —    | (none)  | markdown-only repo; coherence is checked by review (the corpus-hq workspace cuts and reviews the tasks) |
+| —    | (none)  | markdown-only repo; coherence is checked by review (the corpus-works workspace cuts and reviews the tasks) |
 
 ## Workflow
 

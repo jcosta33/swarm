@@ -10,7 +10,7 @@ updated: 2026-06-13
 
 ## Context
 
-RFC-corpus-cli-vision (`corpus-hq/specs/corpus-cli-vision/rfc.md`, accepted by the owner 2026-06-13)
+RFC-corpus-cli-vision (`corpus-works/specs/corpus-cli-vision/rfc.md`, accepted by the owner 2026-06-13)
 proposed a direction for corpus-cli, grounded in a six-lens deep-research survey (~120 sources,
 `research.md`). Three pressures forced the decision: corpus-cli's on-paper design (in-repo specs
 001, 005–009) is **SOL-era** and predates the practical-first repositioning; the agentic-CLI
@@ -121,7 +121,7 @@ line are the reconciliation substrate the run/review commands fill). **Re-baseli
 corpus-cli specs (001, 005–009)**: `worktree`/`check`/`promote` survive as Layer-1/2 commands;
 001's SOL-compiler framing and the SOL-`ir.json` substrate are superseded; new specs are cut per
 phase (M1 standalone parts → M2 launch/reconcile → M3 supercharge). The RFC + research are the
-recorded inputs in corpus-hq. corpus-cli's existing internal `Sol` IR (`buildIr`) is exactly the
+recorded inputs in corpus-works. corpus-cli's existing internal `Sol` IR (`buildIr`) is exactly the
 tool-internal structure Decision 6 endorses — no artifact, kept.
 
 ## Propagation
@@ -130,5 +130,5 @@ tool-internal structure Decision 6 endorses — no artifact, kept.
 
 - `docs/reference/advanced-lifecycle.md` (reword the "reserved machine format" phrasing to
   tool-internal/`--json`), ledger row, RFC → accepted + its `spec.ir.json` references softened,
-  corpus-hq board + the SOL-era spec dispositions. No corpus-cli code change in this decision (the
+  corpus-works board + the SOL-era spec dispositions. No corpus-cli code change in this decision (the
   phase specs drive that).

@@ -10,7 +10,7 @@ updated: 2026-06-16
 
 ## Context
 
-Field feedback (corpus-hq issue #5) asked for a "Platform Constraints & Hazards" forcing-function
+Field feedback (corpus-works issue #5) asked for a "Platform Constraints & Hazards" forcing-function
 section so platform research — quota, permissions, rate limits, runtime/sandbox constraints — is
 done _before_ the acceptance criteria, when it's cheap, rather than discovered mid-build. The
 question was whether to add a section, and to which artifact at which tier.

@@ -11,7 +11,7 @@ updated: 2026-06-22
 ## Context
 
 Corpus exists for the review step, but the canon under-stated _what review is for_ and _how to
-weight it_. A web-verified evidence pass (corpus-hq #52; sources below, each verified June 2026 with
+weight it_. A web-verified evidence pass (corpus-works #52; sources below, each verified June 2026 with
 honest tiers) settles five framing questions — and corrects two of the issue's own framings.
 
 - **Review's primary payload is the maintainability/design layer tests cannot reach.** Roughly 75%

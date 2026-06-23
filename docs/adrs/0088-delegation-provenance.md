@@ -19,7 +19,7 @@ was filtered, what tools it held, whether it could edit, what evidence it return
 `changed_files[]/commands[]` stream is the deferred D1 item), and **in-session subagents — spawned by
 the parent through the runner's own Agent tool — never touch the CLI at all**.
 
-corpus-hq #43 (the corpus-agents exploration) identified a reviewable delegation trace as the
+corpus-works #43 (the corpus-agents exploration) identified a reviewable delegation trace as the
 genuinely-new, agent-neutral contribution a `corpus-agents` member would make.
 `RFC-delegation-provenance` argued the approach; this ADR freezes the contract.
 
@@ -89,5 +89,5 @@ until a future gate decides otherwise.
 `docs/reference/future-cli.md` (the run-record `provenance` block references this contract) ·
 `docs/adrs/README.md` (the index row) · `corpus-cli` (`corpus run` run-record extension — producer 1,
 `CHANGE-delegation-provenance` W2) · `../corpus-starter-kit/advanced/` (the Claude Code hook recipe —
-producer 2, W3). No `checks.yaml` change (convention-first). The corpus-hq workspace cuts and reviews the
+producer 2, W3). No `checks.yaml` change (convention-first). The corpus-works workspace cuts and reviews the
 producer tasks.

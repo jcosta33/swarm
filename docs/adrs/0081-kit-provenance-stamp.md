@@ -11,7 +11,7 @@ updated: 2026-06-16
 ## Context
 
 The kit is adopted by copying it whole, so it can never be _pushed_ to — an adopter silently drifts
-from the latest kit with no local signal that their copied files are stale (corpus-hq issue #12).
+from the latest kit with no local signal that their copied files are stale (corpus-works issue #12).
 ADR-0015 once defined a version marker; ADR-0050 §6 **dropped** it, on the sole ground that "nothing
 reads it in a no-runtime world." That premise is now false: corpus-cli reads the workspace (ADR-0077),
 and `corpus init` already exists as the natural place to stamp a copied version.

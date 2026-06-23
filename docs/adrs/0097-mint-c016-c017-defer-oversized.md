@@ -10,9 +10,9 @@ updated: 2026-06-22
 
 ## Context
 
-The goal-run backlog clearance (corpus-hq #61 §B) left three review/workspace checks _specified-not-shipped_
+The goal-run backlog clearance (corpus-works #61 §B) left three review/workspace checks _specified-not-shipped_
 in their ADRs: the **pass-needs-evidence** gate gap (the verified B2 defect — `corpus check <review>`
-never evaluated an empty-Evidence Pass cell, corpus-hq #50), the **orphaned-reference** skill check
+never evaluated an empty-Evidence Pass cell, corpus-works #50), the **orphaned-reference** skill check
 (ADR-0096-adjacent, #45), and the **oversized-packet** heuristic (ADR-0094). The owner directed
 building the deferred backlog with **measure-before-ship** ([ADR-0086](./0086-deterministic-review-scanning-decision.md)/[ADR-0087](./0087-citation-anchor-check.md):
 0 false-positives on the real corpus + fires on a seeded fixture, ≤10% effective-FP per
@@ -38,7 +38,7 @@ which `checks.yaml` already pinned `hard-error` but no shipped path honored — 
   predicate (`pass_rows_missing_evidence`), two surfaces, so they can never disagree on what counts.
 - The split (gate blocks, reconcile informs) is deliberate: the two commands serve different jobs.
 - **Measured:** 0 empty-Evidence Pass rows across the real reviews (`checks/fixtures/*/review.md` +
-  corpus-hq `reviews/`) — 0-FP on conformant reviews; fires on the seeded empty-evidence fixture.
+  corpus-works `reviews/`) — 0-FP on conformant reviews; fires on the seeded empty-evidence fixture.
 
 ### C017 `orphaned-reference` — minted, **warning** (the workspace path)
 
@@ -51,7 +51,7 @@ A bundled `.agents/skills/<name>/references/<file>` whose filename is named **no
   references is never flagged.
 - A workspace-scope warning (like C002), self-guarding (empty when there is no `.agents/skills/` dir).
 - **Measured:** **6 bundled reference files** across the real `.agents/skills/` corpus the check
-  walks (corpus-hq ×3, corpus-starter-kit ×2, corpus ×1; `task-template.md`, `research-methodology.md`,
+  walks (corpus-works ×3, corpus-starter-kit ×2, corpus ×1; `task-template.md`, `research-methodology.md`,
   `evasions.md`) — **0 orphans**, under both the shipped lenient match and a stricter linked-context
   check. (An earlier sweep reported 88 by globbing `.worktrees/*/.claude/skills/` transient
   worktree copies the check never scans — corrected here to the reproducible in-scope count.) 0-FP;
@@ -65,7 +65,7 @@ A bundled `.agents/skills/<name>/references/<file>` whose filename is named **no
 deferred** — the measure-before-ship discipline working as intended:
 
 - Measuring per-commit diffs across the repos where tasks land (last 40 commits each, generated/vendored
-  excluded): the corpus-hq docs corpus maxes at 539 LOC / 9 files, but **code** task diffs are much
+  excluded): the corpus-works docs corpus maxes at 539 LOC / 9 files, but **code** task diffs are much
   larger — corpus-cli has 6 of 40 commits over 600 LOC (615, 713, 843, 997, 1059, 1199), and the 615-LOC
   one is a coherent feature-with-tests, **not** an oversized packet that needed splitting.
 - At a 600-LOC band that is **≈15% effective-FP** on real code work — above the ≤10% ceiling. A band

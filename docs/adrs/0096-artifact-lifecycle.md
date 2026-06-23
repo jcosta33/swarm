@@ -11,7 +11,7 @@ updated: 2026-06-22
 ## Context
 
 After hundreds of specs over years, do review files live forever? How do artifacts coexist and stay
-findable? A web-verified evidence pass (corpus-hq #54; sources below, each verified June 2026 with
+findable? A web-verified evidence pass (corpus-works #54; sources below, each verified June 2026 with
 honest tiers) gives a principled lifecycle drawn from records-management and large-org documentation
 practice.
 
@@ -52,7 +52,7 @@ layer.
    **`corpus check` is _specified_ (toolable, in the spirit of C015): every `superseded_by` pointer
    resolves to an existing artifact, and the index lists it** — _named here, not shipped; the corpus-cli
    agent mints the contract entry + implementation_ (no `checks.yaml` change lands with this ADR, to
-   avoid contract/impl drift; tracked in corpus-hq #61 §B). _Level: convention now, toolable when the
+   avoid contract/impl drift; tracked in corpus-works #61 §B). _Level: convention now, toolable when the
    check ships._
 
 3. **Freshness + named ownership for durable artifacts** (convention). A durable spec/ADR/finding
@@ -86,7 +86,7 @@ superseded-by` keeps hundreds of artifacts navigable by search-over-a-flat-list.
 rules), `docs/research/sources.md` (the seven entries above), and the starter kit (an `archive/`
 convention + a board note on the supersede lifecycle / board-as-index — the kit board's `State`
 column carries status; the `superseded_by` pointer lives in the artifact's frontmatter). The `superseded_by`-resolves /
-index-lists `corpus check` is the toolable follow-up (corpus-hq #61 §B), not shipped by this ADR.
+index-lists `corpus check` is the toolable follow-up (corpus-works #61 §B), not shipped by this ADR.
 
 ## Update (2026-06-22) — the supersede/index check remains specified-not-shipped ([ADR-0097](./0097-mint-c016-c017-defer-oversized.md))
 

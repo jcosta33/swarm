@@ -17,8 +17,8 @@ adopter silently drifts from the latest kit. [ADR-0081](./0081-kit-provenance-st
 reads-filesystem/writes-nothing posture ([ADR-0077](./0077-corpus-cli-reconcile-only-harness.md)), a
 pinned constant goes stale, and a local-CHANGELOG compare is circular.
 
-That ground holds **only for `corpus check`**. corpus-hq #12 asked for the full update model, and a
-value panel (recorded in corpus-hq `FINDING-competitive-positioning-verified` /
+That ground holds **only for `corpus check`**. corpus-works #12 asked for the full update model, and a
+value panel (recorded in corpus-works `FINDING-competitive-positioning-verified` /
 `RESEARCH-feedback-signal-triage`) found the offline concern is real _for the hermetic check_, but an
 **explicit, network-touching `corpus update`** is a solved pattern (copier / cookiecutter+cruft).
 `corpus init` already resolves the kit by cloning it (or `--from`), so the network already lives in
@@ -65,7 +65,7 @@ to edit the generated files (AGENTS.md, the guides).
 (ADR-0081) gains its second reader. ADOPTING's upgrade guidance points at it. Reconcile-only is
 preserved (the verb reads + reports; it never writes or issues a verdict). The merge is a **recorded
 deferral with a gate** (demand + drift), not a silent omission. The honest manual upgrade path is
-unchanged for the once-copied adopter. corpus-cli spec + tasks live in corpus-hq (`specs/corpus-update/`).
+unchanged for the once-copied adopter. corpus-cli spec + tasks live in corpus-works (`specs/corpus-update/`).
 
 ## Update (2026-06-22) — the apply ships, but **not** as the 3-way merge
 

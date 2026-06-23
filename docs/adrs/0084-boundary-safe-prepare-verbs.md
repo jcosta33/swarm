@@ -10,7 +10,7 @@ updated: 2026-06-16
 
 ## Context
 
-The W1 surface map (`corpus-hq` AUDIT-corpus-cli-surface) passed the whole candidate corpus-cli surface
+The W1 surface map (`corpus-works` AUDIT-corpus-cli-surface) passed the whole candidate corpus-cli surface
 through the reconcile-only boundary (ADR-0077) and found exactly one boundary-eroding idea: a
 **`status.md`-mutating close** (a `corpus finish`/`corpus close` that flips a board row to a pass-like
 state). It crosses **ADR-0077 Decision 8** — the human owns the review result (Pass / Fail /
@@ -39,7 +39,7 @@ file from a finished task). They _prepare_ a new file; they read or derive no bo
    ADR-0077 D1's enumerated "gated close" to scaffold-only. _Level: convention (the hard line), an
    invariant a boundary regression test asserts (no Core use-case writes `status.md`)._
    **Reopen trigger:** write that ADR only on demonstrated **adopter demand for the review-gate
-   teeth** — generation-volume / convenience demand does not qualify (refuted; corpus-hq #1.2, and
+   teeth** — generation-volume / convenience demand does not qualify (refuted; corpus-works #1.2, and
    the #9/#11 measure-first verdict). This trigger is the durable home for the #1.2 decision; the
    GitHub feedback issue need not stay open as a separate tracker.
 
@@ -63,6 +63,6 @@ test** (no Core use-case writes `status.md`) makes the no-mutation property an i
 convention. Refines ADR-0077 (narrows the "gated close" clause wherever it appears — D1's reconcile
 list and D5's Supercharge list — to scaffold-only); does not re-open D8 (it reaffirms it).
 `future-cli.md`'s `pull`/`close`/`promote` rows converge accordingly (the CONT rider). The
-implementation is cut and reviewed from `corpus-hq` (SPEC-corpus-cli-m3-prepare). Negative: two more
+implementation is cut and reviewed from `corpus-works` (SPEC-corpus-cli-m3-prepare). Negative: two more
 commands to maintain. Neutral: a team that wants board mutation must wait for (or propose) the
 parked-close ADR.

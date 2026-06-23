@@ -15,9 +15,9 @@ each stance's _substance_ into the kit work guides (`write-spec` carries the arc
 `review-output` carries refute-by-default, `write-audit` carries observation-only, `write-research`
 the researcher stance, the documentation guide the documentarian stance). So five disciplines had
 **two carriers** — the folded form in the guide _and_ a standalone persona — and the substance had in
-practice drifted into a third copy (corpus-hq's dev-skill mirror), out of sync with the catalog.
+practice drifted into a third copy (the corpus-works dev-skill mirror), out of sync with the catalog.
 
-A deep-research pass (corpus-hq `specs/corpus-skills/research-personas-as-skills.md`) settled the
+A deep-research pass (corpus-works `specs/corpus-skills/research-personas-as-skills.md`) settled the
 principle. A persona's _identity_ does not systematically improve objective-task performance
 ([[ZHENG-PERSONA]](../research/sources.md#ZHENG-PERSONA)); role _framing_ helps only via the concrete
 directives it evokes ([[KONG-ROLEPLAY]](../research/sources.md#KONG-ROLEPLAY)) — directives that
@@ -44,7 +44,7 @@ redundant second carrier whose only reliable effect is drift.
 3. **The kept stances lead grounding-first.** Each opens with its evidence rule (re-run/paste/cite;
    "three named instances"; "an external referent"), not an identity or attitude line — the value is
    the directive, not the persona ([[SELFCORRECT]](../research/sources.md#SELFCORRECT)).
-4. **Single source.** corpus-skills is the canonical home of the kept stances; the corpus-hq dev-skill
+4. **Single source.** corpus-skills is the canonical home of the kept stances; the corpus-works dev-skill
    mirror re-syncs from it. The corpus repo's own `persona-documentarian` dev-skill is replaced by a
    pointer to the folded `write-documentation` discipline.
 
@@ -70,11 +70,11 @@ are unchanged in substance.
 Accepted. **Refines ADR-0042** (conditioning ships as standalone skills — now only for cross-cutting
 stances) and **ADR-0064** (catalog side; the kit-tiering decision is unchanged). Updates the
 `review-stances.md` "every stance also ships standalone" convention. Evidence:
-corpus-hq `specs/corpus-skills/research-personas-as-skills.md`.
+corpus-works `specs/corpus-skills/research-personas-as-skills.md`.
 
 ## Propagation
 
-corpus-skills (remove 4 dirs; reframe 3; README; docs/self-containment), corpus-hq (.agents dev subset;
+corpus-skills (remove 4 dirs; reframe 3; README; docs/self-containment), corpus-works (.agents dev subset;
 research note; board), corpus/.agents (documentarian dev-skill → pointer; SKILLS-MANIFEST),
 corpus/docs/reference (review-stances, agent-guides), corpus-agents (see-also repointing),
 corpus-website (`/skills` page). Sources added to `docs/research/sources.md`: ZHENG-PERSONA,

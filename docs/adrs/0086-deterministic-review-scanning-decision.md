@@ -63,7 +63,7 @@ change` entry is surfaced as a protected-path fact routed to Human attention. Th
 3. **ACCEPT the measurement track as the gating next investment.** A review-gate benchmark — precision _and_
    recall on a seeded corpus of scope-drift, do-not-change-touch, and claim-vs-diff cases — is the next
    investment, and it doubles as the real-world test of the `corpus review --json` surface the MCP adapter
-   consumes (ADR-0085). It is recorded here as committed-next; it is a program, cut as its own corpus-hq spec,
+   consumes (ADR-0085). It is recorded here as committed-next; it is a program, cut as its own corpus-works spec,
    not built by this ADR. _Level: convention._
 
 4. **DEFER behind a measure-first gate** (each earns a build only once the benchmark shows the review gate
@@ -136,7 +136,7 @@ Neutral: a team may treat the C014 warning as blocking by its own CI policy — 
 This refines ADR-0077 (D7 names deterministic review scanning as one of the two wedges; this names it as the
 _shipped_ one and holds D8's verdict-free boundary for C014). It builds on ADR-0079 (C012) and ADR-0083
 (C013) for the conservative-shipping + coordinated-landing pattern, and relates to the evidence-validated
-direction recorded in the corpus-hq workspace (the review-gate-teeth + measure-first track).
+direction recorded in the corpus-works workspace (the review-gate-teeth + measure-first track).
 
 ## Propagation
 
@@ -165,7 +165,7 @@ in lockstep.
   gains the verified entries cited above ([[GOOGLESA]](../research/sources.md#GOOGLESA),
   [[CODERABBIT-PRVAL]](../research/sources.md#CODERABBIT-PRVAL), [[QODO]](../research/sources.md#QODO),
   [[SARIF]](../research/sources.md#SARIF)).
-- **The measurement track and every deferred layer (Decisions 3–4)** are FUTURE — cut as their own corpus-hq
+- **The measurement track and every deferred layer (Decisions 3–4)** are FUTURE — cut as their own corpus-works
   specs, gated on the benchmark. This ADR builds none of them.
 
 Refines ADR-0077 (D7/D8); builds on ADR-0079, ADR-0083; honors ADR-0063 (honesty levels) and ADR-0060 (the

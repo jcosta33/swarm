@@ -11,7 +11,7 @@ updated: 2026-06-13
 ## Context
 
 Two codex stress runs on a real adopter (Promptly, a browser-extension app) and a kimi hostile
-read produced a corpus of field evidence (in `corpus-hq/specs/adoption-experience/` and
+read produced a corpus of field evidence (in `corpus-works/specs/adoption-experience/` and
 `specs/dx-remediation/`). CHANGE-adoption-experience cross-referenced every candidate against the
 current framework and, after its own refute-by-default adversarial review (20 findings, all
 confirmed), reduced the genuine, still-open, field-validated gaps to the set below. Two are

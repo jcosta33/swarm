@@ -12,7 +12,7 @@ updated: 2026-06-23
 
 [ADR-0092](./0092-corpus-agents-member.md) founded corpus-agents as a **Claude-Code-first**
 agent-definition catalog and held a portable layer behind a "do-not-found" gate (needs ≥2 runners
-demonstrating value). The prior deep-research survey (corpus-hq) found the gate's second-runner question
+demonstrating value). The prior deep-research survey (corpus-works) found the gate's second-runner question
 is now answerable: **OpenAI Codex** reads file-based agent definitions (`.codex/agents/*.toml`,
 `developer_instructions` + optional `model`), and **`AGENTS.md` is an open cross-tool format** read by
 Codex, Cursor, Copilot, Gemini CLI, and Aider. The owner directed building the portable layer now —

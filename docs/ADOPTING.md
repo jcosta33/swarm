@@ -8,15 +8,15 @@ copy plus one bootloader to fill. Three paths, in order of preference.
 ## 1. Manual adoption (one copy, ~15 minutes)
 
 Copy the kit whole from [`jcosta33/corpus-starter-kit`](https://github.com/jcosta33/corpus-starter-kit) —
-into a dedicated workspace repo, or a folder inside your project
+into a dedicated workspace repo named `<project>-works`, or a folder inside your project
 ([where files live](03-where-files-live.md)):
 
 ```sh
 # dedicated workspace repo (gh needs a visibility flag in non-interactive mode)
-gh repo create my-workspace --private --template jcosta33/corpus-starter-kit --clone
+gh repo create my-project-works --private --template jcosta33/corpus-starter-kit --clone
 # or clone and re-init without a remote:
-git clone https://github.com/jcosta33/corpus-starter-kit my-workspace \
-  && rm -rf my-workspace/.git && git -C my-workspace init
+git clone https://github.com/jcosta33/corpus-starter-kit my-project-works \
+  && rm -rf my-project-works/.git && git -C my-project-works init
 
 # or co-located inside your project
 git clone https://github.com/jcosta33/corpus-starter-kit /tmp/kit \
@@ -97,7 +97,7 @@ layout it chose. Re-running with `--workspace` over a prior footprint init upgra
 
 A code repo that implements against your specs needs **nothing**. At most:
 
-- a one-line pointer in its `AGENTS.md`: _"Corpus workspace: `<path-or-url>` — read the task packet you are given before coding"_;
+- a one-line pointer in its `AGENTS.md`: _"Corpus workspace: `../<project>-works` — read the task packet you are given before coding"_;
 - the `implement-task` guide copied into its skills directory;
 - the workspace's `.gitignore.additions` lines appended to its `.gitignore` (agent scratch and future CLI state — the _workspace_ commits its artifacts and needs none of it).
 

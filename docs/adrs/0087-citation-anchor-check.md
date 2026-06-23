@@ -12,7 +12,7 @@ updated: 2026-06-20
 
 "Citations are contextual" is a load-bearing project rule (CLAUDE.md): every load-bearing empirical claim
 cites a verified entry via the `[[KEY]]` form, linking the matching `<a id="KEY">` anchor in
-`docs/research/sources.md`. The 2026-06 adversarial audit (corpus-hq #29) found this rule had **no
+`docs/research/sources.md`. The 2026-06 adversarial audit (corpus-works #29) found this rule had **no
 checker**: `corpus check` validates a spec's frontmatter `sources:` paths (C009), but not its inline
 `[[KEY]]` citations. A real dangling citation — `[[FAROS2025]]` in `SPEC-review-gate-benchmark`, an
 anchor that does not exist in `sources.md` — passed `corpus check` clean and shipped. The rule's
@@ -46,7 +46,7 @@ measure-first gate ADR-0086 Decision 3 committed to, and the C014/ADR-0086 mint 
    "MUST-level claim," a larger surface that earns its own ADR.
 
 5. **Measured before shipping (the gate).** C015's precision is measured before it counts as shipped:
-   run it over the real corpus-hq specs (all citations valid after the #29 remediation) — it must produce
+   run it over the real corpus-works specs (all citations valid after the #29 remediation) — it must produce
    **zero** C015 warnings (0% effective-FP on real clean specs) — and over a seeded fixture with a
    dangling `[[KEY]]` — it must fire (recall). This is the v0 measurement; folding citation cases into
    the `corpus-bench` corpus is the richer follow-up.
@@ -72,7 +72,7 @@ measure-first gate ADR-0086 Decision 3 committed to, and the C014/ADR-0086 mint 
 Accepted: C015 ships measured (0% FP on real specs, fires on the fixture) and bumps the contract to
 0.8.0 across the two-repo set. The citation discipline is now toolable, not just a convention. Nothing
 is _enforced_ (a dangling citation never blocks a merge) until a gate wires `corpus check` to CI
-(corpus-hq #13/#10). Honors ADR-0077 D8 (a fact, never a verdict), ADR-0063 (toolable, never enforced),
+(corpus-works #13/#10). Honors ADR-0077 D8 (a fact, never a verdict), ADR-0063 (toolable, never enforced),
 and the single-sourcing rule. Refines ADR-0086 (closes the citation-validation gap it surfaced as #29).
 
 ## Propagation

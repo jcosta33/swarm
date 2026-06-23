@@ -50,5 +50,5 @@ docs/examples, README link, kit example (derived from feature-from-jira), confor
 >
 > **Ledger note (2026-06-22):** the happy-path example was genericized to a tracker-neutral name
 > — `feature-from-jira.md` → `feature-from-ticket.md` — and its Jira-specific framing dropped
-> (corpus-hq #58: work originates in any source, not a single tool). The three-example structure
+> (corpus-works #58: work originates in any source, not a single tool). The three-example structure
 > and ordering are unchanged; only the one example's filename and surface vocabulary moved.

@@ -350,7 +350,7 @@ by a packet whose `AC-001` Pass row carries a structured `verify` block (a fence
 
 **Expected:** flagged `cmd-mismatch` — the block's recorded `cmd` does not match the requirement's named
 Verify command. The comparison normalizes away surrounding backticks, a trailing `(parenthetical)` note,
-and whitespace, so the canon's own backtick-wrapped Verify-with form does **not** false-fire (corpus-hq
+and whitespace, so the canon's own backtick-wrapped Verify-with form does **not** false-fire (corpus-works
 #16); only a genuine disagreement trips it. A block whose `cmd` matches and reads `result=pass` is
 consistent → no finding; a Pass row with only the free-form Evidence cell stays a warning, never
 machine-rejected. A consistency fact, never a verdict.

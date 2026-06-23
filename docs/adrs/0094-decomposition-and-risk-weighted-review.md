@@ -19,7 +19,7 @@ actually look at. Two recurring questions had no grounded answer in the canon:
 2. **Where should review scrutiny concentrate?** Field reports framed it as "greenfield (lighter) vs
    brownfield (heavier)." That framing does not hold up against the evidence.
 
-A web-verified evidence pass (corpus-hq #53; sources below, each verified June 2026 with honest
+A web-verified evidence pass (corpus-works #53; sources below, each verified June 2026 with honest
 tiers) settled the principle — and **reframed the discriminator** from new-vs-old to
 **diffusion / churn / change-type**.
 
@@ -81,7 +81,7 @@ tiers) settled the principle — and **reframed the discriminator** from new-vs-
 `docs/06-creating-tasks.md` (task-shaping rule + named oversized-packet flag), `docs/05-brownfield-and-change-plans.md`
 (risk-weighted review + Hindle caveat), the kit `split-work` guide (the small/untangled lever),
 `docs/research/sources.md` (the nine entries above). The `corpus-cli` oversized-packet check is the
-toolable follow-up (tracked in corpus-hq #61 §B), not shipped by this ADR.
+toolable follow-up (tracked in corpus-works #61 §B), not shipped by this ADR.
 
 ## Update (2026-06-22) — the oversized-packet band measured, deferred ([ADR-0097](./0097-mint-c016-c017-defer-oversized.md))
 

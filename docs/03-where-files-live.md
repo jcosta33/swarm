@@ -64,7 +64,7 @@ Both are first-class:
 - **Dedicated workspace repo** — the same kit in a repo of its own. Across several code repos, this
   is the **multi-repo workspace**: one spec store, one board, one set of decisions for the whole
   family. A Git-native, agent-readable form of the requirements store larger organizations already
-  keep outside their code.
+  keep outside their code. Name a dedicated workspace repo `<project>-works` by default.
 
 The rule: stay co-located while features live in one repo and the same people shape specs and merge
 code. Go multi-repo when features routinely span repos — a spec inside repo A is invisible to repo
@@ -77,7 +77,7 @@ where that surfaces (see the drift note below).
 
 A code repo needs **nothing** to work with Corpus. At most:
 
-- a one-line pointer in its `AGENTS.md` — `Corpus workspace: <path or url>; read the task packet
+- a one-line pointer in its `AGENTS.md` — `Corpus workspace: ../<project>-works; read the task packet
 you are given`;
 - the kit's `.gitignore.additions`, so anything transient an agent writes locally stays out of
   commits;
