@@ -88,7 +88,7 @@ The code repo's committed history stays clean. Choose the co-located layout inst
 
 Start small:
 
-1. Capture one ticket in `intake/`.
+1. Point a spec at one ticket via its `sources` — capture it in `intake/` first only if you want the raw request kept.
 2. Write one `status: ready` spec.
 3. Create one task.
 4. Run it in a worktree.

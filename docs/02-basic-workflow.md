@@ -11,9 +11,12 @@ Every artifact is markdown in the workspace. See [where files live](03-where-fil
 
 ## 1. Pull
 
-Capture the upstream ask as an intake file.
+Bring in the upstream ask. Point the spec's `sources` straight at the origin — a ticket URL, an
+issue, or `self` — or, when you want the raw request kept verbatim, capture it as an intake file
+first. Intake is optional; the spec is the unit.
 
-Use this when work starts from a ticket, issue, chat thread, support note, or PR description.
+Capture intake when work starts from a ticket, issue, chat thread, support note, or PR description
+and you want the original preserved.
 
 Do:
 
