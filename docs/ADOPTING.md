@@ -90,9 +90,9 @@ Start small:
 
 1. Point a spec at one ticket via its `sources` — capture it in `intake/` first only if you want the raw request kept.
 2. Write one `status: ready` spec.
-3. Create one task.
-4. Run it in a worktree.
-5. Review with evidence.
+3. Implement it on a branch or worktree, running each `Verify with:` command.
+4. Fill the spec's `## Execution` with the pasted output (split into tasks only if the work needs parallel slices).
+5. Review with evidence — an independent reviewer writes the packet.
 6. Save one finding if there is a durable lesson.
 
 The tutorial walks this path in [tutorial/README.md](tutorial/README.md).
