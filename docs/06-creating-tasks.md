@@ -1,8 +1,10 @@
 # Creating tasks
 
-A task packet is the unit of work handed to an agent or person.
+A task packet is the **split slice** — cut only when one spec becomes several parallel pieces. For
+the common 1:1 case there is no task: the implementer works from the spec and fills its `## Execution`
+section.
 
-It does not add requirements. It copies scope from a spec or change plan.
+It does not add requirements. It copies a scope-subset from a spec or change plan.
 
 ## Task shape
 

@@ -68,35 +68,36 @@ Do:
 
 Skip this for small, local feature work.
 
-## 5. Task
+## 5. Task (only when splitting)
 
-Create one bounded work packet.
+Most work is one spec → one implementer: **no task file** — the implementer works from the spec and
+fills its `## Execution` section. Cut tasks only when one spec splits into **parallel slices**.
 
-Do:
+When you split, each task:
 
-- copy scope from the spec or change plan
-- name `Do not change` areas
-- include every verify command the worker must run
-- keep parallel tasks write-disjoint
+- copies a scope-subset from the spec or change plan
+- names `Do not change` areas
+- includes every verify command the worker must run
+- stays write-disjoint from its sibling tasks
 
 A task does not add requirements.
 
 ## 6. Run
 
-The worker implements the task.
+The worker implements the spec (or, when split, the task).
 
 Do:
 
-- work on a task branch or worktree
+- work on a branch or worktree
 - run every verify command
 - paste real command output
-- record changed files, out-of-scope edits, blocked questions, and candidate findings
+- record the run in the spec's `## Execution` (or the task): changed files, out-of-scope edits, blocked questions, and candidate findings
 
 `Tests passed` without output is not evidence.
 
 ## 7. Review
 
-Judge the result against the task and spec.
+Judge the result against the spec (and the task, when split).
 
 Do:
 
