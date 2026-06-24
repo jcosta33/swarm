@@ -1,77 +1,97 @@
 # Saving findings
 
-_Works today — plain markdown plus your agent; no Corpus tooling required._
+Close is where durable lessons leave the task and enter the workspace.
 
-Close is the loop's last step. The merge happened. The review packet records what was
-verified. What's left is the part most teams skip: keeping what the work taught you. A
-session ends and its context evaporates. Anything not written to a file is gone. Writing
-intermediate state to durable files measurably helps multi-step work, and is the recommended
-pattern for work that spans sessions
-[[CTXENG]](research/sources.md#CTXENG) [[SCRATCHPAD]](research/sources.md#SCRATCHPAD).
+Save a finding when the lesson will matter again.
 
-## The honest weakness
+Do not save task-local scratch.
 
-A hand-edited board and a findings folder are willpower in markdown — the discipline wikis die
-of. Two structural prompts keep the habit from being bare. The review packet routes **new
-finding candidates** as an exception class, so the reviewer sees them. The agent guides end every
-task with "anything learned worth saving as a finding." A future `corpus close` will prompt for
-both. Until then this is a convention, and saying so beats pretending otherwise.
+## What counts
 
-## The one rule
+Good finding candidates:
 
-> **Before closing a task, record anything durable as a finding.**
+- a behavior that surprised the worker or reviewer
+- a project constraint not already documented
+- a risky edge case
+- a test or fixture fact future tasks need
+- a recurring implementation pattern
+- a known non-goal or boundary
 
-This is a convention — nothing in this repo enforces it. It costs one short file in
-`findings/`, written from the frozen template at
-[`templates/finding.md`](https://github.com/jcosta33/corpus-starter-kit/blob/main/templates/finding.md): what we learned,
-the evidence, where it applies, where it does not, what to do differently next time. The task
-packet's Findings section is the staging area. At Close, anything sitting there moves to
-`findings/` or gets dropped deliberately.
+Poor finding candidates:
 
-## What counts as a finding
+- routine command output
+- temporary debugging notes
+- one-off local setup
+- speculation with no evidence
 
-Durable means _the next task would want to know this_:
+## Finding shape
 
-- **provider quirks** — "the payments sandbox rate-limits at 10 rps; the docs say 100"
-- **hidden contracts** — "the export job assumes `user.email` is never null"
-- **decisions** — "we retry idempotent calls only; rationale in the review packet" (a
-  decision big enough to outlive one feature graduates to an ADR in `decisions/`)
-- **gotchas** — "the test suite passes locally with a stale fixture; regenerate first"
+Use the kit template.
 
-What does **not** count: run logs, transcripts, "the tests passed" (that lives in the review
-packet), local environment details, anything you'd never grep for again. A finding states one
-claim. Writing three? Write three findings.
+Include:
 
-## How findings come back
+- one claim
+- evidence
+- where it applies
+- where it does not apply
+- related spec, task, review, or file
 
-There is no retrieval engine. Findings return through two cheap channels:
+Example:
 
-- **the board** — `status.md` lists findings pending acceptance, so they get read and either
-  accepted or marked stale instead of rotting;
-- **grep** — findings are plain markdown with real words in them; "what do we know about the
-  payments sandbox?" is one search away. Write titles you would search for.
+```markdown
+# Finding: expired checkout sessions are 409
 
-When the next spec or task touches the same area, link the finding in its sources. That is the
-whole feedback loop: lessons from one task become input to the next.
+## What we learned
 
-## Update the board
+Expired checkout sessions return `409 SESSION_EXPIRED`, not a 5xx.
 
-Close ends with a board update in `status.md`
-([template](https://github.com/jcosta33/corpus-starter-kit/blob/main/templates/status.md)). Mark the task closed.
-Link its review packet. List the new finding as pending acceptance. Refresh the Human attention
-list (blocking questions on draft specs · tasks with no review packet · findings pending
-acceptance). One honest rule, at checklist level: **a "verified" or "done" claim on the board
-links its review packet.** A board of unlinked "done" rows is a wish list, not a status.
+## Evidence
 
-The board is hand-edited and stays small. `corpus status` prints the derived board today. Deriving
-full per-spec requirement coverage from the review packets is the deferred coverage engine; for
-now the board is the hand-kept summary.
+- `reviews/checkout-expiry.md`, AC-001
+- `test/integration/expired-session.test.ts`
 
-## When you outgrow this
+## Where it applies
 
-A `findings/` folder plus grep carries a team surprisingly far. Teams with hundreds of findings,
-multiple repos, or recurring cross-feature patterns adopt the advanced memory model: a load-when
-index, a glossary, and patterns built from corroborated findings. It lives at
-[`reference/memory.md`](reference/memory.md). Adopt it when grep stops being enough, not before.
+- checkout session expiry
 
-That's the loop closed: [pull the next piece of work](02-basic-workflow.md).
+## Where it does not apply
+
+- other checkout validation failures
+- non-checkout sessions
+```
+
+## Board update
+
+After review:
+
+- update `status.md`
+- link closed work to its review packet while retained
+- add pending findings to Human attention
+- carry forward blocked questions or follow-up work
+
+A closed row without evidence is not a reliable board entry.
+
+## Promotion
+
+Some discoveries belong somewhere else:
+
+- intended behavior -> spec amendment
+- decision with tradeoffs -> ADR
+- reusable fact -> finding
+- repeated fact pattern -> pattern, if the workspace uses patterns
+- term definition -> glossary
+
+A finding does not weaken a requirement. If the finding contradicts the spec, reconcile the spec.
+
+## Retrieval
+
+There is no retrieval engine in the markdown workflow.
+
+Use:
+
+- clear filenames
+- `status.md`
+- links from specs, tasks, and reviews
+- grep
+
+Name findings for the words future readers will search.

@@ -1,137 +1,108 @@
 # Where files live
 
-_Works today — plain markdown plus your agent; no Corpus tooling required._
+Corpus uses three surfaces:
 
-Three pieces, three homes:
+- **Framework repo**: the docs and decisions for Corpus itself.
+- **Workspace repo or folder**: specs, tasks, reviews, findings, and board for a project.
+- **Code repo**: the application code.
 
-| Piece                    | What it is                                                                                                | Where it lives                                             |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| **The Corpus framework** | The docs (this repository) and the [starter kit](https://github.com/jcosta33/corpus-starter-kit) you copy | Upstream. Read and copy from it; your work never goes here |
-| **Your workspace**       | Your specs, tasks, reviews, and findings                                                                  | Its own repo, or a folder inside your code repo (below)    |
-| **Your code repos**      | Where the code lives                                                                                      | Untouched. Corpus adds nothing to them                     |
+Keep durable work records in the workspace, not scattered across chat or PR comments.
 
-## The workspace
+## Workspace layout
 
 ```text
 your-workspace/
-  AGENTS.md              # the bootloader (CLAUDE.md / GEMINI.md symlink to it)
+  AGENTS.md
   specs/
-    checkout/            # one folder per feature — durable intent
-      spec.md            #   the spec
-      research.md        #   supporting docs sit beside the spec they serve
-  intake/                # tracker items, captured verbatim (see 10-integrations.md)
-  tasks/                 # task packets — one per unit of agent work
-  reviews/               # review packets — the durable record of each task
-  findings/              # lessons saved at Close
-  inventory/             # appears when structural work needs it
-  change-plans/          # appears when structural work needs it
-  decisions/             # project decisions, numbered (0001-, 0002-, …)
-  templates/             # the kit templates you copied in
-  advanced/              # optional templates and reference cards — copy pieces when needed
-  examples/              # one worked chain — read it, then delete it
-  status.md              # the hand-edited workboard
-  .agents/               # agent tooling — guides live in .agents/skills/
-  .claude/skills         # symlink -> .agents/skills (tool adapter; never content)
-  .gitignore.additions   # lines for your CODE repos' .gitignore
+    checkout/
+      spec.md
+      research.md
+  intake/
+  tasks/
+  reviews/
+  findings/
+  inventory/
+  change-plans/
+  decisions/
+  templates/
+  advanced/
+  examples/
+  status.md
 ```
 
-Two kinds of folder:
+Core homes:
 
-- **Feature folders** (`specs/<feature>/`) hold durable intent. The spec plus whatever fed it
-  (research, audit, PRD), side by side — requirement → evidence in one folder hop.
-- **Type folders** (`intake/`, `tasks/`, `reviews/`, `findings/`, `inventory/`, `change-plans/`)
-  hold the flow of work. **Committed, not scratch.** The review packet linking its PR is the
-  record of what was done and how it was checked. `inventory/` and `change-plans/` appear only when
-  structural work needs them (see [brownfield work](05-brownfield-and-change-plans.md)).
+- `intake/`: upstream asks captured verbatim.
+- `specs/<feature>/`: intended behavior and related support docs.
+- `tasks/`: one bounded work packet per task.
+- `reviews/`: review packets kept while they are active records.
+- `findings/`: durable lessons saved at Close.
+- `inventory/`: present-state maps for brownfield work.
+- `change-plans/`: wave plans for structural work.
+- `decisions/`: project ADRs.
+- `status.md`: hand-edited board and index.
 
-The workspace must be **version-controlled** — its own git repo, or committed inside your code
-repo. It _is_ the durable record. An uncommitted workspace drifts: the commit lands, but the spec,
-review, and finding that explain it are lost. A convention; nothing enforces it.
+## Co-located or dedicated
 
-Both naming depths are valid. Flat files (`tasks/012-checkout-totals.md`) for small projects. A
-folder per item with an `NNN-` prefix when items grow attachments. A file declares what it is in
-its frontmatter (`type: spec`, `type: task`, …). The formats live in the
-[kit templates](https://github.com/jcosta33/corpus-starter-kit/tree/main/templates/) and [artifact formats](reference/artifact-formats.md),
-never restated here. `.agents/` holds only the tooling your agent CLI loads
-(see [integrations](10-integrations.md)); your content never lives there.
+Both layouts are valid.
 
-## One repo or two?
+- **Co-located**: put the workspace inside one code repo, often under `corpus/`.
+- **Dedicated**: use a separate repo for one or more code repos.
 
-Both are first-class:
+Default name for a dedicated workspace repo:
 
-- **Co-located** — a single-repo team keeps the same tree inside its code repo, optionally under a
-  visible `corpus/` directory at the root. Same layout, one less repo.
-- **Dedicated workspace repo** — the same kit in a repo of its own. Across several code repos, this
-  is the **multi-repo workspace**: one spec store, one board, one set of decisions for the whole
-  family. A Git-native, agent-readable form of the requirements store larger organizations already
-  keep outside their code. Name a dedicated workspace repo `<project>-works` by default.
+```text
+<project>-works
+```
 
-The rule: stay co-located while features live in one repo and the same people shape specs and merge
-code. Go multi-repo when features routinely span repos — a spec inside repo A is invisible to repo
-B's developers and drifts unowned — or when the people shaping specs aren't the people merging code.
+Use a dedicated workspace when features span repos or when spec owners differ from code owners.
 
-Separation has a known cost: specs can drift from the code they describe. The review packet is
-where that surfaces (see the drift note below).
+## Code repo footprint
 
-## Your code repos stay clean
+A code repo needs little or nothing.
 
-A code repo needs **nothing** to work with Corpus. At most:
+Allowed footprint:
 
-- a one-line pointer in its `AGENTS.md` — `Corpus workspace: ../<project>-works; read the task packet
-you are given`;
-- the kit's `.gitignore.additions`, so anything transient an agent writes locally stays out of
-  commits;
-- optionally, the `implement-task` agent guide copied into the repo's skills directory
-  (see [integrations](10-integrations.md)).
+- a short `AGENTS.md` pointer:
 
-Task packets reach the agent by paste or by path. The PR stays the merge mechanism. It links the
-review packet in the workspace; the packet is the record. A multi-repo workspace repeats the flow
-per repo. One spec cuts repo-scoped tasks (each naming its repo's Commands sub-table); each repo's
-PR links its own review packet back. Committed Corpus content — specs, reviews, findings — never
-lives in code repos. A convention, nothing enforces it, but it keeps adoption from dirtying a
-product repo.
+  ```text
+  Corpus workspace: ../<project>-works. Read the task packet before coding.
+  ```
 
-## When specs change (and drift)
+- `.gitignore` lines for local Corpus state
+- optional agent guide copies if the repo needs them
 
-A spec is amended in place after review feedback. Edit the requirement, keep its ID, note any
-material cut under "Dropped from sources". No regeneration step. Drift surfaces at review time: a
-coverage row that no longer matches the code reads Fail or Unverified. A spec known to lag reality
-is marked `stale` on the
-[status board](https://github.com/jcosta33/corpus-starter-kit/blob/main/templates/status.md) until someone amends it.
+Specs, tasks, reviews, and findings belong in the workspace.
 
-## What lasts, and what ages out
+## Retention
 
-After hundreds of artifacts, not everything should live forever. Records management gives a clean
-test. A record is **durable** when it is evidence of a decision, **transitory** when it has
-short-term value and no decision rides on it (NARA's transitory bar is "generally less than ~180
-days") [[NARAGRS52]](research/sources.md#NARAGRS52). Split the workspace that way:
+Keep for the life of the project:
 
-- **Durable records — keep for the repo's life, supersede, never delete.** Decisions (ADRs),
-  specs of record, saved findings. A reversed decision is _kept and marked superseded_, with a
-  pointer to its replacement, sequentially numbered and never reused
-  [[NYGARDADR]](research/sources.md#NYGARDADR) [[MADR]](research/sources.md#MADR) — the
-  status lifecycle (`proposed | accepted | deprecated | superseded-by-NNNN`) the ADR ledger already
-  uses. Each carries a **named owner**. Documents without owners go stale
-  [[SWEGBOOKDOCS]](research/sources.md#SWEGBOOKDOCS), and write-once rots: about 29% of popular
-  repos already carry an outdated reference [[DOCROT]](research/sources.md#DOCROT).
-- **Transitory output — let it age out.** Review packets, `corpus check` output, and run logs are
-  evidence _of a moment_. Once the task closes and the durable record (the finding, the merged PR)
-  captures what mattered, the rest belongs in **git history (the default archive)** or an
-  `archive/` directory. Keep a **30–90-day retention window** — the band CI tools already use
-  (GitHub Actions 90 days [[GHRETENTION]](research/sources.md#GHRETENTION), GitLab 30 [[GLRETENTION]](research/sources.md#GLRETENTION)). Don't
-  let them pile up in the live tree.
+- accepted specs
+- ADRs
+- saved findings
 
-Two conventions keep a large workspace navigable. **One canonical home per rule or decision.** At
-scale the failure is _duplication_, not absence (Google's Borg had 7–10 overlapping setup docs, no
-owner) [[SWEGBOOKDOCS]](research/sources.md#SWEGBOOKDOCS), so "no canonical owner" is a reviewable
-defect. And the **board is the index.** A flat per-type folder plus `status.md` carrying
-`ID · title · status · superseded-by` keeps hundreds of artifacts findable by search. All
-convention; nothing enforces it. A `corpus check` that the `superseded_by` pointers resolve and the
-index lists them is a named, not-yet-shipped follow-up
-([ADR-0096](adrs/0096-artifact-lifecycle.md)).
+Let transitory output age out once the durable record has what matters:
 
-## Next
+- review packets
+- `corpus check` output
+- run logs
+- temporary agent scratch
 
-- [Basic workflow](02-basic-workflow.md) — the loop these folders serve.
-- [Writing specs](04-writing-specs.md) — what goes in `specs/<feature>/spec.md`.
-- [Adopting Corpus](ADOPTING.md) — one copy of the kit sets this tree up.
+Use git history or `archive/`.
+
+A 30-90 day window matches common CI artifact retention
+[[GHRETENTION]](research/sources.md#GHRETENTION) [[GLRETENTION]](research/sources.md#GLRETENTION).
+Closed board rows can link to retained review packets or archived review packet paths.
+
+## Drift rule
+
+Code can prove a spec wrong. It does not silently update the spec.
+
+When code and intent diverge, do one of three things:
+
+- re-run the verification
+- amend the spec
+- fix the code
+
+See [drift](reference/drift.md).

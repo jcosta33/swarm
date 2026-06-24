@@ -1,171 +1,109 @@
-# Memory: the advanced model
+# Memory
 
-_Advanced design note — internal rationale; not needed to use Corpus._
-
-The core memory story is one folder and one rule: keep findings in `findings/`, and before
-closing a task, record anything durable as a finding
-([09-saving-findings.md](../09-saving-findings.md), template:
-[`finding.md`](https://github.com/jcosta33/corpus-starter-kit/blob/main/templates/finding.md)). For most teams that is the whole system.
-This page is for teams that outgrow it. Everything here is convention — nothing in this
-repository enforces it; the finding scaffold ships as corpus-cli's `corpus promote`, and the Close
-gate (no item left `pending`) is a review-checklist item the human confirms by hand — a
-board-mutating `corpus close` is a non-goal.
-
-You have outgrown the core when grep stops being recall: dozens of findings nobody re-reads,
-agents re-deriving facts a finding already states, the same term meaning two things in two specs,
-the same lesson learned three times by three people. The fix is not more writing — it is writing
-that says **when it should be read**. Externalizing state to files is what makes multi-session
-agent work tractable at all [[CTXENG]](../research/sources.md#CTXENG)
-[[SCRATCHPAD]](../research/sources.md#SCRATCHPAD); the advanced model adds the routing that keeps
-those files findable and trustworthy.
-
-## The shape
-
-The advanced model grows inside the folder you already have:
+The basic memory system is:
 
 ```text
 findings/
-  INDEX.md          # the load-when index — read first, links out
-  glossary.md       # one word, one meaning
-  patterns/         # distilled from corroborating findings
-  retry-jitter.md   # ordinary findings, one file each
-ledger/             # optional append-only history (created lazily — see below)
-  changes/  merges/  promotions/
 ```
 
-## The load-when index
+Save durable lessons there before closing work.
 
-`INDEX.md` is a map, never the territory: one row per durable item, each row a link plus a
-**Load when** condition — the trigger that tells a future task this entry matters now.
+## When `findings/` is enough
 
-- **Every entry names when it matters.** An entry that cannot say when to load it is dead weight
-  and gets removed. This discipline exists because context is finite and badly used: material
-  buried in the middle of a long always-loaded context is reliably missed
-  [[LOSTMID]](../research/sources.md#LOSTMID), so the index stays compact and the verbose bodies
-  are read lazily, only when a Load when fires [[CTXENG]](../research/sources.md#CTXENG).
-- **Link, never restate.** A row is a pointer; if the summary line and the linked finding ever
-  disagree, the finding wins.
-- **Retired knowledge is recorded, not deleted.** A stale or withdrawn entry moves to a
-  stale/superseded table with its replacement, so the recall chain stays auditable.
+Use plain findings while the team can still find relevant knowledge with search and the board.
 
-## The glossary
+Each finding needs:
 
-`glossary.md` holds term definitions: one word, one meaning, project-wide. It exists because
-terminology drift is a real failure mode — two specs using "session" for different things will
-eventually produce a task that implements the wrong one. A term whose meaning was clarified
-during a task is exactly the kind of discovery that promotes here. Definitions live only in the
-glossary; the index never mixes them into its map.
+- one claim
+- evidence
+- where it applies
+- where it does not apply
+- related specs, tasks, reviews, or files
+
+## When to add structure
+
+Add structure when:
+
+- findings are duplicated
+- agents relearn old facts
+- terms drift
+- readers cannot find relevant findings
+- the same lesson appears in several tasks
+
+## Suggested advanced layout
+
+```text
+findings/
+  INDEX.md
+  glossary.md
+  patterns/
+  retry-jitter.md
+ledger/
+  changes/
+  merges/
+  promotions/
+```
+
+## Load-when index
+
+`INDEX.md` is a routing table.
+
+Each row has:
+
+- link
+- short summary
+- Load when condition
+
+If a finding has no clear Load when, do not index it.
+
+## Glossary
+
+Use one term, one meaning.
+
+If a task clarifies a term, promote that definition into the glossary.
 
 ## Patterns
 
-A pattern is a recurring solution shape — knowledge bigger than one fact. The rule that keeps
-`patterns/` honest: **a pattern is written only from corroborating findings — at least two — and
-cites the findings it generalizes.** A single finding never promotes straight to a pattern; one
-observation is an anecdote, and an anecdote dressed as a pattern misleads every future reader
-with unearned generality.
+Write a pattern only after at least two findings support it.
 
-## Promotion: how a discovery becomes durable
+One observation is a finding, not a pattern.
 
-The Close step's "save a finding" rule is the smallest case of a more general act: **promotion**
-— an explicit, recorded decision that moves a discovery from task scratch into a durable,
-indexed home. Each discovery a task surfaces becomes a queue item and resolves to one status:
+## Promotion queue
 
-| Status        | Meaning                                                                             |
-| ------------- | ----------------------------------------------------------------------------------- |
-| `pending`     | raised, not yet resolved                                                            |
-| `promoted`    | written to its durable target and indexed with a Load when                          |
-| `deferred`    | recorded for a future task, with a reason                                           |
-| `rejected`    | judged non-durable, with a reason — "task-local detail" lands here                  |
-| `blocked`     | cannot be promoted yet (e.g. waits on a decision), with a reason                    |
-| `validated`   | corroborated but not yet written — the intermediate stop for high-consequence items |
-| `rolled-back` | promoted earlier, withdrawn later via a retraction entry                            |
+Every discovery ends in one state:
 
-**The close gate: a task does not close while any item is `pending`.** This is a review
-checklist item — the reviewer checks the task's Findings section resolved every discovery — that
-the human confirms before closing by hand (`corpus promote` scaffolds any finding; there is no
-board-mutating `corpus close`). Two corollaries:
+| State | Meaning |
+| --- | --- |
+| `pending` | not resolved |
+| `promoted` | saved in durable home |
+| `deferred` | kept for later with reason |
+| `rejected` | not durable, with reason |
+| `blocked` | cannot decide yet |
+| `validated` | corroborated before promotion |
+| `rolled-back` | withdrawn with retraction |
 
-- **No silent drops.** "Keep it in the task only" is a real resolution — `rejected`, with the
-  reason written down — never a quiet omission.
-- `deferred`, `rejected`, and `blocked` each carry a reason; `validated` does not satisfy the
-  gate by itself (it is on the way to `promoted`, not a terminal state).
+Do not close a task with `pending` discoveries.
 
-Where a promoted item lands depends on what it is: an intended behavior becomes a spec amendment
-(new or changed AC); a decision with alternatives becomes an ADR in `decisions/`; a reusable fact
-becomes a finding; a recurring shape, a pattern; a clarified term, a glossary entry. One boundary
-holds everywhere: **a promotion never weakens an existing requirement** — a discovery that argues
-a requirement is wrong routes to a spec amendment, reviewed as one, never to a finding that
-quietly relaxes it.
+## Validation
 
-## Provenance
+High-consequence findings need independent corroboration before promotion.
 
-A finding is falsifiable only if it carries enough origin to check. The
-[`finding.md`](https://github.com/jcosta33/corpus-starter-kit/blob/main/templates/finding.md) template carries the core (`from`, `date`,
-`related`, Evidence, Where it applies / does not apply); teams running the advanced model record
-the fuller set on each promoted finding:
+Rollback wrong findings with a retraction. Do not silently delete them.
 
-| Field                              | What it records                                                        |
-| ---------------------------------- | ---------------------------------------------------------------------- |
-| claim                              | the one durable fact, stated as a single proposition                   |
-| evidence                           | the pasted output, PR, or review packet that grounds it                |
-| origin                             | the requirement ids (`SPEC-x#AC-NNN`) and the task/review it came from |
-| confirmed by                       | the human reviewer or tool that accepted it                            |
-| date                               | when it was promoted                                                   |
-| content hash                       | a hash of the cited source at promotion time — the staleness signal    |
-| confidence                         | high / medium / low                                                    |
-| applies when / does not apply when | the scope envelope; mirrors the index row's Load when                  |
+## Ledger
 
-A finding whose Evidence section is a bare claim is chat, not memory — a completion claim
-without real output behind it is not evidence [[EVIBOUND]](../research/sources.md#EVIBOUND).
+Use a ledger when verbose task and review scratch can age out.
 
-## Validation and rollback
+The ledger records:
 
-**Authorization is not validation.** An owner approving a finding checks that someone wants it
-remembered, not that it is true. The distinction matters because a memory store is attackable:
-an agent's memory can be poisoned through ordinary-looking interactions, with no privileged
-access [[MINJA]](../research/sources.md#MINJA) — and a poisoned finding misleads every task
-that loads it. Two mechanisms close the gap:
+- completed changes
+- merge decisions
+- promotion decisions
 
-- **The `validated` stop.** A high-consequence promotion goes `pending → validated → promoted`,
-  where `validated` requires independent corroboration: a second finding, a re-run of the
-  evidence, or a reviewer who is not the promoting agent. A finding originating from an
-  externally-authored source never skips this stop.
-- **Rollback.** A promoted finding later shown wrong is withdrawn as `rolled-back` — recorded as
-  a **retraction entry in the index, never a silent delete** — and anything that relied on it is
-  re-opened. Retraction differs from supersession: supersession replaces a fact with a better
-  one; rollback withdraws a fact that should never have been promoted. The audit trail keeps
-  both distinct.
-
-## Staleness
-
-A finding does not stay true by being written down. When the source it cites changes — the file
-is rewritten, the API moves, the measurement is re-run with a different result — the finding is
-**stale**: not deleted, not authority, routed to re-verification or supersession. The content
-hash above is what makes staleness checkable; the comparator that recomputes it is a tool
-concern (see [future-cli.md](future-cli.md)) — today a stale finding is caught by the reviewer
-who follows the evidence link and finds it pointing at something that no longer exists.
-
-## The ledger
-
-Findings preserve _what we learned_; the **ledger** preserves _what happened_ — a compact,
-append-only history that lets a team throw verbose execution scratch away without losing the
-audit trail. Created lazily on first write, it carries one entry per completed change
-(`changes/` — requirements covered, evidence, results), per merge decision (`merges/` — what
-gated, what was out of scope), and per resolved promotion queue (`promotions/` — where each
-discovery landed).
-
-Two properties make it a ledger rather than a log: entries are **immutable** — a correction is a
-new entry referencing the one it amends, so the truth is the chain, not the latest row — and
-every field is **compacted from artifacts that already exist** (task packets, review packets,
-the promotion queue), so it introduces no new evidence. Once a task's load-bearing content is in
-the ledger, the task and review scratch may be archived or dropped; the committed findings,
-ledger, specs, and decisions are what a team never throws away. A team that wants a ledger writes
-the entry by hand at Close — a board/ledger-mutating `corpus close` is a non-goal (it would
-adjudicate the human-owned verdict); `corpus promote` scaffolds the finding, the human records the rest.
+It adds no new evidence. It summarizes existing artifacts.
 
 ## Related
 
-- [09-saving-findings.md](../09-saving-findings.md) — the core findings workflow this page extends.
-- [`finding.md`](https://github.com/jcosta33/corpus-starter-kit/blob/main/templates/finding.md) · [`status.md`](https://github.com/jcosta33/corpus-starter-kit/blob/main/templates/status.md) — the frozen formats; the board's Human attention list tracks findings pending acceptance.
-- [future-cli.md](future-cli.md) — the CLI's design + boundary (the finding scaffold ships as `corpus promote`; a board-mutating close is a non-goal).
-- [drift.md](drift.md) — the wider drift model the staleness signal belongs to.
+- [Saving findings](../09-saving-findings.md)
+- [Future CLI](future-cli.md)
+- [Drift](drift.md)
