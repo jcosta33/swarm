@@ -73,6 +73,17 @@ Add `.gitignore` lines for local Corpus state if you use the CLI.
 
 Do not copy specs, tasks, reviews, or findings into the code repo.
 
+## Spec-external, single-root implementer
+
+For a dedicated workspace governing a separate code repo, keep the implementer in one root:
+
+- Canonical specs, tasks, reviews, and findings stay in the workspace.
+- When you cut a task, snapshot its spec slice into the task packet — stamped with the spec id and version — and place the task in the code repo under a gitignored `.corpus/`.
+- The implementer reads the pinned snapshot and writes only in the code repo, so its commands and edits resolve against one root.
+- The review lead merges the run evidence back into the workspace: the board, the task status, and the review packet.
+
+The code repo's committed history stays clean. Choose the co-located layout instead when you need code and its evidence in one commit.
+
 ## First useful change
 
 Start small:
