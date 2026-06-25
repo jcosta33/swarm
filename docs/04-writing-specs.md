@@ -9,7 +9,7 @@ Write a spec when:
 - reviewers need an acceptance bar
 - a ticket is vague or partial
 
-Skip a new spec when an existing accepted spec already covers the work. Amend that spec instead.
+Skip a new spec when an existing accepted spec already covers the work. **Amend that spec in place** — a spec is a living document: edit the requirement (it keeps its id), let its status move to `active`, and mint a new spec only when a whole feature is replaced.
 
 ## Minimum shape
 

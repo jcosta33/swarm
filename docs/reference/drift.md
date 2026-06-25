@@ -31,6 +31,19 @@ Pick one:
 
 Do not let code redefine intent without an amendment.
 
+## Amending a living spec
+
+A spec is a living organism: amend the original rather than write a new one (ADR-0108).
+
+- **Review on touch.** When a change touches a spec's evidence path, amend the spec in the same
+  change — the moment its code moves is the moment to fix its intent. Amendment is change-triggered;
+  there is no scheduled spec audit.
+- **Amend vs supersede.** Amend an AC's text in place as the feature evolves (it keeps its id); mark
+  an AC superseded in place when it is retired; mint a new spec (and set the old one's
+  `superseded_by`) only when a whole feature is replaced.
+- **Status.** A spec moves `ready → active` once it is in use and being amended; `superseded` only on
+  whole-feature replacement.
+
 ## Evidence path
 
 The evidence path is what the check actually exercised.
