@@ -93,3 +93,11 @@ examples, evals.
 > record folds into the review packet") is superseded by ADR-0072 — the run summary lives in
 > the task packet as a digest; the task and review packet formats are amended additively by
 > the same ADR.
+
+> **Ledger note (2026-06-26):** Decision 2 ("Flow artifacts are committed") is **reversed by
+> [ADR-0104](./0104-ephemeral-by-default.md)** (ephemeral-by-default) — `intake/`, `tasks/`, and
+> `reviews/` are gitignored working state; only durable truth (the spec with its `## Execution`,
+> `findings/`, `decisions/`, the board) is committed, now *earned* by [ADR-0103](./0103-spec-as-living-form-task-on-demand.md)
+> putting the evidence in the spec. The hybrid layout (Decision 1), the packet formats (Decisions
+> 4–5), and co-located/external co-equality (Decision 3) stand; only the commit-the-flow-artifacts
+> stance is reversed. Reviews are a documented opt-in to stay committed (ADR-0104 Decision 2).

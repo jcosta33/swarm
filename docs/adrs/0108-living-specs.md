@@ -19,12 +19,14 @@ the choice:
   cautionary tale: elaborate maturity ladders + mandated periodic review **fail** — IETF RFC 6410
   collapsed tiers and dropped the review cadence. MADR has **no** first-class "amends" to borrow.
 - **R2 (empirical):** staleness is the dominant, **silent** failure (28.9% of top-1000 repos carry an
-  outdated reference; docs co-evolve with code only 13–20% of the time — Tan EMSE 2024, Wen ICPC 2019);
-  **bloat + duplication are measured top concerns** (superfluous 55%, duplicate 46% — Aghajani ICSE
-  2020). The cadence that works is **review-on-touch** (a doc touch triples reviewer attention; a
-  comment on a doc change → update 76.4% of the time — Rao 2022), and silent staleness is caught by a
-  **mechanical reference-snapshot diff** (Tan/DOCER). The "minimal docs co-evolve better" claim was
-  **refuted** — leanness rests on the bloat-failure data, not a proven sync benefit.
+  outdated reference [[DOCROT]](../research/sources.md#DOCROT); docs co-evolve with code only 13–20% of
+  the time [[CODECOMMENTCOEVO]](../research/sources.md#CODECOMMENTCOEVO)); **bloat + duplication are
+  measured top concerns** (superfluous 55%, duplicate 46% [[DOCPERSPECTIVE]](../research/sources.md#DOCPERSPECTIVE)).
+  The cadence that works is **review-on-touch** (a doc touch ~triples reviewer attention — 50.8% vs
+  15.8%; a comment on a doc change → update 76.4% of the time [[COMMENTSONCOMMENTS]](../research/sources.md#COMMENTSONCOMMENTS)),
+  and silent staleness is caught by a **mechanical reference-snapshot diff**
+  ([[DOCROT]](../research/sources.md#DOCROT)/DOCER). The "minimal docs
+  co-evolve better" claim was **refuted** — leanness rests on the bloat-failure data, not a proven sync benefit.
 
 Owner decision: the **hybrid**, kept lightweight.
 

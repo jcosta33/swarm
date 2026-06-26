@@ -126,6 +126,15 @@
 <a id="DOCROT"></a>
 **[DOCROT] Detecting outdated code element references in software repository documentation.** Tan, Wagner, Treude. **Empirical Software Engineering 29:5, 2024**, DOI 10.1007/s10664-023-10397-6 (companion tool paper arXiv:2307.04291). *Verified (June 2026, web — OA journal PDF).* Across >3,000 GitHub projects (the 1,000 most-starred + Google's), **28.9% currently contain at least one outdated code-element reference**, and 82.3% were outdated at least once historically. *Scope: top-by-stars + Google repos — not generalizable to all docs.* Grounds: doc rot is measurable and common → durable artifacts need freshness + ownership, not write-once (ADR-0096).
 
+<a id="CODECOMMENTCOEVO"></a>
+**[CODECOMMENTCOEVO] A Large-Scale Empirical Study on Code-Comment Inconsistencies.** Wen, Nagy, Bavota, Lanza. **ICPC 2019**, DOI 10.1109/ICPC.2019.00019 (author PDF, inf.usi.ch). *Verified (June 2026, web — ICPC proceedings + author PDF).* Code and its comments **co-evolve only rarely**: a code change triggers a corresponding comment change in just **13–20% of cases** (≈7% for method comments, ≈13% for class comments). Grounds: documentation drifts silently because it is seldom updated with the code it describes → freshness must be a mechanical check, not a hope (ADR-0108).
+
+<a id="DOCPERSPECTIVE"></a>
+**[DOCPERSPECTIVE] Software Documentation: The Practitioners' Perspective.** Aghajani, Nagy, Linares-Vásquez, Moreno, Bavota, Lanza, Shepherd. **ICSE 2020**, DOI 10.1145/3377811.3380405. *Verified (June 2026, web — author PDF inf.usi.ch + ICSE proceedings).* A survey of **146 practitioners** ranking documentation issues by perceived relevance found **superfluous/bloated content (55%)** and **clone/duplicate content (46%)** among the top maintainability concerns. Grounds: bloat and duplication are *measured* top documentation failures → the anti-bloat / single-sourcing discipline rests on the failure data, not on an unproven "minimal docs co-evolve better" claim (ADR-0108, ADR-0096).
+
+<a id="COMMENTSONCOMMENTS"></a>
+**[COMMENTSONCOMMENTS] Comments on Comments: Where Code Review and Documentation Meet.** Rao et al. **MSR 2022**, arXiv:2204.00107. *Verified (June 2026, web — ar5iv full text).* Reviewers comment on a diff chunk **50.8%** of the time when a code comment was changed vs **15.8%** when only code changed (a documentation touch ≈**3.2×** the reviewer attention); a reviewer comment on a changed code comment leads to that comment being updated **76.4% (46K/61K)** of the time. Grounds: review-on-touch is the cadence that keeps docs current — a doc change pulls reviewer scrutiny and that scrutiny lands the update (ADR-0108).
+
 ## Verified — reused from the kernel bibliography
 
 These were already verified by the framework's bibliography elsewhere; the entries below restate them so this layer is self-contained.

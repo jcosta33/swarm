@@ -38,6 +38,8 @@ Rules:
 
 ## Results
 
+Four core results:
+
 | Result | Meaning |
 | --- | --- |
 | Pass | evidence shows requirement is met |
@@ -46,6 +48,16 @@ Rules:
 | Blocked | cannot judge yet |
 
 Empty evidence means `Unverified`.
+
+Three lifecycle markers (decorate a prior result, never a core value — [advanced lifecycle](advanced-lifecycle.md)):
+
+| Marker | Meaning |
+| --- | --- |
+| Waived | a `Fail`/`Unverified` accepted by the owner, with reason and expiry |
+| Stale | a prior `Pass` no longer trusted after the text or evidence path changed |
+| Contradicted | evidence conflicts |
+
+Merge gate: every in-scope requirement is `Pass` or a live `Waived`, and none is `Stale`, `Contradicted`, `Fail`, `Blocked`, or `Unverified`. An empty scope does not pass.
 
 ## Evidence
 
