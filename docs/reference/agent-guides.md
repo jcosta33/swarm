@@ -33,16 +33,29 @@ Common workspace guides:
 
 Install only what the workspace uses.
 
-## Cross-cutting stances
+## Implementation depth (opt-in)
 
-Some stances can be loaded alone (from the corpus-skills catalog):
+Kit skills that implement a task packet of a given kind — Corpus-coupled, summoned as the work needs them (ADR-0112):
 
-- `persona-skeptic`
-- `persona-challenger`
-- `persona-surveyor`
-- `adversarial-review` — review *style* (not a Corpus concept, so it lives in the catalog, ADR-0111)
+| Guide | Use |
+| --- | --- |
+| `write-feature` | net-new behavior |
+| `write-fix` | a reproduced defect, root cause |
+| `write-refactor` | restructure, behavior held |
+| `write-rewrite` | deliberate behavior change |
+| `write-migration` | API A → B, green per wave |
+| `write-performance` | a measured bottleneck |
+| `write-testing` | tests as the deliverable |
+| `write-documentation` | human-facing docs |
 
-One-to-one authoring stances are folded into their guides. Do not maintain duplicate copies.
+## Universal catalog (corpus-skills)
+
+Framework-free skills, installable in any repo with no Corpus knowledge ([ADR-0112](../adrs/0112-two-tier-skills.md)) — load alongside the work:
+
+- Stances: `persona-skeptic`, `persona-challenger`, `persona-surveyor`
+- Disciplines: `adversarial-review` (the review *style*), `empirical-proof`, `concise-output`, `fix-flaky-test`
+
+One-to-one authoring stances are folded into their kit guides. Do not maintain duplicate copies.
 
 ## Guide rules
 
