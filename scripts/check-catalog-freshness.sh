@@ -16,12 +16,13 @@
 #   workspace copy must be byte-identical to the governed source — SKILL.md and every reference file.
 #   Any content mismatch, or a reference file present in one but not the other, fails the gate.
 #
-# What it reports but does NOT fail on (kept low-false-positive per ADR-0063 — a noisy gate gets muted):
+# Also hard-gated (STRICT_KIT defaults to 1 since the 2026-06-27 kit sync — ADR-0115 prevention):
 #   - Kit-sourced workspace skills (implement-task, review-output, write-*, save-findings, split-work)
-#     are compared against corpus-starter-kit/.agents/skills when present there. The workspace hosts the
-#     enriched/canonical body of these and the kit ships a leaner export, so they legitimately differ;
-#     divergence here is NOTED, not failed. (When the kit becomes the single source for these too, flip
-#     STRICT_KIT=1 to promote kit divergence to a hard failure.)
+#     are compared against corpus-starter-kit/.agents/skills, the single source for those guides — the
+#     kit ships the enriched/canonical body (Gotchas etc.) and the workspace copy must match it. Drift
+#     fails the gate (set STRICT_KIT=0 to demote kit divergence back to report-only).
+#
+# What it reports but does NOT fail on:
 #   - A workspace skill that exists in NEITHER source (a true orphan with no upstream) is NOTED so it
 #     is visible, but it is not a freshness violation of a governed catalog.
 #
@@ -38,7 +39,7 @@ FAMILY_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/../.." && pwd)
 WORKS_SKILLS=${WORKS_SKILLS:-"$FAMILY_ROOT/corpus-works/.agents/skills"}
 CATALOG_SKILLS=${CATALOG_SKILLS:-"$FAMILY_ROOT/corpus-skills/skills"}
 KIT_SKILLS=${KIT_SKILLS:-"$FAMILY_ROOT/corpus-starter-kit/.agents/skills"}
-STRICT_KIT=${STRICT_KIT:-0}
+STRICT_KIT=${STRICT_KIT:-1}
 
 if [ ! -d "$WORKS_SKILLS" ]; then
     echo "check-catalog-freshness: cannot find the workspace skills copy at: $WORKS_SKILLS" >&2
