@@ -52,8 +52,8 @@ Kit skills that implement a task packet of a given kind — Corpus-coupled, summ
 
 Framework-free skills, installable in any repo with no Corpus knowledge ([ADR-0112](../adrs/0112-two-tier-skills.md)) — load alongside the work:
 
-- Stances: `persona-skeptic`, `persona-challenger`, `persona-surveyor`
-- Disciplines: `adversarial-review` (the review *style*), `empirical-proof`, `concise-output`, `fix-flaky-test`
+- Stances: `persona-challenger`, `persona-surveyor`
+- Disciplines: `adversarial-review` (the review *style* — also carries the former `persona-skeptic` stance), `codebase-exploration`, `debugging`, `security-review`, `git-pr`, `planning-spec`, `empirical-proof`, `concise-output`, `fix-flaky-test`
 
 One-to-one authoring stances are folded into their kit guides. Do not maintain duplicate copies.
 
