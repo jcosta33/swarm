@@ -163,7 +163,8 @@ Sections:
 - Evidence
 - Where it applies
 - Where it does not apply
-- Future guidance
+- related spec / task / review / file
+- Future guidance (optional)
 
 One finding, one durable claim.
 

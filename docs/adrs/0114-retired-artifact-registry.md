@@ -1,7 +1,7 @@
 ---
 type: adr
 id: adr-0114
-status: proposed
+status: accepted
 created: 2026-06-27
 updated: 2026-06-27
 ---
@@ -39,9 +39,9 @@ forbids.
 
 ## Decision
 
-**Proposed (design intent — this ADR builds nothing).** Record the direction for a single canonical
-registry plus a shared cross-repo linter, so a later pass knows *what* to build and *what not* to
-re-restate by hand.
+**Accepted — realized by SPEC-method-gates (2026-06-27).** A single canonical registry plus a shared
+cross-repo linter: a cross-repo fact (an artifact's location + active/retired/relocated status) is stated
+once in the registry, and product/reference docs link there instead of re-restating it by hand.
 
 1. **One canonical registry, under corpus `docs/`.** A single source-of-truth file lists **every** agent,
    skill, and MCP tool across the family, each with a **status**:
@@ -63,11 +63,11 @@ re-restate by hand.
 
 3. **Honesty level.** **proposed — not in force.** No registry file and no linter are created by this
    ADR. Until the registry exists and the linter ships in CI, the cross-repo facts remain held by
-   **convention + review** ([ADR-0063](./0063-honesty-framework-and-tooling-boundary.md)); this ADR may
-   not be cited as if a gate exists. Promote to `accepted` only when the registry lands and the linter
-   runs.
+   **convention + review** ([ADR-0063](./0063-honesty-framework-and-tooling-boundary.md)) until the gate
+   ships. The registry (`docs/artifact-registry.md`) and the linter (`scripts/lint-artifact-refs.sh`) have
+   since shipped (SPEC-method-gates), so the registry is now the live source docs cite.
 
-_Level: proposed (design intent). The CI linter is the future toolable path — **not yet shipped**._
+_Level: toolable — **shipped**. `scripts/lint-artifact-refs.sh` runs the cross-repo check; wiring it into a given repo's CI is per-repo (ADR-0077)._
 
 ## Consequences
 

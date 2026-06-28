@@ -61,12 +61,12 @@ One-to-one authoring stances are folded into their kit guides. Do not maintain d
 
 A guide:
 
-- state when it applies
-- state when it does not apply
-- load only needed references
-- be self-contained enough to run
-- point to templates instead of copying long templates
-- avoid hidden sibling dependencies
+- states when it applies
+- states when it does not apply
+- loads only needed references
+- is self-contained enough to run
+- points to templates instead of copying long templates
+- avoids hidden sibling dependencies
 
 ## Progressive disclosure
 

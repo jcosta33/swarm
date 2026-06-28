@@ -1,6 +1,6 @@
 # Corpus
 
-**A lightweight spec and review workflow for teams coding with agents.**
+**A lightweight spec and review workflow for teams using coding agents.**
 
 Tickets become specs. Specs become agent-ready tasks. Agent output becomes evidence you
 can review. Plain markdown, any agent, no runtime.
@@ -81,7 +81,9 @@ means _Unverified_, never _Pass_. Full demo — a 41-file agent PR reviewed by e
 | **start using Corpus** — get a working workspace                              | [corpus-starter-kit](https://github.com/jcosta33/corpus-starter-kit) — copy it whole, fill `AGENTS.md`, run the loop |
 | **understand the method** — formats, the checks contract, the decision ledger | **this repo** — `docs/` (the numbered happy path), `docs/reference/`, `docs/adrs/`                                   |
 | **run the checks / wire the gate** — `corpus check` as a command              | [corpus-cli](https://github.com/jcosta33/corpus-cli) — the reference CLI (optional)                                  |
-| **add optional skills** — review personas, code-depth guides                  | [corpus-skills](https://github.com/jcosta33/corpus-skills) — `npx skills add jcosta33/corpus-skills`                 |
+| **add optional skills** — review stances, code-lifecycle + authoring guides    | [corpus-skills](https://github.com/jcosta33/corpus-skills) — `npx skills add jcosta33/corpus-skills`                 |
+| **delegate to subagents** — review / audit / spec-author worker definitions    | [corpus-agents](https://github.com/jcosta33/corpus-agents) — copy into `.claude/agents/` (Claude Code) / `.codex/agents/` (Codex) |
+| **use Corpus over MCP** — read + reconcile facts from a non-terminal client    | [corpus-mcp](https://github.com/jcosta33/corpus-mcp) — an MCP server for Claude Desktop / Cursor (no shell needed)   |
 
 Most people start at the kit and never read this repo cover to cover.
 

@@ -1,7 +1,7 @@
 ---
 type: adr
 id: adr-0116
-status: proposed
+status: accepted
 created: 2026-06-27
 updated: 2026-06-27
 ---
@@ -46,19 +46,21 @@ and propose extending the existing `corpus check` to verify it.** A spec is *shi
    board calls done with no Execution record is incoherent — the requirement→evidence linkage for a
    shipped feature is exactly the residue ADR-0110 keeps.
 
-**Proposed checker.** Extend `corpus check` (the toolable subset, [ADR-0063](./0063-honesty-framework-and-tooling-boundary.md))
-to **fail when the board marks a spec shipped but the spec's status disagrees, or the spec has no
-`## Execution` section** — a status/spec coherence check joining the existing `C0NN` core-check family.
+**Spec-side shipped; board-signal half deferred.** `corpus check` (the toolable subset,
+[ADR-0063](./0063-honesty-framework-and-tooling-boundary.md)) now carries the spec-status↔`## Execution`
+coherence (SPEC-method-gates): it flags an `active` spec with no `## Execution`, and a non-`active`
+(draft/ready/done) spec that *carries* one. The other half — **failing when the board marks a spec shipped
+but the spec disagrees** — is NOT built: the board's State column is freeform prose, not a low-FP signal to
+parse, so that half stays the deferred toolable follow-up.
 The check is 0-FP by construction on the board signal: it fires *only* on a spec the board itself
 declares shipped, so a `draft`/`ready`/in-flight spec is never touched, and a legacy or 1:1-simple spec
 that the board has not marked shipped is never forced into the structured form. (The AC-names-a-retired-
 artifact symptom is left to the ADR-0108 reference-snapshot staleness mechanism and to review — it is
 not part of this coherence check.)
 
-_Level: **proposed** — design intent only. This records the invariant and the checker's contract; **no
-rule is built here**, no `checks.yaml` entry is added, and `corpus check` ships nothing for this today.
-The invariant is the discipline-and-review obligation until the check lands; promote to `accepted`,
-and the check from proposed to `toolable`, only when the rule is implemented._
+_Level: **toolable** — the spec-status↔Execution checks shipped (`corpus check`: `active-spec-no-execution`
++ `nonactive-spec-with-execution`, corpus-cli). The board-signal half stays **proposed** (the freeform
+board is not a low-FP parse target); it remains a discipline-and-review obligation until/unless built._
 
 ## Consequences
 

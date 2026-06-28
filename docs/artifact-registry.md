@@ -23,7 +23,7 @@ name may appear outside the immutable history (ADRs) and changelogs.
 
 ## Agents
 
-Source: [`../corpus-agents/agents/`](https://github.com/jcosta33/corpus-agents) ([ADR-0092](./adrs/0092-claude-code-agent-catalog.md)).
+Source: [`../corpus-agents/agents/`](https://github.com/jcosta33/corpus-agents) ([ADR-0092](./adrs/0092-corpus-agents-member.md)).
 
 | Name                     | Status                                          | Notes                                                                                  |
 | ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------------- |
