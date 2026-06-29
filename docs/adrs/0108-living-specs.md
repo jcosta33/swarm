@@ -11,7 +11,7 @@ updated: 2026-06-25
 ## Context
 
 A spec must stay useful and current over years without spawning new documents per change (the
-owner's "living organism" requirement). Two evidence passes (RESEARCH-living-specs, corpus-works) ground
+owner's "living organism" requirement). Two evidence passes (RESEARCH-living-specs, suspec-works) ground
 the choice:
 
 - **R1 (standards/process):** the field *majority* **supersedes** (IETF, PEP `Final`, ADR append-only

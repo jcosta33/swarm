@@ -113,7 +113,7 @@ Do not mix plain `AC-NNN` headings and SOL blocks in one spec.
 
 ## Checks
 
-Use [checks](reference/checks.md) as the review checklist. `corpus check` can report the toolable subset.
+Use [checks](reference/checks.md) as the review checklist. `suspec check` can report the toolable subset.
 
 ## Related
 

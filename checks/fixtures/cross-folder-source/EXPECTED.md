@@ -8,18 +8,18 @@ Checks fixture for [the check catalogue](../../../docs/reference/checks.md), pin
 
 This is the case the shipped worked example (`examples/feature-from-ticket/`) **masks**, because
 that example co-locates its `ticket.md` _beside_ the spec — so a spec-dir-only resolver passes it
-while silently failing the far more common root-level `intake/x.md` layout that `corpus pull` +
-`corpus new spec` scaffold. This fixture restores the cross-folder case.
+while silently failing the far more common root-level `intake/x.md` layout that `suspec pull` +
+`suspec new spec` scaffold. This fixture restores the cross-folder case.
 
 ## Layout
 
 ```
 cross-folder-source/
-  intake/sup-204.md          <- captured by `corpus pull` at the workspace root
+  intake/sup-204.md          <- captured by `suspec pull` at the workspace root
   specs/triage/spec.md       <- sources: [intake/sup-204.md]   (a workspace-root-relative path)
 ```
 
-## Expected results — `corpus check specs/triage/spec.md`
+## Expected results — `suspec check specs/triage/spec.md`
 
 | Check                     | Where                        | Expected result                                                                                                                                                                                  | Severity                |
 | ------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
@@ -33,5 +33,5 @@ cross-folder-source/
 own directory AND the workspace root; only a ref that exists under neither is a broken link. A
 genuinely-missing root ref (e.g. `intake/nope.md`) still fails C009.
 
-> Toolable — `corpus check` implements exactly this. Until the tool runs in a given workspace,
+> Toolable — `suspec check` implements exactly this. Until the tool runs in a given workspace,
 > reviewers read this table as the checklist.

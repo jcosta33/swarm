@@ -1,11 +1,11 @@
-# The `corpus` CLI
+# The `suspec` CLI
 
-`corpus-cli` is optional. The markdown workflow does not require it.
+`suspec-cli` is optional. The markdown workflow does not require it.
 
 The CLI prepares files, launches configured agents, and reconciles evidence.
 It does not write code and does not decide whether code is correct.
 
-Use the [corpus-cli README](https://github.com/jcosta33/corpus-cli#commands) for exact flags and shipped commands.
+Use the [suspec-cli README](https://github.com/jcosta33/suspec-cli#commands) for exact flags and shipped commands.
 
 ## Boundary
 
@@ -36,13 +36,13 @@ The command set includes:
 - `show`
 - `agents emit --codex`
 
-`corpus-mcp` exposes CLI data over MCP. It shells out to the CLI `--json` contract.
+`suspec-mcp` exposes CLI data over MCP. It shells out to the CLI `--json` contract.
 
 ## Non-goals
 
 The CLI does not provide:
 
-- `corpus close` that mutates the board
+- `suspec close` that mutates the board
 - code generation
 - spec compilation
 - automatic task decomposition
@@ -55,7 +55,7 @@ The CLI does not provide:
 
 Deferred:
 
-- `corpus inventory new`
+- `suspec inventory new`
 - per-adapter hook generation
 - run-record `commands[]`
 - strict SOL parser
@@ -67,25 +67,25 @@ Measured-out:
 
 ## Command contracts
 
-### `corpus init`
+### `suspec init`
 
 Creates a workspace from the starter kit.
 
 Writes `AGENTS.md`, templates, guides, flow folders, examples, and `status.md`.
 
-### `corpus pull <ticket>`
+### `suspec pull <ticket>`
 
 Captures an external ticket into `intake/`.
 
 It does not write a spec.
 
-### `corpus new spec <slug> [--from <intake>]`
+### `suspec new spec <slug> [--from <intake>]`
 
 Creates `specs/<slug>/spec.md` from the template.
 
 The user fills requirements.
 
-### `corpus check [file]`
+### `suspec check [file]`
 
 Reads specs or workspace files and reports diagnostics.
 
@@ -97,31 +97,31 @@ Exit codes:
 
 It reports facts. It does not issue a merge verdict.
 
-### `corpus new task --from <SPEC-id | CHANGE-id> [--scope AC-...]`
+### `suspec new task --from <SPEC-id | CHANGE-id> [--scope AC-...]`
 
 Creates a task packet from declared scope.
 
 It does not invent requirements.
 
-### `corpus worktree <create|list|remove|prune>`
+### `suspec worktree <create|list|remove|prune>`
 
 Creates and tracks task worktrees.
 
 One task gets one branch or worktree.
 
-### `corpus run <task> --agent <name>`
+### `suspec run <task> --agent <name>`
 
 Launches a configured agent in the task worktree.
 
 Records the launch envelope. The agent does the work.
 
-### `corpus review <task> [--agent <name>]`
+### `suspec review <task> [--agent <name>]`
 
 Drafts a review packet from the task, diff, spec, and change plan.
 
 It routes mismatches and exceptions to human attention. It does not decide the result.
 
-### `corpus status`
+### `suspec status`
 
 Prints a derived board from workspace files.
 
@@ -132,7 +132,7 @@ Committed `status.md` stays hand-edited.
 If the CLI is used inside a code repo, it may create a gitignored directory:
 
 ```text
-.corpus/
+.suspec/
   config.yaml
   work/
   cache/
@@ -141,7 +141,7 @@ If the CLI is used inside a code repo, it may create a gitignored directory:
 
 Rules:
 
-- never commit `.corpus/`
+- never commit `.suspec/`
 - deleting it loses no durable record
 - specs, reviews, and findings stay in the workspace
 

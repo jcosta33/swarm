@@ -28,7 +28,7 @@ Shared rules:
 
 ## Selector
 
-The frontmatter field is the selector. Filename suffixes carry no Corpus meaning.
+The frontmatter field is the selector. Filename suffixes carry no Suspec meaning.
 
 ```yaml
 ---
@@ -179,7 +179,7 @@ Core checks apply to SOL specs.
 
 SOL-specific checks are the contract in [checks](checks.md).
 
-Treat them as checklist items unless your installed `corpus-cli` catalogue says they are
+Treat them as checklist items unless your installed `suspec-cli` catalogue says they are
 implemented.
 
 ## Versioning

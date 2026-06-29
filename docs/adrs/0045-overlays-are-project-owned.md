@@ -11,7 +11,7 @@ superseded_by: 0049-minimal-install-no-mount-no-imposed-workspace
 > **Superseded by [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md).** There is no
 > overlays directory: project conventions now live in `AGENTS.md`. The reasoning below (project rules must
 > survive a framework upgrade) still holds — under 0049 it holds because the bootloader an agent reads is
-> project-owned and an upgrade only re-copies Corpus's named skill files.
+> project-owned and an upgrade only re-copies Suspec's named skill files.
 
 # ADR-0045: Overlays are project-owned and live outside the replaceable kernel payload
 
@@ -20,29 +20,29 @@ superseded_by: 0049-minimal-install-no-mount-no-imposed-workspace
 Overlays are the project-local rule layer (architecture conventions, extra refusals, local command
 bindings) a repository adds on top of the kernel ([overlays reference](./library/overlays.md)). They are
 **project-authored** content. Yet the kernel payload model placed them _inside_ the framework-owned tree:
-`docs/model/workspace.md` listed `overlays/` as a sub-directory of `.corpus/kernel/` (the installed payload)
-and the producer seed shipped at `starter-kit/.agents/overlays/` (which mirrors `.corpus/kernel/`).
+`docs/model/workspace.md` listed `overlays/` as a sub-directory of `.suspec/kernel/` (the installed payload)
+and the producer seed shipped at `starter-kit/.agents/overlays/` (which mirrors `.suspec/kernel/`).
 
 That nesting is an **upgrade footgun**. The kernel-upgrade model ([0044](./0044-kernel-is-derived-and-self-contained.md))
-replaces `.corpus/kernel/` **wholesale** from a newer payload. With overlays nested inside it, a naive payload
-swap **deletes the project's overlays** — the one directory under `.corpus/kernel/` a project is _expected_ to
+replaces `.suspec/kernel/` **wholesale** from a newer payload. With overlays nested inside it, a naive payload
+swap **deletes the project's overlays** — the one directory under `.suspec/kernel/` a project is _expected_ to
 author. The workspace table even said "Framework-owned; project edits belong in `overlays/`," i.e. it marked a
 project-owned island inside a framework-owned, replace-on-upgrade tree — exactly the ownership conflation that
 makes upgrades unsafe.
 
 ## Decision
 
-**Overlays are project-owned and live at a top-level `.corpus/overlays/`** — a sibling of `.corpus/kernel/`,
-_outside_ the replaceable payload — not at `.corpus/kernel/overlays/`.
+**Overlays are project-owned and live at a top-level `.suspec/overlays/`** — a sibling of `.suspec/kernel/`,
+_outside_ the replaceable payload — not at `.suspec/kernel/overlays/`.
 
-1. **`.corpus/overlays/`** is a top-level workspace category (alongside `sources/`, `status/`, `memory/`,
-   `ledger/`, `archive/`), **project-owned and committed**. A kernel upgrade replaces `.corpus/kernel/`
-   wholesale and **never touches `.corpus/overlays/`**.
+1. **`.suspec/overlays/`** is a top-level workspace category (alongside `sources/`, `status/`, `memory/`,
+   `ledger/`, `archive/`), **project-owned and committed**. A kernel upgrade replaces `.suspec/kernel/`
+   wholesale and **never touches `.suspec/overlays/`**.
 2. The producer seed moves out of the payload mirror: `starter-kit/.agents/overlays/` → **`starter-kit/overlays/`**
-   (a workspace seed, not part of the `starter-kit/.agents/` → `.corpus/kernel/` mirror), so [0044](./0044-kernel-is-derived-and-self-contained.md)'s
-   "`starter-kit/.agents/` mirrors `.corpus/kernel/`" invariant stays honest. The stdlib ships it **empty (a README)**.
-3. The ownership boundary is now **positional**: everything under `.corpus/kernel/**` is framework-owned and
-   replaced on upgrade; `.corpus/overlays/` (with the root `AGENTS.md`, `.corpus/config.yaml`, and the data
+   (a workspace seed, not part of the `starter-kit/.agents/` → `.suspec/kernel/` mirror), so [0044](./0044-kernel-is-derived-and-self-contained.md)'s
+   "`starter-kit/.agents/` mirrors `.suspec/kernel/`" invariant stays honest. The stdlib ships it **empty (a README)**.
+3. The ownership boundary is now **positional**: everything under `.suspec/kernel/**` is framework-owned and
+   replaced on upgrade; `.suspec/overlays/` (with the root `AGENTS.md`, `.suspec/config.yaml`, and the data
    workspace) is project-owned and preserved. This is the same boundary the upgrade story relies on.
 4. The **overlay contract is unchanged** ([overlays reference](./library/overlays.md)): an overlay is
    SOFT, additive, lazily-loaded-by-name guidance that MUST NOT override an approved obligation or redefine
@@ -56,23 +56,23 @@ precondition for a safe kernel upgrade and for the static adoption bundle.
 
 | Alternative                                                                                              | Why rejected                                                                                                                                                                                                                                           |
 | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Keep overlays under `.corpus/kernel/overlays/`, preserve them on upgrade by a special stash/restore step | Makes the upgrade special-case a project-owned subdir of a framework-owned tree; ownership-by-exception is exactly the conflation that caused the footgun. Positional ownership (location = owner) is simpler and safe by construction.                |
-| Keep the producer seed at `starter-kit/.agents/overlays/`                                                | Breaks [0044](./0044-kernel-is-derived-and-self-contained.md)'s mirror invariant (`starter-kit/.agents/` ⇒ `.corpus/kernel/`): the coherence gate would expect it to install under `.corpus/kernel/overlays/`. The seed must leave the payload mirror. |
+| Keep overlays under `.suspec/kernel/overlays/`, preserve them on upgrade by a special stash/restore step | Makes the upgrade special-case a project-owned subdir of a framework-owned tree; ownership-by-exception is exactly the conflation that caused the footgun. Positional ownership (location = owner) is simpler and safe by construction.                |
+| Keep the producer seed at `starter-kit/.agents/overlays/`                                                | Breaks [0044](./0044-kernel-is-derived-and-self-contained.md)'s mirror invariant (`starter-kit/.agents/` ⇒ `.suspec/kernel/`): the coherence gate would expect it to install under `.suspec/kernel/overlays/`. The seed must leave the payload mirror. |
 | Put project rules in the root `AGENTS.md` instead of overlays                                            | `AGENTS.md` is always-loaded persistent facts; overlays are lazily-loaded, pass-scoped rule bundles — a different lifecycle ([overlays reference](./library/overlays.md) §"where does a rule belong"). They are not interchangeable.                   |
 
 ## Consequences
 
 ### Positive
 
-- A kernel upgrade is **safe by construction**: replacing `.corpus/kernel/` cannot delete project overlays.
-- Ownership is positional and unambiguous: `.corpus/kernel/**` framework-owned/replaced; everything else the
+- A kernel upgrade is **safe by construction**: replacing `.suspec/kernel/` cannot delete project overlays.
+- Ownership is positional and unambiguous: `.suspec/kernel/**` framework-owned/replaced; everything else the
   project's.
 - Aligns overlays with the other project-owned, upgrade-surviving surfaces (the root `AGENTS.md`, `config.yaml`).
 
 ### Negative
 
-- The `.corpus/` workspace grows from eight to nine top-level categories; adopters learn one more directory.
-- Existing prose and the producer layout that named `starter-kit/.agents/overlays/` / `.corpus/kernel/overlays/`
+- The `.suspec/` workspace grows from eight to nine top-level categories; adopters learn one more directory.
+- Existing prose and the producer layout that named `starter-kit/.agents/overlays/` / `.suspec/kernel/overlays/`
   must be updated (this ADR + `workspace.md` + `overlays.md` + the `starter-kit/AGENTS.md`/`README.md` pointers).
 
 ### Neutral / tradeoffs
@@ -87,8 +87,8 @@ Accepted (v0.1).
 
 ## Affected obligations / constraints
 
-- Adds: `.corpus/overlays/` as a project-owned, upgrade-surviving top-level workspace category; the positional
-  ownership boundary (`.corpus/kernel/**` framework-owned/replaced vs `.corpus/overlays/` project-owned/preserved).
+- Adds: `.suspec/overlays/` as a project-owned, upgrade-surviving top-level workspace category; the positional
+  ownership boundary (`.suspec/kernel/**` framework-owned/replaced vs `.suspec/overlays/` project-owned/preserved).
 - Modifies: the workspace partition (eight → nine categories); the producer seed location
   (`starter-kit/.agents/overlays/` → `starter-kit/overlays/`); the `starter-kit/AGENTS.md` and `starter-kit/README.md` overlay
   pointers; the "Where overlays live" contract in `docs/library/overlays.md`.

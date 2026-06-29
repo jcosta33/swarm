@@ -17,11 +17,11 @@ participation as the gate ([[MCINTOSH14]](../research/sources.md#MCINTOSH14)), a
 as evidence not verdict. It already observed that **agent reviewers are cheap, so a third is easier to
 justify than the human-coordination literature implies**.
 
-Dogfooding (corpus-works #65/#67/#70) surfaced three seams in how that model is written down:
+Dogfooding (suspec-works #65/#67/#70) surfaced three seams in how that model is written down:
 
 - **#65 — the procedure still reads as one reviewer producing one packet.** The cost calculus
   [[RIGBY13]](../research/sources.md#RIGBY13) measured (~2 reviewers, little marginal yield beyond) is
-  a **human-coordination** cost; an agent lens does not pay it. In practice Corpus review already runs
+  a **human-coordination** cost; an agent lens does not pay it. In practice Suspec review already runs
   several distinct-lens agents — the canon under-states what is done.
 - **#67 — the docs name only Worker and Scout.** They do not recommend separate sessions for spec/task
   authoring vs implementation vs review, nor how to route model strength, nor how to judge whether a
@@ -64,7 +64,7 @@ Dogfooding (corpus-works #65/#67/#70) surfaced three seams in how that model is 
 
 4. **The packet records the plan.** The lead's review packet names the **lenses used** and the
    **reconciliation**; a lens subreviewer never renders the final status or suggested decision — the
-   human owns the verdict ([ADR-0077](./0077-corpus-cli-reconcile-only-harness.md) D8). _Level:
+   human owns the verdict ([ADR-0077](./0077-suspec-cli-reconcile-only-harness.md) D8). _Level:
    convention (the kit review template carries the plan/lens capture)._
 
 ## Consequences
@@ -72,7 +72,7 @@ Dogfooding (corpus-works #65/#67/#70) surfaced three seams in how that model is 
 - **No `checks.yaml` rule and no contract-version bump:** lead-orchestration, the lenses, and the
   routing/escalation guidance are conventions/checklists + BYO tooling — consistent with the honesty
   framework ([ADR-0063](./0063-honesty-framework-and-tooling-boundary.md)). Nothing here is "enforced."
-- **`corpus-reviewer` / `corpus-challenger`** keep "issue no verdict; the human owns the result" and
+- **`suspec-reviewer` / `suspec-challenger`** keep "issue no verdict; the human owns the result" and
   gain the review-lead framing: a lens reviewer takes **one** lens and returns findings only; the lead
   orchestrates ≥3 and aggregates.
 - **Supersedes nothing.** It **refines** ADR-0095 (#3's default + #2's wording) and **reaffirms**
@@ -88,7 +88,7 @@ Dogfooding (corpus-works #65/#67/#70) surfaced three seams in how that model is 
 `docs/07-running-agents.md` (the roles + routing/escalation + measured-cost rule),
 `docs/08-reviewing-output.md` (the review-lead reviewer rule + the author-may-review clarification),
 the kit review template `templates/review.md` (a review-plan / lens-results capture),
-`corpus-agents` `agents/corpus-reviewer.md` + `agents/corpus-challenger.md` (the lead-orchestrates /
+`suspec-agents` `agents/suspec-reviewer.md` + `agents/suspec-challenger.md` (the lead-orchestrates /
 one-lens-subreviewer framing; the emitted `.codex/*.toml` are regenerated, not hand-edited). ADR-0095
 gains a dated ledger note pointing here.
 
@@ -98,6 +98,6 @@ gains a dated ledger note pointing here.
   author" wording).
 - **Reaffirms (does not change):** [ADR-0056](./0056-adversarial-self-review-completion-discipline.md)
   (`implementer ≠ reviewer`, no self-verdict) and the human-owns-the-verdict rule
-  ([ADR-0077](./0077-corpus-cli-reconcile-only-harness.md) D8).
+  ([ADR-0077](./0077-suspec-cli-reconcile-only-harness.md) D8).
 - **Does NOT change:** any closed set, the SOL grammar, the verdict model
   (Pass/Fail/Unverified/Blocked), or the review-packet format.

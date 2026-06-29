@@ -15,8 +15,8 @@ The Phase-3 family sweep (workflow `wf9rvvwys`) confirmed the re-architecture th
 was correct **in file structure**, but the doc/reference layer drifted because every recurring issue
 mapped to a missing automated gate, not to a bad design. One drift class was a **stale catalog copy**.
 
-The governed skills catalog (corpus-skills) is the single source for the universal, framework-free
-skills. The workspace keeps its own copy at `corpus-works/.agents/skills`, which is then symlinked into
+The governed skills catalog (suspec-skills) is the single source for the universal, framework-free
+skills. The workspace keeps its own copy at `suspec-works/.agents/skills`, which is then symlinked into
 the live `.claude/skills` the agents actually load. That copy is a hand-synced **orphan**: nothing tied
 it back to upstream. The sweep found it **2+ days and one re-baseline stale** — it was **missing skills
 that had been added to the catalog** and **still hosting a skill the catalog had retired**. Because the
@@ -32,7 +32,7 @@ catches it.
 ## Decision
 
 **A governed catalog synced into a workspace MUST NOT be an orphaned copy.** Concretely, where a
-workspace consumes a catalog whose single source lives elsewhere (corpus-skills → `corpus-works/.agents/skills`),
+workspace consumes a catalog whose single source lives elsewhere (suspec-skills → `suspec-works/.agents/skills`),
 exactly one of the two holds:
 
 1. **Preferred — it is a *link* to its single source.** A symlink or git submodule pointing at the
@@ -55,8 +55,8 @@ is **in force now** — accepted as a **convention** held by discipline and revi
 synced catalog is touched, the reviewer checks it is a link or matches upstream, and an orphaned copy is
 a finding. The **freshness CHECK is the toolable path and is NOT yet shipped** — there is no CI job today
 that diffs the copy against upstream; nothing automated catches the drift, which is exactly why the sweep
-caught it by hand. Relinking the existing `corpus-works/.agents/skills` copy to its source (option 1), or
-landing the freshness-diff CI (option 2), is **follow-up work**, tracked in corpus-works. Until one of
+caught it by hand. Relinking the existing `suspec-works/.agents/skills` copy to its source (option 1), or
+landing the freshness-diff CI (option 2), is **follow-up work**, tracked in suspec-works. Until one of
 those ships, this ADR's force is convention-plus-review, and this sentence is the honest statement of
 that boundary.
 
@@ -75,8 +75,8 @@ _Level: convention now; the freshness diff is toolable (not yet shipped)._
 - **Cost — link mechanics.** A symlink or submodule is one more piece of repo plumbing (clone/checkout
   must hydrate it; tooling that walks the tree must follow links). The freshness-check alternative trades
   that plumbing for a CI job to build and maintain.
-- **Scope.** This governs *governed catalogs synced into a workspace* (the corpus-skills →
-  `corpus-works` case the sweep found). It does not touch how an external adopter vendors a subset of the
+- **Scope.** This governs *governed catalogs synced into a workspace* (the suspec-skills →
+  `suspec-works` case the sweep found). It does not touch how an external adopter vendors a subset of the
   catalog into their own repo — that remains a deliberate copy under the self-containment rule of
   [ADR-0016](./0016-skills-are-self-contained.md).
 

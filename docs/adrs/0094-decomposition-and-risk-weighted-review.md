@@ -10,7 +10,7 @@ updated: 2026-06-22
 
 ## Context
 
-Agent-written changes are cheap to produce and easy to make large. Corpus's leverage is the
+Agent-written changes are cheap to produce and easy to make large. Suspec's leverage is the
 _handoff_ — what the agent is told to emit and what the human (or an independent reviewer) must
 actually look at. Two recurring questions had no grounded answer in the canon:
 
@@ -19,7 +19,7 @@ actually look at. Two recurring questions had no grounded answer in the canon:
 2. **Where should review scrutiny concentrate?** Field reports framed it as "greenfield (lighter) vs
    brownfield (heavier)." That framing does not hold up against the evidence.
 
-A web-verified evidence pass (corpus-works #53; sources below, each verified June 2026 with honest
+A web-verified evidence pass (suspec-works #53; sources below, each verified June 2026 with honest
 tiers) settled the principle — and **reframed the discriminator** from new-vs-old to
 **diffusion / churn / change-type**.
 
@@ -47,11 +47,11 @@ tiers) settled the principle — and **reframed the discriminator** from new-vs-
    lands in its own task/commit, separate from the behavior change it enables (the small-cleanup
    exception in [[GOOGLESMALLCL]] stands). _Level: convention._
 
-2. **An oversized-packet heuristic is named as a toolable signal** (`corpus check` / a step-bar):
+2. **An oversized-packet heuristic is named as a toolable signal** (`suspec check` / a step-bar):
    flag a task or review packet whose **changed-LOC and files-touched/diffusion** exceed a band,
    anchored to the [[SMARTBEAR]] 200–400 LOC heuristic with files-touched as a first-class signal
    ([[BOSU15]]). Thresholds ship as **heuristics with provenance, never enforced law**. _Level:
-   toolable (the checker is `corpus-cli`); not built here — this ADR specifies it, corpus-cli implements._
+   toolable (the checker is `suspec-cli`); not built here — this ADR specifies it, suspec-cli implements._
 
 3. **Review scrutiny is weighted by change-type / diffusion / churn, not greenfield-vs-brownfield**
    (`docs/05-brownfield-and-change-plans.md`, `docs/06`). Concentrate human / independent-reviewer
@@ -70,7 +70,7 @@ tiers) settled the principle — and **reframed the discriminator** from new-vs-
   reviewed) is kept — but named precisely as **coupling/diffusion**, the version the evidence
   supports, not "new vs old."
 - No `checks.yaml` rule and no contract-version bump land with this ADR: the oversized-packet flag is
-  specified-not-shipped (a `corpus-cli` toolable, demand-gated), consistent with the honesty framework
+  specified-not-shipped (a `suspec-cli` toolable, demand-gated), consistent with the honesty framework
   (ADR-0063) — name the checker, never claim enforcement before a tool ships.
 - Thresholds are heuristics: [[SMARTBEAR]] is a single 2006 vendor dataset, and [[HINDLE11]] is scoped
   to four Apache Java projects — the docs cite the band as guidance with its provenance and caveats,
@@ -80,8 +80,8 @@ tiers) settled the principle — and **reframed the discriminator** from new-vs-
 
 `docs/06-creating-tasks.md` (task-shaping rule + named oversized-packet flag), `docs/05-brownfield-and-change-plans.md`
 (risk-weighted review + Hindle caveat), the kit `split-work` guide (the small/untangled lever),
-`docs/research/sources.md` (the nine entries above). The `corpus-cli` oversized-packet check is the
-toolable follow-up (tracked in corpus-works #61 §B), not shipped by this ADR.
+`docs/research/sources.md` (the nine entries above). The `suspec-cli` oversized-packet check is the
+toolable follow-up (tracked in suspec-works #61 §B), not shipped by this ADR.
 
 ## Update (2026-06-22) — the oversized-packet band measured, deferred ([ADR-0097](./0097-mint-c016-c017-defer-oversized.md))
 
@@ -89,5 +89,5 @@ The named oversized-packet toolable was built and **measured**: a raw changed-LO
 both useful and low-false-positive for code task diffs (≈15% FP at 600 LOC — feature-with-tests shares
 the 600–1200 LOC range; a 0-FP band of ≥1500 never fires on the population it targets). So the
 band-based check is **specified-not-shipped** (id `C018` reserved for a future decomposition-predictive
-signal), and `corpus review` surfaces the diff size as **neutral info** instead — the "size as a signal"
+signal), and `suspec review` surfaces the diff size as **neutral info** instead — the "size as a signal"
 intent in the only honest form the data supports. Full measurement in ADR-0097.

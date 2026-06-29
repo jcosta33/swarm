@@ -10,7 +10,7 @@ updated: 2026-06-11
 
 ## Context
 
-Requirement clarity is the best-evidenced lever Corpus has: ambiguous or incomplete task input measurably
+Requirement clarity is the best-evidenced lever Suspec has: ambiguous or incomplete task input measurably
 degrades agent code correctness [[ORCHID]](../research/sources.md#ORCHID)
 [[HUMANEVALCOMM]](../research/sources.md#HUMANEVALCOMM), models usually generate anyway rather than ask
 [[HUMANEVALCOMM]](../research/sources.md#HUMANEVALCOMM) [[HILBENCH]](../research/sources.md#HILBENCH), and
@@ -32,7 +32,7 @@ sources[]`; sections Intent / Non-goals / Requirements / Open questions / Affect
    [[IFSCALE]](../research/sources.md#IFSCALE) — preliminary).
 2. **SOL is the optional stricter surface,** selected per file by frontmatter `format: sol`. SOL is a
    _notation_ (EARS-shaped blocks: `REQ AC-001:` / `WHEN` / `THE <actor> MUST <response>` / `VERIFY BY`),
-   not a language: it carries no version number, and the fields `corpus_language`, `aps_version`,
+   not a language: it carries no version number, and the fields `suspec_language`, `aps_version`,
    `spec_version` do not exist. The full notation reference lives at `docs/reference/structured-requirements.md`.
 3. **One form-agnostic requirement record** underlies both surfaces:
    `{ id, strength, statement, verify_refs[], kind, edges[] }` plus spec-level
@@ -52,7 +52,7 @@ sources[]`; sections Intent / Non-goals / Requirements / Open questions / Affect
 | Alternative                   | Why weaker                                                                                                                   |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | SOL-only (status quo)         | Adoption friction with no enforcement; the evidence requires clarity, not a particular syntax                                |
-| Plain-markdown only, drop SOL | Discards a working stricter surface praised in real adoption (O-002) and the parser target corpus-cli already builds against |
+| Plain-markdown only, drop SOL | Discards a working stricter surface praised in real adoption (O-002) and the parser target suspec-cli already builds against |
 | Two independent formats       | Forks the checks/review machinery; the single record + anti-fork fixtures prevent divergence                                 |
 
 ## Consequences
@@ -69,4 +69,4 @@ ADR-0028 (the obligation/prose layers survive as reference-tier notation and wri
 ## Propagation
 
 Templates, docs/04, reference (structured-requirements, checks, artifact-formats), conformance fixtures
-(equivalence pairs), evals, corpus-cli.
+(equivalence pairs), evals, suspec-cli.

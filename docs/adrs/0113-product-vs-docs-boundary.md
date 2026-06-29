@@ -12,11 +12,11 @@ updated: 2026-06-27
 
 The Phase 3 family sweep (workflow `wf9rvvwys`, the AUDIT-family pass) confirmed the
 re-architecture this program shipped was right in **file structure** — 8→6 agents, 7→11 skills,
-corpus-mcp at 0.2.0, the catalog/kit split of [ADR-0112](./0112-two-tier-skills.md) — but the
+suspec-mcp at 0.2.0, the catalog/kit split of [ADR-0112](./0112-two-tier-skills.md) — but the
 **doc / reference layer drifted**, and every recurring issue mapped to a missing automated gate.
 
 The concrete drift the sweep found: the **citation / product-pollution** and **count-drift**
-classes had **recurred** in corpus-mcp and the kit. This program had already run a manual
+classes had **recurred** in suspec-mcp and the kit. This program had already run a manual
 strip-and-rule pass, but that pass covered only the **catalog and the agents** — so ADR-####
 / AUDIT-#### citations and repo / GitHub / DOI URLs leaked back into MCP tool strings and kit
 files. Humans caught the recurrence in the sweep; no gate did. A citation embedded in a
@@ -34,9 +34,9 @@ ADR writes it down.
 
 1. **The product surface — zero citations, zero source URLs.** These files MUST carry no
    `ADR-####` / `AUDIT-####` citation and no repo / GitHub / DOI URL:
-   - agent definition **bodies** (corpus-agents),
+   - agent definition **bodies** (suspec-agents),
    - **`SKILL.md` bodies** (the catalog and the kit),
-   - MCP tool **`title` / `description` / `inputSchema` `.describe()` strings** (corpus-mcp),
+   - MCP tool **`title` / `description` / `inputSchema` `.describe()` strings** (suspec-mcp),
    - product **READMEs**.
 
 2. **The docs surface cites freely.** Everything under `docs/` — and the science / sources pages
@@ -54,8 +54,8 @@ ADR writes it down.
    displays*, not the source that explains them to a maintainer.
 
 _Level: convention (in force now, by discipline + review)._ The policy is **in force today**:
-this program stripped corpus-skills, corpus-agents, corpus-mcp, and the kit, and codified the
-rule in corpus-skills `docs/self-containment.md` Rule 3 and corpus-agents `docs/sources.md`.
+this program stripped suspec-skills, suspec-agents, suspec-mcp, and the kit, and codified the
+rule in suspec-skills `docs/self-containment.md` Rule 3 and suspec-agents `docs/sources.md`.
 What holds it today is **discipline and review**, not a tool.
 
 The **enforcement path** is a per-repo CI regex-lint scanning the designated product paths for

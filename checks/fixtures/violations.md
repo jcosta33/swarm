@@ -1,6 +1,6 @@
 # Checks fixtures — violations
 
-_Advanced design note — internal rationale; not needed to use Corpus._
+_Advanced design note — internal rationale; not needed to use Suspec._
 
 One minimal negative fixture per violation class. Each snippet must be flagged by a
 checker applying [`../checks.yaml`](../checks.yaml) — or by a reviewer applying
@@ -39,8 +39,8 @@ A review packet's coverage table:
 
 **Expected:** flagged — an empty Evidence cell means **Unverified**, never **Pass**.
 The row's correct content is `Unverified` plus a Human attention entry. Implemented as **C016**
-(ADR-0097): the **gate** path (`corpus check <review>`) blocks on it (hard error); the advisory
-**reconcile** path (`corpus review`) surfaces the same row id without blocking (ADR-0077 D8).
+(ADR-0097): the **gate** path (`suspec check <review>`) blocks on it (hard error); the advisory
+**reconcile** path (`suspec review`) surfaces the same row id without blocking (ADR-0077 D8).
 
 ---
 
@@ -350,7 +350,7 @@ by a packet whose `AC-001` Pass row carries a structured `verify` block (a fence
 
 **Expected:** flagged `cmd-mismatch` — the block's recorded `cmd` does not match the requirement's named
 Verify command. The comparison normalizes away surrounding backticks, a trailing `(parenthetical)` note,
-and whitespace, so the canon's own backtick-wrapped Verify-with form does **not** false-fire (corpus-works
+and whitespace, so the canon's own backtick-wrapped Verify-with form does **not** false-fire (suspec-works
 #16); only a genuine disagreement trips it. A block whose `cmd` matches and reads `result=pass` is
 consistent → no finding; a Pass row with only the free-form Evidence cell stays a warning, never
 machine-rejected. A consistency fact, never a verdict.
@@ -411,5 +411,5 @@ it is dead weight no reader is sent to (the reference-load field test measured t
 resource helps only when the guide loads it). **Orphan direction only**: the named `checklist.md` is
 _not_ flagged, and the inverse case (a guide naming a reference that does not exist) is out of scope.
 Matching is lenient — the bare filename anywhere in the body counts as named — so a guide that does
-point at its references never false-fires (measured 0-orphan across the real skills corpus). A
+point at its references never false-fires (measured 0-orphan across the real skills suspec). A
 workspace-scope warning; surfaces a fact, never a verdict.

@@ -24,8 +24,8 @@ Brevity is the default, not a mandate.
 ## The dial
 
 Want stronger economy? Install the optional concision skill from the
-[corpus-skills](https://github.com/jcosta33/corpus-skills) catalog. It is opt-in conditioning — not a
-Corpus requirement, and not a runtime hook.
+[suspec-skills](https://github.com/jcosta33/suspec-skills) catalog. It is opt-in conditioning — not a
+Suspec requirement, and not a runtime hook.
 
 ## Related
 

@@ -2,7 +2,7 @@
 
 The numbered happy path, in order:
 
-1. [What is Corpus?](01-what-is-corpus.md) - the workflow and its artifacts.
+1. [What is Suspec?](01-what-is-suspec.md) - the workflow and its artifacts.
 2. [The basic workflow](02-basic-workflow.md) - the loop, step by step.
 3. [Where files live](03-where-files-live.md) - the workspace, the code repo, retention.
 4. [Writing specs](04-writing-specs.md) - intent, requirements, and `Verify with:`.
@@ -16,6 +16,6 @@ The numbered happy path, in order:
 Then go deeper:
 
 - [Tutorial](tutorial/README.md) - walk one small change end to end.
-- [Examples](examples/README.md) - complete Corpus chains.
+- [Examples](examples/README.md) - complete Suspec chains.
 - [Reference](reference/) - the deep layer: checks, step bars, artifact formats, glossary.
-- [Adopting Corpus](ADOPTING.md) - set up a workspace.
+- [Adopting Suspec](ADOPTING.md) - set up a workspace.

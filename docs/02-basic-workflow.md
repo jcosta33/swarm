@@ -149,4 +149,4 @@ For code-changing work, keep:
 ## Related
 
 - Next: [Where files live](03-where-files-live.md)
-- Previous: [What is Corpus?](01-what-is-corpus.md)
+- Previous: [What is Suspec?](01-what-is-suspec.md)

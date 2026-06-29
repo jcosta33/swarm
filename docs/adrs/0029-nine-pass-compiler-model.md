@@ -24,7 +24,7 @@ passes (schedulable transformations).
 
 ## Decision
 
-The Corpus pipeline is a fixed, ordered sequence of nine **passes**, each a schedulable
+The Suspec pipeline is a fixed, ordered sequence of nine **passes**, each a schedulable
 transformation with a typed input artifact and a typed output artifact:
 
 ```text
@@ -41,7 +41,7 @@ durable discoveries into provenance-anchored artifacts. There is NO runtime — 
 pass guide. For a single obligation the partial order MUST be respected (no `verify` before
 `implement`, no `implement` before `lower`). The full per-pass input/output contract, the
 pass-to-phase mapping, and the contract notes are detailed in the compiler-pipeline
-reference ([`docs/model/how-corpus-works.md`](./model/how-corpus-works.md)) and the per-pass pages under [`docs/passes/`](./passes/).
+reference ([`docs/model/how-suspec-works.md`](./model/how-suspec-works.md)) and the per-pass pages under [`docs/passes/`](./passes/).
 
 ## Alternatives considered
 

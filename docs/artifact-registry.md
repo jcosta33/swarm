@@ -1,6 +1,6 @@
 # Artifact registry
 
-The single source of truth for **every Corpus agent, skill, and MCP tool** across the repo family,
+The single source of truth for **every Suspec agent, skill, and MCP tool** across the repo family,
 each with a lifecycle **status**. Product and reference docs **link here** instead of restating an
 artifact's location or active/retired status — a cross-repo fact stated once drifts in one place, not
 in N ([ADR-0114](./adrs/0114-retired-artifact-registry.md), grounded by
@@ -16,32 +16,32 @@ name may appear outside the immutable history (ADRs) and changelogs.
 | Status               | Meaning                                                                        |
 | -------------------- | ------------------------------------------------------------------------------ |
 | `active`             | Live and installable in its stated home.                                       |
-| `active (kit)`       | Live, but ships from the **starter kit** (`../corpus-starter-kit/.agents/skills/`), not the catalog ([ADR-0112](./adrs/0112-two-tier-skills.md)). |
+| `active (kit)`       | Live, but ships from the **starter kit** (`../suspec-starter-kit/.agents/skills/`), not the catalog ([ADR-0112](./adrs/0112-two-tier-skills.md)). |
 | `redirect-stub`      | The name resolves but the artifact only points elsewhere; names its target.    |
 | `retired`            | Gone; names its replacement, or none.                                          |
 | `relocated→<target>` | Moved; names the new home.                                                      |
 
 ## Agents
 
-Source: [`../corpus-agents/agents/`](https://github.com/jcosta33/corpus-agents) ([ADR-0092](./adrs/0092-corpus-agents-member.md)).
+Source: [`../suspec-agents/agents/`](https://github.com/jcosta33/suspec-agents) ([ADR-0092](./adrs/0092-suspec-agents-member.md)).
 
 | Name                     | Status                                          | Notes                                                                                  |
 | ------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `corpus-reviewer`        | active                                          | Reviews a finished task/PR; proof-first mode re-runs Verify + pastes evidence, no verdict. |
-| `corpus-auditor`         | active                                          | Present-state audit of a code area.                                                    |
-| `corpus-challenger`      | active                                          | Pressure-tests a not-yet-built proposal/spec/plan.                                     |
-| `corpus-spec-author`     | active                                          | Authors/revises specs.                                                                 |
-| `corpus-documentarian`   | active                                          | Authors product/reference documentation.                                              |
-| `corpus-researcher`      | active                                          | Surveys options/evidence behind one decision-informing question.                       |
-| `corpus-explorer`        | retired (→ built-in Explore agent)              | Code-location is the built-in **Explore** agent + the `codebase-exploration` skill; there is no separate `corpus-explorer`. |
-| `corpus-evidence-checker`| redirect-stub (→ `corpus-reviewer` proof-first) | Folded into `corpus-reviewer`'s proof-first mode; stub stays only to redirect inbound references. |
+| `suspec-reviewer`        | active                                          | Reviews a finished task/PR; proof-first mode re-runs Verify + pastes evidence, no verdict. |
+| `suspec-auditor`         | active                                          | Present-state audit of a code area.                                                    |
+| `suspec-challenger`      | active                                          | Pressure-tests a not-yet-built proposal/spec/plan.                                     |
+| `suspec-spec-author`     | active                                          | Authors/revises specs.                                                                 |
+| `suspec-documentarian`   | active                                          | Authors product/reference documentation.                                              |
+| `suspec-researcher`      | active                                          | Surveys options/evidence behind one decision-informing question.                       |
+| `suspec-explorer`        | retired (→ built-in Explore agent)              | Code-location is the built-in **Explore** agent + the `codebase-exploration` skill; there is no separate `suspec-explorer`. |
+| `suspec-evidence-checker`| redirect-stub (→ `suspec-reviewer` proof-first) | Folded into `suspec-reviewer`'s proof-first mode; stub stays only to redirect inbound references. |
 
 ## Skills
 
-Catalog source: [`../corpus-skills/skills/`](https://github.com/jcosta33/corpus-skills) ([ADR-0112](./adrs/0112-two-tier-skills.md)).
-Kit source: [`../corpus-starter-kit/.agents/skills/`](https://github.com/jcosta33/corpus-starter-kit).
+Catalog source: [`../suspec-skills/skills/`](https://github.com/jcosta33/suspec-skills) ([ADR-0112](./adrs/0112-two-tier-skills.md)).
+Kit source: [`../suspec-starter-kit/.agents/skills/`](https://github.com/jcosta33/suspec-starter-kit).
 
-### Universal catalog (corpus-skills)
+### Universal catalog (suspec-skills)
 
 | Name                 | Status                                | Notes                                                       |
 | -------------------- | ------------------------------------- | ----------------------------------------------------------- |
@@ -58,7 +58,7 @@ Kit source: [`../corpus-starter-kit/.agents/skills/`](https://github.com/jcosta3
 | `security-review`    | active                                | Security-focused review pass.                               |
 | `persona-skeptic`    | redirect-stub (→ `adversarial-review`)| Merged into `adversarial-review`; folder remains as a redirect. |
 
-### Kit guides (corpus-starter-kit)
+### Kit guides (suspec-starter-kit)
 
 The kit's authoring guides ship from the starter kit, not the catalog ([ADR-0112](./adrs/0112-two-tier-skills.md)).
 
@@ -88,22 +88,22 @@ The kit's authoring guides ship from the starter kit, not the catalog ([ADR-0112
 
 ## MCP tools
 
-Source: [`../corpus-mcp/src/tools.ts`](https://github.com/jcosta33/corpus-mcp) (`server.registerTool(...)`).
+Source: [`../suspec-mcp/src/tools.ts`](https://github.com/jcosta33/suspec-mcp) (`server.registerTool(...)`).
 
 | Name                            | Status                              | Notes                                                        |
 | ------------------------------- | ----------------------------------- | ----------------------------------------------------------- |
-| `corpus_get_status`             | active                              | Workspace status.                                           |
-| `corpus_check_workspace`        | active                              | Run workspace checks.                                       |
-| `corpus_check_file`             | active                              | Check a single file.                                        |
-| `corpus_get_task`               | active                              | Read a task packet.                                         |
-| `corpus_get_spec`               | active                              | Read a spec.                                                |
-| `corpus_get_review`             | active                              | Read a review packet.                                       |
-| `corpus_get_checks`             | active                              | Read the checks contract.                                   |
-| `corpus_reconcile`              | active                              | Reconcile workspace/board state.                            |
-| `corpus_list`                   | active                              | List workspace artifacts.                                   |
-| `corpus_scaffold_spec`         | active                              | Scaffold a spec.                                            |
-| `corpus_split_task`             | active                              | Scaffold split task packets.                                |
-| `corpus_scaffold_finding`       | active                              | Scaffold a finding candidate.                               |
-| `corpus_scan_task`              | retired                             | No replacement; folded into the scaffold/check tools.       |
-| `corpus_validate_review_packet` | retired                             | No replacement; review validation lives in `corpus_get_review` + the checks contract. |
-| `corpus_reconcile_review`       | retired                             | No replacement; reconciliation is `corpus_reconcile`.       |
+| `suspec_get_status`             | active                              | Workspace status.                                           |
+| `suspec_check_workspace`        | active                              | Run workspace checks.                                       |
+| `suspec_check_file`             | active                              | Check a single file.                                        |
+| `suspec_get_task`               | active                              | Read a task packet.                                         |
+| `suspec_get_spec`               | active                              | Read a spec.                                                |
+| `suspec_get_review`             | active                              | Read a review packet.                                       |
+| `suspec_get_checks`             | active                              | Read the checks contract.                                   |
+| `suspec_reconcile`              | active                              | Reconcile workspace/board state.                            |
+| `suspec_list`                   | active                              | List workspace artifacts.                                   |
+| `suspec_scaffold_spec`         | active                              | Scaffold a spec.                                            |
+| `suspec_split_task`             | active                              | Scaffold split task packets.                                |
+| `suspec_scaffold_finding`       | active                              | Scaffold a finding candidate.                               |
+| `suspec_scan_task`              | retired                             | No replacement; folded into the scaffold/check tools.       |
+| `suspec_validate_review_packet` | retired                             | No replacement; review validation lives in `suspec_get_review` + the checks contract. |
+| `suspec_reconcile_review`       | retired                             | No replacement; reconciliation is `suspec_reconcile`.       |

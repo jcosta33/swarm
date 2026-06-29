@@ -8,7 +8,7 @@ supersedes:
 superseded_by:
 ---
 
-# ADR-0053: Corpus is a structured specification & review system (review-as-exceptions)
+# ADR-0053: Suspec is a structured specification & review system (review-as-exceptions)
 
 ## Context
 
@@ -25,7 +25,7 @@ measured experienced developers **~19% slower** with AI while they _believed_ th
 [[METR]](../research/sources.md#METR), and industry data finds adoption raises **both throughput and
 instability** absent a control layer [[DORA2025]](../research/sources.md#DORA2025).
 
-Read together, these say what Corpus should _be_, plainly: not "the smartest agent," but the layer that makes
+Read together, these say what Suspec should _be_, plainly: not "the smartest agent," but the layer that makes
 agent work **legible, safe, and reproducible** — clear specs in, reviewable evidence out, with a verification
 gate as the control the evidence says adoption lacks. The framing the framework had drifted toward
 (spec-repo discipline, obligations, verdicts) is correct but under-stated; this ADR names the position.
@@ -38,7 +38,7 @@ reframe over existing parts**, not a new layer.
 
 ## Decision
 
-1. **Position Corpus as a structured specification & review system for agentic software work**: it turns messy
+1. **Position Suspec as a structured specification & review system for agentic software work**: it turns messy
    inputs into verifiable specs, specs into bounded agent work, and large agent output into reviewable
    evidence.
 2. **Foreground "review-as-exceptions" as the merge-gate payoff** — the productivity unlock and the control
@@ -55,7 +55,7 @@ reframe over existing parts**, not a new layer.
    review obsolete," "regenerates code from specs," and "the new SDLC." Understated = clear and brief, not
    informal: the SOL/verdict rigor stays.
 
-This **refines** [0050](./0050-corpus-is-a-spec-repo-discipline.md),
+This **refines** [0050](./0050-suspec-is-a-spec-repo-discipline.md),
 [0051](./0051-complete-the-spec-repo-pivot.md), and [0052](./0052-per-feature-spec-folders.md) (a positioning
 layer over the spec-repo discipline + per-feature homes) and keeps `.agents/`
 ([0049](./0049-minimal-install-no-mount-no-imposed-workspace.md)). It changes **no** closed set, the SOL
@@ -89,7 +89,7 @@ change. No follow-on migration.
 
 ## Affected obligations / constraints
 
-- Refines: [0050](./0050-corpus-is-a-spec-repo-discipline.md), [0051](./0051-complete-the-spec-repo-pivot.md),
+- Refines: [0050](./0050-suspec-is-a-spec-repo-discipline.md), [0051](./0051-complete-the-spec-repo-pivot.md),
   [0052](./0052-per-feature-spec-folders.md) (positioning over the existing discipline + homes).
 - Keeps: [0049](./0049-minimal-install-no-mount-no-imposed-workspace.md) (`.agents/`, no mount).
 - Grounded by: [[HARNESSBENCH]](../research/sources.md#HARNESSBENCH), [[AHE]](../research/sources.md#AHE),

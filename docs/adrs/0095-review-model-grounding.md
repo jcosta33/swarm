@@ -10,8 +10,8 @@ updated: 2026-06-22
 
 ## Context
 
-Corpus exists for the review step, but the canon under-stated _what review is for_ and _how to
-weight it_. A web-verified evidence pass (corpus-works #52; sources below, each verified June 2026 with
+Suspec exists for the review step, but the canon under-stated _what review is for_ and _how to
+weight it_. A web-verified evidence pass (suspec-works #52; sources below, each verified June 2026 with
 honest tiers) settles five framing questions — and corrects two of the issue's own framings.
 
 - **Review's primary payload is the maintainability/design layer tests cannot reach.** Roughly 75%
@@ -57,8 +57,8 @@ honest tiers) settles five framing questions — and corrects two of the issue's
    `Unverified`** — _not a new "Blocked" state._ (Refinement of #52's "Pass → Blocked": `Unverified`
    is the precise existing review-result for "no evidence supports this result"; `Blocked` means a
    precondition prevents proceeding. The protective intent is identical and **already ships** — the
-   corpus-cli reconcile flags an empty-evidence Pass row as `Unverified`, AC-020 — so no new semantics
-   or corpus-cli change is needed.) _Level: convention, with the shipped reconcile as the toolable
+   suspec-cli reconcile flags an empty-evidence Pass row as `Unverified`, AC-020 — so no new semantics
+   or suspec-cli change is needed.) _Level: convention, with the shipped reconcile as the toolable
    realization._ ([[MCINTOSH14]] is the warrant)
 
 5. **Agent-runs-the-app is evidence, not a verdict.** The author-agent **attaches its run**
@@ -67,8 +67,8 @@ honest tiers) settles five framing questions — and corrects two of the issue's
    pixel/vision; an autonomous run never certifies a change. _Level: convention/toolable (the tooling
    is BYO; nothing enforces it)._ ([[GPTDROID]], [[ITKONEN14]], [[WEBAGENTILLUSION]])
 
-6. **`corpus-reviewer` / `corpus-challenger` carry the distinct-lens framing** and keep "issue no
-   verdict; the human owns the result" (corpus-agents). _Level: convention._
+6. **`suspec-reviewer` / `suspec-challenger` carry the distinct-lens framing** and keep "issue no
+   verdict; the human owns the result" (suspec-agents). _Level: convention._
 
 ## Consequences
 
@@ -84,8 +84,8 @@ honest tiers) settles five framing questions — and corrects two of the issue's
 
 ## Propagation
 
-`docs/08-reviewing-output.md` (the five framing rules), the `corpus-reviewer`/`corpus-challenger`
-definitions in `corpus-agents`, `docs/research/sources.md` (the eight entries above). No review-packet
+`docs/08-reviewing-output.md` (the five framing rules), the `suspec-reviewer`/`suspec-challenger`
+definitions in `suspec-agents`, `docs/research/sources.md` (the eight entries above). No review-packet
 _format_ change (ADR-0058/0089 stand); the participation gate is the existing empty-evidence→Unverified
 reconcile, not a new field or check.
 

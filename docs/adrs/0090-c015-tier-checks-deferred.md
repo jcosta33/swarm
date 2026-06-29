@@ -43,7 +43,7 @@ The investigation found that neither deferred case has a clean, high-precision i
    safeguard with zero new code; the invariant is noted in `sources.md` so it stays true (a future
    editor who anchors a rejected entry would silently defeat the check).
 
-3. **The trigger to revisit the Caveated case.** Fold citation cases into the `corpus-bench` corpus and
+3. **The trigger to revisit the Caveated case.** Fold citation cases into the `suspec-bench` suspec and
    **measure** a candidate `MUST`-detector's effective-FP before minting anything. Only a _structural_,
    high-precision signal earns a check — e.g. a controlled RFC-2119 `MUST` marker adjacent to a
    `[[KEY]]` whose anchor sits under the Caveated tier — and only after the benchmark shows it clears
@@ -70,5 +70,5 @@ bump, no new check. Refines ADR-0087 Decision 4 (resolves the deferred v1 questi
 
 `docs/adrs/0090-c015-tier-checks-deferred.md` (this record) · `docs/adrs/README.md` (index row) ·
 `docs/research/sources.md` (the "Rejected entries carry no `<a id>` anchor" invariant note in the
-Rejected section). No corpus-cli / `checks.yaml` change. Refines
+Rejected section). No suspec-cli / `checks.yaml` change. Refines
 [0087](./0087-citation-anchor-check.md) Decision 4.

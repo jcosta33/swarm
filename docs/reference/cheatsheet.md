@@ -123,7 +123,7 @@ Dedicated workspace repo:
 Code repo pointer:
 
 ```text
-Corpus workspace: ../<project>-works. Read the task packet before coding.
+Suspec workspace: ../<project>-works. Read the task packet before coding.
 ```
 
 ## CLI
@@ -131,15 +131,15 @@ Corpus workspace: ../<project>-works. Read the task packet before coding.
 Common commands:
 
 ```bash
-corpus init
-corpus update --check
-corpus check
-corpus new spec <slug>
-corpus new task --from SPEC-id --scope AC-001
-corpus worktree create TASK-id
-corpus run TASK-id --agent codex
-corpus review TASK-id
-corpus status
+suspec init
+suspec update --check
+suspec check
+suspec new spec <slug>
+suspec new task --from SPEC-id --scope AC-001
+suspec worktree create TASK-id
+suspec run TASK-id --agent codex
+suspec review TASK-id
+suspec status
 ```
 
 CLI prepares and reconciles. It does not write code or decide correctness.

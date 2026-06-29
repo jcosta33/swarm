@@ -1,6 +1,6 @@
 # Examples
 
-These examples show complete Corpus chains.
+These examples show complete Suspec chains.
 
 Read in this order:
 

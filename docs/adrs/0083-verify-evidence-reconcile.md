@@ -17,7 +17,7 @@ into the review packet's `## Requirement coverage` Evidence cell. What threads t
 requirement id (stable, spec-scoped per ADR-0080) plus human transcription — never a mechanical
 join. The Evidence cell is a free-form string.
 
-What `corpus review` reconciles today is coverage (C012: in-scope ids covered, no orphan rows) plus
+What `suspec review` reconciles today is coverage (C012: in-scope ids covered, no orphan rows) plus
 a set of structural facts — among them the one mechanical evidence fact that exists: a `Pass` row
 with an empty Evidence cell reads Unverified. That fact is binary presence — _is the cell
 non-empty?_ — never _does this cell's content correspond to the requirement's named Verify command,
@@ -127,11 +127,11 @@ judgment biases [[JUDGEBIAS]](../research/sources.md#JUDGEBIAS); and whether the
 the right behavior, the edge cases, and the real runtime stays a human judgment. The check confirms
 internal consistency (named command ↔ recorded pass ↔ keyed row), not external ground truth.
 
-**Honesty level: toolable, in prose, at most.** A future `corpus review` / `corpus check` should
+**Honesty level: toolable, in prose, at most.** A future `suspec review` / `suspec check` should
 confirm the structured-evidence block records a matching named command with a `result=pass`; until
 then it is a review checklist item. Nothing in the repository runs, so nothing is **enforced** —
 enforcement requires a shipped tool wired to a gate, and that gate is the adopting team's CI or the
-agent CLI's hook runtime, never corpus-cli.
+agent CLI's hook runtime, never suspec-cli.
 
 **The check is a new code, C013 — not a strengthening of C012.** C012 (`coverage`) answers one
 question: does every in-scope id have a row, and does every row name a real spec id? — an id-set
@@ -149,7 +149,7 @@ the severity split live on its own row.
 | **Hard-match the free-form Evidence cell directly** (parse the existing prose cell for the command and a pass token)                    | Fails the SMELLS-precision bar — a command-in-prose match sits at ~48–59% precision [[SMELLS]] and would false-block real evidence. The free-form cell must stay a warning. Rejected.                                                                                                                                                                                                                                                                                                                                                                                 |
 | **The check issues a Pass/Fail verdict** on whether the named command passed                                                            | Violates ADR-0077 Decision 8 and ADR-0063 — the harness routes a fact (a consistency fact), it never adjudicates the review result. Rejected.                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | **Defer the format entirely; leave all evidence free-form and warning-only**                                                            | Forgoes the only mechanically defensible tightening of the evidence wedge — the structured form is the one path that moves the boundary at all. Rejected.                                                                                                                                                                                                                                                                                                                                                                                                             |
-| **The task `## Verify` section as the structured home** (a `verify` fence per Verify item in the task packet)                           | The block would live in the task packet, which `corpus review` does not parse today (it parses the review packet, keyed by id), adding parse surface beyond the existing coverage-row machinery; and a hard match would key on the _implementer's own_ fence, brushing the independence rule. The review-packet sibling block reuses the id-keyed coverage-row parser and keeps the structured fact beside the row it backs. Rejected as the _home_ (see Propagation for the narrow W4 token-carry the task may still hold).                                          |
+| **The task `## Verify` section as the structured home** (a `verify` fence per Verify item in the task packet)                           | The block would live in the task packet, which `suspec review` does not parse today (it parses the review packet, keyed by id), adding parse surface beyond the existing coverage-row machinery; and a hard match would key on the _implementer's own_ fence, brushing the independence rule. The review-packet sibling block reuses the id-keyed coverage-row parser and keeps the structured fact beside the row it backs. Rejected as the _home_ (see Propagation for the narrow W4 token-carry the task may still hold).                                          |
 | **A full machine run-record now** (a fenced `{id, cmd, exit, ref}` projection the agent emits with the work order, parsed for `exit=0`) | Structurally the strongest — a discrete `cmd` and a closed `exit` integer. But it presumes the W4 parse work (lift the spec command into a field; a new run-record parser; a three-way id join) and a runner/wrapper that emits it, which is the W4 build, not a W2 format freeze. Adopting the run record _now_ would smuggle the implementation into the format decision. The keyed `verify` block degrades gracefully to today's free-form warning and is tool-draftable to the same record in W4. Deferred to W4 as the richer source; rejected as the W2 freeze. |
 | **Strengthen C012 to also carry the evidence-binding fact**                                                                             | Conflates coverage (id-set reconcile) with evidence binding (a block records a matching command + a pass) — two facts a reviewer cites separately — and forces one severity onto two different defect classes. Rejected in favor of minting C013.                                                                                                                                                                                                                                                                                                                     |
 
@@ -164,7 +164,7 @@ Positive: the evidence wedge gains its first mechanically defensible tightening;
 opt-in (zero forced ceremony, a row may still use only the free-form cell and stay a warning) and
 tool-draftable to near-zero added human cost in W4. Negative: a second evidence form to teach and a
 new parse path to build. Neutral: a team may treat the structured-form warning as blocking by its own
-CI policy — that is the team's gate, not Corpus's.
+CI policy — that is the team's gate, not Suspec's.
 
 **Single-sourcing: the format and the rule land in canon — [docs/08-reviewing-output.md](../08-reviewing-output.md),
 [reference/structured-requirements.md](../reference/structured-requirements.md),
@@ -185,13 +185,13 @@ canon commit that would red the gate in between" precedent:
   ADR may promote to hard error with field evidence) and its non-draft scope guard. The closed-set
   counts in `checks/README.md` and the cheatsheet appendix move accordingly.
 - **The contract version bump — `0.5.0 → 0.6.0`** in `checks.yaml`, moved in lockstep with
-  corpus-cli's pinned `CONTRACT_VERSION` so the drift-guard test never reds in between.
+  suspec-cli's pinned `CONTRACT_VERSION` so the drift-guard test never reds in between.
 - **Kit template derivations.** `templates/review.md` gains the optional `verify` block beside the
   Evidence cell (with the info-string grammar in a comment); `templates/task.md` may optionally emit
   the same `result=pass` token under `## Verify` / `## Run summary` so a future review draft copies it
   rather than re-derives; `templates/spec.md` is unchanged in shape — its `Verify with:` line becomes
   the parse target the W4 spec-side command lift reads.
-- **The corpus-cli build.** `parseReviewPacket` gains a fenced-`verify`-block scanner (none exists
+- **The suspec-cli build.** `parseReviewPacket` gains a fenced-`verify`-block scanner (none exists
   today; the parser reads pipe rows only); `parseSpecRecord` lifts the `Verify with:` / `VERIFY BY`
   command into a discrete field (today it is undifferentiated inside `body`); `reconcileReview`
   surfaces the new consistency fact on the verdict-free report. Fixtures add a `verify`-block review

@@ -1,10 +1,10 @@
 # Checks
 
-Checks catch common Corpus mistakes.
+Checks catch common Suspec mistakes.
 
 Use this page as a review checklist.
 
-`corpus check` implements the toolable subset. The CLI command catalogue is the source for what
+`suspec check` implements the toolable subset. The CLI command catalogue is the source for what
 ships today.
 
 ## Honesty levels
@@ -44,7 +44,7 @@ Notes:
 
 - `AC-NNN` IDs are unique within a spec, not across the workspace. Cross-spec references use `SPEC-id#AC-NNN`.
 - A `Verify with:` command that does not exist yet is not a spec defect. The requirement is `Unverified` until evidence exists.
-- The oversized-packet size band is specified-not-shipped. `corpus review` reports diff size as neutral information.
+- The oversized-packet size band is specified-not-shipped. `suspec review` reports diff size as neutral information.
 
 ## Workspace validity
 

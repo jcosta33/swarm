@@ -10,8 +10,8 @@ Tool behavior described here is a contract for optional tooling, not proof that 
 
 Use precise wording:
 
-- good: `corpus check can report...`
-- bad: `Corpus enforces...`
+- good: `suspec check can report...`
+- bad: `Suspec enforces...`
 
 ## 2. Conventions are not enforcement
 
@@ -54,7 +54,7 @@ Empty evidence means `Unverified`.
 
 ## 5. Provider neutral
 
-Corpus artifacts are plain markdown.
+Suspec artifacts are plain markdown.
 
 They must work with any agent or human who can read files.
 

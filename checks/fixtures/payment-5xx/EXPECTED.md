@@ -5,7 +5,7 @@
 Checks fixture for [the check catalogue](../../../docs/reference/checks.md): payment
 provider 5xx handling, with two seeded defects — a pair of contradictory requirements, and
 an open blocking question in a spec marked `status: ready`. The results below are known by
-hand and pin what corpus-cli's `corpus check` must report (toolable). Until that tool
+hand and pin what suspec-cli's `suspec check` must report (toolable). Until that tool
 runs, nothing here is enforced — reviewers use the same tables as a checklist.
 
 **Check scope.** Each file is checked standalone. `spec.md` and `spec.sol.md` intentionally

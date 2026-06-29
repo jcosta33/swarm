@@ -11,7 +11,7 @@ superseded_by:
 # ADR-0040: The installable payload ships from a single directory (originally `kernel/`, now `starter-kit/`)
 
 > **Refined by [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md).** Two updates: (1) the
-> _adopter-side_ mount this ADR defined (`.corpus/kernel/`) is gone — under 0049 the payload installs in
+> _adopter-side_ mount this ADR defined (`.suspec/kernel/`) is gone — under 0049 the payload installs in
 > place beside the project's own skills; (2) the producer directory has been **renamed `kernel/` → `starter-kit/`**
 > (the "kernel" OS metaphor was dropped as oversell for a NO-RUNTIME file-set). The _producer-side_ decision
 > below — that the payload ships from one directory in this repo — still stands; only its name changed.
@@ -23,7 +23,7 @@ The copyable framework payload — the unitary thing a consuming repository adop
 
 ## Decision
 
-v0.1 ships the copyable kernel payload under `starter-kit/` (renamed from the earlier `scaffold/`), pulling the rename forward from its v0.2 deferral. `starter-kit/.agents/` is the installable payload interior and `starter-kit/AGENTS.md` is the populated bootloader a consumer adopts; the framework-dev `starter-kit/` is the _shipping location_, distinct from the adopted-project workspace it installs into. The install relation is unchanged: a consumer copies the contents 1:1, and in a consuming repo the payload lands at `.corpus/kernel/`, under which `.corpus/` is the canonical workspace and `.agents/` is only an agent-tool compatibility mirror. The rename is cosmetic — it changes the payload's directory name only, never the `.agents/` interior, the artifact filenames, or the conformance definition. The full specification is §20.0 (the canonical layout note) and §20.5 (the adopted-project `.corpus/kernel/` install target); the wave-2 ordering is §34.0.
+v0.1 ships the copyable kernel payload under `starter-kit/` (renamed from the earlier `scaffold/`), pulling the rename forward from its v0.2 deferral. `starter-kit/.agents/` is the installable payload interior and `starter-kit/AGENTS.md` is the populated bootloader a consumer adopts; the framework-dev `starter-kit/` is the _shipping location_, distinct from the adopted-project workspace it installs into. The install relation is unchanged: a consumer copies the contents 1:1, and in a consuming repo the payload lands at `.suspec/kernel/`, under which `.suspec/` is the canonical workspace and `.agents/` is only an agent-tool compatibility mirror. The rename is cosmetic — it changes the payload's directory name only, never the `.agents/` interior, the artifact filenames, or the conformance definition. The full specification is §20.0 (the canonical layout note) and §20.5 (the adopted-project `.suspec/kernel/` install target); the wave-2 ordering is §34.0.
 
 ## Alternatives considered
 
@@ -39,7 +39,7 @@ v0.1 ships the copyable kernel payload under `starter-kit/` (renamed from the ea
 
 - The shipping directory name now matches the spec's own term for the artifact ("the kernel"), removing the `scaffold/`↔`starter-kit/` divergence the §20.0 layout had already adopted.
 - Wave 2 has a single, settled directory to lay the payload under (`starter-kit/.agents/`, `starter-kit/AGENTS.md`), with no second rename owed in v0.2.
-- The framework-dev shipping location and the adopted-project install target read consistently: `starter-kit/` ships, `.corpus/kernel/` receives.
+- The framework-dev shipping location and the adopted-project install target read consistently: `starter-kit/` ships, `.suspec/kernel/` receives.
 
 ### Negative
 
@@ -48,7 +48,7 @@ v0.1 ships the copyable kernel payload under `starter-kit/` (renamed from the ea
 ### Neutral / tradeoffs
 
 - The change is purely a directory-name rename; the install relation, the `.agents/` interior, the artifact filenames, and the conformance definition are unchanged, so a tool keying on those is unaffected.
-- The §20.0 note's reserved v0.2 rename + one-cycle-alias path is now moot for this rename; this record pulls it forward instead, and a consuming repo's `.corpus/kernel/` target is unchanged either way.
+- The §20.0 note's reserved v0.2 rename + one-cycle-alias path is now moot for this rename; this record pulls it forward instead, and a consuming repo's `.suspec/kernel/` target is unchanged either way.
 
 ## Status
 
@@ -56,6 +56,6 @@ Accepted (v0.1).
 
 ## Affected obligations / constraints
 
-- Adds: the v0.1 payload-directory contract — the copyable kernel ships under `starter-kit/` (`starter-kit/.agents/` interior, `starter-kit/AGENTS.md` bootloader), installing 1:1 into a consumer's `.corpus/kernel/` (§20.0, §20.5).
+- Adds: the v0.1 payload-directory contract — the copyable kernel ships under `starter-kit/` (`starter-kit/.agents/` interior, `starter-kit/AGENTS.md` bootloader), installing 1:1 into a consumer's `.suspec/kernel/` (§20.0, §20.5).
 - Modifies: the earlier `scaffold/` payload-root name is renamed to `starter-kit/` (interior, filenames, and conformance definition unchanged).
 - Supersedes: the §34.0 wave-2 note's v0.2 deferral of the payload-directory rename — the rename is pulled forward into v0.1 by this record; there is no prior ADR to supersede.

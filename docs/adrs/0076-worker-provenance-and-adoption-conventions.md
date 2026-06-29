@@ -11,7 +11,7 @@ updated: 2026-06-13
 ## Context
 
 Two codex stress runs on a real adopter (Promptly, a browser-extension app) and a kimi hostile
-read produced a corpus of field evidence (in `corpus-works/specs/adoption-experience/` and
+read produced a suspec of field evidence (in `suspec-works/specs/adoption-experience/` and
 `specs/dx-remediation/`). CHANGE-adoption-experience cross-referenced every candidate against the
 current framework and, after its own refute-by-default adversarial review (20 findings, all
 confirmed), reduced the genuine, still-open, field-validated gaps to the set below. Two are
@@ -19,11 +19,11 @@ load-bearing and externally corroborated; the rest are small internal-coherence 
 field evidence justified directly.
 
 - **Delegated-worker boot/provenance is invisible.** A subagent can produce scoped edits while
-  leaving no artifact proving it booted as a Corpus worker — and in one job a worker that
+  leaving no artifact proving it booted as a Suspec worker — and in one job a worker that
   self-reported full boot left no task artifact at all. Anthropic's multi-agent research system
   states (verbatim) that each subagent needs an objective, output format, tool/source guidance,
   and clear boundaries, and that vague briefs cause duplicated work and coverage gaps
-  [[ANTHROPIC-MULTIAGENT]](../research/sources.md#ANTHROPIC-MULTIAGENT). Corpus already names the
+  [[ANTHROPIC-MULTIAGENT]](../research/sources.md#ANTHROPIC-MULTIAGENT). Suspec already names the
   task packet as the handoff and the advanced lifecycle carries a per-worker hand-off record, but
   the _core_ task/review artifacts capture no boot proof.
 - **Validation evidence and status hygiene drifted.** The runs surfaced: an environment that
@@ -98,14 +98,14 @@ run-summary discipline and docs/06's "too much packet is a cost" both stand).
 
 10. **Placeholder hygiene.** An unfilled `{{placeholder}}` left in a _live_ `AGENTS.md`/board is a
     workspace-validity **checklist failure** today (sharpening the existing "populated AGENTS.md"
-    convention); a future `corpus init`/`corpus check` _should_ enforce it. _Level: checklist;
+    convention); a future `suspec init`/`suspec check` _should_ enforce it. _Level: checklist;
     enforcement toolable, not shipped._
 
 11. **Artifact-fit pointer.** A one-line "choosing the right artifact" pointer, including the
     bug-report-vs-spec choice (a bounded polish fix against an existing spec is a bug report, not a
     new feature spec). No new template — `advanced/bug.md` already ships. _Level: convention._
 
-Recorded but deferred: a future `corpus run` could generate the worker handoff / launch envelope
+Recorded but deferred: a future `suspec run` could generate the worker handoff / launch envelope
 from the task packet (_toolable_, its own ADR when built). The provenance bundle, brownfield
 example, and skill-risk checklist (kimi market gaps) are additive and held to a separate change
 plan.
@@ -122,7 +122,7 @@ plan.
 - **A multi-worker coordination record as the default** — rejected as too heavy for single-worker
   or trivial tasks; it stays the advanced-tier form and Decision 1 is its lightweight core.
 - **Shipping the orchestration as a runtime** — rejected; the orchestration research itself
-  cautions against "more agents," and Corpus stays markdown-first, recording the handoff, not
+  cautions against "more agents," and Suspec stays markdown-first, recording the handoff, not
   running it.
 
 ## Consequences
@@ -133,7 +133,7 @@ footprint and the per-worker hand-off, now cross-linked from the core run path).
 (new terms — worker, scout, provenance, isolation mode — are defined in the glossary and the user
 tier keeps plain language) and ADR-0063 (every rule above carries a level; nothing claims
 enforcement without a shipped tool). The template-shape change propagates in lockstep to the kit,
-the corpus-cli `scaffold/` mirror, and any hq copy. One new `sources.md` entry
+the suspec-cli `scaffold/` mirror, and any hq copy. One new `sources.md` entry
 ([[ANTHROPIC-MULTIAGENT]], first-party, web-verified, never a `MUST`) grounds the subagent-brief
 direction; the runtime-isolation point is design rationale (no citation owed); the EU AI Act
 regulatory rationale and the kimi market statistics are explicitly **not** load-bearing here and
@@ -151,5 +151,5 @@ checks.md (placeholder as checklist failure), future-cli (placeholder gate + han
 note), **checks/checks.yaml v0.4.1** (review `Task status` added to `optional_sections`;
 `trigger-coverage` gains the worker-boot-provenance trigger — the heading-for-heading
 reconciliation duty in checks/README), glossary (worker · scout · provenance · isolation mode),
-research/sources.md (one entry: [[ANTHROPIC-MULTIAGENT]]), corpus-cli scaffold resync + its
+research/sources.md (one entry: [[ANTHROPIC-MULTIAGENT]]), suspec-cli scaffold resync + its
 `AGENTS.md` contract-version reference, ledger row.

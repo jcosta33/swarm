@@ -17,12 +17,12 @@ identified artifacts by frontmatter in practice.
 
 ## Decision
 
-1. Every Corpus artifact is a plain `.md` file whose **frontmatter `type:`** identifies it
+1. Every Suspec artifact is a plain `.md` file whose **frontmatter `type:`** identifies it
    (`spec | task | review | finding | status | intake | inventory | change-plan | audit | bug-report |
 adr | research | prd | rfc | threat-model`). Tools and agents discriminate on `type:`, never on filename.
-2. No Corpus file, template, example, or fixture uses a `.corpus.` filename infix. The optional stricter
+2. No Suspec file, template, example, or fixture uses a `.suspec.` filename infix. The optional stricter
    spec surface is selected by `format: sol` (ADR-0058) — frontmatter, not filename.
-3. The names `*.corpus.ir.json` and `*.corpus.plan.json` survive **only** as reserved contract names on the
+3. The names `*.suspec.ir.json` and `*.suspec.plan.json` survive **only** as reserved contract names on the
    future-CLI page for machine-emitted artifacts no shipped tool produces today.
 
 ## Alternatives considered
@@ -44,7 +44,7 @@ ADR-0030 and ADR-0054.
 
 ## Propagation
 
-All file-producing surfaces; conformance manifest (`format: sol` selector); corpus-cli parser targets.
+All file-producing surfaces; conformance manifest (`format: sol` selector); suspec-cli parser targets.
 
 > **Addendum (2026-06-11):** the reserved machine-artifact contract names are spelled without the
 > infix — `<spec>.ir.json` / `<spec>.plan.json` — consistent with §2; the future-CLI page is their

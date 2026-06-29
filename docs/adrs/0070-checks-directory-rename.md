@@ -22,7 +22,7 @@ repositioning removed. It also misleads structurally: a top-level `conformance/`
 
 1. **`conformance/` → `checks/`; `conformance.yaml` → `checks/checks.yaml`.** The directory
    matches its canonical prose home, `docs/reference/checks.md`. The yaml's `version` bumps
-   0.2.1 → 0.3.0 — the path is consumer-visible contract surface and corpus-cli has not shipped,
+   0.2.1 → 0.3.0 — the path is consumer-visible contract surface and suspec-cli has not shipped,
    so this is the cheapest the rename will ever be.
 2. **The counts registry's producer home is now `checks/README.md`** — the two-home rule
    (ADR-0057 §5) is unchanged; one of the homes moved with its file.
@@ -34,7 +34,7 @@ repositioning removed. It also misleads structurally: a top-level `conformance/`
 - **Keep `conformance/`** — "conformance suite" is technically accurate standards language,
   but the framework spent ADRs 0054/0057/0063/0066 choosing the practical register; a
   top-level directory is the most visible vocabulary surface in the repo.
-- **Fold the fixtures under `docs/`** — they are test data with a named consumer (corpus-cli's
+- **Fold the fixtures under `docs/`** — they are test data with a named consumer (suspec-cli's
   oracle; a reviewer applying the checks by hand), not reading material.
 
 ## Consequences

@@ -1,17 +1,17 @@
-# Lineage — what Corpus keeps from heavyweight engineering
+# Lineage — what Suspec keeps from heavyweight engineering
 
-Corpus is lean, but the needs it serves are old. Requirements specifications, design descriptions,
+Suspec is lean, but the needs it serves are old. Requirements specifications, design descriptions,
 verification plans, technical reviews, traceability, and change control all solved a real coordination
 problem: many people, long durations, changing requirements, and the need to know both what was
 *intended* and what was actually *verified*. The durable lesson was never "write lots of documents" —
 it was **make intent, verification, and change control explicit**. Standards say as much: the amount of
 formality is meant to scale with the work, and "documents" may be files, models, or records, not paper.
 
-Corpus keeps those **functions** and collapses the **forms** — one authoritative living spec plus
+Suspec keeps those **functions** and collapses the **forms** — one authoritative living spec plus
 machine-captured execution, atomic findings, and small decision records, instead of a document stack.
 The table maps each legacy function to where it lives now.
 
-| Legacy practice | Function it served | In Corpus |
+| Legacy practice | Function it served | In Suspec |
 | --- | --- | --- |
 | Requirements specification | verifiable intent, stably-identified | the **spec** — acceptance criteria with stable ids + a `Verify with:` line each ([[ISO29148]]) |
 | Design description | communicate design to stakeholders | the spec's design notes; a **decision** record when the trade-off is durable ([[ISO42010]] — decisions + rationale are required architecture elements) |
@@ -29,10 +29,10 @@ Two disciplines carry the weight that the dropped paperwork used to:
 - **Review is participation, not a sign-off.** Coverage and substantive engagement predict quality;
   a rubber-stamp does not ([[MCINTOSH14]]).
 - **A review check earns blocking only when it is precise.** A noisy check gets ignored; the bar is a
-  low effective-false-positive rate ([[GOOGLESA]]) — which is why Corpus checks are advisory until
+  low effective-false-positive rate ([[GOOGLESA]]) — which is why Suspec checks are advisory until
   measured (see [principles](principles.md), honesty level *toolable*).
 
-What Corpus deliberately does **not** revive: a separate document per change, a hand-maintained
+What Suspec deliberately does **not** revive: a separate document per change, a hand-maintained
 traceability matrix, a routine standalone test plan, or a generic detached review checklist. Those are
 the forms that rot ([[DOCROT]]) and duplicate ([[DOCPERSPECTIVE]]) — the measured failure modes a lean
 record set exists to avoid.

@@ -1,6 +1,6 @@
-# Adopting Corpus
+# Adopting Suspec
 
-Adopt Corpus by copying the starter kit into a workspace.
+Adopt Suspec by copying the starter kit into a workspace.
 
 Use a dedicated repo named:
 
@@ -22,7 +22,7 @@ or place the same tree inside one code repo.
 2. Copy the starter kit contents into it.
 
    ```bash
-   cp -R path/to/corpus-starter-kit/. <project>-works/
+   cp -R path/to/suspec-starter-kit/. <project>-works/
    ```
 
 3. Fill placeholders in:
@@ -36,7 +36,7 @@ or place the same tree inside one code repo.
 
    ```bash
    git add .
-   git commit -m "Adopt Corpus workspace"
+   git commit -m "Adopt Suspec workspace"
    ```
 
 5. Write one small spec and run the loop once.
@@ -45,10 +45,10 @@ Use symlinks only when your team and platform handle them reliably. On Windows, 
 
 ## CLI setup
 
-If you use `corpus-cli`:
+If you use `suspec-cli`:
 
 ```bash
-corpus init
+suspec init
 ```
 
 In an empty directory, this creates the workspace.
@@ -56,7 +56,7 @@ In an empty directory, this creates the workspace.
 In a non-empty code repo, use the workspace option when you want a dedicated workspace:
 
 ```bash
-corpus init --workspace ../<project>-works
+suspec init --workspace ../<project>-works
 ```
 
 The CLI is optional. Copying the kit by hand is valid.
@@ -66,10 +66,10 @@ The CLI is optional. Copying the kit by hand is valid.
 In each governed code repo, add only what is needed:
 
 ```text
-Corpus workspace: ../<project>-works. Read the task packet before coding.
+Suspec workspace: ../<project>-works. Read the task packet before coding.
 ```
 
-Add `.gitignore` lines for local Corpus state if you use the CLI.
+Add `.gitignore` lines for local Suspec state if you use the CLI.
 
 Do not copy specs, tasks, reviews, or findings into the code repo.
 
@@ -78,7 +78,7 @@ Do not copy specs, tasks, reviews, or findings into the code repo.
 For a dedicated workspace governing a separate code repo, keep the implementer in one root:
 
 - Canonical specs, tasks, reviews, and findings stay in the workspace.
-- When you cut a task, snapshot its spec slice into the task packet — stamped with the spec id and version — and place the task in the code repo under a gitignored `.corpus/`.
+- When you cut a task, snapshot its spec slice into the task packet — stamped with the spec id and version — and place the task in the code repo under a gitignored `.suspec/`.
 - The implementer reads the pinned snapshot and writes only in the code repo, so its commands and edits resolve against one root.
 - The review lead merges the run evidence back into the workspace: the board, the task status, and the review packet.
 
@@ -102,8 +102,8 @@ The tutorial walks this path in [tutorial/README.md](tutorial/README.md).
 If you copied the kit, update by copying new kit-owned files or by using:
 
 ```bash
-corpus update --check
-corpus update --write
+suspec update --check
+suspec update --write
 ```
 
 Keep project-owned specs, tasks, reviews, findings, and decisions unchanged unless you choose to edit them.

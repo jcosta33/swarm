@@ -35,7 +35,7 @@ write-change-plan, write-inventory, spec-check, save-findings, split-work}`. The
    — its evidentiary discipline (three named instances; observation vs claim) is the one stance that does
    not fold cleanly.
 4. **Adoption is manual-first:** a copy checklist (the 12 files) leads; the agent-assisted prompt is the
-   second path; a future `corpus init` is the third.
+   second path; a future `suspec init` is the third.
 
 ## Alternatives considered
 

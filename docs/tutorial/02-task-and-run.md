@@ -61,7 +61,7 @@ Use one worktree or branch per task.
 Example:
 
 ```bash
-git worktree add -b corpus/checkout-expiry ../shop-api--checkout-expiry main
+git worktree add -b suspec/checkout-expiry ../shop-api--checkout-expiry main
 ```
 
 Hand off:

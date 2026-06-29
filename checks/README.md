@@ -1,15 +1,15 @@
 # Checks fixtures
 
-_Advanced design note — internal rationale; not needed to use Corpus._
+_Advanced design note — internal rationale; not needed to use Suspec._
 
-Test data for [the checks reference](../docs/reference/checks.md), consumed by corpus-cli.
+Test data for [the checks reference](../docs/reference/checks.md), consumed by suspec-cli.
 Every check in that reference is a claim about what a correct checker reports on a given
 file; this directory pins those reports as fixtures, per the two-way severity split
-(hard error / warning). corpus-cli's `corpus check` is the reference consumer — its
+(hard error / warning). suspec-cli's `suspec check` is the reference consumer — its
 test suite runs against these files — and a reviewer working by hand can use them the
 same way: apply the checks, compare against the pinned expectation.
 
-**Nothing in this directory runs.** It is data, not a runner: Corpus ships the contract
+**Nothing in this directory runs.** It is data, not a runner: Suspec ships the contract
 ([`checks.yaml`](./checks.yaml)) and the fixtures that test it, never the checker.
 
 ## When is a workspace valid?
@@ -18,11 +18,11 @@ The whole bar, in one breath: a workspace is valid when **(a)** it has a populat
 `AGENTS.md` (aim for ~100 lines — guidance, not a cap), **(b)** the core templates are
 present, and **(c)** at least one spec satisfies the core checks of
 [the checks reference](../docs/reference/checks.md). Nothing else is required. This is a
-convention — nothing in this repository enforces it; `corpus check` can verify clause (c).
+convention — nothing in this repository enforces it; `suspec check` can verify clause (c).
 
 ## The two evidence rules
 
-Checklist level — review is expected to inspect both; `corpus check`'s packet mode can
+Checklist level — review is expected to inspect both; `suspec check`'s packet mode can
 flag the mechanical parts:
 
 - **`non-empty-paste`** — a completion claim binds to pasted output or a CI link, never a
@@ -39,14 +39,14 @@ flag the mechanical parts:
 | [`fixtures/conformant-task.md`](./fixtures/conformant-task.md)            | A task packet that passes every task check — the positive oracle.                                                                                                                                                                                                                    |
 | [`fixtures/violations.md`](./fixtures/violations.md)                      | One minimal negative fixture per violation class, each with the check it trips and the expected report.                                                                                                                                                                              |
 | `fixtures/auth-refresh/` · `fixtures/payment-5xx/` · `fixtures/checkout/` | Three end-to-end domains: the spec in both forms (the equivalence pair), a task packet, a review packet, a finding, and an `EXPECTED.md` pinning what a checker must report for the spec, change-plan, and review-checklist checks (C001–C011 + the content rules) at each artifact. |
-| [`fixtures/prose-corpus/`](./fixtures/prose-corpus/README.md)             | The labeled writing-rules corpus: prose spans with ground-truth labels for the advisory watchlist, plus the precision/recall baseline any detector is scored against.                                                                                                                |
+| [`fixtures/prose-corpus/`](./fixtures/prose-corpus/README.md)             | The labeled writing-rules suspec: prose spans with ground-truth labels for the advisory watchlist, plus the precision/recall baseline any detector is scored against.                                                                                                                |
 | `fixtures/intake/`                                                        | One valid intake snapshot; the expectation is pinned in the file's trailing note.                                                                                                                                                                                                    |
 | `fixtures/transformation/`                                                | A valid inventory + change-plan pair; its `EXPECTED.md` pins `C010 preserves-refs-resolve` and `C011 waves-present`.                                                                                                                                                                 |
 
 The review-packet **reconcile** checks — `C012 coverage`, `C013 verify-evidence-binding`,
 `C014 do-not-change-touched` — are pinned as negative fixtures in
 [`fixtures/violations.md`](./fixtures/violations.md) (V18 / V19 / V17). Their positive domain oracle
-(a clean coverage table, a consistent verify block, a clean diff) lands coordinated with the corpus-cli
+(a clean coverage table, a consistent verify block, a clean diff) lands coordinated with the suspec-cli
 implementation per [ADR-0079](../docs/adrs/0079-c012-coverage-check.md) /
 [ADR-0083](../docs/adrs/0083-verify-evidence-reconcile.md) /
 [ADR-0086](../docs/adrs/0086-deterministic-review-scanning-decision.md), not in the domain `EXPECTED.md`
@@ -77,7 +77,7 @@ different check behavior, these pairs are the fixtures that catch it.
 
 ## Reference values (reconciliation) — producer note
 
-This section is for maintainers of Corpus and of tools that consume it. The closed sets
+This section is for maintainers of Suspec and of tools that consume it. The closed sets
 below have exact sizes, and those sizes are registered in exactly two places: **here** and
 the appendix of [the cheatsheet](../docs/reference/cheatsheet.md). Adopter-facing pages list
 values rather than counting them (a numeral-bearing model name — the six-step loop, the
@@ -100,7 +100,7 @@ Reconciliation duties this note carries:
 - The core check IDs and severities in [`checks.yaml`](./checks.yaml) match
   [the checks reference](../docs/reference/checks.md) row for row.
 - The task and review section lists in [`checks.yaml`](./checks.yaml) match
-  the kit's `templates/` (the corpus-starter-kit repo) heading for heading.
+  the kit's `templates/` (the suspec-starter-kit repo) heading for heading.
 - Every fixture's pinned expectation agrees with both; a fixture that disagrees means
   the contract, the prose, or the fixture is wrong — find out which before shipping.
 

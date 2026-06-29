@@ -33,7 +33,7 @@ required `type:` frontmatter envelope** with obligation-blocks already spec-only
 The fix is grounded in the field's convergent convention (web-verified, June 2026): the two leading
 spec-driven tools both organize **per-feature folders** — GitHub Spec Kit scaffolds `specs/<NNN-feature>/`
 (spec + plan + tasks + research co-located) [[SPECKIT]](../research/sources.md#SPECKIT); Amazon Kiro uses
-`.kiro/specs/<feature>/` and writes requirements in **EARS**, Corpus's SOL clause shape
+`.kiro/specs/<feature>/` and writes requirements in **EARS**, Suspec's SOL clause shape
 [[KIRO]](../research/sources.md#KIRO). ADRs have a settled home: a sequentially-numbered in-repo
 `decisions/` directory [[ADR-CONV]](../research/sources.md#ADR-CONV). Co-locating a feature's supporting
 artifacts with its contract is exactly what closes the requirements↔output traceability gap that 2025 SE
@@ -51,7 +51,7 @@ with the thing it serves.
    ADR-0051's flat `specs/*.md` and **eliminates the open-ended top-level type-folder cloud** — the
    supporting docs are homed by co-location, not by a parallel `audits/ findings/ …` sprawl. (Execution
    scratch — task frames, traces, reviews — stays gitignored or the linked PR per
-   [ADR-0050](./0050-corpus-is-a-spec-repo-discipline.md); a deliberately-kept review lands in the feature
+   [ADR-0050](./0050-suspec-is-a-spec-repo-discipline.md); a deliberately-kept review lands in the feature
    folder.)
 2. **Project-wide decisions live in `decisions/`** — sequentially-numbered ADRs (`0001-<slug>.md`), one
    decision per immutable file, superseded rather than rewritten [[ADR-CONV]](../research/sources.md#ADR-CONV).
@@ -70,7 +70,7 @@ with the thing it serves.
    [ADR-0043](./0043-checkable-documents.md); this ADR does not extend it.
 
 This **refines** [0051](./0051-complete-the-spec-repo-pivot.md) (specs are now per-feature folders, not flat
-files; the type-folder cloud is gone) and [0050](./0050-corpus-is-a-spec-repo-discipline.md) (unchanged:
+files; the type-folder cloud is gone) and [0050](./0050-suspec-is-a-spec-repo-discipline.md) (unchanged:
 code repos stay pristine, the PR is the default trace/verdict — a _kept_ review in a spec repo lands in the
 feature folder; in a code repo it stays gitignored scratch or the linked PR). It **aligns with**
 [0032](./0032-memory-model.md) (findings → memory) and [0043](./0043-checkable-documents.md) (lint scope).
@@ -83,7 +83,7 @@ It changes **no** closed set, the SOL grammar, the nine steps, the verdicts, or 
 | Keep flat `specs/*.md` + give each other type its own top-level folder (`audits/`, `research/`, …) | This is the status quo's cloud with names. It cannot **co-locate** a feature's audit/research with its spec, so traceability stays a cross-folder lookup; and it grows an unbounded top-level surface — the exact incoherence being removed. |
 | Keep everything top-level, "type:-tagged, kept how you like" (ADR-0051 as written)                 | Self-contradicted by `promote.md` and `memory.md`; homes nothing concretely; an adopter can't tell where an audit goes.                                                                                                                      |
 | Route supporting artifacts + ADRs "under `.agents/`" (promote.md as written)                       | `.agents/` is **tooling**, not content. ADRs/audits/research are product intent humans read; burying them in the agent-tooling dir conflates the two and contradicts the spec-repo discipline.                                               |
-| Split the spec into per-feature `spec.md`+`plan.md`+`tasks.md` like Spec Kit / Kiro                | Corpus's distinctive choice is the **single self-contained SOL contract** (obligations + `VERIFY BY` in one file); the plan is _derived_ by `decompose`, not hand-authored. Adopt their per-feature _folder_, not their multi-file split.    |
+| Split the spec into per-feature `spec.md`+`plan.md`+`tasks.md` like Spec Kit / Kiro                | Suspec's distinctive choice is the **single self-contained SOL contract** (obligations + `VERIFY BY` in one file); the plan is _derived_ by `decompose`, not hand-authored. Adopt their per-feature _folder_, not their multi-file split.    |
 
 ## Consequences
 
@@ -92,7 +92,7 @@ It changes **no** closed set, the SOL grammar, the nine steps, the verdicts, or 
   its evidence sit together (traceability by co-location). The framework stops contradicting itself.
 - **Negative:** a doctrine sweep across ~12 prose files (workspace, ADOPTING, promote, the artifact pages,
   author/decompose) plus the scaffold restructure (`git mv` the example spec into a feature folder, add
-  `decisions/`, add a "Lives in:" line to each template) and a `corpus-cli` realignment. Done as part of this
+  `decisions/`, add a "Lives in:" line to each template) and a `suspec-cli` realignment. Done as part of this
   change.
 - **Neutral:** all closed sets, the SOL grammar, the nine steps, and the artifact taxonomy itself are
   unchanged — only _where files live_ changes, and it changes to match where the docs already said the
@@ -101,14 +101,14 @@ It changes **no** closed set, the SOL grammar, the nine steps, the verdicts, or 
 ## Status
 
 Accepted (v0.1). Restructure: `starter-kit/specs/example.md` → `specs/001-example-feature/spec.md`
-(+ a co-located supporting doc), `starter-kit/decisions/` seeded with `0001-adopt-corpus.md`; the model/adoption
+(+ a co-located supporting doc), `starter-kit/decisions/` seeded with `0001-adopt-suspec.md`; the model/adoption
 docs and `promote.md` routing reconciled to the three-home model; each template carries a "Lives in:" line;
-`corpus-cli` (co-located) realigned.
+`suspec-cli` (co-located) realigned.
 
 ## Affected obligations / constraints
 
 - Refines: [0051](./0051-complete-the-spec-repo-pivot.md) (per-feature folders replace flat specs; the
-  top-level type-folder cloud is removed), [0050](./0050-corpus-is-a-spec-repo-discipline.md) (artifact homes;
+  top-level type-folder cloud is removed), [0050](./0050-suspec-is-a-spec-repo-discipline.md) (artifact homes;
   PR-as-trace unchanged).
 - Aligns with: [0032](./0032-memory-model.md) (findings → `.agents/memory/`),
   [0043](./0043-checkable-documents.md) (lint stays spec-only; no document-lint built here).

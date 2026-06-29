@@ -10,14 +10,14 @@ updated: 2026-06-22
 
 ## Context
 
-The corpus-skills catalog shipped seven `persona-*` conditioning stances. But ADR-0064 already folds
+The suspec-skills catalog shipped seven `persona-*` conditioning stances. But ADR-0064 already folds
 each stance's _substance_ into the kit work guides (`write-spec` carries the architect stance,
 `review-output` carries refute-by-default, `write-audit` carries observation-only, `write-research`
 the researcher stance, the documentation guide the documentarian stance). So five disciplines had
 **two carriers** — the folded form in the guide _and_ a standalone persona — and the substance had in
-practice drifted into a third copy (the corpus-works dev-skill mirror), out of sync with the catalog.
+practice drifted into a third copy (the suspec-works dev-skill mirror), out of sync with the catalog.
 
-A deep-research pass (corpus-works `specs/corpus-skills/research-personas-as-skills.md`) settled the
+A deep-research pass (suspec-works `specs/suspec-skills/research-personas-as-skills.md`) settled the
 principle. A persona's _identity_ does not systematically improve objective-task performance
 ([[ZHENG-PERSONA]](../research/sources.md#ZHENG-PERSONA)); role _framing_ helps only via the concrete
 directives it evokes ([[KONG-ROLEPLAY]](../research/sources.md#KONG-ROLEPLAY)) — directives that
@@ -44,8 +44,8 @@ redundant second carrier whose only reliable effect is drift.
 3. **The kept stances lead grounding-first.** Each opens with its evidence rule (re-run/paste/cite;
    "three named instances"; "an external referent"), not an identity or attitude line — the value is
    the directive, not the persona ([[SELFCORRECT]](../research/sources.md#SELFCORRECT)).
-4. **Single source.** corpus-skills is the canonical home of the kept stances; the corpus-works dev-skill
-   mirror re-syncs from it. The corpus repo's own `persona-documentarian` dev-skill is replaced by a
+4. **Single source.** suspec-skills is the canonical home of the kept stances; the suspec-works dev-skill
+   mirror re-syncs from it. The Suspec repo's own `persona-documentarian` dev-skill is replaced by a
    pointer to the folded `write-documentation` discipline.
 
 ## Alternatives considered
@@ -59,7 +59,7 @@ redundant second carrier whose only reliable effect is drift.
 ## Consequences
 
 Positive: one carrier per 1:1 discipline (no drift); a small, honest catalog of genuinely
-cross-cutting postures; downstream references (canon docs, corpus-agents see-alsos, the website) tell
+cross-cutting postures; downstream references (canon docs, suspec-agents see-alsos, the website) tell
 one true story. Negative: a one-time cross-repo edit (five repos) and the loss of the
 "load architect/auditor/researcher/documentarian as a posture without its host guide" affordance —
 judged unused in practice (the host guide is where that work happens). Neutral: the kit work guides
@@ -70,13 +70,13 @@ are unchanged in substance.
 Accepted. **Refines ADR-0042** (conditioning ships as standalone skills — now only for cross-cutting
 stances) and **ADR-0064** (catalog side; the kit-tiering decision is unchanged). Updates the
 `review-stances.md` "every stance also ships standalone" convention. Evidence:
-corpus-works `specs/corpus-skills/research-personas-as-skills.md`.
+suspec-works `specs/suspec-skills/research-personas-as-skills.md`.
 
 ## Propagation
 
-corpus-skills (remove 4 dirs; reframe 3; README; docs/self-containment), corpus-works (.agents dev subset;
-research note; board), corpus/.agents (documentarian dev-skill → pointer; SKILLS-MANIFEST),
-corpus/docs/reference (review-stances, agent-guides), corpus-agents (see-also repointing),
-corpus-website (`/skills` page). Sources added to `docs/research/sources.md`: ZHENG-PERSONA,
+suspec-skills (remove 4 dirs; reframe 3; README; docs/self-containment), suspec-works (.agents dev subset;
+research note; board), suspec/.agents (documentarian dev-skill → pointer; SKILLS-MANIFEST),
+suspec/docs/reference (review-stances, agent-guides), suspec-agents (see-also repointing),
+suspec-website (`/skills` page). Sources added to `docs/research/sources.md`: ZHENG-PERSONA,
 KONG-ROLEPLAY (the grounding claim reuses the existing SELFCORRECT entry); the fuller verified
 citation list lives in the research note.

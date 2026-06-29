@@ -10,17 +10,17 @@ updated: 2026-06-20
 
 ## Context
 
-Corpus's provenance and reviewability spine — ADR-0076 (worker provenance) and ADR-0077 (reconcile-only)
+Suspec's provenance and reviewability spine — ADR-0076 (worker provenance) and ADR-0077 (reconcile-only)
 — covers human/lead → worker handoffs recorded in markdown, but **not agent → subagent delegation**: a
 main agent spawning a Claude Code subagent, or handing off through the OpenAI Agents SDK. That
 delegation leaves no reviewable trace today — who was delegated to, why, with what inputs, what context
 was filtered, what tools it held, whether it could edit, what evidence it returned. Two gaps:
-`corpus run` records only the launch envelope (`{task_id, adapter, worktree, branch, source, exit}`; the
+`suspec run` records only the launch envelope (`{task_id, adapter, worktree, branch, source, exit}`; the
 `changed_files[]/commands[]` stream is the deferred D1 item), and **in-session subagents — spawned by
 the parent through the runner's own Agent tool — never touch the CLI at all**.
 
-corpus-works #43 (the corpus-agents exploration) identified a reviewable delegation trace as the
-genuinely-new, agent-neutral contribution a `corpus-agents` member would make.
+suspec-works #43 (the suspec-agents exploration) identified a reviewable delegation trace as the
+genuinely-new, agent-neutral contribution a `suspec-agents` member would make.
 `RFC-delegation-provenance` argued the approach; this ADR freezes the contract.
 
 ## Decision
@@ -44,23 +44,23 @@ genuinely-new, agent-neutral contribution a `corpus-agents` member would make.
 
 3. **The contract is neutral; producers are runner-specific.** Two producers emit conformant data for
    the surface each can see:
-   - **Producer 1 — `corpus run --agent` launches.** corpus-cli extends its run-record toward the D1 form:
+   - **Producer 1 — `suspec run --agent` launches.** suspec-cli extends its run-record toward the D1 form:
      `changed_files[]` (the worktree diff after the agent exits) plus a `provenance` block carrying the
      fields it knows (`worker`/adapter, `reason`/task, worktree, isolation, `exit`). **Additive** — old
      run-records stay valid; no field becomes required. `commands[]` (the agent's internal commands) the
      interactive launcher cannot observe; it stays deferred.
    - **Producer 2 — in-session subagents.** A Claude Code `SubagentStart` / `SubagentStop` hook recipe
-     appends a trace line to `.corpus/work/delegations.ndjson` — because in-session subagents bypass
-     `corpus run` entirely. Runner-specific (Claude-Code-first); shipped as an opt-in recipe in the kit's
+     appends a trace line to `.suspec/work/delegations.ndjson` — because in-session subagents bypass
+     `suspec run` entirely. Runner-specific (Claude-Code-first); shipped as an opt-in recipe in the kit's
      `advanced/`, lower-staleness than agent frontmatter (a shell hook keyed to a stable event name).
 
 4. **The trace audits delegation; it never runs it.** The producers ship records, never an executor.
-   The only sanctioned launcher remains `corpus run --agent`, which never becomes the agent (ADR-0077). A
+   The only sanctioned launcher remains `suspec run --agent`, which never becomes the agent (ADR-0077). A
    launched run that bypassed both producers leaves no trace — so the _absence_ of orchestration is
    observable. This is the structural defense against a hidden multi-agent runtime.
 
 5. **Convention-first, not a check (yet).** No C0xx mint and no contract-version bump this cycle (the
-   trace is a record, not a spec/review structure `corpus check` reconciles). A check ("a launched run
+   trace is a record, not a spec/review structure `suspec check` reconciles). A check ("a launched run
    recorded a provenance trace") is deferred to a separate decision, minted only if review keeps
    catching missing traces — the ADR-0063 anti-enforcement-theater rule and the ADR-0086/0087
    measure-first precedent.
@@ -71,7 +71,7 @@ genuinely-new, agent-neutral contribution a `corpus-agents` member would make.
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Do nothing (status quo)                                     | Agent → subagent delegation stays unreviewable; the provenance/reviewability spine degrades as multi-agent work grows — the exact gap #43 found.                 |
 | A multi-agent runtime / orchestrator that owns delegation   | Violates ADR-0077 (no model loop, no center) and breaks the constellation (members depend on a hub). The trace audits delegation; it never runs it.              |
-| Provenance only in `corpus run`'s record (no hook producer) | Misses in-session subagents entirely — the majority of Claude-Code delegation never touches the CLI. The two-producer split is what makes the contract complete. |
+| Provenance only in `suspec run`'s record (no hook producer) | Misses in-session subagents entirely — the majority of Claude-Code delegation never touches the CLI. The two-producer split is what makes the contract complete. |
 | Mint a check (C0xx) requiring a trace now                   | Premature enforcement theater (ADR-0063); start as a convention/record and measure first (the ADR-0086/0087 precedent).                                          |
 
 ## Consequences
@@ -79,15 +79,15 @@ genuinely-new, agent-neutral contribution a `corpus-agents` member would make.
 Accepted: the delegation-provenance contract is canon — a neutral, verdict-free trace with a frozen
 schema and two runner-specific producers. Honors ADR-0077 D8 (a fact, never a verdict), ADR-0063
 (convention this cycle; toolable/enforced only on a later measured decision), and extends ADR-0076 plus
-the `future-cli.md` run-record form. The producers — the corpus-cli run-record D1 extension and the
-Claude Code hook recipe — land per `CHANGE-delegation-provenance`; the experimental `corpus-reviewer`
+the `future-cli.md` run-record form. The producers — the suspec-cli run-record D1 extension and the
+Claude Code hook recipe — land per `CHANGE-delegation-provenance`; the experimental `suspec-reviewer`
 probe is the first subject to measure. Nothing is enforced — a missing trace never blocks anything —
 until a future gate decides otherwise.
 
 ## Propagation
 
 `docs/reference/future-cli.md` (the run-record `provenance` block references this contract) ·
-`docs/adrs/README.md` (the index row) · `corpus-cli` (`corpus run` run-record extension — producer 1,
-`CHANGE-delegation-provenance` W2) · `../corpus-starter-kit/advanced/` (the Claude Code hook recipe —
-producer 2, W3). No `checks.yaml` change (convention-first). The corpus-works workspace cuts and reviews the
+`docs/adrs/README.md` (the index row) · `suspec-cli` (`suspec run` run-record extension — producer 1,
+`CHANGE-delegation-provenance` W2) · `../suspec-starter-kit/advanced/` (the Claude Code hook recipe —
+producer 2, W3). No `checks.yaml` change (convention-first). The suspec-works workspace cuts and reviews the
 producer tasks.

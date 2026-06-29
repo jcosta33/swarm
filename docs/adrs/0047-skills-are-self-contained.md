@@ -15,13 +15,13 @@ superseded_by:
 ADR-0016 made skills **cite-don't-define**: a skill carries procedure and _cites_ the authoritative
 semantics (the `passes/` + `language/` references) rather than restating them. That kept skills thin and
 single-homed the semantics — but it assumed the agent **follows the citation** to load the authority when
-it matters. Building the first real adopter (`corpus-cli`) surfaced that this assumption is unsound for an
+it matters. Building the first real adopter (`suspec-cli`) surfaced that this assumption is unsound for an
 LLM agent:
 
 - The official Agent Skills design makes following a reference **the model's discretion** — bundled
   references load "as needed," and "files never referenced in a session never load at all." A skill that
   is only _correct_ when the agent follows a pointer is betting on an optional step.
-- Corpus already carried the evidence against deep references: chained references "get partial-read and
+- Suspec already carried the evidence against deep references: chained references "get partial-read and
   silently dropped" [[SKILLBP]](../research/sources.md#SKILLBP), which is why the body-shape rule was
   "one hop." The logical conclusion is **zero required hops**.
 - Non-salient / out-of-context material is underused (lost-in-the-middle, multi-turn decay

@@ -49,7 +49,7 @@
 | watchlist | Vague terms that need same-line criteria. |
 | wave | One verified stage of a change plan. |
 | worker | Implementer that owns a task and returns a run summary. |
-| workspace | Repo or folder holding Corpus artifacts. |
+| workspace | Repo or folder holding Suspec artifacts. |
 | worktree | Separate checkout for one task. |
 | writing rules | Requirement hygiene rules. |
 

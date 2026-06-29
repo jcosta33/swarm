@@ -1,6 +1,6 @@
 # Local checks
 
-Corpus core checks are generic.
+Suspec core checks are generic.
 
 Project-specific checks belong to the project.
 
@@ -8,7 +8,7 @@ Project-specific checks belong to the project.
 
 | Layer | Owns |
 | --- | --- |
-| Corpus core CLI | generic artifact checks |
+| Suspec core CLI | generic artifact checks |
 | Workspace | command slots and local policy |
 | Code repo | build, test, lint, typecheck |
 | Local scripts | project-specific predicates |

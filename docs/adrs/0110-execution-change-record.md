@@ -14,7 +14,7 @@ updated: 2026-06-26
 section the run record; [ADR-0104](./0104-ephemeral-by-default.md) made tasks/reviews ephemeral. The
 gap that left: when the review evaporates, the **requirement→evidence linkage** it carried is lost — the
 durable residue in `## Execution` was free prose, not a structured map. An external proposal (the
-Lean-Corpus disposition, corpus-works DEC-0004) over-reached to *committed per-change evidence files*,
+Lean-Suspec disposition, suspec-works DEC-0004) over-reached to *committed per-change evidence files*,
 but its one legitimate point holds: the digest is small, durable, and worth keeping. [ADR-0107](./0107-fast-track-staleness-detection.md)
 already pins a `reviewed_sha` + `evidence_hash` on the review packet; this carries that residue **into
 the living spec at close**, so it survives the ephemeral review.
@@ -28,7 +28,7 @@ stays append-only (ADR-0103). A structured entry carries, beneath its dated head
 - **Coverage** — the AC→evidence digest: each in-scope AC mapped to the evidence that closed it (a test
   pass, a CI link, a named check). The compact, durable form of the review's coverage table.
 - **Pins** — `reviewed-sha:` (the code SHA reviewed) + `evidence-hash:` (the ADR-0107 digest over the
-  diff + cited evidence). Written by `corpus stamp` at close.
+  diff + cited evidence). Written by `suspec stamp` at close.
 
 This is **additive and not a frozen contract section** — it amends nothing in the freeze-at-`ready`
 block; a spec with a prose Execution entry stays valid (legacy + 1:1-simple work is not forced into the
@@ -44,9 +44,9 @@ coverage line. An entry with **no** digest is not flagged (legacy/simple is allo
 - The requirement→evidence map + the reviewed SHA survive the ephemeral review — closing the
   audit-trail hole ADR-0104 opened, without committing a per-change `evidence/` tree (no reversal of
   ephemeral-by-default; no new artifact class).
-- Reuses ADR-0107's pins + the `Stale` marker — `corpus check --staleness` already flips a review on
+- Reuses ADR-0107's pins + the `Stale` marker — `suspec check --staleness` already flips a review on
   SHA/hash drift; the same pins now live in the spec's Execution.
-- `corpus show spec` already surfaces `## Execution` raw (showArtifact `section_body`); the advisory
+- `suspec show spec` already surfaces `## Execution` raw (showArtifact `section_body`); the advisory
   rides that parse + the existing pin fields — no new plumbing.
 - **Migration tail:** pre-existing prose Execution entries stay valid; the structured form is adopted
   going forward (stamp on the next amendment). Not a bulk rewrite.

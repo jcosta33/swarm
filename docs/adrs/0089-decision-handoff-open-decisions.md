@@ -10,7 +10,7 @@ updated: 2026-06-20
 
 ## Context
 
-A developer adopting Corpus rarely runs one agent — they orchestrate several, each deep in its own
+A developer adopting Suspec rarely runs one agent — they orchestrate several, each deep in its own
 domain (a parser change here, a docs sweep there, a benchmark in a third worktree). At the moment a
 unit of work closes and a decision is owed, that developer is **context-poor**: pulled across domains,
 holding none of any single agent's depth. The agent that just did the work is the only party still
@@ -130,9 +130,9 @@ agents close a unit of work the same way.
 ## Propagation
 
 `docs/reference/artifact-formats.md` (the `## Open decisions` entry in the review section list + a
-load-bearing bullet) · `../corpus-starter-kit/templates/review.md` (the optional section with authoring
+load-bearing bullet) · `../suspec-starter-kit/templates/review.md` (the optional section with authoring
 guidance) · `docs/research/sources.md` (the eight evidence entries, tiered) ·
-`docs/adrs/README.md` (the index row) · the corpus-works trail (SPEC/TASK/REVIEW + the persisted research).
-Extends [0060](./0060-corpus-workspace.md); honors [0077](./0077-corpus-cli-reconcile-only-harness.md)
+`docs/adrs/README.md` (the index row) · the suspec-works trail (SPEC/TASK/REVIEW + the persisted research).
+Extends [0060](./0060-suspec-workspace.md); honors [0077](./0077-suspec-cli-reconcile-only-harness.md)
 Decision 8 and [0063](./0063-honesty-framework-and-tooling-boundary.md); convention-first like
 [0088](./0088-delegation-provenance.md). No contract change, no check.

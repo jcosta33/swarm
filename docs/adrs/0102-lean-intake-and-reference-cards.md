@@ -54,7 +54,7 @@ independent of the larger spec-as-living-form change (which stays an open propos
 
 `docs/02-basic-workflow.md`, `docs/03-where-files-live.md`, `docs/ADOPTING.md` (intake optional), and
 the kit cards `advanced/checks-reference.md` + `advanced/sol-reference.md` (→ pointers) + the
-`spec-check` guide (→ canonical checks doc). corpus-works vendored copies re-sync from the kit.
+`spec-check` guide (→ canonical checks doc). suspec-works vendored copies re-sync from the kit.
 
 ## Affected obligations / constraints
 

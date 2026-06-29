@@ -11,7 +11,7 @@ updated: 2026-06-27
 ## Context
 
 The Phase 3 family sweep (workflow `wf9rvvwys`) confirmed the re-architecture this program shipped
-was correct in **file structure** — 8→6 agents, 7→11 skills, corpus-mcp at 0.2.0, the
+was correct in **file structure** — 8→6 agents, 7→11 skills, suspec-mcp at 0.2.0, the
 [ADR-0112](./0112-two-tier-skills.md) catalog/kit split — but the **doc/reference layer drifted**, and
 the drift clustered where prose **hardcodes a count or a range that some other file is the real owner
 of**. Two concrete instances:
@@ -65,7 +65,7 @@ prose may describe this rule as "enforced", "guaranteed", or "blocking".
   prose links instead of copying, the ledger advancing can no longer falsify the prose. The catch is
   that, at *convention* level, this holds only for prose written under the discipline; a number copied
   in by a future author is still possible until the lint ships. The recurrence the sweep documented
-  (the class survived in corpus-mcp + the kit because the manual pass covered only catalog+agents) is
+  (the class survived in suspec-mcp + the kit because the manual pass covered only catalog+agents) is
   exactly the residual: **humans catch it, not gates**, until the toolable lint lands.
 - **Build-time generation (option 2) shifts a maintenance burden into the build** — a count that must
   appear (e.g. a generated summary) now needs a generator reading the source, not a hand-edited

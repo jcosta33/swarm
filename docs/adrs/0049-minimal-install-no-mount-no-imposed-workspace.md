@@ -10,9 +10,9 @@ superseded_by:
 
 # ADR-0049: Minimal install — `.agents/`, no mount, a small flow-based folder set
 
-> **Refined by [ADR-0050](./0050-corpus-is-a-spec-repo-discipline.md).** The goldilocks six-folder `.agents/`
+> **Refined by [ADR-0050](./0050-suspec-is-a-spec-repo-discipline.md).** The goldilocks six-folder `.agents/`
 > set below is the **spec repo's** authoring workspace. A **code repo** that only _consumes_ specs gets
-> near-zero — no specs, no SOL cards, at most one opt-in `implement-and-verify` skill, with all Corpus
+> near-zero — no specs, no SOL cards, at most one opt-in `implement-and-verify` skill, with all Suspec
 > scratch gitignored. The per-repo version marker named here is **dropped** (see 0050 §6).
 
 ## Context
@@ -24,8 +24,8 @@ reference) found most of the structure was ceremony a **no-runtime** framework c
   `generated/{5}`, `memory/{2}`, `ledger/{3}`, `overlays/`, `archive/`, `tmp/`). Four of the eight
   top-level dirs (`status/`, `overlays/`, `archive/`, `tmp/`) are referenced by **zero** shipped skills or
   templates; the rest only by passing prose mentions. They are a filesystem for a runtime that does not
-  exist — and Corpus's first invariant is that it ships **no runtime**.
-- **The "kernel" mount + symlink bridge.** Skills were copied into a framework-owned `.corpus/kernel/skills/`
+  exist — and Suspec's first invariant is that it ships **no runtime**.
+- **The "kernel" mount + symlink bridge.** Skills were copied into a framework-owned `.suspec/kernel/skills/`
   and then surfaced into the agent's scan dir (`.claude/skills/`) by symlink. This was the source of **two**
   adoption bugs in a single session (a dir-symlink collision that hid the project's own skills, then a
   stranded skill). The structure manufactured the bugs.
@@ -38,15 +38,15 @@ that, nothing requires a separate mount, a bridge, or a pre-built workspace tree
 
 ## Decision
 
-1. **Install is "copy files next to your skills."** Corpus ships three folders — `skills/`, `templates/`,
+1. **Install is "copy files next to your skills."** Suspec ships three folders — `skills/`, `templates/`,
    `reference/`. An adopter copies them under `.agents/` (or, for a CLI that scans a fixed skills dir like
-   Claude Code's `.claude/skills/`, puts the skills there directly). **No `.corpus/kernel/` mount, no symlink
-   bridge.** Corpus's skills are ordinary skills, installed where skills live, beside the project's own.
-2. **Upgrade is "re-copy the named files."** Corpus's skills carry recognizable names (`pass-*`, `persona-*`,
+   Claude Code's `.claude/skills/`, puts the skills there directly). **No `.suspec/kernel/` mount, no symlink
+   bridge.** Suspec's skills are ordinary skills, installed where skills live, beside the project's own.
+2. **Upgrade is "re-copy the named files."** Suspec's skills carry recognizable names (`pass-*`, `persona-*`,
    `write-*`) that cannot collide with a project's own; an upgrade re-copies those, leaving the project's
    skills untouched. Replacement safety is a **naming** property, not a separate-mount property.
 3. **A small, flow-based folder set under `.agents/` — the goldilocks middle** (see the Update below; this
-   corrects the original "no folders at all"). Corpus prescribes **six** folders, every one of which the
+   corrects the original "no folders at all"). Suspec prescribes **six** folders, every one of which the
    proven flow reads or durably writes — no more:
 
    | `.agents/` folder | Earned by                                                                          |
@@ -59,9 +59,9 @@ that, nothing requires a separate mount, a bridge, or a pre-built workspace tree
    | `memory/`         | `promote` writes durable findings/patterns; `INDEX.md` is a required artifact      |
 
    Other source artifacts (audits, findings, ADRs, PRDs…) are normal `type:`-tagged documents that live
-   under `.agents/` however the project likes — **suggested, not mandated** (Corpus reads the frontmatter,
-   not a fixed path). The adopted-kernel **version marker** lives in `.agents/` (e.g. `.agents/corpus.version`),
-   not a `.corpus/` file. Anything that serves only a **future toolchain** — `status/` drift, `generated/`
+   under `.agents/` however the project likes — **suggested, not mandated** (Suspec reads the frontmatter,
+   not a fixed path). The adopted-kernel **version marker** lives in `.agents/` (e.g. `.agents/suspec.version`),
+   not a `.suspec/` file. Anything that serves only a **future toolchain** — `status/` drift, `generated/`
    packets, an append-only `ledger/`, `archive/`, `tmp/`, the on-disk `.json` IR/plan files — is created
    **lazily, the first time a tool writes it**, never stamped empty at install. The test for prescribing a
    folder is "does a pass a human/agent runs **today** read or durably write it?"
@@ -71,11 +71,11 @@ that, nothing requires a separate mount, a bridge, or a pre-built workspace tree
    directory (this is what supersedes [0045](./0045-overlays-are-project-owned.md)).
 5. **"kernel" is retired everywhere** — adopter-facing _and_ in the producer repo. It is OS-runtime jargon
    for a folder of markdown in a NO-RUNTIME framework. The concept is "the install" / "the installed files"
-   / "Corpus ships X"; the producer directory `starter-kit/` is renamed `starter-kit/`. (The repo-wide text sweep is a
+   / "Suspec ships X"; the producer directory `starter-kit/` is renamed `starter-kit/`. (The repo-wide text sweep is a
    tracked follow-up wave; this ADR fixes the decision.)
 
 This **supersedes [0048](./0048-installed-payload-is-the-runtime-surface.md)** (the payload no longer mounts
-at `.corpus/kernel/`; it installs in place) and **[0045](./0045-overlays-are-project-owned.md)** (no overlays
+at `.suspec/kernel/`; it installs in place) and **[0045](./0045-overlays-are-project-owned.md)** (no overlays
 dir). It **refines [0040](./0040-kernel-payload-directory.md)** (the adopter-side mount it defined is gone;
 the producer-side payload directory survives, rename pending) and **[0044](./0044-kernel-is-derived-and-self-contained.md)**
 (`docs/` stays canonical and the derived files are still eyeball-diffed — they simply install in place
@@ -85,10 +85,10 @@ rather than into a mount).
 
 | Alternative                                                                    | Why rejected                                                                                                                                                                                                                                             |
 | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Keep the `.corpus/kernel/` mount + bridge                                      | It exists only for wholesale replacement on upgrade, which unique skill names already give for free — and it caused two adoption bugs. Pure cost.                                                                                                        |
+| Keep the `.suspec/kernel/` mount + bridge                                      | It exists only for wholesale replacement on upgrade, which unique skill names already give for free — and it caused two adoption bugs. Pure cost.                                                                                                        |
 | Prescribe **zero** folders (create everything on first write)                  | The original form of this ADR. Over-corrected: the proven flow genuinely needs homes for specs, tasks, and memory, and leaving them unprescribed makes adoption _less_ intuitive and `promote`'s routing point nowhere. See the goldilocks Update below. |
 | Keep the full pre-built workspace tree (~32 dirs)                              | The opposite extreme: 4 of 8 top-level dirs referenced by zero shipped skills; a filing cabinet for a runtime that isn't there.                                                                                                                          |
-| Delete the reconciliation model entirely (status/generated/ledger as concepts) | That is design, not noise — the intent/reality/observed split and the surface policies are Corpus's value. The fix is to stop _materialising_ them at install, not to remove them. They remain documented contracts a tool fulfils, created lazily.      |
+| Delete the reconciliation model entirely (status/generated/ledger as concepts) | That is design, not noise — the intent/reality/observed split and the surface policies are Suspec's value. The fix is to stop _materialising_ them at install, not to remove them. They remain documented contracts a tool fulfils, created lazily.      |
 
 ## Consequences
 
@@ -96,7 +96,7 @@ rather than into a mount).
   empty tree, no mount, no bridge, no OS jargon. The two classes of bridge bug become impossible, and the
   prescribed set matches how `.agents/` is already used in the wild.
 - **Negative:** the elaborate `docs/model/workspace.md` filesystem model is replaced by a slim one, and the
-  ADRs/docs that referenced `.corpus/kernel/`, the workspace tree, or overlays must be swept. Done as part of
+  ADRs/docs that referenced `.suspec/kernel/`, the workspace tree, or overlays must be swept. Done as part of
   this change.
 - **Neutral:** the obligation model, all closed sets, the SOL grammar, the pass pipeline, and the
   reconciliation _design_ (desired/reality/observed, surface policies) are unchanged — only where files
@@ -112,7 +112,7 @@ routing table pointing nowhere. The correction is the **goldilocks middle** now 
 the **six** `.agents/` folders the flow actually exercises, and only those — drop the ~26 dirs that served
 a future toolchain. The principle is unchanged ("don't materialise what nothing reads"); the boundary moved
 from _zero_ to _the proven floor_. The review also caught a real defect: `conformance.md` required a
-`.corpus/VERSION` file that no longer exists — the version marker moves to `.agents/`.
+`.suspec/VERSION` file that no longer exists — the version marker moves to `.agents/`.
 
 ## Status
 

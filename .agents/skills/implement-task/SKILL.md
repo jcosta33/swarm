@@ -2,7 +2,7 @@
 name: implement-task
 type: agent-guide
 description: >-
-  Implement a Corpus task packet: read the sources first, stay inside scope, run
+  Implement a Suspec task packet: read the sources first, stay inside scope, run
   every Verify item and paste real output, self-review your diff before
   handoff. ALWAYS apply when given a task packet (`type: task`) or asked to
   implement against a spec's requirements. Do not edit outside the task's
@@ -61,10 +61,10 @@ enforces them at edit time.
    the point of the review step._
 
 **Spec-external mode (single-root).** When the workspace and code live in separate
-repos, the task and its pinned spec snapshot sit in the code repo's gitignored `.corpus/`.
-Read the snapshot; write only in the code repo (your code + `.corpus/` scratch) — never the
+repos, the task and its pinned spec snapshot sit in the code repo's gitignored `.suspec/`.
+Read the snapshot; write only in the code repo (your code + `.suspec/` scratch) — never the
 canonical workspace. Your commands and edits resolve against one root, and the review lead
-merges your evidence back. (Grounding: [Corpus ADR-0100](https://github.com/jcosta33/corpus/blob/main/docs/adrs/0100-spec-external-ops-local-mode.md).)
+merges your evidence back. (Grounding: [Suspec ADR-0100](https://github.com/jcosta33/suspec/blob/main/docs/adrs/0100-spec-external-ops-local-mode.md).)
 
 ## Refuses
 

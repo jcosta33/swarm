@@ -1,6 +1,6 @@
 # Artifact formats
 
-Every Corpus file is markdown with frontmatter.
+Every Suspec file is markdown with frontmatter.
 
 The `type:` field identifies the artifact.
 

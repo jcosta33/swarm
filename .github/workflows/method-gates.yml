@@ -1,8 +1,8 @@
 name: method-gates
 
-# The method-critique gates (ADRs 0113-0118) run over the whole corpus family. The lint scripts live in
+# The method-critique gates (ADRs 0113-0118) run over the whole suspec family. The lint scripts live in
 # this repo (scripts/) and check the sibling repos, so the family CI home is here: check out each member
-# next to corpus, build corpus-cli, then run the scriptable gates + `corpus check`. Per ADR-0077 a gate is
+# next to suspec, build suspec-cli, then run the scriptable gates + `suspec check`. Per ADR-0077 a gate is
 # a RECORD/CHECK — this fails the build on a violation; adopters wire their own CI as they see fit.
 
 on:
@@ -19,28 +19,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # The family, all checked out under $GITHUB_WORKSPACE/family so the scripts' REPO_PARENT_DIR resolves.
-      - { name: corpus,              uses: actions/checkout@v4, with: { repository: jcosta33/corpus,              path: family/corpus } }
-      - { name: corpus-skills,       uses: actions/checkout@v4, with: { repository: jcosta33/corpus-skills,       path: family/corpus-skills } }
-      - { name: corpus-agents,       uses: actions/checkout@v4, with: { repository: jcosta33/corpus-agents,       path: family/corpus-agents } }
-      - { name: corpus-mcp,          uses: actions/checkout@v4, with: { repository: jcosta33/corpus-mcp,          path: family/corpus-mcp } }
-      - { name: corpus-starter-kit,  uses: actions/checkout@v4, with: { repository: jcosta33/corpus-starter-kit,  path: family/corpus-starter-kit } }
-      - { name: corpus-works,        uses: actions/checkout@v4, with: { repository: jcosta33/corpus-works,        path: family/corpus-works } }
-      - { name: corpus-cli,          uses: actions/checkout@v4, with: { repository: jcosta33/corpus-cli,          path: family/corpus-cli } }
+      - { name: suspec,              uses: actions/checkout@v4, with: { repository: jcosta33/suspec,              path: family/suspec } }
+      - { name: suspec-skills,       uses: actions/checkout@v4, with: { repository: jcosta33/suspec-skills,       path: family/suspec-skills } }
+      - { name: suspec-agents,       uses: actions/checkout@v4, with: { repository: jcosta33/suspec-agents,       path: family/suspec-agents } }
+      - { name: suspec-mcp,          uses: actions/checkout@v4, with: { repository: jcosta33/suspec-mcp,          path: family/suspec-mcp } }
+      - { name: suspec-starter-kit,  uses: actions/checkout@v4, with: { repository: jcosta33/suspec-starter-kit,  path: family/suspec-starter-kit } }
+      - { name: suspec-works,        uses: actions/checkout@v4, with: { repository: jcosta33/suspec-works,        path: family/suspec-works } }
+      - { name: suspec-cli,          uses: actions/checkout@v4, with: { repository: jcosta33/suspec-cli,          path: family/suspec-cli } }
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Build corpus-cli (provides `corpus check`)
-        working-directory: family/corpus-cli
+      - name: Build suspec-cli (provides `suspec check`)
+        working-directory: family/suspec-cli
         run: |
           corepack enable
           pnpm install --frozen-lockfile
           pnpm build
 
       - name: Method-gates — product-vs-docs, count-ranges, artifact-refs, catalog-freshness
-        run: sh family/corpus/scripts/lint-all.sh "$GITHUB_WORKSPACE/family"
+        run: sh family/suspec/scripts/lint-all.sh "$GITHUB_WORKSPACE/family"
 
-      - name: corpus check — workspace (incl. the ADR-0116 spec-Execution invariant)
-        working-directory: family/corpus-works
-        run: node "$GITHUB_WORKSPACE/family/corpus-cli/bin/corpus.js" check
+      - name: suspec check — workspace (incl. the ADR-0116 spec-Execution invariant)
+        working-directory: family/suspec-works
+        run: node "$GITHUB_WORKSPACE/family/suspec-cli/bin/suspec.js" check

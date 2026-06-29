@@ -1,6 +1,6 @@
-# What is Corpus?
+# What is Suspec?
 
-Corpus is a markdown workflow for agent-assisted code changes.
+Suspec is a markdown workflow for agent-assisted code changes.
 
 It gives you:
 
@@ -14,9 +14,9 @@ It does not replace your agent, issue tracker, PRs, CI, or docs site.
 
 ## Why use it
 
-Agent output is easy to generate and hard to review. Corpus puts a small record between each step:
+Agent output is easy to generate and hard to review. Suspec puts a small record between each step:
 
-| Problem | Corpus record |
+| Problem | Suspec record |
 | --- | --- |
 | Vague ticket | `intake/` snapshot plus a spec |
 | Repeated prompt context | workspace files the agent can read |
@@ -51,12 +51,12 @@ See [the basic workflow](02-basic-workflow.md).
 
 The markdown workflow works without tooling.
 
-`corpus-cli` is optional. It scaffolds, checks, launches, and reconciles files.
+`suspec-cli` is optional. It scaffolds, checks, launches, and reconciles files.
 It does not write code or decide whether work is correct.
 
 See [the CLI reference](reference/future-cli.md).
 
-Corpus keeps the *functions* of heavyweight engineering (explicit intent, verification, review,
+Suspec keeps the *functions* of heavyweight engineering (explicit intent, verification, review,
 traceability, change control) while dropping the document stack — see [lineage](reference/lineage.md).
 
 ## Start here

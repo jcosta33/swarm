@@ -14,7 +14,7 @@ The artifact set risks two failure modes: too many *stations* (ceremony for a tr
 *lean* (can't unfold for an 8-PR migration). [ADR-0103](./0103-spec-as-living-form-task-on-demand.md)
 started the fix (spec is the unit, task on-demand) but it was never stated as a principle, and the kit
 still ships `/examples` + `/advanced` as if every adopter needs every extended-type blank. Ratified
-from RFC-stretch-collapse (corpus-works#72 ceremony).
+from RFC-stretch-collapse (suspec-works#72 ceremony).
 
 ## Decision
 

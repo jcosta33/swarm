@@ -16,11 +16,11 @@ longer describe what was built: requirements reality outran, acceptance criteria
 that no longer hold, whole features with no spec. The artifacts and the code
 disagree.
 
-Corpus has the pieces to recover but never named the procedure. Inventory maps
+Suspec has the pieces to recover but never named the procedure. Inventory maps
 current code ([ADR-0068](./0068-inventory-and-change-plan.md)). Specs are living
 and support supersession ([ADR-0103](./0103-spec-as-living-form-task-on-demand.md),
 [ADR-0108](./0108-living-specs.md)). The harness is reconcile-only — it surfaces
-drift, it never blocks ([ADR-0077](./0077-corpus-cli-reconcile-only-harness.md)).
+drift, it never blocks ([ADR-0077](./0077-suspec-cli-reconcile-only-harness.md)).
 The staleness signals catch the mechanical cases — a stale review packet
 ([ADR-0107](./0107-fast-track-staleness-detection.md)), status/spec incoherence
 ([ADR-0116](./0116-shipped-spec-invariant.md)). What was missing is the answer to
@@ -30,7 +30,7 @@ The staleness signals catch the mechanical cases — a stale review packet
 
 **Drift is expected, not a failure. When reality and the artifacts disagree, you
 re-baseline: trust the code, reconcile the specs to it, and record the gap.**
-Corpus never punishes the drift — it gives a procedure to make the artifacts true
+Suspec never punishes the drift — it gives a procedure to make the artifacts true
 again. The re-baseline pass, when you notice the mismatch (or a coherence check
 flags it):
 
@@ -49,7 +49,7 @@ flags it):
    not a silent reset.
 5. **Update the board** to the re-baselined state.
 
-The honest scope: Corpus does not auto-detect semantic code-vs-spec drift — that
+The honest scope: Suspec does not auto-detect semantic code-vs-spec drift — that
 is review and human judgment. The mechanical cases (a stale evidence hash, a
 status/spec mismatch) are flagged by the existing signals; the rest is a
 triggered, human-run reconciliation. _Level: convention._

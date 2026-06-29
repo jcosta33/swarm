@@ -17,9 +17,9 @@ and **no requirement id is reused across specs** — the second clause was meant
 question of whether requirement ids should be globally unique or spec-scoped … left to a future
 decision if revisited."
 
-Dogfooding the reference CLI surfaced the answer. `corpus check` over the corpus-works workspace is red
+Dogfooding the reference CLI surfaced the answer. `suspec check` over the suspec-works workspace is red
 with ~29 cross-spec C002 findings, because every spec naturally numbers its requirements from
-`AC-001` and the kit's `corpus new spec` scaffold mints `AC-001` for each new spec — so any two
+`AC-001` and the kit's `suspec new spec` scaffold mints `AC-001` for each new spec — so any two
 non-draft specs collide through no author fault, and the gate (the product's wedge) reds against its
 own dogfood workspace.
 
@@ -45,20 +45,20 @@ _draft ids being work-in-progress_ still informs the sibling lifecycle gates (C0
 non-draft source-spec guard, ADR-0079).
 
 C002's id, name (`duplicate-id`), and severity (hard error) are **unchanged** — the machine row in
-`checks.yaml` is the same, so the contract version and the corpus-cli drift guard are unaffected; only
+`checks.yaml` is the same, so the contract version and the suspec-cli drift guard are unaffected; only
 the prose semantics in `reference/checks.md` and `reference/structured-requirements.md` change, plus
 the deletion of the cross-spec requirement-id pass in the reference implementation
-(`corpus-cli .../checkWorkspace.ts`).
+(`suspec-cli .../checkWorkspace.ts`).
 
 ## Consequences
 
-- `corpus check` greens against the corpus-works dogfood workspace; the cross-spec C002 findings clear, and
-  every spec (and the `corpus new spec` scaffold) can number from `AC-001` without coordination.
+- `suspec check` greens against the suspec-works dogfood workspace; the cross-spec C002 findings clear, and
+  every spec (and the `suspec new spec` scaffold) can number from `AC-001` without coordination.
 - A bare `AC-001` quoted without its spec is now ambiguous by design — readers and tools carry the
   source-spec binding, which tasks, reviews, and C012 already require. Cross-spec references use
   `SPEC-x#AC-NNN`.
 - The reference impl drops the `requirementIdToPaths` accumulation/emit in `checkWorkspace.ts`; the
-  frontmatter-`id:` collision check stays. corpus-cli's `checkWorkspace` tests assert the new behavior
+  frontmatter-`id:` collision check stays. suspec-cli's `checkWorkspace` tests assert the new behavior
   (a reused `AC-001` across specs is not a C002 finding; a duplicate frontmatter id still is).
 - This does **not** weaken in-file id integrity (C001 holds) and does not touch C012 — which keys a
   review's coverage rows against its single named source spec, exactly the spec-scoped model.

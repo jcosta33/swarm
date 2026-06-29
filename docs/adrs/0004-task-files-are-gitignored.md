@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted. Superseded by [ADR-0060](./0060-corpus-workspace.md) — tasks are committed workspace flow artifacts.
+Accepted. Superseded by [ADR-0060](./0060-suspec-workspace.md) — tasks are committed workspace flow artifacts.
 
 ## Context
 

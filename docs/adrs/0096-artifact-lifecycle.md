@@ -11,7 +11,7 @@ updated: 2026-06-22
 ## Context
 
 After hundreds of specs over years, do review files live forever? How do artifacts coexist and stay
-findable? A web-verified evidence pass (corpus-works #54; sources below, each verified June 2026 with
+findable? A web-verified evidence pass (suspec-works #54; sources below, each verified June 2026 with
 honest tiers) gives a principled lifecycle drawn from records-management and large-org documentation
 practice.
 
@@ -30,7 +30,7 @@ practice.
   stale," freshness reminders help (a ~3-month example), and at scale a dominant failure mode is
   **duplication, not just absence** (the Borg case: 7–10 overlapping docs, no owner) ([[SWEGBOOKDOCS]]).
 
-corpus's `docs/adrs/` already numbers sequentially and its ADR frontmatter already carries
+suspec's `docs/adrs/` already numbers sequentially and its ADR frontmatter already carries
 `status`/`supersedes`/`superseded_by` — so the decision lifecycle is half-convention already; the
 gap is stating it, extending it to specs, and adding the durable/ephemeral + retention + freshness
 layer.
@@ -39,20 +39,20 @@ layer.
 
 1. **Durable-vs-ephemeral is a first-class rule** (`docs/03-where-files-live.md`, convention).
    **Durable records** — decisions (ADRs), specs of record, saved findings — persist for the repo's
-   life and **supersede-not-delete**. **Transitory output** — review packets, `corpus check` output,
+   life and **supersede-not-delete**. **Transitory output** — review packets, `suspec check` output,
    run logs — ages out: keep it in git history (the default archive) or an `archive/` directory, with
    a retention window in the **30–90-day band** (anchored to GitHub 90 [[GHRETENTION]] / GitLab 30
    [[GLRETENTION]], not an invented number). _Level: convention._ ([[NARAGRS52]], [[ISO15489]])
 
 2. **Status lifecycle + supersede pointer on decisions and specs** (convention, with a named toolable).
    Status is `proposed | accepted | deprecated | superseded` with a `superseded_by: NNNN` pointer
-   (corpus's ADR frontmatter already carries this two-field form; the conceptual single-token is
+   (suspec's ADR frontmatter already carries this two-field form; the conceptual single-token is
    "superseded-by-NNNN"); the artifact is kept and only its status changes; numbers are sequential
    and never reused ([[NYGARDADR]], [[MADR]]). A
-   **`corpus check` is _specified_ (toolable, in the spirit of C015): every `superseded_by` pointer
-   resolves to an existing artifact, and the index lists it** — _named here, not shipped; the corpus-cli
+   **`suspec check` is _specified_ (toolable, in the spirit of C015): every `superseded_by` pointer
+   resolves to an existing artifact, and the index lists it** — _named here, not shipped; the suspec-cli
    agent mints the contract entry + implementation_ (no `checks.yaml` change lands with this ADR, to
-   avoid contract/impl drift; tracked in corpus-works #61 §B). _Level: convention now, toolable when the
+   avoid contract/impl drift; tracked in suspec-works #61 §B). _Level: convention now, toolable when the
    check ships._
 
 3. **Freshness + named ownership for durable artifacts** (convention). A durable spec/ADR/finding
@@ -72,7 +72,7 @@ superseded-by` keeps hundreds of artifacts navigable by search-over-a-flat-list.
 ## Consequences
 
 - No `checks.yaml` rule and no contract-version bump land here: the supersede/index check is
-  specified-not-shipped (corpus-cli follow-up, #61), consistent with the honesty framework (ADR-0063).
+  specified-not-shipped (suspec-cli follow-up, #61), consistent with the honesty framework (ADR-0063).
 - Retention/freshness numbers are anchored, never invented: the 30–90-day band cites GitHub/GitLab,
   the ~180-day transitory bound and the ~3-month freshness reminder are cited as _typical/example_,
   not rules ([[NARAGRS52]], [[SWEGBOOKDOCS]]).
@@ -86,13 +86,13 @@ superseded-by` keeps hundreds of artifacts navigable by search-over-a-flat-list.
 rules), `docs/research/sources.md` (the seven entries above), and the starter kit (an `archive/`
 convention + a board note on the supersede lifecycle / board-as-index — the kit board's `State`
 column carries status; the `superseded_by` pointer lives in the artifact's frontmatter). The `superseded_by`-resolves /
-index-lists `corpus check` is the toolable follow-up (corpus-works #61 §B), not shipped by this ADR.
+index-lists `suspec check` is the toolable follow-up (suspec-works #61 §B), not shipped by this ADR.
 
 ## Update (2026-06-22) — the supersede/index check remains specified-not-shipped ([ADR-0097](./0097-mint-c016-c017-defer-oversized.md))
 
 ADR-0097 cleared the deferred-checks backlog under measure-before-ship — minting C016 (pass-needs-evidence)
 and C017 (orphaned-reference). The `superseded_by`-resolves / index-lists check named here **stays
 specified-not-shipped**: only two real artifacts carry a filled `superseded_by` pointer today, and the
-scanned workspace tree does not yet include the ADR ledger where the lifecycle lives — too thin a corpus
+scanned workspace tree does not yet include the ADR ledger where the lifecycle lives — too thin a suspec
 to validate a "the pointer resolves + the board lists it" invariant against. It mints when the
-`superseded_by` corpus and a scanned index are real. Recorded in ADR-0097.
+`superseded_by` suspec and a scanned index are real. Recorded in ADR-0097.

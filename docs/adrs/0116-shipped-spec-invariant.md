@@ -16,7 +16,7 @@ updated: 2026-06-27
 AC→evidence Coverage digest, the SHA/hash Pins). Together they assume a spec's recorded lifecycle and
 its board placement stay coherent. Nothing checks that they do.
 
-The Phase 3 family sweep (workflow `wf9rvvwys`) found the drift this leaves open. `SPEC-corpus-agents`
+The Phase 3 family sweep (workflow `wf9rvvwys`) found the drift this leaves open. `SPEC-suspec-agents`
 was marked **shipped** on the workspace board, yet:
 
 - its own frontmatter status still said **`ready`** (board and spec disagreed about whether the work
@@ -34,7 +34,7 @@ recurring classes the sweep traced to a missing automated gate: humans caught it
 ## Decision
 
 **Propose an invariant — _a spec marked shipped on the board MUST be coherent with its own record_ —
-and propose extending the existing `corpus check` to verify it.** A spec is *shipped-coherent* iff:
+and propose extending the existing `suspec check` to verify it.** A spec is *shipped-coherent* iff:
 
 1. **Status agrees.** When the board places a spec in a terminal/shipped column, the spec's own
    frontmatter status is the agreeing terminal value (`active` for an amended-and-shipped living spec,
@@ -46,7 +46,7 @@ and propose extending the existing `corpus check` to verify it.** A spec is *shi
    board calls done with no Execution record is incoherent — the requirement→evidence linkage for a
    shipped feature is exactly the residue ADR-0110 keeps.
 
-**Spec-side shipped; board-signal half deferred.** `corpus check` (the toolable subset,
+**Spec-side shipped; board-signal half deferred.** `suspec check` (the toolable subset,
 [ADR-0063](./0063-honesty-framework-and-tooling-boundary.md)) now carries the spec-status↔`## Execution`
 coherence (SPEC-method-gates): it flags an `active` spec with no `## Execution`, and a non-`active`
 (draft/ready/done) spec that *carries* one. The other half — **failing when the board marks a spec shipped
@@ -58,8 +58,8 @@ that the board has not marked shipped is never forced into the structured form. 
 artifact symptom is left to the ADR-0108 reference-snapshot staleness mechanism and to review — it is
 not part of this coherence check.)
 
-_Level: **toolable** — the spec-status↔Execution checks shipped (`corpus check`: `active-spec-no-execution`
-+ `nonactive-spec-with-execution`, corpus-cli). The board-signal half stays **proposed** (the freeform
+_Level: **toolable** — the spec-status↔Execution checks shipped (`suspec check`: `active-spec-no-execution`
++ `nonactive-spec-with-execution`, suspec-cli). The board-signal half stays **proposed** (the freeform
 board is not a low-FP parse target); it remains a discipline-and-review obligation until/unless built._
 
 ## Consequences
@@ -69,7 +69,7 @@ board is not a low-FP parse target); it remains a discipline-and-review obligati
   silently disagree about whether a feature is done.
 - **A shipped spec is forced to carry its ADR-0110 evidence digest** — the gate makes the durable
   AC→evidence residue a precondition of "shipped," not an optional courtesy that a fast close can skip.
-- **Cost:** another `corpus check` core check to specify and (later) build and maintain; until it ships
+- **Cost:** another `suspec check` core check to specify and (later) build and maintain; until it ships
   this is one more discipline-and-review obligation, which is precisely the failure mode the sweep
   showed discipline alone does not hold. The honest cost is the gap between this `proposed` record and a
   shipped checker — this ADR closes nothing on its own.
@@ -83,7 +83,7 @@ board is not a low-FP parse target); it remains a discipline-and-review obligati
 - **Refines:** [ADR-0108](./0108-living-specs.md) (adds a coherence gate to the living-spec lifecycle
   it defines) and [ADR-0110](./0110-execution-change-record.md) (makes a present `## Execution` digest a
   precondition of a board-shipped spec). **Grounded by:** the Phase 3 family sweep (`wf9rvvwys`,
-  `SPEC-corpus-agents`).
+  `SPEC-suspec-agents`).
 - **Does NOT change:** the spec status set, the `## Execution` format, the verdict model, or the checks
   contract — no `checks.yaml` rule is added here (the checker is proposed, not shipped; ADR-0063). ADRs
   0108/0110 are refined by reference, never edited (Nygard immutability).

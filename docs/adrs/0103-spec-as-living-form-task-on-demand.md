@@ -15,7 +15,7 @@ and in that case the task **repeats the spec**: the spec's ACs already carry the
 lines, so the task's `## Verify` restates them; `scope` is "all of it"; `Agent instructions` are
 boilerplate. Only the execution record (`Run summary` / `Self-review` / `Findings`) carries weight —
 and that is *run* content, not a second contract. The result is a pass-through station that doubles the
-spec (corpus-works#72 ceremony; the session deliberation; RFC-lean-artifact-set D1).
+spec (suspec-works#72 ceremony; the session deliberation; RFC-lean-artifact-set D1).
 
 The task earns its keep for one job the spec cannot do: a **write-disjoint scope slice** when one spec
 splits into **N parallel** tasks. So the move is to **demote** the task, not delete it.
@@ -51,7 +51,7 @@ parse.
 
 4. **Coverage keys on whatever scopes the work** (refines [ADR-0079](./0079-c012-coverage-check.md)):
    the review's coverage is checked against the **task's `scope` when a task exists**, and against the
-   **spec's AC ids when it does not** (the 1:1 case). _Level: convention now; the corpus-cli reconcile
+   **spec's AC ids when it does not** (the 1:1 case). _Level: convention now; the suspec-cli reconcile
    adapts as a tracked follow-up._
 
 ## Consequences
@@ -62,8 +62,8 @@ parse.
   record; the reviewer reads the spec's contract + execution and writes the separate packet.
 - **Independence + the verdict model are untouched** — the review packet is still a separate artifact;
   the spec author / implementer / reviewer roles attach to the work (ADR-0099).
-- **Reference impl (corpus-cli / corpus-mcp) adapts as a tracked follow-up** (specified-vs-shipped,
-  ADR-0063): `new task` becomes the split tool; `corpus check`/`review` coverage keys on the spec when
+- **Reference impl (suspec-cli / suspec-mcp) adapts as a tracked follow-up** (specified-vs-shipped,
+  ADR-0063): `new task` becomes the split tool; `suspec check`/`review` coverage keys on the spec when
   no task; `scan_task` reads the spec's `## Execution` in the 1:1 case. The CLI keeps working in the
   meantime (the task artifact still exists).
 - **Honesty:** convention-level; no `checks.yaml` rule or contract bump lands here.
@@ -74,7 +74,7 @@ The kit spec template (add `## Execution`), the task template (reframed as the o
 `docs/02-basic-workflow.md` + `docs/06-creating-tasks.md` (spec is the unit; task on-demand),
 `split-work` (cut a task only when decomposing; otherwise fill the spec's `## Execution`),
 `implement-task` (1:1 → fill the spec's `## Execution`; split → the task), and `review-output`
-(review the spec's ACs + execution when there is no task). corpus-cli/mcp adaptation tracked.
+(review the spec's ACs + execution when there is no task). suspec-cli/mcp adaptation tracked.
 
 ## Affected obligations / constraints
 

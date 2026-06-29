@@ -6,7 +6,7 @@ created: 2026-06-11
 updated: 2026-06-11
 ---
 
-# ADR-0060 — The Corpus Workspace: hybrid layout, committed flow artifacts, the review packet
+# ADR-0060 — The Suspec Workspace: hybrid layout, committed flow artifacts, the review packet
 
 ## Context
 
@@ -33,7 +33,7 @@ spec-kit issue threads #1191/#876/#1059 and the Fiberplane "Drift" post — surv
    review packet that links its PR is the default record of work. (A PR-only record remains the floor for
    teams with no workspace.)
 3. **Co-located and external are co-equal defaults.** A single-repo team keeps the same tree inside its
-   repo (optionally under a visible `corpus/` directory). The external workspace is framed as a Git-native,
+   repo (optionally under a visible `suspec/` directory). The external workspace is framed as a Git-native,
    agent-readable form of the external requirements store larger organizations already run — never as the
    common practice of comparable tools (it is not; the in-repo norm and the drift failure mode are the
    recorded counter-evidence, survey V-021/V-024). One spec store can govern many code repos.

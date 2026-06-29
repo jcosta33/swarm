@@ -10,7 +10,7 @@ updated: 2026-06-16
 
 ## Context
 
-Field feedback (corpus-works issue #5) asked for a "Platform Constraints & Hazards" forcing-function
+Field feedback (suspec-works issue #5) asked for a "Platform Constraints & Hazards" forcing-function
 section so platform research — quota, permissions, rate limits, runtime/sandbox constraints — is
 done _before_ the acceptance criteria, when it's cheap, rather than discovered mid-build. The
 question was whether to add a section, and to which artifact at which tier.
@@ -59,4 +59,4 @@ choice is not silently re-litigated.
 - The advisory rule carries no gate (consistent with the rest of the writing rules and the
   ceremony-on-clear-work caution); a team that wants teeth can treat it as a review checklist item.
 - If the escalation is ever taken, it reuses the established `threat-model` input-doc pattern, so the
-  corpus-cli reconcile and the kit advanced tier treat it like any other optional input doc.
+  suspec-cli reconcile and the kit advanced tier treat it like any other optional input doc.

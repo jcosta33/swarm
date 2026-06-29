@@ -1,6 +1,6 @@
 # Running agents
 
-Corpus does not run agents. It gives them task packets.
+Suspec does not run agents. It gives them task packets.
 
 Any worker can use a task packet:
 
@@ -49,13 +49,13 @@ Use one branch or worktree per task.
 Branch pattern:
 
 ```text
-corpus/<spec-slug>/<task-slug>
+suspec/<spec-slug>/<task-slug>
 ```
 
 For a single-task spec:
 
 ```text
-corpus/<task-slug>
+suspec/<task-slug>
 ```
 
 Worktrees isolate file state. They do not isolate shared services, ports, databases, or credentials. Configure those separately when needed.

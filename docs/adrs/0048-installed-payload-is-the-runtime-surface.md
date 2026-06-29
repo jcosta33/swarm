@@ -9,23 +9,23 @@ superseded_by: 0049-minimal-install-no-mount-no-imposed-workspace
 ---
 
 > **Superseded by [ADR-0049](./0049-minimal-install-no-mount-no-imposed-workspace.md).** The "what to ship"
-> conclusion survives — skills + the compact `reference/` cards + templates, not the manuals or corpus (see
+> conclusion survives — skills + the compact `reference/` cards + templates, not the manuals or suspec (see
 > this ADR's Update). What 0049 overturns is the _destination_: that payload no longer mounts at
-> `.corpus/kernel/`; it installs in place beside the project's own skills, with no symlink bridge.
+> `.suspec/kernel/`; it installs in place beside the project's own skills, with no symlink bridge.
 
 # ADR-0048: The installed payload is the runtime surface, not the whole kernel
 
 ## Context
 
 ADR-0040/0044 defined the installable payload as `starter-kit/.agents/` and shipped it **wholesale** into an
-adopter's `.corpus/kernel/` — `skills/`, `templates/`, `language/` (the full SOL/APS/errors/versioning
+adopter's `.suspec/kernel/` — `skills/`, `templates/`, `language/` (the full SOL/APS/errors/versioning
 manuals), `passes/` (the nine pass reference docs with rationale), `conformance/` (the golden corpus),
 and `memory/`. The justification was offline self-containment.
 
-Adopting `corpus-cli` made the cost visible: ~1.2 MB of framework documentation copied into the repo, of
+Adopting `suspec-cli` made the cost visible: ~1.2 MB of framework documentation copied into the repo, of
 which an agent **loads almost none** at runtime. Per the load-what-the-task-names doctrine, an agent
 loads the _skill_ the task names; it never opens the full `passes/`/`language/` manuals or the
-conformance corpus. With skills now self-contained ([0047](./0047-skills-are-self-contained.md)), the
+conformance suspec. With skills now self-contained ([0047](./0047-skills-are-self-contained.md)), the
 only thing that made the kernel ship `passes/` + `language/` — keeping skill citations from dangling —
 is gone. The corpus (`conformance/`) is test data for a _checker_, never used by an adopting project.
 
@@ -33,10 +33,10 @@ is gone. The corpus (`conformance/`) is test data for a _checker_, never used by
 
 1. **The installed payload is the runtime surface only:** `skills/` (self-contained for _procedure_) +
    `reference/` (the compact operative cards — see the Update below) + `templates/` + the `memory/` seed +
-   the `AGENTS.md` bootloader + `config.yaml` + `overlays/` + `.corpus-version`.
+   the `AGENTS.md` bootloader + `config.yaml` + `overlays/` + `.suspec-version`.
 2. **`passes/`, `language/`, and `conformance/` are NOT installed.** They are the framework's **human
-   reference and test data**, and they live canonically in the `corpus` repo (`docs/passes/`,
-   `docs/language/`, and the conformance corpus). An adopter that wants the _rationale_ reads the `corpus` repo.
+   reference and test data**, and they live canonically in the `suspec` repo (`docs/passes/`,
+   `docs/language/`, and the conformance suspec). An adopter that wants the _rationale_ reads the `suspec` repo.
 3. The bootloader and skills **name** the deep manuals (provenance) but link nothing that isn't
    shipped, so the slim payload has no dangling refs.
 
@@ -50,16 +50,16 @@ the deep reference stays upstream. (The twin-maintenance burden 0044 introduced 
 | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Ship the whole kernel (status quo)                     | ~1.2 MB of reference an agent never loads, duplicated into every adopter; the user-visible bloat that prompted this.                                                       |
 | Ship a compact normative _card_ instead of the manuals | Originally rejected (a card is one more hop, and [0047](./0047-skills-are-self-contained.md) says the hop is unreliable). **The Update below overturns this** — see there. |
-| Fetch the reference from the network on demand         | Breaks offline use and pins a repo location; the reference is for _humans_, who can open the `corpus` repo.                                                                |
+| Fetch the reference from the network on demand         | Breaks offline use and pins a repo location; the reference is for _humans_, who can open the `suspec` repo.                                                                |
 
 ## Consequences
 
-- **Positive:** the adopter's `.corpus/kernel/` drops to the runtime surface (skills + templates); no
-  manuals, no corpus. Upgrades copy less; there is less to drift.
+- **Positive:** the adopter's `.suspec/kernel/` drops to the runtime surface (skills + templates); no
+  manuals, no suspec. Upgrades copy less; there is less to drift.
 - **Negative:** an agent cannot read the full pass rationale offline. Acceptable: the skills carry the
   operational rules ([0047](./0047-skills-are-self-contained.md)); rationale is a human concern, upstream.
-- **Neutral:** `starter-kit/.agents/{passes,language,conformance}` remain in the `corpus` repo (the reference +
-  the corpus a future `corpus-core` checker tests against); they are simply outside the installed subset.
+- **Neutral:** `starter-kit/.agents/{passes,language,conformance}` remain in the `suspec` repo (the reference +
+  the corpus a future `suspec-core` checker tests against); they are simply outside the installed subset.
 
 ## Update (2026-06-06): the compact reference is shipped after all
 
@@ -81,14 +81,14 @@ _rules_, ~12 KB total. The 0047 "the hop is unreliable" worry applied to _ration
 skips; an operative card the running pass needs is loaded _because_ it is operative, the same reason the
 skill is. Added `pass-improve-spec` and `pass-lower-spec` so all nine passes have a guide.
 
-Net payload is still far below the wholesale kernel (the manuals + corpus remain unshipped); the cards add
+Net payload is still far below the wholesale kernel (the manuals + suspec remain unshipped); the cards add
 ~12 KB, not the ~1.2 MB this ADR removed.
 
 ## Status
 
 Accepted (v0.1), amended 2026-06-06 (see Update). `ADOPTING.md` copies the runtime subset
-`{skills, reference, templates, memory}` + `.corpus-version`; `corpus-cli`'s `.corpus/kernel/` carries the
-skills + the three reference cards (still far below the 1.2 MB wholesale kernel — manuals + corpus stay
+`{skills, reference, templates, memory}` + `.suspec-version`; `suspec-cli`'s `.suspec/kernel/` carries the
+skills + the three reference cards (still far below the 1.2 MB wholesale kernel — manuals + suspec stay
 upstream).
 
 ## Affected obligations / constraints

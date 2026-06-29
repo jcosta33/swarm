@@ -4,7 +4,7 @@
 
 Checks fixture for [the check catalogue](../../../docs/reference/checks.md): silent token
 refresh on 401, with two seeded spec defects. The results below are known by hand and pin
-what corpus-cli's `corpus check` must report (toolable). Until that tool runs, nothing
+what suspec-cli's `suspec check` must report (toolable). Until that tool runs, nothing
 here is enforced — reviewers use the same tables as a checklist.
 
 **Check scope.** Each file is checked standalone. `spec.md` and `spec.sol.md` intentionally
@@ -65,7 +65,7 @@ files is wrong (the anti-fork rule).
 | `no-open-critical` | task and review            | pass — no open blocking question                                         |
 | `trigger-coverage` | review Human attention     | pass — names the unverified row and the risky file                       |
 
-These are checklist-level rules; `corpus check`'s packet mode can flag the mechanical
+These are checklist-level rules; `suspec check`'s packet mode can flag the mechanical
 parts (the empty Evidence cell).
 
 ## finding.md

@@ -5,7 +5,7 @@
 Checks fixture for the structural-work pair: an inventory (`INV-checkout-storage`) and the
 change plan built on it (`CHANGE-inventory-ledger`). Both files are **valid** — this
 directory pins what a well-formed pair looks like, not a defect. The results below are known
-by hand and pin what corpus-cli's `corpus check` must report for change plans (toolable).
+by hand and pin what suspec-cli's `suspec check` must report for change plans (toolable).
 Until that tool runs, nothing here is enforced — reviewers use the same table as a checklist.
 
 ## change-plan.md

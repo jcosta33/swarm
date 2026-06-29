@@ -26,7 +26,7 @@ Independent review is the invariant; the formal review is the formality that sca
 - **Invariant — never skipped for code-changing work.** The implementer does not render the
   verdict; a non-implementer judges the result against its intent, on evidence
   ([ADR-0056](./0056-adversarial-self-review-completion-discipline.md),
-  [ADR-0077](./0077-corpus-cli-reconcile-only-harness.md) D8). For a trivial change the owner
+  [ADR-0077](./0077-suspec-cli-reconcile-only-harness.md) D8). For a trivial change the owner
   verifies directly, the owner is that non-implementer.
 - **Optional — risk-weighted.** The formal review artifacts (a `reviews/` packet, a review
   lead orchestrating independent lenses) are the form for a substantial or high-diffusion

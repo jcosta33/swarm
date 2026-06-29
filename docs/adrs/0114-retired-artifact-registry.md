@@ -24,9 +24,9 @@ against one source:
   `write-documentation` lives — each repo's prose stated the location independently, so each could drift
   independently, and did.
 - **Retired artifacts named as active.** The re-architecture retired a set of agents and tools —
-  `corpus-explorer`, `persona-skeptic`, `corpus-evidence-checker`, `corpus_scan_task`,
-  `corpus_validate_review_packet`. The sweep found **four sites** still naming retired artifacts as if
-  active. The citation/product-pollution and count-drift classes had **recurred** in corpus-mcp and the
+  `suspec-explorer`, `persona-skeptic`, `suspec-evidence-checker`, `suspec_scan_task`,
+  `suspec_validate_review_packet`. The sweep found **four sites** still naming retired artifacts as if
+  active. The citation/product-pollution and count-drift classes had **recurred** in suspec-mcp and the
   kit because this program's manual strip-and-rule pass covered only the catalog and the agents —
   humans caught the rest in review, not a gate. A fact restated independently in N places drifts in N
   places; nothing greps for it.
@@ -43,7 +43,7 @@ forbids.
 cross-repo linter: a cross-repo fact (an artifact's location + active/retired/relocated status) is stated
 once in the registry, and product/reference docs link there instead of re-restating it by hand.
 
-1. **One canonical registry, under corpus `docs/`.** A single source-of-truth file lists **every** agent,
+1. **One canonical registry, under suspec `docs/`.** A single source-of-truth file lists **every** agent,
    skill, and MCP tool across the family, each with a **status**:
    - `active`
    - `redirect-stub` (the name resolves but only points elsewhere)
@@ -57,7 +57,7 @@ once in the registry, and product/reference docs link there instead of re-restat
 2. **A shared linter, run in each repo's CI.** One linter (shared spec, vendored or installed per repo)
    greps each repo's **product and reference docs** for any registry name whose status is **not
    `active`**, and **fails the run**, pointing the author at the replacement the registry names
-   (`corpus-explorer → corpus-…`, `write-documentation → kit`). This is the toolable path: the gate the
+   (`suspec-explorer → suspec-…`, `write-documentation → kit`). This is the toolable path: the gate the
    sweep found missing, that would have caught all four retired-name sites and the three location
    disagreements mechanically instead of by reviewer attention.
 

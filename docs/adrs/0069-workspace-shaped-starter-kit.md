@@ -21,7 +21,7 @@ core path where it defeats the kit's reason to exist.
 
 ## Decision
 
-1. **`starter-kit/` is a complete Corpus workspace.** Its root carries `AGENTS.md` (+
+1. **`starter-kit/` is a complete Suspec workspace.** Its root carries `AGENTS.md` (+
    `CLAUDE.md`/`GEMINI.md` symlinks), `templates/`, the prescribed flow folders (`specs/`,
    `intake/`, `tasks/`, `reviews/`, `findings/`, `inventory/`, `change-plans/`, `decisions/`)
    each seeded with a one-line README, the live `status.md` board, and the worked example as a
@@ -37,7 +37,7 @@ core path where it defeats the kit's reason to exist.
    place; optional guides are copied into `.agents/skills/` when wanted. The staging directory
    `agent/` is retired.
 4. **Distribution: in-repo now, template repo at public launch.** The kit stays in this repo
-   while formats settle — the corpus-cli kit copy's lag is live evidence of what a second
+   while formats settle — the suspec-cli kit copy's lag is live evidence of what a second
    derived repo costs pre-stability. At public launch the kit is published as a separate
    GitHub _template repository_ (one-click "Use this template"), produced either by a split or
    by a producer-side mirror job; that step is deliberate, recorded here, and not started now.
@@ -68,7 +68,7 @@ starter-kit tree, ADOPTING, root README (get-started), docs/03, docs/10, kit AGE
 > **Addendum (2026-06-12):** two corrections from the same-day verification passes. (1) The
 > copy command is `cp -R` — on macOS BSD cp, `-r` dereferences the kit's three symlinks into
 > stale copies; all live surfaces document `-R`. (2) `decisions/` ships a short governance
-> README plus the `0001-adopt-corpus` seed entry, not a one-line README like the seven flow
+> README plus the `0001-adopt-suspec` seed entry, not a one-line README like the seven flow
 > folders. Known consequence, recorded in `.agents/SKILLS-MANIFEST.md`: the kit's nested
-> `.claude/skills` symlink surfaces the three kit guides in Claude sessions on the Corpus repo
+> `.claude/skills` symlink surfaces the three kit guides in Claude sessions on the Suspec repo
 > itself.

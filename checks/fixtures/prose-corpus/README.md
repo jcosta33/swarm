@@ -1,13 +1,13 @@
-# Writing-rules corpus
+# Writing-rules suspec
 
-_Advanced design note — internal rationale; not needed to use Corpus._
+_Advanced design note — internal rationale; not needed to use Suspec._
 
 The labeled fixture set for the writing-rules watchlist in
 [the checks reference](../../../docs/reference/checks.md): short requirement-prose spans,
 each paired with its ground-truth label — `clean`, or the specific `SOL-P` code from the
 checks catalogue that should fire, with the reason. **Inert fixture data — nothing here
-runs.** Corpus ships no detector; this corpus is what a detector — corpus-cli's
-`corpus check`, or a human reviewer — is scored _against_.
+runs.** Suspec ships no detector; this corpus is what a detector — suspec-cli's
+`suspec check`, or a human reviewer — is scored _against_.
 
 ## Why this corpus exists
 
@@ -18,7 +18,7 @@ clean prose (a false positive) or miss a real problem (a false negative). Field 
 put lightweight requirement-smell detection well below perfect precision
 [[SMELLS]](../../../docs/research/sources.md#SMELLS) — which is exactly why the watchlist
 is advisory, and why a detector's accuracy is only measurable against ground truth. This
-corpus is that ground truth: spans whose correct label is known independent of any
+suspec is that ground truth: spans whose correct label is known independent of any
 detector, so precision and recall can be computed by hand or by a harness.
 
 ## The accuracy baseline
@@ -82,4 +82,4 @@ per-code bug.
 The corpus is self-contained: every label is decidable from the item's own `text`,
 `context`, and `reason`. The word families and the same-line rule the labels invoke are
 the writing rules of [the checks reference](../../../docs/reference/checks.md); this
-corpus pins expected outcomes, not rule mechanics.
+suspec pins expected outcomes, not rule mechanics.

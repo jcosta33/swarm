@@ -34,11 +34,11 @@ good pattern already exists; it just isn't standard. (From the session deliberat
    another harness, a human), it records the same `## Open decisions` for the owner. The **principle**
    (options + a lean, never a guess) is runner-agnostic; the *interactive mechanism* is a Claude-Code
    affordance that does not travel ([ADR-0098](./0098-codex-emitter-and-universal-layer.md)) — additive
-   in the corpus-agents layer, never required of the format. _Level: convention._
+   in the suspec-agents layer, never required of the format. _Level: convention._
 
 3. **Genuine forks only (anti-ceremony).** This fires on a behavioral choice that changes the
    artifact's meaning, not on every micro-wording choice. An empty `## Open decisions` is correct when
-   there is no real fork; padding it is the ceremony overhead (corpus-works#72) this must not add.
+   there is no real fork; padding it is the ceremony overhead (suspec-works#72) this must not add.
    _Level: convention._
 
 4. **Scope: where the artifact decides.** The convention binds artifacts that make a **behavioral
@@ -64,7 +64,7 @@ good pattern already exists; it just isn't standard. (From the session deliberat
 
 The kit spec template (upgrade the `## Open questions` guidance to options + a recommendation —
 **no rename**), the `write-spec` guide (rule 7), and a note that `write-rfc` already complies and
-audit/PRD/research are exempt. corpus-agents worker definitions may wire the interactive prompt
+audit/PRD/research are exempt. suspec-agents worker definitions may wire the interactive prompt
 (Claude-Code only, marked non-portable). No review-packet or spec *format* break.
 
 ## Affected obligations / constraints

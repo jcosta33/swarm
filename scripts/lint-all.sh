@@ -1,5 +1,5 @@
 #!/bin/sh
-# lint-all.sh — run every shipped method-gate (ADRs 0113-0118) over the corpus family.
+# lint-all.sh — run every shipped method-gate (ADRs 0113-0118) over the Suspec family.
 #
 # A single entry point for the four scriptable gates. Each is a RECORD/CHECK, not an executor
 # (ADR-0077): it reads and reports, edits nothing. Aggregates: exits 0 only if every gate is clean,
@@ -10,7 +10,7 @@
 #   0114  lint-artifact-refs.sh       no product/reference doc names a retired/relocated artifact as active
 #   0115  check-catalog-freshness.sh  a synced workspace catalog copy must match its source (no orphaned copy)
 #
-# The corpus-cli spec-side check (0116, active spec → `## Execution`) ships in `corpus check`, not here.
+# The suspec-cli spec-side check (0116, active spec → `## Execution`) ships in `suspec check`, not here.
 # Per ADR-0077, wiring these into a given repo's CI is that repo's call; this script is what CI would run.
 #
 # Usage: scripts/lint-all.sh [REPO_PARENT_DIR]   (default /Users/josecosta/dev)

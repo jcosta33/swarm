@@ -1,4 +1,4 @@
-# Corpus
+# Suspec
 
 **A lightweight spec and review workflow for teams using coding agents.**
 
@@ -12,8 +12,8 @@ pools in five places: vague tickets pasted into chat, context re-explained every
 agents drifting off-scope, giant PRs nobody can honestly review, and lessons lost when the
 session ends.
 
-Corpus is not an agent. Your tool — Claude Code, Codex, Cursor, Aider, or a human — writes
-the code. Corpus structures the work around it, and spends where the bottleneck is:
+Suspec is not an agent. Your tool — Claude Code, Codex, Cursor, Aider, or a human — writes
+the code. Suspec structures the work around it, and spends where the bottleneck is:
 **generation outruns validation**. So the review side gets the structure.
 
 ## The loop
@@ -70,7 +70,7 @@ means _Unverified_, never _Pass_. Full demo — a 41-file agent PR reviewed by e
 
 ## Where files live
 
-- **This repo** — the framework: the docs and the checks contract. The ready-to-copy workspace (templates + guides) is [jcosta33/corpus-starter-kit](https://github.com/jcosta33/corpus-starter-kit).
+- **This repo** — the framework: the docs and the checks contract. The ready-to-copy workspace (templates + guides) is [jcosta33/suspec-starter-kit](https://github.com/jcosta33/suspec-starter-kit).
 - **Your workspace** — specs, tasks, reviews, findings: a dedicated repo, or the same tree in your project ([where files live](docs/03-where-files-live.md)).
 - **Your code repos** — stay clean. The PR links its review packet. That's all.
 
@@ -78,33 +78,33 @@ means _Unverified_, never _Pass_. Full demo — a 41-file agent PR reviewed by e
 
 | You want to…                                                                  | Go to                                                                                                                |
 | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **start using Corpus** — get a working workspace                              | [corpus-starter-kit](https://github.com/jcosta33/corpus-starter-kit) — copy it whole, fill `AGENTS.md`, run the loop |
+| **start using Suspec** — get a working workspace                              | [suspec-starter-kit](https://github.com/jcosta33/suspec-starter-kit) — copy it whole, fill `AGENTS.md`, run the loop |
 | **understand the method** — formats, the checks contract, the decision ledger | **this repo** — `docs/` (the numbered happy path), `docs/reference/`, `docs/adrs/`                                   |
-| **run the checks / wire the gate** — `corpus check` as a command              | [corpus-cli](https://github.com/jcosta33/corpus-cli) — the reference CLI (optional)                                  |
-| **add optional skills** — review stances, code-lifecycle + authoring guides    | [corpus-skills](https://github.com/jcosta33/corpus-skills) — `npx skills add jcosta33/corpus-skills`                 |
-| **delegate to subagents** — review / audit / spec-author worker definitions    | [corpus-agents](https://github.com/jcosta33/corpus-agents) — copy into `.claude/agents/` (Claude Code) / `.codex/agents/` (Codex) |
-| **use Corpus over MCP** — read + reconcile facts from a non-terminal client    | [corpus-mcp](https://github.com/jcosta33/corpus-mcp) — an MCP server for Claude Desktop / Cursor (no shell needed)   |
+| **run the checks / wire the gate** — `suspec check` as a command              | [suspec-cli](https://github.com/jcosta33/suspec-cli) — the reference CLI (optional)                                  |
+| **add optional skills** — review stances, code-lifecycle + authoring guides    | [suspec-skills](https://github.com/jcosta33/suspec-skills) — `npx skills add jcosta33/suspec-skills`                 |
+| **delegate to subagents** — review / audit / spec-author worker definitions    | [suspec-agents](https://github.com/jcosta33/suspec-agents) — copy into `.claude/agents/` (Claude Code) / `.codex/agents/` (Codex) |
+| **use Suspec over MCP** — read + reconcile facts from a non-terminal client    | [suspec-mcp](https://github.com/jcosta33/suspec-mcp) — an MCP server for Claude Desktop / Cursor (no shell needed)   |
 
 Most people start at the kit and never read this repo cover to cover.
 
 ## Works today, comes later
 
 **Today** (markdown + your agent, nothing to install): the templates, specs, task packets,
-review packets, findings, the worked examples. Corpus itself needs no runtime.
+review packets, findings, the worked examples. Suspec itself needs no runtime.
 
-**Toolable** (optional — the reference CLI, [corpus-cli](https://github.com/jcosta33/corpus-cli)):
-`corpus check` runs the [checks contract](docs/reference/checks.md) over your specs and reviews. The
-kit's [hooks](https://github.com/jcosta33/corpus-starter-kit/tree/main/hooks) wire it into your commit
-and pull-request gates — teeth for the review side. Nothing here is a runtime you need to _use_ Corpus.
-`corpus init`, `new`, `worktree`, `pull`, `promote`, and `status` scaffold the loop's mechanics.
-`corpus run` launches a prepared task on your agent in its worktree and records the launch. `corpus
+**Toolable** (optional — the reference CLI, [suspec-cli](https://github.com/jcosta33/suspec-cli)):
+`suspec check` runs the [checks contract](docs/reference/checks.md) over your specs and reviews. The
+kit's [hooks](https://github.com/jcosta33/suspec-starter-kit/tree/main/hooks) wire it into your commit
+and pull-request gates — teeth for the review side. Nothing here is a runtime you need to _use_ Suspec.
+`suspec init`, `new`, `worktree`, `pull`, `promote`, and `status` scaffold the loop's mechanics.
+`suspec run` launches a prepared task on your agent in its worktree and records the launch. `suspec
 review` reconciles a finished run against its spec and diff — surfacing facts (omitted edits,
 out-of-scope changes, unbacked claims), never a result.
 
-**Planned** (the rest of `corpus-cli`): `corpus close`. What ships when:
+**Planned** (the rest of `suspec-cli`): `suspec close`. What ships when:
 [docs/reference/future-cli.md](docs/reference/future-cli.md).
 
-Corpus does **not** promise deterministic generation, automatic correctness, formal
+Suspec does **not** promise deterministic generation, automatic correctness, formal
 verification, software compiled from specs, or the end of PR review. It promises better
 inputs, bounded tasks, reviewable evidence, and kept context.
 
@@ -128,7 +128,7 @@ Against its neighbors: spec-first scaffolds generate plans. Trackers hold ticket
 reviewers hunt bugs and check a diff against a linked ticket's acceptance criteria. An
 `AGENTS.md` alone carries standing facts, not per-change contracts.
 
-Corpus's distinct piece is the **persisted, independent, exception-routing review packet**
+Suspec's distinct piece is the **persisted, independent, exception-routing review packet**
 tied to requirement IDs. It is deterministic — no model in the loop. It is keyed to a
 spec/task that lives in your git history. It is verdict-free: it routes facts, and a human
 owns Pass/Fail. Around it sit a workspace and one honesty rule — anything a tool doesn't
@@ -136,7 +136,7 @@ enforce says so.
 
 ## Initiation
 
-1. Copy the kit whole — it is a ready workspace: use [jcosta33/corpus-starter-kit](https://github.com/jcosta33/corpus-starter-kit) as a template (a new repo, or a folder in your project).
+1. Copy the kit whole — it is a ready workspace: use [jcosta33/suspec-starter-kit](https://github.com/jcosta33/suspec-starter-kit) as a template (a new repo, or a folder in your project).
 2. Fill its `AGENTS.md` with your commands and facts.
 3. Claude Code finds the guides via the shipped `.claude/skills` symlink; point any other tool at `.agents/skills/`.
 4. New to the loop? **[Walk it once, hands-on](docs/tutorial/README.md)** — a guided build on one small change. Then write a spec for your next real change and run it.
@@ -145,6 +145,6 @@ Or hand your agent [docs/ADOPTING.md](docs/ADOPTING.md) and let it do the copyin
 
 ## Going deeper
 
-[What is Corpus](docs/01-what-is-corpus.md) · [Basic workflow](docs/02-basic-workflow.md) · [Writing specs](docs/04-writing-specs.md) ·
+[What is Suspec](docs/01-what-is-suspec.md) · [Basic workflow](docs/02-basic-workflow.md) · [Writing specs](docs/04-writing-specs.md) ·
 [Reviewing output](docs/08-reviewing-output.md) · [Examples](docs/examples/) · [Reference](docs/reference/) ·
 [Design decisions](docs/adrs/) · [Evidence](docs/research/sources.md)

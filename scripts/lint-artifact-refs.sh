@@ -24,21 +24,22 @@
 # Usage: run from anywhere.  `sh scripts/lint-artifact-refs.sh`  → exit 0 clean, non-zero on a hit.
 set -eu
 
-# Resolve the corpus repo root from this script's location, then the family root (its parent), so the
+# Resolve the Suspec repo root from this script's location, then the family root (its parent), so the
 # linter can reach the sibling repos from any cwd / in CI.
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-CORPUS_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
-FAMILY_ROOT=$(CDPATH= cd -- "$CORPUS_ROOT/.." && pwd)
+SUSPEC_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+FAMILY_ROOT=$(CDPATH= cd -- "$SUSPEC_ROOT/.." && pwd)
 
-REGISTRY="$CORPUS_ROOT/docs/artifact-registry.md"
+REGISTRY="$SUSPEC_ROOT/docs/artifact-registry.md"
 if [ ! -f "$REGISTRY" ]; then
     echo "lint-artifact-refs: cannot find the registry at $REGISTRY" >&2
     echo "  This linter reads the non-active names from docs/artifact-registry.md (ADR-0114)." >&2
     exit 2
 fi
 
-# The repos whose product/reference docs are in scope. Only those present are scanned.
-REPOS="corpus corpus-agents corpus-skills corpus-mcp corpus-cli corpus-starter-kit corpus-bench"
+# The repos whose product/reference docs are in scope. Each pair is the public Suspec repo name
+# followed by the unchanged local checkout folder accepted during the rename.
+REPOS="suspec:corpus suspec-agents:corpus-agents suspec-skills:corpus-skills suspec-mcp:corpus-mcp suspec-cli:corpus-cli suspec-starter-kit:corpus-starter-kit suspec-bench:corpus-bench"
 
 # Retirement/redirect vocabulary: a line carrying any of these is a legitimate redirect note, so a
 # non-active name appearing on it is allowed (not a stale active-reference).
@@ -79,8 +80,14 @@ fi
 # 2. Build the in-scope doc list: each repo's root README.md + docs/**/*.md, minus the exclusions.
 # ---------------------------------------------------------------------------------------------------
 DOCS=$(
-    for repo in $REPOS; do
-        base="$FAMILY_ROOT/$repo"
+    for pair in $REPOS; do
+        new=${pair%%:*}
+        old=${pair#*:}
+        if [ -d "$FAMILY_ROOT/$new" ]; then
+            base="$FAMILY_ROOT/$new"
+        else
+            base="$FAMILY_ROOT/$old"
+        fi
         [ -d "$base" ] || continue
         [ -f "$base/README.md" ] && printf '%s\n' "$base/README.md"
         [ -d "$base/docs" ] && find "$base/docs" -type f -name '*.md' 2>/dev/null
@@ -92,7 +99,7 @@ DOCS=$(
             (*/docs/adrs/*)             continue ;;  # immutable history (ADR-0114 Consequences)
             (*/CHANGELOG.md)            continue ;;  # release history legitimately names retired things
             (*/persona-skeptic/*)       continue ;;  # redirect-stub self-naming (skill)
-            (*/corpus-evidence-checker*) continue ;; # redirect-stub self-naming (agent)
+            (*/suspec-evidence-checker*) continue ;; # redirect-stub self-naming (agent)
         esac
         printf '%s\n' "$f"
     done

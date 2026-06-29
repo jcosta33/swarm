@@ -5,7 +5,7 @@
 # must NOT hardcode a count-bearing ADR range like "ADRs 0001–0108". Such a range is a snapshot:
 # it goes stale the moment ADR-0109 lands, and a stale "we have N ADRs / 0001–0NNN" line in the
 # files agents read first is worse than no number at all. The single source of truth for the ADR
-# set is the LEDGER (corpus/docs/adrs/README.md); bootstrap files should LINK to it, not restate
+# set is the LEDGER (suspec/docs/adrs/README.md); bootstrap files should LINK to it, not restate
 # its bounds. This gate fails the build when a hardcoded ADR range reappears in those prose files.
 #
 # It is a RECORD/CHECK, not an executor (ADR-0077): it greps and reports; it edits nothing.
@@ -17,11 +17,11 @@
 # do NOT match. Slash-joined cross-refs ("ADR-0056/0077") are not ranges and do NOT match.
 #
 # WHAT it scans. AGENTS.md / CLAUDE.md / GEMINI.md / README.md at each repo root in the family.
-# The LEDGER (corpus/docs/adrs/README.md) is EXCLUDED: it is the source of truth and legitimately
+# The LEDGER (suspec/docs/adrs/README.md) is EXCLUDED: it is the source of truth and legitimately
 # lists ranges.
 #
 # Usage: run from anywhere.  `sh scripts/lint-count-ranges.sh`  → exit 0 clean, non-zero on a hit.
-#   Override the roots it scans with CORPUS_FAMILY_ROOTS (space-separated absolute paths).
+#   Override the roots it scans with SUSPEC_FAMILY_ROOTS (space-separated absolute paths).
 set -eu
 
 # Force a byte-stable locale so the Unicode en-dash in the pattern and in files is matched
@@ -39,15 +39,25 @@ export LC_ALL
 ENDASH=$(printf '\342\200\223')
 RANGE_RE="0[0-9][0-9][0-9][[:space:]]*(-|${ENDASH})[[:space:]]*0[0-9][0-9][0-9]"
 
-# The family roots to scan. Default to the standard sibling layout; override with CORPUS_FAMILY_ROOTS.
-if [ -n "${CORPUS_FAMILY_ROOTS:-}" ]; then
-    ROOTS="$CORPUS_FAMILY_ROOTS"
+# The family roots to scan. Default to the standard sibling layout; override with SUSPEC_FAMILY_ROOTS.
+if [ -n "${SUSPEC_FAMILY_ROOTS:-}" ]; then
+    ROOTS="$SUSPEC_FAMILY_ROOTS"
 else
-    # Resolve corpus's repo root from this script's location, then its siblings.
+    # Resolve suspec's repo root from this script's location, then its siblings.
     SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-    CORPUS_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
-    PARENT=$(CDPATH= cd -- "$CORPUS_ROOT/.." && pwd)
-    ROOTS="$CORPUS_ROOT $PARENT/corpus-agents $PARENT/corpus-works $PARENT/corpus-starter-kit"
+    SUSPEC_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+    PARENT=$(CDPATH= cd -- "$SUSPEC_ROOT/.." && pwd)
+    roots="$SUSPEC_ROOT"
+    for pair in "suspec-agents:corpus-agents" "suspec-works:corpus-works" "suspec-starter-kit:corpus-starter-kit"; do
+        new=${pair%%:*}
+        old=${pair#*:}
+        if [ -d "$PARENT/$new" ]; then
+            roots="$roots $PARENT/$new"
+        elif [ -d "$PARENT/$old" ]; then
+            roots="$roots $PARENT/$old"
+        fi
+    done
+    ROOTS="$roots"
 fi
 
 # The target bootstrap/reference prose files at each root.

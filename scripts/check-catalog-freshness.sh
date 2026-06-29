@@ -2,8 +2,8 @@
 # check-catalog-freshness.sh — the synced-catalog freshness gate (ADR-0115, gate 0115-catalog-freshness).
 #
 # ADR-0115 ("Synced workspace catalogs must be links or freshness-gated — no orphaned copies"):
-# the governed skills catalog (corpus-skills) is the single source for the universal, framework-free
-# skills, but the workspace keeps a hand-synced copy at corpus-works/.agents/skills that the live
+# the governed skills catalog (suspec-skills) is the single source for the universal, framework-free
+# skills, but the workspace keeps a hand-synced copy at suspec-works/.agents/skills that the live
 # .claude/skills symlinks into. A copy that can drift will drift (the Phase-3 sweep found it 2+ days
 # stale — missing skills the catalog had added, still hosting one it had retired). This is the option-2
 # freshness CHECK named in ADR-0115: it diffs the copy against its source and FAILS on any divergence,
@@ -12,13 +12,13 @@
 # It is a RECORD/CHECK, not an executor (ADR-0077): it diffs trees and edits nothing.
 #
 # What it gates (the hard, fail-on-divergence check — the no-orphaned-copy guard):
-#   For every skill dir present in BOTH corpus-works/.agents/skills AND corpus-skills/skills, the
+#   For every skill dir present in BOTH suspec-works/.agents/skills AND suspec-skills/skills, the
 #   workspace copy must be byte-identical to the governed source — SKILL.md and every reference file.
 #   Any content mismatch, or a reference file present in one but not the other, fails the gate.
 #
 # Also hard-gated (STRICT_KIT defaults to 1 since the 2026-06-27 kit sync — ADR-0115 prevention):
 #   - Kit-sourced workspace skills (implement-task, review-output, write-*, save-findings, split-work)
-#     are compared against corpus-starter-kit/.agents/skills, the single source for those guides — the
+#     are compared against suspec-starter-kit/.agents/skills, the single source for those guides — the
 #     kit ships the enriched/canonical body (Gotchas etc.) and the workspace copy must match it. Drift
 #     fails the gate (set STRICT_KIT=0 to demote kit divergence back to report-only).
 #
@@ -27,28 +27,40 @@
 #     is visible, but it is not a freshness violation of a governed catalog.
 #
 # Usage (run from anywhere; paths resolve from this script's location):
-#   sh corpus/scripts/check-catalog-freshness.sh        → exit 0 clean, 1 on catalog divergence.
+#   sh suspec/scripts/check-catalog-freshness.sh        → exit 0 clean, 1 on catalog divergence.
 # Override discovered paths with WORKS_SKILLS / CATALOG_SKILLS / KIT_SKILLS if your checkout differs.
 # Set STRICT_KIT=1 to make kit-source divergence a hard failure too.
 set -eu
 
-# Resolve the family root from this script's location: corpus/scripts/ -> corpus/ -> dev/ (the family).
+# Resolve the family root from this script's location: suspec/scripts/ -> suspec/ -> dev/ (the family).
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 FAMILY_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/../.." && pwd)
 
-WORKS_SKILLS=${WORKS_SKILLS:-"$FAMILY_ROOT/corpus-works/.agents/skills"}
-CATALOG_SKILLS=${CATALOG_SKILLS:-"$FAMILY_ROOT/corpus-skills/skills"}
-KIT_SKILLS=${KIT_SKILLS:-"$FAMILY_ROOT/corpus-starter-kit/.agents/skills"}
+repo_dir() {
+    new=$1
+    old=$2
+    if [ -d "$FAMILY_ROOT/$new" ]; then
+        printf '%s\n' "$FAMILY_ROOT/$new"
+    elif [ -d "$FAMILY_ROOT/$old" ]; then
+        printf '%s\n' "$FAMILY_ROOT/$old"
+    else
+        printf '%s\n' "$FAMILY_ROOT/$new"
+    fi
+}
+
+WORKS_SKILLS=${WORKS_SKILLS:-"$(repo_dir suspec-works corpus-works)/.agents/skills"}
+CATALOG_SKILLS=${CATALOG_SKILLS:-"$(repo_dir suspec-skills corpus-skills)/skills"}
+KIT_SKILLS=${KIT_SKILLS:-"$(repo_dir suspec-starter-kit corpus-starter-kit)/.agents/skills"}
 STRICT_KIT=${STRICT_KIT:-1}
 
 if [ ! -d "$WORKS_SKILLS" ]; then
     echo "check-catalog-freshness: cannot find the workspace skills copy at: $WORKS_SKILLS" >&2
-    echo "  Set WORKS_SKILLS to the corpus-works/.agents/skills directory." >&2
+    echo "  Set WORKS_SKILLS to the suspec-works/.agents/skills directory." >&2
     exit 2
 fi
 if [ ! -d "$CATALOG_SKILLS" ]; then
     echo "check-catalog-freshness: cannot find the governed catalog at: $CATALOG_SKILLS" >&2
-    echo "  Set CATALOG_SKILLS to the corpus-skills/skills directory." >&2
+    echo "  Set CATALOG_SKILLS to the suspec-skills/skills directory." >&2
     exit 2
 fi
 
@@ -115,7 +127,7 @@ for skill_path in "$WORKS_SKILLS"/*/; do
         diffs=$(diff_skill_tree "$CATALOG_SKILLS/$skill" "$skill_path" || true)
         if [ -n "$diffs" ]; then
             catalog_fail=1
-            echo "FAIL [catalog] $skill — workspace copy diverged from corpus-skills:" >&2
+            echo "FAIL [catalog] $skill — workspace copy diverged from suspec-skills:" >&2
             printf '%s\n' "$diffs" >&2
         fi
     elif [ "$in_kit" -eq 1 ]; then
@@ -124,18 +136,18 @@ for skill_path in "$WORKS_SKILLS"/*/; do
         if [ -n "$diffs" ]; then
             if [ "$STRICT_KIT" = "1" ]; then
                 kit_fail=1
-                echo "FAIL [kit] $skill — workspace copy diverged from corpus-starter-kit:" >&2
+                echo "FAIL [kit] $skill — workspace copy diverged from suspec-starter-kit:" >&2
                 printf '%s\n' "$diffs" >&2
             else
                 noted_kit=$((noted_kit + 1))
-                echo "note [kit] $skill — differs from corpus-starter-kit (workspace is the enriched copy):"
+                echo "note [kit] $skill — differs from suspec-starter-kit (workspace is the enriched copy):"
                 printf '%s\n' "$diffs"
             fi
         fi
     else
         # No source in either governed tree.
         noted_orphan=$((noted_orphan + 1))
-        echo "note [orphan] $skill — present in the workspace but in neither corpus-skills nor corpus-starter-kit."
+        echo "note [orphan] $skill — present in the workspace but in neither suspec-skills nor suspec-starter-kit."
     fi
 done
 
@@ -147,7 +159,7 @@ if [ "$catalog_fail" -ne 0 ] || [ "$kit_fail" -ne 0 ]; then
     exit 1
 fi
 
-echo "check-catalog-freshness: OK — $checked_catalog catalog skill(s) in sync with corpus-skills (no drift)."
-[ "$noted_kit" -gt 0 ]    && echo "  ($noted_kit kit-sourced skill(s) differ from corpus-starter-kit — noted, not gated.)"
+echo "check-catalog-freshness: OK — $checked_catalog catalog skill(s) in sync with suspec-skills (no drift)."
+[ "$noted_kit" -gt 0 ]    && echo "  ($noted_kit kit-sourced skill(s) differ from suspec-starter-kit — noted, not gated.)"
 [ "$noted_orphan" -gt 0 ] && echo "  ($noted_orphan workspace skill(s) have no upstream source — noted.)"
 exit 0

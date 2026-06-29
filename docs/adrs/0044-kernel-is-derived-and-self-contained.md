@@ -29,10 +29,10 @@ carries a `CONSTRAINT WHERE`-clause the kernel regressed). The hand-maintained t
 **"fix one copy, miss the twin"** defect.
 
 The same analysis surfaced a **larger, latent defect the twins were hiding: the shipped kernel is not
-actually self-contained.** An adopter installs `starter-kit/.agents/` into `.corpus/kernel/` and receives
+actually self-contained.** An adopter installs `starter-kit/.agents/` into `.suspec/kernel/` and receives
 **no `docs/`** and **no §-numbered monolith** — yet the kernel files carry **614 `§N` references and 9
 `Appendix-X` references** that resolve only against the frozen, never-shipped build source
-(`.agents/specs/corpus/`), including in the **always-loaded `starter-kit/AGENTS.md`** (`§14`/`§17`/`§20.5`/…)
+(`.agents/specs/suspec/`), including in the **always-loaded `starter-kit/AGENTS.md`** (`§14`/`§17`/`§20.5`/…)
 and in `conformance.yaml` (`§21`/`§25`/`§32`/`§33`, plus `catalogue_ref: docs/language/errors.md`
 pointing at a path the adopter never gets). Several kernel files also still carry **migration framing**
 the de-pivot forbids ("the earlier 4-value enum is upgraded", "merges legacy Bind+Trace", "two competing

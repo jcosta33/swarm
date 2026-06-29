@@ -1,6 +1,6 @@
 # Tutorial: first loop
 
-Walk one small change through Corpus:
+Walk one small change through Suspec:
 
 ```text
 Pull -> Spec -> Task -> Run -> Review -> Close
@@ -22,7 +22,7 @@ Requirement:
 
 > A checkout session older than 30 minutes must return `409 SESSION_EXPIRED`, never a 5xx.
 
-This uses the fictional `shop-api` from the examples. The Corpus artifacts are real; the code and test command are illustrative.
+This uses the fictional `shop-api` from the examples. The Suspec artifacts are real; the code and test command are illustrative.
 
 Run the same loop on your own repo for executable proof.
 
@@ -35,6 +35,6 @@ Run the same loop on your own repo for executable proof.
 
 ## Prerequisites
 
-- a Corpus workspace from [Adopting Corpus](../ADOPTING.md)
+- a Suspec workspace from [Adopting Suspec](../ADOPTING.md)
 - an agent or human worker
 - a code repo for your real run

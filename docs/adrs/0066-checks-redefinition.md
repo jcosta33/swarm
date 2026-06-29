@@ -28,7 +28,7 @@ checks specs.
 3. **Reference values are producer-internal.** The closed-set cardinalities and their reconciliation
    checks live only in `conformance/README.md` (producer note) and the cheatsheet appendix. Adopter-facing
    pages list values, never counts.
-4. **The corpus is "checks fixtures":** test data for `docs/reference/checks.md`, consumed by corpus-cli.
+4. **The corpus is "checks fixtures":** test data for `docs/reference/checks.md`, consumed by suspec-cli.
    Fixtures pin expected results per the two-way severity split (hard error / warning); each spec-format
    fixture domain ships a simple/SOL **equivalence pair** asserting both surfaces encode the identical
    requirement record (the anti-fork proof), plus intake, change-plan, and inventory fixtures.
@@ -38,7 +38,7 @@ checks specs.
 | Alternative                               | Why weaker                                                                   |
 | ----------------------------------------- | ---------------------------------------------------------------------------- |
 | Keep the three-clause definition + ladder | Measures adopters against producer concerns; the reports name it as friction |
-| Drop fixtures                             | corpus-cli loses its oracle; the checks contract becomes untestable          |
+| Drop fixtures                             | suspec-cli loses its oracle; the checks contract becomes untestable          |
 
 ## Consequences
 
@@ -47,12 +47,12 @@ explicitly (where it belongs).
 
 ## Status
 
-Accepted. Partially supersedes ADR-0026 and ADR-0051 (validity-bar clauses) and ADR-0033 (corpus framing);
+Accepted. Partially supersedes ADR-0026 and ADR-0051 (validity-bar clauses) and ADR-0033 (suspec framing);
 refines ADR-0063.
 
 ## Propagation
 
-conformance/ (README, yaml, fixtures), checks.md, cheatsheet appendix, evals, corpus-cli.
+conformance/ (README, yaml, fixtures), checks.md, cheatsheet appendix, evals, suspec-cli.
 
 > **Ledger note (2026-06-12):** the checks fixtures' home renamed to `checks/` by ADR-0070;
 > step-output scoring became the step-bars reference page per ADR-0071.

@@ -12,7 +12,7 @@ superseded_by:
 
 ## Context
 
-Corpus specified worktree/branch/merge only inside the parallel-decomposition coordination record. The
+Suspec specified worktree/branch/merge only inside the parallel-decomposition coordination record. The
 single-task load path (`AGENTS.md` → `task.md` → `implement.md`) carried **no isolation signal**, so
 "implement this spec" gave an agent no reason to leave the base branch — and the per-kind templates gave
 the inverse cue (the spec-bearing kinds had no Branch field while a few others did). The fix is one small
@@ -25,7 +25,7 @@ it is **orthogonal to `parallel_group`** (a single non-parallel task can still n
 
 - **A code task implementing a spec or audit-remediation** (it has a `source:` `*.md` / audit-derived
   spec) → a **worktree + branch off the base**. The branch is named for what it implements:
-  `corpus/<spec-slug>` for a whole spec, `corpus/<spec-slug>/<task-slug>` for one obligation or a fan-out
+  `suspec/<spec-slug>` for a whole spec, `suspec/<spec-slug>/<task-slug>` for one obligation or a fan-out
   worker (one grammar — single-task and parallel reconcile). `base:` records the merge target (default
   `main`; the dev's HEAD when handed off mid-branch). **A spec is implemented off the base, never on it.**
 - **Anything else** — a quick ad-hoc edit with no spec, a doc/source-only authoring task, a read-only
@@ -34,7 +34,7 @@ it is **orthogonal to `parallel_group`** (a single non-parallel task can still n
 This lives where the agent reads it: the `## Isolation` section of `implement.md` (both twins) and the
 `isolation:`/`base:` fields on the `task.md` frame, with a one-line trigger in the `starter-kit/AGENTS.md`
 startup. Merge + cleanup are the orchestration lifecycle at worker-count 1 (the cross-worker disjointness
-condition is vacuous for one writer); an in-flight worktree is recorded under `.corpus/status/worktrees/`.
+condition is vacuous for one writer); an in-flight worktree is recorded under `.suspec/status/worktrees/`.
 
 Refines [0039](./0039-write-surface-model.md) (which scoped isolation to parallel decomposition only) and
 operationalizes the single-fork clause of [0010](./0010-write-side-single-threaded.md).
@@ -52,7 +52,7 @@ operationalizes the single-fork clause of [0010](./0010-write-side-single-thread
 - An agent can decide worktree-or-not deterministically with **no runtime**, and name the branch for the
   spec it implements; a quick ad-hoc edit stays zero-ceremony.
 - **NO RUNTIME means nothing enforces it** — an agent _can_ ignore the rule and land a spec on the base.
-  This is specification completeness, the same soft-control limit as every Corpus gate; a future launcher
+  This is specification completeness, the same soft-control limit as every Suspec gate; a future launcher
   reads the rule.
 - No canonical closed set changes; the merge gate and write-surface model are untouched.
 

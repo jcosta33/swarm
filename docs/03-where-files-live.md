@@ -1,8 +1,8 @@
 # Where files live
 
-Corpus uses three surfaces:
+Suspec uses three surfaces:
 
-- **Framework repo**: the docs and decisions for Corpus itself.
+- **Framework repo**: the docs and decisions for Suspec itself.
 - **Workspace repo or folder**: specs, tasks, reviews, findings, and board for a project.
 - **Code repo**: the application code.
 
@@ -44,7 +44,7 @@ Core homes:
 
 Both layouts are valid.
 
-- **Co-located**: put the workspace inside one code repo, often under `corpus/`.
+- **Co-located**: put the workspace inside one code repo, often under `suspec/`.
 - **Dedicated**: use a separate repo for one or more code repos.
 
 Default name for a dedicated workspace repo:
@@ -66,10 +66,10 @@ Allowed footprint:
 - a short `AGENTS.md` pointer:
 
   ```text
-  Corpus workspace: ../<project>-works. Read the task packet before coding.
+  Suspec workspace: ../<project>-works. Read the task packet before coding.
   ```
 
-- `.gitignore` lines for local Corpus state
+- `.gitignore` lines for local Suspec state
 - optional agent guide copies if the repo needs them
 
 Specs, tasks, reviews, and findings belong in the workspace.
@@ -86,7 +86,7 @@ Let transitory output age out once the durable record has what matters:
 
 - closed task packets
 - review packets
-- `corpus check` output
+- `suspec check` output
 - run logs
 - temporary agent scratch
 

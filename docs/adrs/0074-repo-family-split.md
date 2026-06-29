@@ -10,33 +10,33 @@ updated: 2026-06-13
 
 ## Context
 
-ADR-0073 named the multi-repo workspace and noted that the Corpus family's own was "a separate
-owner action." The owner acted: a `corpus-works` repo now exists for the family (corpus · corpus-cli ·
-corpus-skills · planned: corpus-starter-kit, corpus-ci, corpus-website). Until now this repo carried
+ADR-0073 named the multi-repo workspace and noted that the Suspec family's own was "a separate
+owner action." The owner acted: a `suspec-works` repo now exists for the family (suspec · suspec-cli ·
+suspec-skills · planned: suspec-starter-kit, suspec-ci, suspec-website). Until now this repo carried
 its own producer workspace (`.agents/specs|audits|change-plans`) and two skill surfaces beyond
-the kit core (the kit's `advanced/` guides; `docs/library/code-skills/`), and corpus-cli carried a
-full co-located workspace. The repo-split audit (now at `corpus-works:specs/repo-split-architecture/audit.md`)
-states the governing principle: **`corpus` is canon; every other repo is derived, implemented, or
+the kit core (the kit's `advanced/` guides; `docs/library/code-skills/`), and suspec-cli carried a
+full co-located workspace. The repo-split audit (now at `suspec-works:specs/repo-split-architecture/audit.md`)
+states the governing principle: **`suspec` is canon; every other repo is derived, implemented, or
 indexed from it** — and a producer workspace inside the product repo ships planning clutter to
 the adopters and the CLI that consume it.
 
 ## Decision
 
-1. **The producer workspace is `corpus-works`** — the family's multi-repo workspace (the ADR-0073
-   shape applied to Corpus itself). Specs, audits, research, change plans, findings, tasks,
-   reviews, and the board for changes to this repo and to corpus-cli live there. This repo and
-   corpus-cli carry the code-repo footprint (the workspace pointer, the gitignore lines, the
+1. **The producer workspace is `suspec-works`** — the family's multi-repo workspace (the ADR-0073
+   shape applied to Suspec itself). Specs, audits, research, change plans, findings, tasks,
+   reviews, and the board for changes to this repo and to suspec-cli live there. This repo and
+   suspec-cli carry the code-repo footprint (the workspace pointer, the gitignore lines, the
    `implement-task` guide) — nothing else. Accepted framework decisions still land here, in
-   `docs/adrs/`; `corpus-works` is not a second canon.
-2. **The optional guides are a catalog: `corpus-skills`.** The kit's `advanced/` guides and the
+   `docs/adrs/`; `suspec-works` is not a second canon.
+2. **The optional guides are a catalog: `suspec-skills`.** The kit's `advanced/` guides and the
    per-change-shape implementation guides (formerly `docs/library/code-skills/`) move to the
-   `corpus-skills` repo in the Agent Skills format (`skills/<name>/SKILL.md`), installable
-   piecemeal (`npx skills add jcosta33/corpus-skills`) or by copying folders. The kit keeps the
+   `suspec-skills` repo in the Agent Skills format (`skills/<name>/SKILL.md`), installable
+   piecemeal (`npx skills add jcosta33/suspec-skills`) or by copying folders. The kit keeps the
    three core guides; `starter-kit/advanced/` keeps the optional templates and the two
    reference cards and points at the catalog for guides. `docs/library/` is retired.
 3. **The dev subset shrinks to implementation-side guides.** `.agents/skills/` keeps
    `implement-task` (byte-identical kit mirror), `empirical-proof`, and
-   `persona-documentarian`. The authoring, review, and persona guides move to `corpus-works`'s
+   `persona-documentarian`. The authoring, review, and persona guides move to `suspec-works`'s
    skills as workspace-adapted copies — spec writing, reviewing, and auditing for this repo run
    from the workspace.
 
@@ -51,8 +51,8 @@ the adopters and the CLI that consume it.
 - **Advanced guides stay in the kit** — every adopter carries guides they do not need, and the
   catalog cannot grow without growing every workspace copy; the kit stays core-only, the
   catalog installs piecemeal.
-- **A `corpus-linter` repo** — rejected; record-level checks belong in corpus-cli
-  (`corpus spec check`), per the audit and ADR-0058's notation-not-language framing.
+- **A `suspec-linter` repo** — rejected; record-level checks belong in suspec-cli
+  (`suspec spec check`), per the audit and ADR-0058's notation-not-language framing.
 
 ## Consequences
 
@@ -61,7 +61,7 @@ via the catalog; the tier's templates and cards stay in the kit), ADR-0069 (kit 
 advanced directory's guide subfolders leave), and ADR-0073 (the family's own multi-repo
 workspace exists). The propagation surfaces — docs/01/03/05/07/08, ADOPTING, agent-guides,
 review-stances, advanced-lifecycle, kit README, advanced README, the skills manifest, this
-repo's `AGENTS.md` — now point at the workspace and the catalog. corpus-cli's uninstall is
+repo's `AGENTS.md` — now point at the workspace and the catalog. suspec-cli's uninstall is
 recorded in its own history.
 
 ## Propagation
