@@ -121,3 +121,8 @@ Keep the worktree until review is final. Review may need to:
 - rerun commands
 - verify changed files
 - ask for follow-up work
+
+## Related
+
+- Next: [Reviewing output](08-reviewing-output.md)
+- Previous: [Creating tasks](06-creating-tasks.md)

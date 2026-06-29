@@ -16,6 +16,7 @@
 | durable record | Kept for project life: accepted specs, ADRs, findings. |
 | evidence | Pasted output, CI link, or named manual observation. |
 | evidence path | Files and checks exercised by the last valid evidence. |
+| Execution | Append-only run record on the spec; one dated entry per change-cycle, prose or a structured change-record (ADR-0110). |
 | finding | Durable lesson saved at Close. |
 | honesty level | convention, checklist, toolable, enforced. |
 | intake | Verbatim source snapshot. |

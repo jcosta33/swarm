@@ -15,7 +15,7 @@ Pull -> (Inventory) -> Spec -> (Change Plan) -> Task -> Run -> Review -> Close
 | Spec | `specs/<feature>/spec.md` |
 | Change Plan | `change-plans/*.md` |
 | Task | `tasks/*.md` |
-| Run | task `## Run summary` |
+| Run | spec `## Execution` (default), or task `## Run summary` |
 | Review | `reviews/*.md` |
 | Close | `findings/*.md`, `status.md` |
 

@@ -72,12 +72,17 @@ Sections:
 - Open questions
 - Affected areas
 - Dropped from sources, when needed
+- Execution — append-only run record, one dated entry per change-cycle
 
 Each requirement has:
 
 - `AC-NNN`
 - one behavior
 - `Verify with:`
+
+`## Execution` holds the run record. An entry may be prose or a structured change-record carrying
+`Scope`, `Coverage` (AC→evidence), and `Pins` (`reviewed-sha:` + `evidence-hash:`) — see
+[ADR-0110](../adrs/0110-execution-change-record.md).
 
 ## Task
 
@@ -104,6 +109,13 @@ Sections:
 - Run summary
 
 Every verify item names a requirement id.
+
+`status` is one of:
+
+- `ready`
+- `running`
+- `review-ready`
+- `closed`
 
 ## Review
 

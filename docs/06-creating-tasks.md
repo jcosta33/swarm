@@ -122,3 +122,8 @@ It records:
 - candidate findings
 
 The summary points to evidence. It does not replace evidence.
+
+## Related
+
+- Next: [Running agents](07-running-agents.md)
+- Previous: [Brownfield work and change plans](05-brownfield-and-change-plans.md)

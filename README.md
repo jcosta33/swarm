@@ -25,7 +25,7 @@ intake   spec     task    branch   review     finding
 snapshot                  + code   packet     + status
 ```
 
-1. **Pull** — snapshot the ticket into `intake/`.
+1. **Pull** — point the spec's `sources` at the origin (a ticket URL, an issue, or `self`), or snapshot the ticket into `intake/` when you want the raw request kept. Intake is optional.
 2. **Spec** — a one-page contract: requirements with IDs and `Verify with:` lines.
 3. **Task** — a bounded packet an agent finishes in one sitting.
 4. **Run** — your agent, in its own git worktree (a parallel checkout: own folder, own branch).

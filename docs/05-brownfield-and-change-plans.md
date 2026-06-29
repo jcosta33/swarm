@@ -92,3 +92,8 @@ Increase review depth when work has:
 ## When not to use this
 
 Do not write inventory or a change plan for a small, local feature with clear code and clear tests. Use the normal loop.
+
+## Related
+
+- Next: [Creating tasks](06-creating-tasks.md)
+- Previous: [Writing specs](04-writing-specs.md)

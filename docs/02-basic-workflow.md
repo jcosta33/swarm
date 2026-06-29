@@ -140,3 +140,8 @@ For code-changing work, keep:
 - independent review
 - evidence for every `Pass`
 - a visible record of blocked or unverified work
+
+## Related
+
+- Next: [Where files live](03-where-files-live.md)
+- Previous: [What is Corpus?](01-what-is-corpus.md)

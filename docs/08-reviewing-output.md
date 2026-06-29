@@ -130,3 +130,8 @@ The status is about the review packet, not the PR platform state.
 An agent driving the app can produce evidence: actions taken, screen state, logs, or screenshots.
 
 It does not produce the verdict. A reviewer still judges the evidence against the requirement.
+
+## Related
+
+- Next: [Saving findings](09-saving-findings.md)
+- Previous: [Running agents](07-running-agents.md)

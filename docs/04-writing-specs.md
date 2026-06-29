@@ -93,6 +93,15 @@ Use `ready` only when:
 - non-goals are stated
 - affected areas are named
 
+## Execution
+
+Append-only run record on the spec. The implementer adds one dated entry per change-cycle: the
+changed files, evidence, and blocked questions for that run. An entry may be plain prose, or a
+structured change-record carrying **Scope** (the ACs touched), **Coverage** (each in-scope AC
+mapped to the evidence that closed it), and **Pins** (`reviewed-sha:` + `evidence-hash:`, written
+at close) — see [ADR-0110](adrs/0110-execution-change-record.md). This is the durable residue once
+the ephemeral review evaporates.
+
 ## Optional SOL form
 
 Plain markdown is the default.
@@ -105,3 +114,8 @@ Do not mix plain `AC-NNN` headings and SOL blocks in one spec.
 ## Checks
 
 Use [checks](reference/checks.md) as the review checklist. `corpus check` can report the toolable subset.
+
+## Related
+
+- Next: [Brownfield work and change plans](05-brownfield-and-change-plans.md)
+- Previous: [Where files live](03-where-files-live.md)

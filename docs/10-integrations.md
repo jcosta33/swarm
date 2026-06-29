@@ -78,3 +78,8 @@ Corpus does not own:
 - issue tracker state
 - CI configuration
 - merge authority
+
+## Related
+
+- Previous: [Saving findings](09-saving-findings.md)
+- Start over: [What is Corpus?](01-what-is-corpus.md)

@@ -4,9 +4,9 @@ Agent guides are optional instruction packs.
 
 The task packet is still the contract.
 
-## Kit guides
+## Kit core
 
-The starter kit includes:
+The starter kit's always-core loop guides:
 
 | Guide | Use |
 | --- | --- |
@@ -14,9 +14,9 @@ The starter kit includes:
 | `implement-task` | run task packets |
 | `review-output` | review worker output |
 
-## Workspace guides
+## Kit authoring guides
 
-Common workspace guides:
+Also kit-shipped (Corpus-coupled → the kit, [ADR-0112](../adrs/0112-two-tier-skills.md)) — install only what the workspace uses:
 
 | Guide | Use |
 | --- | --- |
@@ -30,8 +30,6 @@ Common workspace guides:
 | `spec-check` | spec review |
 | `split-work` | task decomposition |
 | `save-findings` | close and promotion |
-
-Install only what the workspace uses.
 
 ## Implementation depth (opt-in)
 

@@ -55,7 +55,7 @@ Default name for a dedicated workspace repo:
 
 Use a dedicated workspace when features span repos or when spec owners differ from code owners.
 
-In dedicated mode, keep the implementer single-root. Canonical specs, tasks, and reviews stay in the workspace, but the task's spec slice is snapshotted into a task packet placed in the code repo's gitignored `.corpus/`, so the implementer reads and writes one root. The review lead merges the evidence back to the workspace. See [ADOPTING](ADOPTING.md).
+In dedicated mode, keep the implementer single-root. See [ADOPTING](ADOPTING.md#spec-external-single-root-implementer).
 
 ## Code repo footprint
 
@@ -107,3 +107,8 @@ When code and intent diverge, do one of three things:
 - fix the code
 
 See [drift](reference/drift.md).
+
+## Related
+
+- Next: [Writing specs](04-writing-specs.md)
+- Previous: [The basic workflow](02-basic-workflow.md)

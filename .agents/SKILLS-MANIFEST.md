@@ -7,7 +7,7 @@ surfaces are the starter kit's guides
 workspace authoring guides), the optional catalog
 ([corpus-skills](https://github.com/jcosta33/corpus-skills) — conditioning stances and
 code-authoring depth), and the reference pages under `docs/reference/`. The family workspace
-that plans and reviews changes to this repo is the sibling `corpus-hq` repo.
+that plans and reviews changes to this repo is the sibling `corpus-works` repo.
 
 ## Single-sourcing
 
@@ -19,14 +19,14 @@ competing authority.
 
 | Guide             | Counterpart                                                                    | Why it is here                                                                                                                     |
 | ----------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `implement-task`  | mirror of the kit's `.agents/skills/implement-task/` (corpus-starter-kit repo) | Tasks cut in the corpus-hq workspace are implemented in this repo; the implementing session loads the core guide here.             |
+| `implement-task`  | mirror of the kit's `.agents/skills/implement-task/` (corpus-starter-kit repo) | Tasks cut in the corpus-works workspace are implemented in this repo; the implementing session loads the core guide here.             |
 | `empirical-proof` | the catalog's `empirical-proof` (repo-adapted copy)                            | The evidence rules in standalone form: a completion claim binds to pasted output; without it the result is Unverified, never Pass. |
 
 ## Census — omitted, and why
 
 | Guide                                                                                                                                                              | Why not here                                                                                                                                                                                  |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `write-spec`, `review-output`, and the workspace authoring guides (`write-audit`, `write-research`, `write-rfc`, …)                                                | Authoring, review, and Close-step work runs from the corpus-hq workspace; its `.agents/skills/` carries them.                                                                                 |
+| `write-spec`, `review-output`, and the workspace authoring guides (`write-audit`, `write-research`, `write-rfc`, …)                                                | Authoring, review, and Close-step work runs from the corpus-works workspace; its `.agents/skills/` carries them.                                                                                 |
 | The conditioning stances (`persona-challenger` / `persona-surveyor`, and `adversarial-review`)                                                                     | They live in the corpus-skills catalog (the universal set); install into whichever workspace needs them.                                                                                       |
 | The per-change-shape implementation guides (the `write-*` family) and `implement-task`                                                                             | They live in the corpus-starter-kit (the kit's `.agents/skills/`), per [ADR-0112](../docs/adrs/0112-two-tier-skills.md); install into whichever workspace needs them.                          |
 | The documentarian discipline (was a local `persona-documentarian` copy)                                                                                            | Folded into the kit's `write-documentation`, its single source ([ADR-0093](../docs/adrs/0093-collapse-1to1-personas.md)); install that guide from the kit when writing this repo's human-facing pages. |

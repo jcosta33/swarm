@@ -86,7 +86,7 @@ status: needs-human
 | AC-001 | Pass | `active-session` -> passed | no |
 | AC-002 | Fail | `expired-session` -> expected 409, got 500 | yes |
 | AC-003 | Pass | `missing-session` -> passed | no |
-| AC-004 | Pass | `provider-failure` -> passed | yes |
+| AC-004 | Pass | `provider-failure` -> passed | no |
 
 ## Human attention
 

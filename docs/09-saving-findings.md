@@ -95,3 +95,8 @@ Use:
 - grep
 
 Name findings for the words future readers will search.
+
+## Related
+
+- Next: [Integrations](10-integrations.md)
+- Previous: [Reviewing output](08-reviewing-output.md)
