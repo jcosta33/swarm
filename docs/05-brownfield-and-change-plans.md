@@ -89,6 +89,17 @@ Increase review depth when work has:
 - migrations or destructive operations
 - weak or missing tests
 
+## Re-baseline
+
+When changes ship without artifacts — a hotfix, a fast iteration — the specs stop describing what was built. Reality and the artifacts disagree. Re-baseline to make them true again:
+
+- inventory the current code, reading what is there, not the stale spec
+- audit the gap: which requirements reality outran, what shipped with no spec
+- revise each drifted spec to match what was built, or mark it `superseded`; where the code is wrong instead, that is a finding
+- save a finding recording the drift, and update the board
+
+This is the same machinery as adopting an existing codebase — inventory first — pointed at a workspace whose own specs went stale.
+
 ## When not to use this
 
 Do not write inventory or a change plan for a small, local feature with clear code and clear tests. Use the normal loop.
