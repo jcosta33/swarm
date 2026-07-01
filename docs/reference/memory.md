@@ -80,6 +80,7 @@ Every discovery ends in one state:
 | `rejected` | not durable, with reason |
 | `blocked` | cannot decide yet |
 | `validated` | corroborated before promotion |
+| `quarantined` | suspicious, conflicting, unsupported, or sensitive — reason recorded, never retrieved as active |
 | `rolled-back` | withdrawn with retraction |
 
 Do not close a task with `pending` discoveries.
